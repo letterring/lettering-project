@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import static com.example.lettering.domain.user.entity.QUser.user;
+
 @Repository
 public class UserCustomRepositoryImpl implements UserCustomRepository {
 

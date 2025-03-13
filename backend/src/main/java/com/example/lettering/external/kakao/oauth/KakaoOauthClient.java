@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class KakaoOauthClient {
 
