@@ -1,5 +1,6 @@
 package com.example.lettering.util.entity;
 
+import com.example.lettering.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
