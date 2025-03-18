@@ -1,7 +1,7 @@
 stages:
   - notify
 
-# Merge Request 발생 시 Mattermost로 알림 전송
+# ✅ Merge Request 발생 시 Mattermost로 알림 전송
 notify_mattermost:
   stage: notify
   tags: 
@@ -9,6 +9,7 @@ notify_mattermost:
     - runner
     - gitlab
   script:
+    - apt-get update && apt-get install -y curl
     - >
       if [ -n "$CI_MERGE_REQUEST_IID" ]; then 
         curl -X POST -H "Content-Type: application/json" \
@@ -24,7 +25,7 @@ notify_mattermost:
         echo "❌ MR 정보 없음"
       fi
 
-# 이슈 발생 시 Mattermost로 알림 전송
+# ✅ 이슈 발생 시 Mattermost로 알림 전송
 notify_issue:
   stage: notify
   tags:
@@ -32,6 +33,7 @@ notify_issue:
     - runner
     - gitlab
   script:
+    - apt-get update && apt-get install -y curl
     - >
       if [ -n "$CI_COMMIT_MESSAGE" ]; then 
         curl -X POST -H "Content-Type: application/json" \
