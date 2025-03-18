@@ -1,9 +1,3 @@
-workflow:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_PIPELINE_SOURCE == "issue_event"'
-
 stages:
   - notify
 
@@ -14,21 +8,19 @@ notify_mattermost:
     - docker
     - runner
     - gitlab
+  only:
+    - merge_requests
   script:
     - >
-      if [[ -n "$CI_MERGE_REQUEST_IID" ]]; then 
-        curl -X POST -H "Content-Type: application/json" \
-          -d '{
-            "text": "🔀 *새로운 Merge Request가 생성되었습니다!* 🎉\n
-            **프로젝트:** `'$CI_PROJECT_NAME'`\n
-            **작성자:** `'$GITLAB_USER_LOGIN'`\n
-            **브랜치:** `'$CI_COMMIT_REF_NAME'`\n
-            **MR 제목:** \"'${CI_MERGE_REQUEST_TITLE:-"제목 없음"}'\"\n
-            [**Merge Request 보기**]('$CI_PROJECT_URL/-/merge_requests/$CI_MERGE_REQUEST_IID')"
-          }' https://meeting.ssafy.com/hooks/9ecrs1m8ybbtfpa5dxsms8n4zo
-      else
-        echo "❌ MR 정보 없음"
-      fi
+      curl -X POST -H "Content-Type: application/json" \
+        -d '{
+          "text": "🔀 *새로운 Merge Request가 생성되었습니다!* 🎉\n
+          **프로젝트:** `'$CI_PROJECT_NAME'`\n
+          **작성자:** `'$GITLAB_USER_LOGIN'`\n
+          **브랜치:** `'$CI_COMMIT_REF_NAME'`\n
+          **MR 제목:** \"'${CI_MERGE_REQUEST_TITLE:-"제목 없음"}'\"\n
+          [**Merge Request 보기**]('$CI_PROJECT_URL/-/merge_requests/$CI_MERGE_REQUEST_IID')"
+        }' https://meeting.ssafy.com/hooks/9ecrs1m8ybbtfpa5dxsms8n4zo
 
 # 실제 GitLab Issue 생성 시 Mattermost로 알림 전송
 notify_issue:
