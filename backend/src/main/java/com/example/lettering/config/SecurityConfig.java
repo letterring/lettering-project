@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/kakao") // 🔹 `/login` 대신 명확하게 설정
                         .successHandler((request, response, authentication) -> {
-                            response.sendRedirect("http://localhost:3000/home"); // React로 이동
+                            response.sendRedirect("http://localhost:5173"); // React로 이동
                         })
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                 )
