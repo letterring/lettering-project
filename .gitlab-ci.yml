@@ -4,6 +4,10 @@ stages:
 # Merge Request 발생 시 Mattermost로 알림 전송
 notify_mattermost:
   stage: notify
+  tags: 
+    - docker
+    - runner
+    - gitlab
   script:
     - >
       if [ -n "$CI_MERGE_REQUEST_IID" ]; then 
@@ -23,6 +27,10 @@ notify_mattermost:
 # 이슈 발생 시 Mattermost로 알림 전송
 notify_issue:
   stage: notify
+  tags:
+    - docker
+    - runner
+    - gitlab
   script:
     - >
       if [ -n "$CI_COMMIT_MESSAGE" ]; then 
@@ -38,15 +46,3 @@ notify_issue:
         echo "❌ 이슈 정보 없음"
       fi
 
-# 자동 테스트 및 빌드 단계 추가 (필요 시)
-test:
-  stage: notify
-  script:
-    - echo "✅ 테스트 진행 중..."
-    - echo "테스트 성공!"
-
-# Runner 태그 설정 (등록한 Runner의 태그에 맞게 수정)
-tags:
-  - docker
-  - runner
-  - gitlab
