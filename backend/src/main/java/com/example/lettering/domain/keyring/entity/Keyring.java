@@ -1,4 +1,4 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.keyring.entity;
 
 import com.example.lettering.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -27,12 +27,12 @@ public class Keyring {
     private User owner;
 
     // 받는 사람의 이름 (NFCName) - 편지에서 수신자 정보를 관리하지 않으므로 이곳에서 관리
-    @Column(name = "nfc_name", nullable = false)
+    @Column(name = "nfc_name")
     private String nfcName;
 
     // 키링 디자인 (KeyringDesign 엔티티 참조)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "design_id", nullable = false)
+    @JoinColumn(name = "design_id")
     private KeyringDesign design;
 
     // 연결된 NFC 태그 값
