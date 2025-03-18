@@ -1,10 +1,16 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "issue_event"'
+
 stages:
   - notify
 
 # Merge Request 발생 시 Mattermost로 알림 전송
 notify_mattermost:
   stage: notify
-  tags: 
+  tags:
     - docker
     - runner
     - gitlab
