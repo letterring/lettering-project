@@ -1,39 +1,38 @@
 stages:
   - notify
 
-# 🔔 Merge Request 발생 시 Mattermost 알림 전송
 notify_mattermost:
   stage: notify
   script:
-    - if [ -n "$CI_MERGE_REQUEST_IID" ]; then
+    - |
+      if [ -n "$CI_MERGE_REQUEST_IID" ]; then
         curl -X POST -H "Content-Type: application/json" \
           -d '{
             "text": "**새로운 Merge Request가 생성되었습니다!** 🎉\n
-            **프로젝트:** '"$CI_PROJECT_NAME"'\n
-            **작성자:** '"$GITLAB_USER_LOGIN"'\n
-            **브랜치:** '"$CI_COMMIT_REF_NAME"'\n
-            **MR 제목:** '"${CI_MERGE_REQUEST_TITLE:-제목 없음}"'\n
-            [**Merge Request 보기**]('"$CI_PROJECT_URL"'/-/merge_requests/$CI_MERGE_REQUEST_IID")"
-          }' \
-          https://meeting.ssafy.com/hooks/9ecrs1m8ybbtfpa5dxsms8n4zo || echo "Mattermost 알림 실패"
+            **프로젝트:** $CI_PROJECT_NAME\n
+            **작성자:** $GITLAB_USER_LOGIN\n
+            **브랜치:** $CI_COMMIT_REF_NAME\n
+            **MR 제목:** ${CI_MERGE_REQUEST_TITLE:-제목 없음}\n
+            [**Merge Request 보기**]($CI_PROJECT_URL/-/merge_requests/$CI_MERGE_REQUEST_IID)"
+          }' https://meeting.ssafy.com/hooks/9ecrs1m8ybbtfpa5dxsms8n4zo
       else
         echo "🚫 MR 정보 없음"
       fi
 
-# 🔔 Issue 발생 시 Mattermost 알림 전송
 notify_issue:
   stage: notify
   script:
-    - if [ -n "$CI_JOB_ID" ]; then
+    - |
+      if [ -n "$CI_JOB_ID" ]; then
         curl -X POST -H "Content-Type: application/json" \
           -d '{
-            "text": "**새로운 Issue가 생성되었습니다!** 🚀\n
-            **프로젝트:** '"$CI_PROJECT_NAME"'\n
-            **작성자:** '"$GITLAB_USER_LOGIN"'\n
-            **브랜치:** '"$CI_COMMIT_REF_NAME"'\n
-            [**Issue 보기**]('"$CI_PROJECT_URL"'/-/issues/$CI_JOB_ID")"
-          }' \
-          https://meeting.ssafy.com/hooks/9ecrs1m8ybbtfpa5dxsms8n4zo || echo "Mattermost 알림 실패"
+            "text": "**새로운 Issue가 생성되었습니다!** 🎉\n
+            **프로젝트:** $CI_PROJECT_NAME\n
+            **작성자:** $GITLAB_USER_LOGIN\n
+            **브랜치:** $CI_COMMIT_REF_NAME\n
+            **이슈 번호:** $CI_JOB_ID\n
+            [**이슈 보기**]($CI_PROJECT_URL/-/issues/$CI_JOB_ID)"
+          }' https://meeting.ssafy.com/hooks/9ecrs1m8ybbtfpa5dxsms8n4zo
       else
-        echo "🚫 Issue 정보 없음"
+        echo "🚫 이슈 정보 없음"
       fi
