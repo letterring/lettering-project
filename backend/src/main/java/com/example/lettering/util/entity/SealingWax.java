@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "sealing_wax")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

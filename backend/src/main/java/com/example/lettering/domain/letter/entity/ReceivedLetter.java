@@ -1,5 +1,7 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.letter.entity;
 
+import com.example.lettering.domain.letter.enums.EmojiScore;
+import com.example.lettering.util.entity.Keyring;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;

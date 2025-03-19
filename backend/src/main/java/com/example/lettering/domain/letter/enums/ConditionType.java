@@ -1,4 +1,4 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.letter.enums;
 
 public enum ConditionType {
     RESERVATION,   // 예약 전송

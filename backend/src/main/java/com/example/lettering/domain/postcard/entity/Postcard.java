@@ -1,36 +1,46 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.postcard.entity;
 
+import com.example.lettering.domain.letter.enums.ConditionType;
+import com.example.lettering.domain.user.entity.QuizInfo;
 import com.example.lettering.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "letter")
+@Table(name = "postcard")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Letter {
+public class Postcard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 작성 시각 (보낸 시간)
+    // 작성자 (엽서 작성자)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User author;
+
+    // 보낸 시각
     @Column(name = "sent_time", nullable = false)
     private LocalDateTime sentTime;
+
+    // 엽서 이미지 URL (S3 저장 주소)
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
 
     // 퀴즈 정보 (공통 Embeddable)
     @Embedded
     private QuizInfo quizInfo;
 
-    // 실링왁스 (외래키로 SealingWax 엔티티 참조)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sealing_wax_id", nullable = false)
-    private SealingWax sealingWax;
+    // CONTENT (3000 BYTE)
+    @Column(name = "content", nullable = false, length = 3000)
+    private String content;
 
     // 조건 타입 (예약 전송, 타임캡슐)
     @Enumerated(EnumType.STRING)
@@ -48,17 +58,4 @@ public class Letter {
     // 즐겨찾기 여부
     @Column(name = "favorite", nullable = false)
     private Boolean favorite;
-
-    // 작성자 (보내는 사람)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
-
-    // 편지의 글 (단락별로 여러 개 저장)
-    @OneToMany(mappedBy = "letter", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LetterContent> contents;
-
-    // 여러 이미지 (LetterImage 엔티티 사용)
-    @OneToMany(mappedBy = "letter", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LetterImage> images;
 }

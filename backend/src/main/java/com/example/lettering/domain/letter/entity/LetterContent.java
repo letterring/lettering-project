@@ -1,4 +1,4 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.letter.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Table(name = "letter_content")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
