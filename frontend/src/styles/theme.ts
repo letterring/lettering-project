@@ -1,21 +1,20 @@
 import { css, DefaultTheme } from 'styled-components';
 
 const colors = {
-  Red: '#C1121F',
-  DarkRed: '#780000',
+  MainRed: '#B13F3E',
+  Red1: '#B10C0C',
+  Red2: '#CF4041',
   Navy: '#0239A6',
-  MainBlue: '#0062FF',
   SkyBlue: '#0062FF',
   Blue: '#669BBC',
-  DarkYellow: '#D6B842',
-  Yellow: '#F7D95F',
   Gray0: '#191919',
   Gray1: '#3D3D3D',
   Gray2: '#CFCED3',
   Gray3: '#E8E8F4',
   Gray4: '#EEEEFA',
   Gray5: '#F3F3F3',
-  Beige: '#FFF4DE',
+  Ivory1: '#FFFBEF',
+  Background: '#F9F9F9',
   White: '#FFFFFF',
 };
 

@@ -14,3 +14,13 @@ const client = axios.create({
 });
 
 export default client;
+
+// // 게시글 조회
+// export const getPostDetail = async (postId) => {
+//   try {
+//     const { data } = await client.get(`/post/${postId}`);
+//     return data.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
