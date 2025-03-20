@@ -1,8 +1,7 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.sealingwax.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "sealing_wax")
