@@ -4,6 +4,7 @@ import com.example.lettering.domain.user.dto.LoginRequestDto;
 import com.example.lettering.domain.user.dto.LoginResponseDto;
 import com.example.lettering.domain.user.dto.SignUpRequestDto;
 import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.domain.user.service.AuthService;
 import com.example.lettering.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @Operation(summary = "회원가입 기능", description = "회원가입을 수행합니다.")
     @PostMapping("/signup")
@@ -84,5 +86,21 @@ public class UserController {
         SecurityContextHolder.clearContext(); // ✅ Spring Security 인증 정보 삭제
 
         return ResponseEntity.ok(Collections.singletonMap("message", "로그아웃 성공"));
+    }
+
+    @GetMapping("/address")
+    public ResponseEntity<?> getUserAddress(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null || user.getRoadAddress() == null || user.getDetailAddress() == null) {
+            return ResponseEntity.ok().body(null); // ✅ 주소 정보가 없으면 null 반환
+        }
+
+        return ResponseEntity.ok().body(user);
     }
 }
