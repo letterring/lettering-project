@@ -4,7 +4,7 @@ import { RecoilRoot } from 'recoil';
 
 import ScrollToTop from './components/common/ScrollToTop';
 import ErrorPage from './pages/ErrorPage';
-import HomePage from './pages/sender/Homepage';
+import OnBoadingPage from './pages/sender/OnBoadingPage';
 
 const Router = () => {
   return (
@@ -14,7 +14,7 @@ const Router = () => {
         <Suspense>
           <Routes>
             {/* sender */}
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<OnBoadingPage />} />
 
             {/* dear */}
 
