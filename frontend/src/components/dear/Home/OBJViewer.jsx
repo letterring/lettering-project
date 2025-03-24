@@ -1,9 +1,12 @@
-import { OrbitControls } from '@react-three/drei';
+import { Html, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+
+import AnimatedEnvelope from './AnimatedEnvelope';
 
 const OBJViewer = ({ objPath, mtlPath, position }) => {
   const [object, setObject] = useState(null);
@@ -31,7 +34,16 @@ const OBJViewer = ({ objPath, mtlPath, position }) => {
   return object ? <primitive object={object} position={position} /> : null;
 };
 
-const ViewerWrapper = ({ objPath, mtlPath, newLetter, onMissedClick }) => {
+const ViewerWrapper = ({
+  objPath,
+  mtlPath,
+  envelopeObjPath,
+  envelopeMtlPath,
+  newLetter,
+  onMissedClick,
+}) => {
+  const navigate = useNavigate();
+
   const [positionY, setPositionY] = useState(-10);
   const [rotationSpeed, setRotationSpeed] = useState(0);
   const [isRising, setIsRising] = useState(true);
@@ -75,45 +87,85 @@ const ViewerWrapper = ({ objPath, mtlPath, newLetter, onMissedClick }) => {
     }
   }, [rotationSpeed, isRising]);
 
+  // useEffect(() => {
+  //   if (!isRising && rotationSpeed === 0) {
+  //     const timeout = setTimeout(() => {
+  //       navigate('/dear/postcard');
+  //     }, 2000);
+
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [isRising, rotationSpeed, navigate]);
+
   return (
-    <StCanvasWrapper>
-      <Canvas
-        shadows
-        camera={{ position: [0, 0, 20], fov: 50 }}
-        onPointerMissed={(e) => {
-          if (e.button === 0) {
-            onMissedClick?.();
-          }
-        }}
-      >
-        <ambientLight intensity={1} />
-        <directionalLight castShadow position={[5, 5, 5]} intensity={3} />
-        <directionalLight position={[-5, 5, 5]} intensity={0} />
-        <pointLight position={[0, 3, 3]} intensity={5} />
-        <spotLight position={[10, 10, 10]} angle={0.2} intensity={4} castShadow />
+    <StCanvasPageWrapper>
+      <StCanvasWrapper>
+        <Canvas
+          shadows
+          camera={{ position: [0, 0, 20], fov: 50 }}
+          onPointerMissed={(e) => {
+            if (e.button === 0) {
+              onMissedClick?.();
+            }
+          }}
+        >
+          <ambientLight intensity={1} />
+          <directionalLight castShadow position={[5, 5, 5]} intensity={3} />
+          <directionalLight position={[-5, 5, 5]} intensity={0} />
+          <pointLight position={[0, 3, 3]} intensity={5} />
+          <spotLight position={[10, 10, 10]} angle={0.2} intensity={4} castShadow />
 
-        {!isRising && newLetter ? (
-          <OBJViewer objPath={objPath} mtlPath={mtlPath} position={[0, positionY + 2, 0]} />
-        ) : null}
-        <OBJViewer objPath={objPath} mtlPath={mtlPath} position={[0, positionY, 0]} />
+          {!isRising && newLetter ? (
+            <AnimatedEnvelope
+              objPath={envelopeObjPath}
+              mtlPath={envelopeMtlPath}
+              basePosition={[0, positionY + 3, 0]}
+            />
+          ) : null}
+          <OBJViewer objPath={objPath} mtlPath={mtlPath} position={[0, positionY, 0]} />
 
-        <OrbitControls
-          enableZoom={true}
-          enableRotate={true}
-          enablePan={false}
-          minPolarAngle={Math.PI / 2}
-          maxPolarAngle={Math.PI / 2}
-          autoRotate={true}
-          autoRotateSpeed={rotationSpeed}
-        />
-      </Canvas>
-    </StCanvasWrapper>
+          {!isRising && (
+            <Html position={[0, positionY - 4, 0]} center>
+              <StFloatingText>새로운 편지가 도착했어요!</StFloatingText>
+            </Html>
+          )}
+
+          <OrbitControls
+            enableZoom={true}
+            enableRotate={true}
+            enablePan={false}
+            minPolarAngle={Math.PI / 2}
+            maxPolarAngle={Math.PI / 2}
+            autoRotate={true}
+            autoRotateSpeed={rotationSpeed}
+          />
+        </Canvas>
+      </StCanvasWrapper>
+    </StCanvasPageWrapper>
   );
 };
 
 export default ViewerWrapper;
+const StCanvasPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 
 const StCanvasWrapper = styled.div`
   width: 100vw;
   height: 100vh;
+`;
+
+const StFloatingText = styled.div`
+  font-size: 1.6rem;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  display: inline-block;
 `;
