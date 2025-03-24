@@ -3,6 +3,7 @@ package com.example.lettering.controller;
 import com.example.lettering.controller.request.LoginRequestDto;
 import com.example.lettering.controller.response.LoginResponseDto;
 import com.example.lettering.controller.request.SignUpRequestDto;
+import com.example.lettering.controller.response.UserAddressResponse;
 import com.example.lettering.domain.user.service.AuthServiceImpl;
 import com.example.lettering.domain.user.service.UserServiceImpl;
 import com.example.lettering.domain.user.entity.User;
