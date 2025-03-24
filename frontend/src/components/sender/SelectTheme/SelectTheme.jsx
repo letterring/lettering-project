@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+import SealingWaxCarousel from './SealingWaxCarousel';
 
 const SelectTheme = () => {
-  const [themes, setThemes] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const sliderRef = useRef(null);
+  const [selectedTheme, setSelectedTheme] = useState(null);
 
-  //  하드코딩 > api 완성되면 삭제 예정
+  // ✅ 로컬 스토리지에서 sealingWaxName 값 가져오기 → 없으면 2번 자동 선택
   useEffect(() => {
+    const storedThemeName = localStorage.getItem('sealingWaxName');
     const mockData = [
       { id: 1, sealing_wax_name: 'Happy Birthday', image_url: '/temp-images/1.png' },
       { id: 2, sealing_wax_name: 'Love Letter', image_url: '/temp-images/2.png' },
@@ -16,131 +17,88 @@ const SelectTheme = () => {
       { id: 5, sealing_wax_name: 'Congratulations', image_url: '/temp-images/5.png' },
     ];
 
-    // 무한 스크롤을 위해 데이터 3배 복제
-    setThemes([...mockData, ...mockData, ...mockData]);
+    if (storedThemeName) {
+      const storedTheme = mockData.find((theme) => theme.sealing_wax_name === storedThemeName);
+      setSelectedTheme(storedTheme);
+    } else {
+      setSelectedTheme(mockData[1]); // ✅ 없으면 2번 테마 자동 선택
+    }
   }, []);
 
-  //  무한 스크롤 처리
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (slider && themes.length > 0) {
-      slider.scrollLeft = slider.scrollWidth / 3;
+  const handleSelectTheme = (theme) => {
+    setSelectedTheme(theme);
+  };
 
-      const handleScroll = () => {
-        if (slider.scrollLeft <= 0) {
-          slider.scrollLeft = slider.scrollWidth / 3;
-        } else if (slider.scrollLeft >= slider.scrollWidth * (2 / 3)) {
-          slider.scrollLeft = slider.scrollWidth / 3;
-        }
-      };
-
-      slider.addEventListener('scroll', handleScroll);
-
-      return () => {
-        slider.removeEventListener('scroll', handleScroll);
-      };
+  const handleConfirm = () => {
+    if (selectedTheme) {
+      localStorage.setItem('sealingWaxName', selectedTheme.sealing_wax_name);
+      console.log(`${selectedTheme.sealing_wax_name} 테마가 저장되었습니다!`);
+    } else {
+      alert('테마를 선택해주세요!');
     }
-  }, [themes]);
-
-  //  실링왁스 클릭 시 선택 상태 설정
-  const handleSelectTheme = (index) => {
-    setSelectedIndex(index);
   };
 
   return (
     <Wrapper>
-      {/* 실링왁스 선택 영역 */}
-      <ThemeWrapper ref={sliderRef}>
-        {themes.map((theme, index) => (
-          <ThemeItem
-            key={`${theme.id}-${index}`}
-            $isSelected={index === selectedIndex}
-            $backgroundImage={theme.image_url}
-            onClick={() => handleSelectTheme(index)} // 클릭 시 -> 선택 상태로
-          />
-        ))}
-      </ThemeWrapper>
+      <Title>디자인 선택</Title>
 
-      {/*  선택된 실링왁스 이름 */}
-      <SelectedThemeName>{themes[selectedIndex]?.sealing_wax_name}</SelectedThemeName>
+      <SealingWaxCarousel onSelect={handleSelectTheme} selectedTheme={selectedTheme} />
+
+      {/* ✅ 실링왁스 이름 위치 조정 */}
+      {selectedTheme && <SelectedThemeName>{selectedTheme.sealing_wax_name}</SelectedThemeName>}
+
+      {/* ✅ 선택한 실링왁스 예시 이미지 */}
+      {selectedTheme && <ExampleImage src={`/temp-images/${selectedTheme.id + 10}.png`} />}
+
+      <ConfirmButton onClick={handleConfirm} disabled={!selectedTheme}>
+        지금 디자인으로 편지쓰기
+      </ConfirmButton>
     </Wrapper>
   );
 };
 
 export default SelectTheme;
 
-// 둥둥 떠다니는 애니메이션 정의
-const floatAnimation = keyframes`
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-`;
-
-// Wrapper: 전체를 감싸는 컨테이너
 const Wrapper = styled.div`
+  padding: 10px;
   display: flex;
   flex-direction: column;
+  gap: 16px;
   align-items: center;
-  padding: 20px;
 `;
 
-// 선택된 실링왁스 이름 표시
-const SelectedThemeName = styled.div`
-  font-size: 20px;
-  font-weight: bold;
+const Title = styled.h1`
+  text-align: center;
   color: #b13f3e;
-  margin-bottom: 16px;
-  height: 24px;
 `;
 
-const ThemeWrapper = styled.div`
-  display: flex;
-  gap: 10px;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  padding-left: 100%;
-  padding-top: 10%;
-  padding-bottom: 10%;
-
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  white-space: nowrap;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
+const SelectedThemeName = styled.div`
+  text-align: center;
+  font-size: 18px;
+  color: #b13f3e;
+  font-weight: bold;
 `;
 
-// 선택 상태 강조 효과 적용 + 애니메이션 추가
-const ThemeItem = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== '$isSelected' && prop !== '$backgroundImage',
-})`
-  flex: 0 0 100px;
-  height: 100px;
-  background-image: url(${(props) => props.$backgroundImage});
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+const ExampleImage = styled.img`
+  width: 100%;
+  height: auto;
   border-radius: 10px;
+  margin-top: 8px;
+`;
 
-  // 선택 상태 강조 (크기 확대 + 투명도)
-  transform: ${(props) => (props.$isSelected ? 'scale(1.5)' : 'scale(1)')};
-  opacity: ${(props) => (props.$isSelected ? 1 : 0.6)};
+const ConfirmButton = styled.button`
+  padding: 12px;
+  background-color: #b13f3e;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 16px;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
 
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
-
-  // 선택한 실링왁스 애니메이션
-  animation: ${(props) => (props.$isSelected ? floatAnimation : 'none')} 1.5s infinite ease-in-out;
-
-  &:hover {
-    transform: ${(props) => (props.$isSelected ? 'scale(1.4)' : 'scale(1.1)')};
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
   }
 `;
