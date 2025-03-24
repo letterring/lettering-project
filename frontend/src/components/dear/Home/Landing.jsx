@@ -35,4 +35,6 @@ const Landing = () => {
 
 export default Landing;
 
-const StHomeWrapper = styled.div``;
+const StHomeWrapper = styled.div`
+  background-color: white;
+`;

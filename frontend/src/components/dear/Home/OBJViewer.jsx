@@ -1,8 +1,9 @@
 import { Html, OrbitControls } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import * as THREE from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
@@ -34,6 +35,38 @@ const OBJViewer = ({ objPath, mtlPath, position }) => {
   return object ? <primitive object={object} position={position} /> : null;
 };
 
+const CameraZoomHelper = ({ trigger, targetPosition, onComplete }) => {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    if (trigger && targetPosition) {
+      const start = performance.now();
+      const duration = 1000;
+
+      const startPos = camera.position.clone();
+      const endPos = new THREE.Vector3(...targetPosition).add(new THREE.Vector3(0, 0, 5));
+
+      const animate = (time) => {
+        const elapsed = time - start;
+        const t = Math.min(elapsed / duration, 1);
+
+        camera.position.lerpVectors(startPos, endPos, t);
+        camera.lookAt(...targetPosition);
+
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          onComplete?.();
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }
+  }, [trigger, targetPosition]);
+
+  return null;
+};
+
 const ViewerWrapper = ({
   objPath,
   mtlPath,
@@ -47,6 +80,8 @@ const ViewerWrapper = ({
   const [positionY, setPositionY] = useState(-10);
   const [rotationSpeed, setRotationSpeed] = useState(0);
   const [isRising, setIsRising] = useState(true);
+  const [startZoom, setStartZoom] = useState(false);
+  const [zoomTarget, setZoomTarget] = useState(null);
 
   useEffect(() => {
     if (isRising) {
@@ -76,7 +111,7 @@ const ViewerWrapper = ({
   useEffect(() => {
     if (!isRising && rotationSpeed > 0) {
       let currentRotation = 0;
-      const totalRotation = Math.PI * 17; // 360도
+      const totalRotation = Math.PI * 36;
       const interval = setInterval(() => {
         currentRotation += rotationSpeed * 0.1;
         if (currentRotation >= totalRotation) {
@@ -87,15 +122,27 @@ const ViewerWrapper = ({
     }
   }, [rotationSpeed, isRising]);
 
-  // useEffect(() => {
-  //   if (!isRising && rotationSpeed === 0) {
-  //     const timeout = setTimeout(() => {
-  //       navigate('/dear/postcard');
-  //     }, 2000);
+  useEffect(() => {
+    if (!isRising && rotationSpeed === 0) {
+      if (newLetter) {
+        const timeout = setTimeout(() => {
+          const target = [0, positionY + 3, 0];
+          setZoomTarget(target);
+          setStartZoom(true);
+        }, 1500);
+        return () => clearTimeout(timeout);
+      }
+      const timeout = setTimeout(() => {
+        navigate('/dear/home');
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isRising, rotationSpeed, newLetter]);
 
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [isRising, rotationSpeed, navigate]);
+  // 📬 확대 끝나고 라우터 이동
+  const handleZoomComplete = () => {
+    navigate('/dear/postcard');
+  };
 
   return (
     <StCanvasPageWrapper>
@@ -115,16 +162,16 @@ const ViewerWrapper = ({
           <pointLight position={[0, 3, 3]} intensity={5} />
           <spotLight position={[10, 10, 10]} angle={0.2} intensity={4} castShadow />
 
-          {!isRising && newLetter ? (
+          {!isRising && newLetter && (
             <AnimatedEnvelope
               objPath={envelopeObjPath}
               mtlPath={envelopeMtlPath}
               basePosition={[0, positionY + 3, 0]}
             />
-          ) : null}
+          )}
           <OBJViewer objPath={objPath} mtlPath={mtlPath} position={[0, positionY, 0]} />
 
-          {!isRising && (
+          {!isRising && newLetter && (
             <Html position={[0, positionY - 4, 0]} center>
               <StFloatingText>새로운 편지가 도착했어요!</StFloatingText>
             </Html>
@@ -139,6 +186,11 @@ const ViewerWrapper = ({
             autoRotate={true}
             autoRotateSpeed={rotationSpeed}
           />
+          <CameraZoomHelper
+            trigger={startZoom}
+            targetPosition={zoomTarget}
+            onComplete={handleZoomComplete}
+          />
         </Canvas>
       </StCanvasWrapper>
     </StCanvasPageWrapper>
@@ -146,6 +198,7 @@ const ViewerWrapper = ({
 };
 
 export default ViewerWrapper;
+
 const StCanvasPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -159,13 +212,15 @@ const StCanvasWrapper = styled.div`
 `;
 
 const StFloatingText = styled.div`
+  font-family: 'Pretendard';
   font-size: 1.6rem;
-  color: black;
-  font-weight: bold;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
   text-align: center;
   background: rgba(255, 255, 255, 0.8);
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 0.8rem;
   white-space: nowrap;
   display: inline-block;
 `;

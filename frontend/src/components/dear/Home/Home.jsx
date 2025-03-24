@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import DearHomeImage from '../../../assets/icons/images/dear_home.png';
+import LongButton from '../../common/button/LongButton';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Home = () => {
       </StMotionFadeIn>
 
       <StImageWrapper>
-        <StImage layoutId="shared-postbox" src={DearHomeImage} alt="우체통 이미지" />
+        <StImage src={DearHomeImage} alt="우체통 이미지" />
       </StImageWrapper>
 
       <StMotionFadeIn
@@ -36,7 +37,7 @@ const Home = () => {
       >
         <StButtonWrapper>
           {/* <StButton onClick={() => navigate('/dear/postcard')}>새로운 편지 보러가기</StButton> */}
-          <StButton onClick={() => navigate('/dear')}>받은 편지함</StButton>
+          <LongButton onClick={() => navigate('/dear')} btnName="받은 편지함" />
         </StButtonWrapper>
       </StMotionFadeIn>
     </StPageWrapper>
@@ -83,18 +84,4 @@ const StButtonWrapper = styled.div`
   gap: 1.6rem;
   width: 100%;
   min-width: 25rem;
-`;
-
-const StButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.Red2};
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 1.2rem 2rem;
-  ${({ theme }) => theme.fonts.Title3};
-  cursor: pointer;
-
-  &:hover {
-    background-color: #c0392b;
-  }
 `;

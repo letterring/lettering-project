@@ -19,7 +19,7 @@ const Postcard = () => {
 
   return (
     <StWrapper>
-      <StEnvelopeWrapper onClick={() => navigate('/dear/postdetail')}>
+      <StEnvelopeWrapper onClick={() => navigate('/dear/postcard/detail')}>
         <StEnvelopeTop src={EnvelopeTopImg} alt="편지 봉투 윗부분" />
 
         <StPostcard
@@ -37,7 +37,7 @@ const Postcard = () => {
           transition={{ duration: 1.2 }}
           // onAnimationComplete={() => {
           //   setTimeout(() => {
-          //     navigate('/dear/postdetail');
+          //     navigate('/dear/postcard/detail');
           //   }, 800); // 1초 뒤 이동
           // }}
         />
@@ -56,6 +56,7 @@ const StWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
 `;
 
 const StEnvelopeWrapper = styled.div`

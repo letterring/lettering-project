@@ -28,7 +28,7 @@ const Router = () => {
               <Route path="/dear" element={<DearLandingPage />} />
               <Route path="/dear/home" element={<DearHomePage />} />
               <Route path="/dear/postcard" element={<DearPostcardPage />} />
-              <Route path="/dear/postdetail" element={<DearPostDetailPage />} />
+              <Route path="/dear/postcard/detail" element={<DearPostDetailPage />} />
 
               {/* common */}
               <Route path="*" element={<ErrorPage />} />
