@@ -25,7 +25,7 @@ public class SealingWaxController {
 
     private final SealingWaxService sealingWaxService;
 
-    @Operation(summary = "실링왁스 등록 기능", description = "실링왁스 디자인을 추가합니다.")
+    @Operation(summary = "실링왁스 등록 API", description = "실링왁스 디자인을 추가합니다.")
     @SwaggerBody(content = @Content(encoding = @Encoding(name = "sealingwax", contentType = MediaType.APPLICATION_JSON_VALUE)))
     @PostMapping(value = "/backoffice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SealingWaxResponse> createSealingWax(
@@ -34,7 +34,7 @@ public class SealingWaxController {
         return ResponseEntity.ok(sealingWaxService.createSealingWax(createSealingWaxRequest, imageFile));
     }
 
-    @Operation(summary = "실링왁스 목록 불러오기 기능", description = "실링왁스 디자인 목록을 가져옵니다.")
+    @Operation(summary = "실링왁스 목록 불러오기 API", description = "실링왁스 디자인 목록을 가져옵니다.")
     @GetMapping
     public ResponseEntity<SealingWaxListResponse> getAllSealingWaxes() {
         return ResponseEntity.ok(SealingWaxListResponse.of(sealingWaxService.getAllSealingWaxes()));
