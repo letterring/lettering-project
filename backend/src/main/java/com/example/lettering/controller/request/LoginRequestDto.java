@@ -1,4 +1,4 @@
-package com.example.lettering.domain.user.dto;
+package com.example.lettering.controller.request;
 
 
 import com.example.lettering.domain.user.enums.Provider;

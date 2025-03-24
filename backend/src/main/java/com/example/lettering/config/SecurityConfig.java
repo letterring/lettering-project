@@ -5,6 +5,7 @@ import com.example.lettering.domain.user.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -18,6 +19,9 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    @Value("${domain.name}")
+    private String domainName;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -30,7 +34,7 @@ public class SecurityConfig {
 //                .oauth2Login(oauth2 -> oauth2
 //                        .loginPage("/oauth2/authorization/kakao") // 🔹 `/login` 대신 명확하게 설정
 //                        .successHandler((request, response, authentication) -> {
-//                            response.sendRedirect("http://localhost:5173"); // React로 이동
+//                            response.sendRedirect(domainName); // React로 이동
 //                        })
 //                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
 //                )

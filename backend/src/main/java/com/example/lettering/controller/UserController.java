@@ -1,13 +1,13 @@
 package com.example.lettering.controller;
 
+import com.example.lettering.controller.request.LoginRequestDto;
+import com.example.lettering.controller.response.LoginResponseDto;
+import com.example.lettering.controller.request.SignUpRequestDto;
 import com.example.lettering.controller.response.UserAddressResponse;
-import com.example.lettering.domain.user.dto.LoginRequestDto;
-import com.example.lettering.domain.user.dto.LoginResponseDto;
-import com.example.lettering.domain.user.dto.SignUpRequestDto;
+import com.example.lettering.domain.user.service.AuthServiceImpl;
+import com.example.lettering.domain.user.service.UserServiceImpl;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.repository.UserRepository;
-import com.example.lettering.domain.user.service.AuthService;
-import com.example.lettering.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.AuthenticationFailedException;
@@ -28,8 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Tag(name = "User API", description = "유저 관련 API")
 public class UserController {
-    private final UserService userService;
-    private final AuthService authService;
+    private final UserServiceImpl userService;
+    private final AuthServiceImpl authService;
     private final UserRepository userRepository;
 
     @Operation(summary = "회원가입 기능", description = "회원가입을 수행합니다.")
