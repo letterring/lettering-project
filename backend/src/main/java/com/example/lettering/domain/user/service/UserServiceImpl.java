@@ -21,10 +21,11 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SaltRepository saltRepository;
 
+    @Override
     public void addUser(SignUpRequestDto signUpRequestDto) {
         // ✅ provider가 null이면 기본값 LOCAL 설정
         Provider provider = (signUpRequestDto.getProvider() != null) ? signUpRequestDto.getProvider() : Provider.LOCAL;
@@ -61,7 +62,8 @@ public class UserServiceImpl {
         }
     }
 
-    private void validateSignUpDto(SignUpRequestDto signUpRequestDto) {
+    @Override
+    public void validateSignUpDto(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUserNickname(signUpRequestDto.getUserNickname())) {
             throw new BusinessException(ExceptionCode.USER_NICKNAME_DUPLICATED);
         }
@@ -72,8 +74,9 @@ public class UserServiceImpl {
         }
     }
 
+    @Override
     // ✅ 이메일이 이미 존재하고, `LOCAL` 계정인지 확인하는 메서드
-    private boolean isLocalUser(String email) {
+    public boolean isLocalUser(String email) {
         Optional<User> existingUser = userRepository.findByEmail(email);
         return existingUser.isPresent() && existingUser.get().getPassword() != null; // ✅ LOCAL 계정이면 password 존재
     }

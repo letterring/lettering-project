@@ -3,7 +3,7 @@ package com.example.lettering.controller;
 import com.example.lettering.controller.request.LoginRequestDto;
 import com.example.lettering.controller.response.LoginResponseDto;
 import com.example.lettering.controller.request.SignUpRequestDto;
-import com.example.lettering.domain.user.service.AuthService;
+import com.example.lettering.domain.user.service.AuthServiceImpl;
 import com.example.lettering.domain.user.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,7 +25,7 @@ import java.util.Map;
 @Tag(name = "User API", description = "유저 관련 API")
 public class UserController {
     private final UserServiceImpl userService;
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     @Operation(summary = "회원가입 기능", description = "회원가입을 수행합니다.")
     @PostMapping("/signup")
