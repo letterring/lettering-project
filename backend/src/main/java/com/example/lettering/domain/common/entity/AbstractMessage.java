@@ -1,10 +1,10 @@
 package com.example.lettering.domain.common.entity;
 
+import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.letter.enums.ConditionType;
 import com.example.lettering.domain.sealingwax.entity.SealingWax;
 import com.example.lettering.domain.user.entity.QuizInfo;
 import com.example.lettering.domain.user.entity.User;
-import com.example.lettering.util.entity.Keyring;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.keyring.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
