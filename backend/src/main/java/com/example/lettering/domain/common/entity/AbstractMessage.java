@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public abstract class AbstractMessage {
 
     @Id
