@@ -1,5 +1,14 @@
+export { ReactComponent as IcAlarmClock } from './alarm-clock.svg';
+export { ReactComponent as IcArrowRight } from './arrow-right.svg';
+export { ReactComponent as IcCheckCircle } from './check-circle.svg';
+export { ReactComponent as IcEnvelop } from './envelop.svg';
 export { ReactComponent as IcBack } from './ic_back.svg';
 export { ReactComponent as IcDetail } from './ic_detail.svg';
 export { ReactComponent as IcMenu } from './ic_menu.svg';
 export { ReactComponent as IcMenuSmall } from './ic_menu_small.svg';
 export { ReactComponent as IcSend } from './ic_send.svg';
+export { ReactComponent as IcLock } from './lock.svg';
+export { ReactComponent as IcPen } from './pen.svg';
+export { ReactComponent as IcSetting } from './setting.svg';
+export { ReactComponent as IcTimeQuarter } from './time-quarter.svg';
+export { ReactComponent as IcTrash } from './trash.svg';
