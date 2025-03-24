@@ -90,6 +90,7 @@ public class UserController {
         return ResponseEntity.ok(Collections.singletonMap("message", "로그아웃 성공"));
     }
 
+    @Operation(summary = "회원 주소 조회", description = "로그인된 사용자의 주소 정보를 불러옵니다.")
     @GetMapping("/address")
     public ResponseEntity<?> getUserAddress(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
