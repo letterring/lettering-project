@@ -1,9 +1,11 @@
 package com.example.lettering.controller;
 
+import com.example.lettering.controller.response.UserAddressResponse;
 import com.example.lettering.domain.user.dto.LoginRequestDto;
 import com.example.lettering.domain.user.dto.LoginResponseDto;
 import com.example.lettering.domain.user.dto.SignUpRequestDto;
 import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.domain.user.service.AuthService;
 import com.example.lettering.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,6 +30,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @Operation(summary = "회원가입 기능", description = "회원가입을 수행합니다.")
     @PostMapping("/signup")
@@ -85,4 +89,36 @@ public class UserController {
 
         return ResponseEntity.ok(Collections.singletonMap("message", "로그아웃 성공"));
     }
+
+    @Operation(summary = "회원 주소 조회", description = "로그인된 사용자의 주소 정보를 불러옵니다.")
+    @GetMapping("/address")
+    public ResponseEntity<?> getUserAddress(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인이 필요합니다.");
+        }
+
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("사용자 정보를 찾을 수 없습니다.");
+        }
+
+        User user = userOptional.get();
+
+        // DTO 생성해서 반환
+        UserAddressResponse dto = new UserAddressResponse(
+                user.getRealName(),
+                user.getPhoneNumber(),
+                user.getEmail(),
+                user.getZipcode(),
+                user.getRoadAddress(),
+                user.getDetailAddress()
+        );
+
+        return ResponseEntity.ok(dto);
+    }
+
 }

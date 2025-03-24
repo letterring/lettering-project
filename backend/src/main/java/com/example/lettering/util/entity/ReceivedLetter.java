@@ -1,5 +1,6 @@
 package com.example.lettering.util.entity;
 
+import com.example.lettering.domain.keyring.entity.Keyring;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;

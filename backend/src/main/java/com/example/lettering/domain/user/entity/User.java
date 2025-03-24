@@ -1,8 +1,9 @@
 package com.example.lettering.domain.user.entity;
 
+import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.util.entity.Font;
-import com.example.lettering.util.entity.Keyring;
+import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.util.entity.Letter;
 import com.example.lettering.util.entity.Postcard;
 import jakarta.persistence.*;
@@ -45,6 +46,9 @@ public class User {
     @Column(name = "font")
     private Font font;
 
+    @Column(name = "zipcode", nullable = false)
+    private String zipcode;
+
     @Column(name = "road_address")
     private String roadAddress;
 
@@ -62,6 +66,9 @@ public class User {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Postcard> postcards;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
 
     // ✅ **OAuth 회원가입 (비밀번호 필요 없음)**
     public static User createOAuthUser(String email, String userNickname, Provider provider) {
@@ -81,6 +88,14 @@ public class User {
     // ✅ **닉네임 업데이트 (빌더 패턴 오류 해결)**
     public void updateNickname(String newNickname) {
         this.userNickname = (newNickname != null) ? newNickname : this.userNickname;
+    }
+
+    public void updateAddress(String realName, String phoneNumber, String zipcode, String roadAddress, String detailAddress) {
+        this.realName = realName;
+        this.phoneNumber = phoneNumber;
+        this.zipcode = zipcode;
+        this.roadAddress = roadAddress;
+        this.detailAddress = detailAddress;
     }
 
     // ✅ **OAuth 로그인 시 기존 사용자 정보 업데이트 가능**
