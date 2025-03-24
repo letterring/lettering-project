@@ -19,6 +19,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "order_number", nullable = false, unique = true)
+    private Long orderNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -31,6 +34,9 @@ public class Order {
 
     @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "zipcode", nullable = false)
+    private String zipcode;
 
     @Column(name = "road_address", nullable = false)
     private String roadAddress;

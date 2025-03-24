@@ -46,6 +46,9 @@ public class User {
     @Column(name = "font")
     private Font font;
 
+    @Column(name = "zipcode", nullable = false)
+    private String zipcode;
+
     @Column(name = "road_address")
     private String roadAddress;
 
@@ -87,9 +90,10 @@ public class User {
         this.userNickname = (newNickname != null) ? newNickname : this.userNickname;
     }
 
-    public void updateAddress(String realName, String phoneNumber, String roadAddress, String detailAddress) {
+    public void updateAddress(String realName, String phoneNumber, String zipcode, String roadAddress, String detailAddress) {
         this.realName = realName;
         this.phoneNumber = phoneNumber;
+        this.zipcode = zipcode;
         this.roadAddress = roadAddress;
         this.detailAddress = detailAddress;
     }

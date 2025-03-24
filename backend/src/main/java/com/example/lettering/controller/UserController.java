@@ -1,5 +1,6 @@
 package com.example.lettering.controller;
 
+import com.example.lettering.controller.response.UserAddressResponse;
 import com.example.lettering.domain.user.dto.LoginRequestDto;
 import com.example.lettering.domain.user.dto.LoginResponseDto;
 import com.example.lettering.domain.user.dto.SignUpRequestDto;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -93,14 +95,29 @@ public class UserController {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId == null) {
-            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인이 필요합니다.");
         }
 
-        User user = userRepository.findById(userId).orElse(null);
-        if (user == null || user.getRoadAddress() == null || user.getDetailAddress() == null) {
-            return ResponseEntity.ok().body(null); // ✅ 주소 정보가 없으면 null 반환
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("사용자 정보를 찾을 수 없습니다.");
         }
 
-        return ResponseEntity.ok().body(user);
+        User user = userOptional.get();
+
+        // DTO 생성해서 반환
+        UserAddressResponse dto = new UserAddressResponse(
+                user.getRealName(),
+                user.getPhoneNumber(),
+                user.getEmail(),
+                user.getZipcode(),
+                user.getRoadAddress(),
+                user.getDetailAddress()
+        );
+
+        return ResponseEntity.ok(dto);
     }
+
 }
