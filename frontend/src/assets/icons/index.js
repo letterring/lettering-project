@@ -9,6 +9,8 @@ export { ReactComponent as IcMenuSmall } from './ic_menu_small.svg';
 export { ReactComponent as IcSend } from './ic_send.svg';
 export { ReactComponent as IcLock } from './lock.svg';
 export { ReactComponent as IcPen } from './pen.svg';
+export { ReactComponent as IcPostBox } from './post-box.svg';
 export { ReactComponent as IcSetting } from './setting.svg';
+export { ReactComponent as IcStar } from './star.svg';
 export { ReactComponent as IcTimeQuarter } from './time-quarter.svg';
 export { ReactComponent as IcTrash } from './trash.svg';

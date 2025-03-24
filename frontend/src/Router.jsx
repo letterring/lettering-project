@@ -18,6 +18,7 @@ import SelectDearPage from './pages/sender/SelectDearPage';
 import SelectThemePage from './pages/sender/SelectThemePage';
 import SignUpPage from './pages/SignUpPage';
 import MyPage from './pages/sender/MyPage';
+import OnBoadingPage from './pages/sender/OnBoadingPage';
 
 const Router = () => {
   const location = useLocation();
