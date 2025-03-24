@@ -4,6 +4,7 @@ import com.example.lettering.controller.request.CreatePostcardRequest;
 import com.example.lettering.domain.postcard.service.PostcardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +27,18 @@ public class PostcardController {
 
     @Operation(summary = "엽서 작성 API", description = "엽서를 작성하여 등록합니다.")
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Long> createPostcard(
-            @RequestPart("postcard") CreatePostcardRequest request,
-            @RequestPart("image") MultipartFile imageFile) throws IOException {
+    public ResponseEntity<Map<String, Object>> createPostcard(
+            @RequestPart("postcard") CreatePostcardRequest createPostcardRequest,
+            @RequestPart("image") MultipartFile imageFile,
+            HttpSession session) throws IOException {
 
-        return ResponseEntity.ok(postcardService.createPostcard(request, imageFile));
+        //Long senderId = (Long) session.getAttribute("userId");
+        Long senderId = 1L; //추후 로그인 검증 메서드 연결 필요
+        Long postcardId = postcardService.createPostcard(createPostcardRequest, imageFile, senderId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", postcardId);
+        result.put("success", true);
+        return ResponseEntity.ok(result);
     }
 }

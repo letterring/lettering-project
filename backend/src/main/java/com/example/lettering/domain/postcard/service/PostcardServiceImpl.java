@@ -1,8 +1,16 @@
 package com.example.lettering.domain.postcard.service;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
+import com.example.lettering.domain.keyring.entity.Keyring;
+import com.example.lettering.domain.keyring.repository.KeyringRepository;
 import com.example.lettering.domain.postcard.entity.Postcard;
 import com.example.lettering.domain.postcard.repository.PostcardRepository;
+import com.example.lettering.domain.sealingwax.entity.SealingWax;
+import com.example.lettering.domain.sealingwax.repository.SealingWaxRepository;
+import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.user.repository.UserRepository;
+import com.example.lettering.exception.ExceptionCode;
+import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,20 +24,28 @@ import java.io.IOException;
 @Transactional
 public class PostcardServiceImpl implements PostcardService {
 
+
     private final PostcardRepository postcardRepository;
     private final S3ImageUtil s3ImageUtil;
+    private final UserRepository userRepository;
+    private final KeyringRepository keyringRepository;
+    private final SealingWaxRepository sealingWaxRepository;
 
     @Override
-    public Long createPostcard(CreatePostcardRequest request, MultipartFile imageFile) throws IOException {
+    public Long createPostcard(CreatePostcardRequest createPostcardRequest, org.springframework.web.multipart.MultipartFile imageFile, Long senderId) throws IOException {
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
+
+        Keyring keyring = keyringRepository.findById(createPostcardRequest.getKeyringId())
+                .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
+
+        SealingWax sealingWax = sealingWaxRepository.findById(createPostcardRequest.getSealingWaxId())
+                .orElseThrow(() -> new BusinessException(ExceptionCode.SEALINGWAX_NOT_FOUND));
+
         String imageUrl = s3ImageUtil.uploadImage(imageFile, "postcard_images");
 
-        // Postcard 엔티티 생성 (필요한 AbstractMessage 필드들은 실제 서비스 로직에 따라 추가)
-        Postcard postcard = Postcard.builder()
-                .content(request.getContent())
-                .imageUrl(imageUrl)
-                .build();
+        Postcard postcard = Postcard.fromDto(createPostcardRequest, sender, keyring, sealingWax, imageUrl);
 
-        // 엔티티 저장
         Postcard saved = postcardRepository.save(postcard);
         return saved.getId();
     }
