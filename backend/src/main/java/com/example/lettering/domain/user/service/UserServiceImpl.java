@@ -1,7 +1,7 @@
 package com.example.lettering.domain.user.service;
 
-import com.example.lettering.domain.user.dto.PasswordEncryptionResultDto;
-import com.example.lettering.controller.request.SignUpRequestDto;
+import com.example.lettering.domain.user.dto.PasswordEncryptionResult;
+import com.example.lettering.controller.request.SignUpRequest;
 import com.example.lettering.domain.user.entity.Salt;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.enums.Provider;
@@ -9,6 +9,7 @@ import com.example.lettering.domain.user.repository.SaltRepository;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
+import com.example.lettering.exception.type.DbException;
 import com.example.lettering.util.OpenCrypt;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final SaltRepository saltRepository;
 
     @Override
-    public void addUser(SignUpRequestDto signUpRequestDto) {
+    public void addUser(SignUpRequest signUpRequestDto) {
         // ✅ provider가 null이면 기본값 LOCAL 설정
         Provider provider = (signUpRequestDto.getProvider() != null) ? signUpRequestDto.getProvider() : Provider.LOCAL;
 
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
         // ✅ LOCAL 계정이라면 비밀번호 암호화 (Salt 적용)
         if (provider == Provider.LOCAL) {
-            PasswordEncryptionResultDto encryptionResult = OpenCrypt.encryptPw(signUpRequestDto.getPassword());
+            PasswordEncryptionResult encryptionResult = OpenCrypt.encryptPw(signUpRequestDto.getPassword());
             user.updatePassword(encryptionResult.getHashedPassword());
 
             // ✅ Salt 정보 저장
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateSignUpDto(SignUpRequestDto signUpRequestDto) {
+    public void validateSignUpDto(SignUpRequest signUpRequestDto) {
         if (userRepository.existsByUserNickname(signUpRequestDto.getUserNickname())) {
             throw new BusinessException(ExceptionCode.USER_NICKNAME_DUPLICATED);
         }
@@ -79,5 +80,11 @@ public class UserServiceImpl implements UserService {
     public boolean isLocalUser(String email) {
         Optional<User> existingUser = userRepository.findByEmail(email);
         return existingUser.isPresent() && existingUser.get().getPassword() != null; // ✅ LOCAL 계정이면 password 존재
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new DbException(ExceptionCode.USER_NOT_FOUND));
     }
 }

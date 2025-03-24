@@ -1,7 +1,7 @@
 package com.example.lettering.domain.user.service;
 
-import com.example.lettering.controller.request.LoginRequestDto;
-import com.example.lettering.controller.response.LoginResponseDto;
+import com.example.lettering.controller.request.LoginRequest;
+import com.example.lettering.controller.response.LoginResponse;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.domain.user.repository.SaltRepository;
@@ -20,7 +20,7 @@ public class AuthServiceImpl implements AuthService{
     private final SaltRepository saltRepository;
 
     @Override
-    public LoginResponseDto loginUser(LoginRequestDto loginRequestDto) throws AuthenticationFailedException {
+    public LoginResponse loginUser(LoginRequest loginRequestDto) {
         Provider provider = (loginRequestDto.getProvider() != null) ? loginRequestDto.getProvider() : Provider.LOCAL;
 
         // ✅ 이메일과 provider로 사용자 찾기
@@ -46,11 +46,11 @@ public class AuthServiceImpl implements AuthService{
         }
 
         // ✅ 로그인 성공 시 유저 정보 반환
-        return new LoginResponseDto(loginUser.getId(), loginUser.getUserNickname());
+        return new LoginResponse(loginUser.getId(), loginUser.getUserNickname());
     }
 
     @Override
-    public LoginResponseDto createResponseDto(User user) {
-        return new LoginResponseDto(user.getId(), user.getUserNickname());
+    public LoginResponse createResponseDto(User user) {
+        return new LoginResponse(user.getId(), user.getUserNickname());
     }
 }

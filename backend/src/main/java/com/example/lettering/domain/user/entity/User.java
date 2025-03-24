@@ -6,7 +6,6 @@ import com.example.lettering.util.entity.Font;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.letter.entity.Letter;
 import com.example.lettering.domain.postcard.entity.Postcard;
-import com.example.lettering.domain.keyring.entity.Keyring;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -91,7 +90,7 @@ public class User {
         this.userNickname = (newNickname != null) ? newNickname : this.userNickname;
     }
 
-    public void updateAddress(String realName, String phoneNumber, String zipcode, String roadAddress, String detailAddress) {
+    public void updatePersonalInfo(String realName, String phoneNumber, String zipcode, String roadAddress, String detailAddress) {
         this.realName = realName;
         this.phoneNumber = phoneNumber;
         this.zipcode = zipcode;

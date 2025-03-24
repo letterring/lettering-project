@@ -1,7 +1,7 @@
 package com.example.lettering.domain.keyring.service;
 
-
 import com.example.lettering.controller.request.OrderRequest;
+import com.example.lettering.controller.response.KeyringDesignResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.entity.Order;
@@ -10,45 +10,53 @@ import com.example.lettering.domain.keyring.repository.KeyringRepository;
 import com.example.lettering.domain.keyring.repository.OrderRepository;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.repository.UserRepository;
+import com.example.lettering.exception.ExceptionCode;
+import com.example.lettering.exception.type.BusinessException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class KeyringServiceImpl implements KeyringService{
 
-    private final KeyringRepository keyringRepository;
     private final KeyringDesignRepository keyringDesignRepository;
+    private final KeyringRepository keyringRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+    // ✅ 모든 키링 디자인 조회
+    @Override
+    public List<KeyringDesignResponse> getAllKeyringDesigns() {
+        return keyringDesignRepository.findAll().stream()
+                .map(KeyringDesignResponse::from)
+                .toList();
+    }
+
+
     @Transactional
+    @Override
     public Long processOrder(User user, OrderRequest request) {
         // ✅ 구매 가능한 키링 개수 확인
         long availableCount = keyringRepository.countAvailableKeyrings();
         if (availableCount < request.getQuantity()) {
-            throw new RuntimeException("구매 가능한 키링이 부족합니다.");
+            throw new BusinessException(ExceptionCode.KEYRING_NOT_ENOUGH);
         }
 
         // ✅ 디자인 확인
-        Optional<KeyringDesign> designOptional = keyringDesignRepository.findById(request.getKeyringDesignId());
-        if (designOptional.isEmpty()) {
-            throw new RuntimeException("선택한 디자인을 찾을 수 없습니다.");
-        }
-        KeyringDesign selectedDesign = designOptional.get();
+        KeyringDesign selectedDesign = keyringDesignRepository.findById(request.getKeyringDesignId())
+                .orElseThrow(() -> new BusinessException(ExceptionCode.DESIGN_NOT_FOUND));
 
         // ✅ 구매 가능한 키링 가져오기
         List<Keyring> availableKeyrings = keyringRepository.findAvailableKeyrings(request.getQuantity());
         if (availableKeyrings.isEmpty()) {
-            throw new RuntimeException("구매 가능한 키링을 찾을 수 없습니다.");
+            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
         }
 
         // ✅ 주소 저장
-        user.updateAddress(
+        user.updatePersonalInfo(
                 request.getRealName(),
                 request.getPhoneNumber(),
                 request.getZipcode(),
@@ -59,9 +67,7 @@ public class OrderService {
 
         // ✅ 키링 상태 업데이트
         for (Keyring keyring : availableKeyrings) {
-            keyring.setIsPurchase(true);
-            keyring.setOwner(user);
-            keyring.setDesign(selectedDesign);
+            keyring.purchase(user, selectedDesign);
         }
         keyringRepository.saveAll(availableKeyrings);
 

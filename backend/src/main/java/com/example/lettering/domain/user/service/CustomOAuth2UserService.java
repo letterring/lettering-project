@@ -47,7 +47,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         user.updateNickname(nickname); // 닉네임이 변경될 수도 있으므로 업데이트
         User savedUser = userRepository.save(user);
 
-        System.out.println("✅ 사용자 저장 완료: " + savedUser.getEmail() + " (ID: " + savedUser.getId() + ")");
+
 
         // ✅ 세션에 사용자 정보 저장
         session.setAttribute("userId", user.getId());

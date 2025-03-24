@@ -1,7 +1,6 @@
 package com.example.lettering.controller.request;
 
 import com.example.lettering.domain.user.enums.Provider;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequestDto {
+public class SignUpRequest {
     @NotBlank(message = "사용자 이름은 필수입니다.")
     @Size(min = 2, message = "사용자 이름은 2자 이상이어야 합니다.")
     private String userNickname;
