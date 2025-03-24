@@ -9,6 +9,7 @@ import DearLandingPage from './pages/dear/LandingPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
+import HomePage from './pages/sender/Homepage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
 
 const Router = () => {
@@ -23,6 +24,7 @@ const Router = () => {
             <Routes location={location} key={location.pathname}>
               {/* sender */}
               <Route path="/" element={<OnBoadingPage />} />
+              <Route path="/home" element={<HomePage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
