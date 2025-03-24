@@ -38,14 +38,14 @@ const keyringList = [
 const My = () => {
   return (
     <StMyWrapper>
-      <StTitleWrapper>닉네임</StTitleWrapper>
+      <Title>닉네임</Title>
       <SettingItem type="nickname" value="NaNa" />
-      <StTitleWrapper>폰트</StTitleWrapper>
+      <Title>폰트</Title>
       <SettingItem type="font" value="GangwonEduAll" />
-      <StTitleWrapper>
+      <Title>
         키링
         <IcSetting />
-      </StTitleWrapper>
+      </Title>
       <KeyringList keyringArr={keyringList} />
     </StMyWrapper>
   );
@@ -67,7 +67,7 @@ const StMyWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.Gray1};
 `;
 
-const StTitleWrapper = styled.div`
+const Title = styled.div`
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.Title2};
   display: flex;
