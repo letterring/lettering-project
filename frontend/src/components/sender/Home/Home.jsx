@@ -6,13 +6,21 @@ import Background from '/src/assets/background2.png';
 import SendermainImg from '/src/assets/images/sender_main.png';
 
 import { IcMenu } from '../../../assets/icons';
+import useModal from '../../../hooks/common/useModal';
 import LongButton from '../../common/button/LongButton';
+import MenuModal from '../../common/modal/MenuModal';
 
 const Home = () => {
+  const menu = useModal();
+
+  const handleMenuClick = () => {
+    menu.toggle();
+  };
+
   return (
     <>
-      <StHomeWrapper Background={Background}>
-        <MenuBtn />
+      <StHomeWrapper $Background={Background}>
+        <MenuBtn onClick={handleMenuClick} />
         <StContentWrapper>
           Lettering
           <img src={SendermainImg} alt="senderMainImg" />
@@ -22,6 +30,10 @@ const Home = () => {
           </StButtonsWrapper>
         </StContentWrapper>
       </StHomeWrapper>
+
+      <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
+        <MenuModal isShowing={menu.isShowing} status="시작 화면" />
+      </StMenuModalWrapper>
     </>
   );
 };
@@ -29,6 +41,7 @@ const Home = () => {
 export default Home;
 
 const StHomeWrapper = styled.div`
+  position: relative;
   height: 100%;
 
   background-image: url(${Background});
@@ -62,9 +75,25 @@ const StButtonsWrapper = styled.div`
 `;
 
 const MenuBtn = styled(IcMenu)`
-  position: fixed;
+  position: absolute;
   top: 4rem;
   right: 2rem;
 
   cursor: pointer;
+`;
+
+const StMenuModalWrapper = styled.div`
+  display: ${({ $showing }) => ($showing ? 'block' : 'none')};
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(0, 0, 0, 0.5);
 `;
