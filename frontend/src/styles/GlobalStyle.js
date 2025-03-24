@@ -1,5 +1,7 @@
 import { createGlobalStyle, css } from 'styled-components';
 
+import BackGround from '/src/assets/background.png';
+
 export const reset = css`
   html,
   body,
@@ -143,14 +145,19 @@ export const reset = css`
 export const GlobalStyle = createGlobalStyle`
 ${reset}
 
-#root, body, html,main {
-    /* width: 39rem; */
-    max-width: 39rem;
-    height: 100%;
-    margin: 0 auto;
-    /* overflow-y: auto; */
-    -ms-overflow-style: none; /* 인터넷 익스플로러 */
-    scrollbar-width: none; /* 파이어폭스 */
+#root, body, html {
+  /* width: 39rem; */
+  max-width: 39rem;
+  height: 100%;
+  margin: 0 auto;
+  /* overflow-y: auto; */
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+#root {
+  background-image: url(${BackGround});
+  background-color: ${({ theme }) => theme.colors.Background};
 }
 /* #root::-webkit-scrollbar {
     display: none;
