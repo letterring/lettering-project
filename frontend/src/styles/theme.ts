@@ -25,7 +25,7 @@ const colors = {
 const fonts = {
   TitleLogo: css`
     font-family: 'Alkatra';
-    font-size: 5rem;
+    font-size: 4rem;
     font-style: normal;
     font-weight: 400;
     line-height: 130%;

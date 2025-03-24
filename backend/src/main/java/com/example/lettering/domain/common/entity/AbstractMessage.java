@@ -27,7 +27,7 @@ public abstract class AbstractMessage {
     protected User sender;
 
     // 편지를 받는 사람
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "keyring_id", nullable = false)
     protected Keyring keyring;
 
@@ -46,7 +46,7 @@ public abstract class AbstractMessage {
     protected QuizInfo quizInfo;
 
     // 조건 시간 (예약 전송 또는 타임캡슐 개봉 예정 시간)
-    @Column(name = "condition_time")
+    @Column(name = "condition_time", nullable = false)
     protected LocalDateTime conditionTime;
 
     // 작성 시각 (보낸 시간)
@@ -62,11 +62,11 @@ public abstract class AbstractMessage {
     protected Boolean favorite;
 
     // 답장 텍스트
-    @Column(name = "reply_text", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "reply_text", columnDefinition = "TEXT")
     protected String replyText;
 
     // 답장 보낸 시간
-    @Column(name = "reply_sent_time", nullable = false)
+    @Column(name = "reply_sent_time")
     protected LocalDateTime replySentTime;
 
     // 받은 편지 읽음 여부 (Postcard의 open, Letter의 open)
