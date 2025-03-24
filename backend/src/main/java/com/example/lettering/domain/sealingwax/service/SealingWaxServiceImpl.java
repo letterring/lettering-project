@@ -8,6 +8,8 @@ import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +23,8 @@ public class SealingWaxServiceImpl implements SealingWaxService {
     private final S3ImageUtil s3ImageUtil;
 
     @Override
-    public SealingWaxResponse createSealingWax(CreateSealingWaxRequest request) throws IOException {
-        String imageUrl = s3ImageUtil.uploadImage(request.getImageFile(), "wax_images");
+    public SealingWaxResponse createSealingWax(CreateSealingWaxRequest request, MultipartFile imageFile) throws IOException {
+        String imageUrl = s3ImageUtil.uploadImage(imageFile, "wax_images");
         SealingWax sealingWax = SealingWax.fromDto(request, imageUrl);
         return SealingWaxResponse.fromEntity(sealingWaxRepository.save(sealingWax));
     }

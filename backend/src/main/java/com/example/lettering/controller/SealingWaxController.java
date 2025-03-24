@@ -4,9 +4,13 @@ import com.example.lettering.controller.request.CreateSealingWaxRequest;
 import com.example.lettering.controller.response.SealingWaxListResponse;
 import com.example.lettering.controller.response.SealingWaxResponse;
 import com.example.lettering.domain.sealingwax.service.SealingWaxService;
+import com.example.lettering.util.SwaggerBody;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,13 +26,12 @@ public class SealingWaxController {
     private final SealingWaxService sealingWaxService;
 
     @Operation(summary = "실링왁스 등록 기능", description = "실링왁스 디자인을 추가합니다.")
-    @PostMapping("/backoffice")
+    @SwaggerBody(content = @Content(encoding = @Encoding(name = "sealingwax", contentType = MediaType.APPLICATION_JSON_VALUE)))
+    @PostMapping(value = "/backoffice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SealingWaxResponse> createSealingWax(
             @RequestPart("sealingwax") CreateSealingWaxRequest createSealingWaxRequest,
             @RequestPart("image") MultipartFile imageFile) throws IOException {
-
-        createSealingWaxRequest.setImageFile(imageFile);
-        return ResponseEntity.ok(sealingWaxService.createSealingWax(createSealingWaxRequest));
+        return ResponseEntity.ok(sealingWaxService.createSealingWax(createSealingWaxRequest, imageFile));
     }
 
     @Operation(summary = "실링왁스 목록 불러오기 기능", description = "실링왁스 디자인 목록을 가져옵니다.")

@@ -9,5 +9,4 @@ import org.springframework.web.multipart.MultipartFile;
 public class CreateSealingWaxRequest {
     private String sealingWaxName;
     private Integer imageCount;
-    private MultipartFile imageFile;
 }
