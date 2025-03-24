@@ -4,6 +4,7 @@ import { RecoilRoot } from 'recoil';
 
 import ScrollToTop from './components/common/ScrollToTop';
 import ErrorPage from './pages/ErrorPage';
+import HomePage from './pages/sender/Homepage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
 
 const Router = () => {
@@ -15,6 +16,7 @@ const Router = () => {
           <Routes>
             {/* sender */}
             <Route path="/" element={<OnBoadingPage />} />
+            <Route path="/home" element={<HomePage />} />
 
             {/* dear */}
 
