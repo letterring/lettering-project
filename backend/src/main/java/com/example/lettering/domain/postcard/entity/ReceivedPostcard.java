@@ -1,6 +1,7 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.postcard.entity;
 
 import com.example.lettering.domain.keyring.entity.Keyring;
+import com.example.lettering.domain.letter.enums.EmojiScore;
 import jakarta.persistence.*;
 import lombok.*;
 

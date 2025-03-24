@@ -1,4 +1,9 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.letter.enums;
+
+/*
+*
+* */
+
 
 public enum EmojiScore {
     HAPPY,

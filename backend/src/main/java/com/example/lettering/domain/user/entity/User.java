@@ -4,8 +4,9 @@ import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.util.entity.Font;
 import com.example.lettering.domain.keyring.entity.Keyring;
-import com.example.lettering.util.entity.Letter;
-import com.example.lettering.util.entity.Postcard;
+import com.example.lettering.domain.letter.entity.Letter;
+import com.example.lettering.domain.postcard.entity.Postcard;
+import com.example.lettering.domain.keyring.entity.Keyring;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -64,7 +65,7 @@ public class User {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Keyring> keyrings;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Postcard> postcards;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

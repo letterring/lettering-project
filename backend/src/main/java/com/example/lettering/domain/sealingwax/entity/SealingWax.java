@@ -1,13 +1,12 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.sealingwax.entity;
 
+import com.example.lettering.controller.request.CreateSealingWaxRequest;
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "sealing_wax")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,4 +27,12 @@ public class SealingWax {
     // 추가: 실링왁스 이미지 URL (S3 등에서 관리되는 이미지 주소)
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
+
+    public static SealingWax fromDto(CreateSealingWaxRequest createSealingWaxRequest, String imageUrl) {
+        return SealingWax.builder()
+                .sealingWaxName(createSealingWaxRequest.getSealingWaxName())
+                .imageCount(createSealingWaxRequest.getImageCount())
+                .imageUrl(imageUrl)
+                .build();
+    }
 }

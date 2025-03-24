@@ -1,4 +1,4 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.user.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;
