@@ -12,5 +12,6 @@ const Home = () => {
 export default Home;
 
 const StHomeWrapper = styled.div`
-  color: darkred;
+  color: ${({ theme }) => theme.colors.MainRed};
+  ${({ theme }) => theme.fonts.TitleLogo};
 `;
