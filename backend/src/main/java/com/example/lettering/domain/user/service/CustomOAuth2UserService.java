@@ -3,6 +3,8 @@ package com.example.lettering.domain.user.service;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.domain.user.repository.UserRepository;
+import com.example.lettering.exception.ExceptionCode;
+import com.example.lettering.exception.type.BusinessException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,7 +36,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String nickname = extractNickname(provider.name(), oauth2User);
 
         if (email == null) {
-            throw new IllegalArgumentException("OAuth provider did not return an email.");
+            throw new BusinessException(ExceptionCode.OAUTH_EMAIL_NOT_FOUND);
         }
 
         // ✅ 사용자 정보 조회 및 저장
@@ -66,7 +68,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if ("KAKAO".equalsIgnoreCase(provider)) {
             Map<String, Object> kakaoAccount = oauth2User.getAttribute("kakao_account");
             if (kakaoAccount == null || !kakaoAccount.containsKey("email")) {
-                throw new IllegalArgumentException("Kakao OAuth2 response does not contain an email.");
+                throw new BusinessException(ExceptionCode.OAUTH_EMAIL_NOT_FOUND);
             }
             return (String) kakaoAccount.get("email");
         }

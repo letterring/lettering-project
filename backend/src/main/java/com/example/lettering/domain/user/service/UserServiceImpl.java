@@ -1,12 +1,14 @@
 package com.example.lettering.domain.user.service;
 
 import com.example.lettering.domain.user.dto.PasswordEncryptionResultDto;
-import com.example.lettering.domain.user.dto.SignUpRequestDto;
+import com.example.lettering.controller.request.SignUpRequestDto;
 import com.example.lettering.domain.user.entity.Salt;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.domain.user.repository.SaltRepository;
 import com.example.lettering.domain.user.repository.UserRepository;
+import com.example.lettering.exception.ExceptionCode;
+import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.util.OpenCrypt;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl {
     private final UserRepository userRepository;
     private final SaltRepository saltRepository;
 
@@ -33,7 +35,7 @@ public class UserService {
         // ✅ 같은 이메일이 존재하는 경우, provider를 확인하여 중복 처리
         for (User user : usersWithEmail) {
             if (user.getProvider() == Provider.LOCAL && provider == Provider.LOCAL) {
-                throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+                throw new BusinessException(ExceptionCode.EMAIL_DUPLICATED);
             }
         }
 
@@ -59,19 +61,14 @@ public class UserService {
         }
     }
 
-    public User findByNickname(String nickname) {
-        return userRepository.findByUserNickname(nickname)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
     private void validateSignUpDto(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUserNickname(signUpRequestDto.getUserNickname())) {
-            throw new IllegalArgumentException("DUPLICATE_USERNICKNAME");
+            throw new BusinessException(ExceptionCode.USER_NICKNAME_DUPLICATED);
         }
 
         // ✅ 이메일 중복 검사 (이미 `LOCAL` 계정이면 가입 불가)
         if (isLocalUser(signUpRequestDto.getEmail())) {
-            throw new IllegalArgumentException("DUPLICATE_EMAIL");
+            throw new BusinessException(ExceptionCode.EMAIL_DUPLICATED);
         }
     }
 
