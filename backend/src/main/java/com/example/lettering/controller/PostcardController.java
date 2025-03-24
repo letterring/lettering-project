@@ -32,8 +32,7 @@ public class PostcardController {
             @RequestPart("image") MultipartFile imageFile,
             HttpSession session) throws IOException {
 
-        //Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L; //추후 로그인 검증 메서드 연결 필요
+        Long senderId = (Long) session.getAttribute("userId");
         Long postcardId = postcardService.createPostcard(createPostcardRequest, imageFile, senderId);
 
         Map<String, Object> result = new HashMap<>();
