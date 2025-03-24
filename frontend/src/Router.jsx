@@ -5,6 +5,7 @@ import { RecoilRoot } from 'recoil';
 import ScrollToTop from './components/common/ScrollToTop';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/sender/Homepage';
+import SelectThemePage from './pages/sender/SelectThemePage';
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
           <Routes>
             {/* sender */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/theme" element={<SelectThemePage />} />
 
             {/* dear */}
 
