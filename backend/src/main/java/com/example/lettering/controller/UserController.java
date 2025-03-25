@@ -1,6 +1,8 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.LoginRequest;
+import com.example.lettering.controller.request.UpdateFontRequest;
+import com.example.lettering.controller.request.UpdateNicknameRequest;
 import com.example.lettering.controller.response.LoginResponse;
 import com.example.lettering.controller.request.SignUpRequest;
 import com.example.lettering.controller.response.UserAddressResponse;
@@ -65,7 +67,9 @@ public class UserController {
             throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
         }
 
-        return ResponseEntity.ok(new LoginResponse(userId, userNickname));
+        User user = userService.getUserById(userId);
+
+        return ResponseEntity.ok(new LoginResponse(user.getId(), user.getUserNickname()));
     }
 
     @Operation(summary = "로그아웃 기능", description = "현재 로그인된 유저의 세션을 삭제하고 로그아웃합니다.")
@@ -114,6 +118,37 @@ public class UserController {
         }
 
         return ResponseEntity.ok(userService.getMypageInfo(userId));
+    }
+
+    @PatchMapping("/nickname")
+    @Operation(summary = "닉네임 수정", description = "로그인한 사용자의 닉네임을 수정합니다.")
+    public ResponseEntity<?> updateNickname(
+            @RequestBody @Valid UpdateNicknameRequest request,
+            HttpSession session
+    ) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        userService.updateNickname(userId, request.getNewNickname());
+        return ResponseEntity.ok(Map.of("message", "닉네임이 성공적으로 변경되었습니다."));
+    }
+
+    @PatchMapping("/font")
+    @Operation(summary = "폰트 수정", description = "로그인한 사용자의 폰트를 수정합니다.")
+    public ResponseEntity<?> updateFont(
+            @RequestBody @Valid UpdateFontRequest request,
+            HttpSession session
+    ) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        userService.updateFont(userId, request.getFont());
+
+        return ResponseEntity.ok(Map.of("message", "폰트가 성공적으로 변경되었습니다."));
     }
 
 }

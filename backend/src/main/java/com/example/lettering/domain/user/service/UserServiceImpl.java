@@ -10,6 +10,7 @@ import com.example.lettering.domain.user.dto.PasswordEncryptionResult;
 import com.example.lettering.controller.request.SignUpRequest;
 import com.example.lettering.domain.user.entity.Salt;
 import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.user.enums.Font;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.domain.user.repository.SaltRepository;
 import com.example.lettering.domain.user.repository.UserRepository;
@@ -128,6 +129,19 @@ public class UserServiceImpl implements UserService {
                 user.getFont() != null ? user.getFont().name() : null,
                 keyringResponses
         );
+    }
+
+    @Override
+    public void updateNickname(Long userId, String newNickname) {
+        User user = getUserById(userId);
+        user.updateNickname(newNickname);
+
+    }
+
+    @Override
+    public void updateFont(Long userId, Font newFont) {
+        User user = getUserById(userId);
+        user.updateFont(newFont); // ✅ setter 대신 명시적 도메인 메서드 사용
     }
 
 }
