@@ -5,7 +5,7 @@ import com.example.lettering.domain.user.entity.User;
 
 public interface UserService {
     void addUser(SignUpRequest signUpRequestDto);
-    void validateSignUpDto(SignUpRequest signUpRequestDto);
+    void validateDuplicateUserInfo(SignUpRequest signUpRequestDto);
     boolean isLocalUser(String email);
     User getUserById(Long id);
 }

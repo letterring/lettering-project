@@ -28,6 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(SignUpRequest signUpRequestDto) {
+        validateDuplicateUserInfo(signUpRequestDto);
+
         // ✅ provider가 null이면 기본값 LOCAL 설정
         Provider provider = (signUpRequestDto.getProvider() != null) ? signUpRequestDto.getProvider() : Provider.LOCAL;
 
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateSignUpDto(SignUpRequest signUpRequestDto) {
+    public void validateDuplicateUserInfo(SignUpRequest signUpRequestDto) {
         if (userRepository.existsByUserNickname(signUpRequestDto.getUserNickname())) {
             throw new BusinessException(ExceptionCode.USER_NICKNAME_DUPLICATED);
         }

@@ -1,6 +1,7 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.OrderRequest;
+import com.example.lettering.controller.response.KeyringDesignListResponse;
 import com.example.lettering.controller.response.KeyringDesignResponse;
 import com.example.lettering.controller.response.OrderResponse;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
@@ -30,7 +31,7 @@ public class KeyringController {
     // ✅ 모든 키링 디자인 목록 조회 (구매 페이지에서 사용)
     @Operation(summary = "키링 디자인 목록 조회", description = "모든 키링 디자인을 조회합니다.")
     @GetMapping("/designs")
-    public ResponseEntity<List<KeyringDesignResponse>> getAllKeyringDesigns() {
+    public ResponseEntity<KeyringDesignListResponse> getAllKeyringDesigns() {
         return ResponseEntity.ok(keyringService.getAllKeyringDesigns());
     }
 

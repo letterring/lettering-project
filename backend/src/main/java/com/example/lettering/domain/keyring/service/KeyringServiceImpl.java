@@ -1,6 +1,7 @@
 package com.example.lettering.domain.keyring.service;
 
 import com.example.lettering.controller.request.OrderRequest;
+import com.example.lettering.controller.response.KeyringDesignListResponse;
 import com.example.lettering.controller.response.KeyringDesignResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
@@ -29,10 +30,12 @@ public class KeyringServiceImpl implements KeyringService{
 
     // ✅ 모든 키링 디자인 조회
     @Override
-    public List<KeyringDesignResponse> getAllKeyringDesigns() {
-        return keyringDesignRepository.findAll().stream()
+    public KeyringDesignListResponse getAllKeyringDesigns() {
+        List<KeyringDesignResponse> designResponses = keyringDesignRepository.findAll().stream()
                 .map(KeyringDesignResponse::from)
                 .toList();
+
+        return KeyringDesignListResponse.from(designResponses);
     }
 
 
@@ -75,17 +78,17 @@ public class KeyringServiceImpl implements KeyringService{
         Long orderNumber = generateOrderNumber();
         int totalPrice = selectedDesign.getPrice().intValue() * request.getQuantity();
 
-        Order order = Order.builder()
-                .orderNumber(orderNumber)
-                .user(user)
-                .realName(request.getRealName())
-                .phoneNumber(request.getPhoneNumber())
-                .email(request.getEmail())
-                .zipcode(request.getZipcode())
-                .roadAddress(request.getRoadAddress())
-                .detailAddress(request.getDetailAddress())
-                .totalPrice(totalPrice)
-                .build();
+        Order order = Order.create(
+                user,
+                orderNumber,
+                request.getRealName(),
+                request.getPhoneNumber(),
+                request.getEmail(),
+                request.getZipcode(),
+                request.getRoadAddress(),
+                request.getDetailAddress(),
+                totalPrice
+        );
 
         orderRepository.save(order);
 
@@ -96,4 +99,5 @@ public class KeyringServiceImpl implements KeyringService{
         Long lastNumber = orderRepository.getMaxOrderNumber();
         return (lastNumber != null) ? lastNumber + 1 : 1000001L;
     }
+
 }
