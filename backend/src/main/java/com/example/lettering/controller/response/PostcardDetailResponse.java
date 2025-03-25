@@ -2,7 +2,7 @@ package com.example.lettering.controller.response;
 
 import com.example.lettering.domain.message.entity.Postcard;
 import com.example.lettering.domain.sealingwax.enums.DesignType;
-import com.example.lettering.util.entity.Font;
+import com.example.lettering.domain.user.enums.Font;
 import lombok.Getter;
 import lombok.Setter;
 

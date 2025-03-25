@@ -5,7 +5,7 @@ import com.example.lettering.domain.message.enums.ConditionType;
 import com.example.lettering.domain.sealingwax.entity.SealingWax;
 import com.example.lettering.domain.user.entity.QuizInfo;
 import com.example.lettering.domain.user.entity.User;
-import com.example.lettering.util.entity.Font;
+import com.example.lettering.domain.user.enums.Font;
 import jakarta.persistence.*;
 import lombok.*;
 

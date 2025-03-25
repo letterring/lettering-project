@@ -1,4 +1,4 @@
-package com.example.lettering.util.entity;
+package com.example.lettering.domain.user.enums;
 
 public enum Font {
     GOMSIN1,     // Nanum GomSinCe

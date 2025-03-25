@@ -39,8 +39,7 @@ public class MessageController {
             @RequestPart("image") MultipartFile imageFile,
             HttpSession session) throws IOException {
 
-//        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L;
+        Long senderId = (Long) session.getAttribute("userId");
         Long postcardId = postcardService.createPostcard(createPostcardRequest, imageFile, senderId);
 
         Map<String, Object> result = new HashMap<>();
@@ -72,8 +71,7 @@ public class MessageController {
             HttpSession session,
             @RequestParam(name = "index", defaultValue = "0") int index) {
 
-//        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L;
+        Long senderId = (Long) session.getAttribute("userId");
         if (senderId == null) {
             throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
         }
@@ -86,8 +84,7 @@ public class MessageController {
             @PathVariable("messageId") Long messageId,
             HttpSession session) {
 
-//        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L;
+        Long senderId = (Long) session.getAttribute("userId");
         if (senderId == null) {
             throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
         }

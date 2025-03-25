@@ -13,6 +13,7 @@ public class KeyringDesignResponse {
     private String designName;
     private String imageUrl;
     private Long price;
+    private String description; // ✅ 추가
 
     // ✅ 변환 메서드: Entity → DTO
     public static KeyringDesignResponse from(KeyringDesign entity) {
@@ -20,7 +21,8 @@ public class KeyringDesignResponse {
                 entity.getId(),
                 entity.getDesignName(),
                 entity.getImageUrl(),
-                entity.getPrice()
+                entity.getPrice(),
+                entity.getDescription() // ✅ 추가
         );
     }
 }
