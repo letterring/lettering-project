@@ -1,4 +1,4 @@
-package com.example.lettering.domain.postcard.service;
+package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
 import org.springframework.web.multipart.MultipartFile;

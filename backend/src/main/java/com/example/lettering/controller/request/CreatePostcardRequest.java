@@ -1,6 +1,6 @@
 package com.example.lettering.controller.request;
 
-import com.example.lettering.domain.letter.enums.ConditionType;
+import com.example.lettering.domain.message.enums.ConditionType;
 import lombok.Getter;
 import lombok.Setter;
 

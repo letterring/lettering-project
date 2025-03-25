@@ -1,6 +1,5 @@
-package com.example.lettering.domain.letter.entity;
+package com.example.lettering.domain.message.entity;
 
-import com.example.lettering.domain.common.entity.AbstractMessage;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;

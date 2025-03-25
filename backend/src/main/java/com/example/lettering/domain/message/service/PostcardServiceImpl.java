@@ -1,10 +1,10 @@
-package com.example.lettering.domain.postcard.service;
+package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
-import com.example.lettering.domain.postcard.entity.Postcard;
-import com.example.lettering.domain.postcard.repository.PostcardRepository;
+import com.example.lettering.domain.message.entity.Postcard;
+import com.example.lettering.domain.message.repository.PostcardRepository;
 import com.example.lettering.domain.sealingwax.entity.SealingWax;
 import com.example.lettering.domain.sealingwax.repository.SealingWaxRepository;
 import com.example.lettering.domain.user.entity.User;
@@ -15,7 +15,6 @@ import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -23,7 +22,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Transactional
 public class PostcardServiceImpl implements PostcardService {
-
 
     private final PostcardRepository postcardRepository;
     private final S3ImageUtil s3ImageUtil;
@@ -44,7 +42,7 @@ public class PostcardServiceImpl implements PostcardService {
 
         String imageUrl = s3ImageUtil.uploadImage(imageFile, "postcard_images");
 
-        Postcard postcard = Postcard.fromDto(createPostcardRequest, sender, keyring, sealingWax, imageUrl);
+        Postcard postcard = Postcard.fromDto(createPostcardRequest, sender, keyring, sealingWax, imageUrl, sender.getFont());
 
         Postcard saved = postcardRepository.save(postcard);
         return saved.getId();
