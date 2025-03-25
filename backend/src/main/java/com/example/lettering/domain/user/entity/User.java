@@ -46,7 +46,7 @@ public class User {
     @Column(name = "font")
     private Font font;
 
-    @Column(name = "zipcode", nullable = false)
+    @Column(name = "zipcode")
     private String zipcode;
 
     @Column(name = "road_address")
