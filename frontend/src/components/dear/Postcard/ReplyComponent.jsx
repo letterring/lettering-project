@@ -15,7 +15,6 @@ const ReplyComponent = () => {
   };
 
   const handleSendClick = () => {
-    console.log('답장 전송:', reply);
     setIsSent(true);
   };
 
@@ -31,13 +30,15 @@ const ReplyComponent = () => {
       </StReplyHeader>
       <StReplyBox>
         {!isSent ? (
-          <StInput
-            type="text"
-            value={reply}
-            onChange={handleReplyChange}
-            maxLength={50}
-            placeholder="아직 답장하지 않았습니다"
-          />
+          <>
+            <StTextArea
+              value={reply}
+              onChange={handleReplyChange}
+              maxLength={50}
+              placeholder="아직 답장하지 않았습니다"
+            />
+            <StCharacterCount>{reply.length} / 50</StCharacterCount>
+          </>
         ) : (
           <StSentReply>{reply}</StSentReply>
         )}
@@ -56,7 +57,7 @@ const StReplyWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 7rem;
+  margin-bottom: 5rem;
   width: 25rem;
 `;
 
@@ -70,7 +71,7 @@ const StReplyHeader = styled.div`
 `;
 
 const StReplyBox = styled.div`
-  background-color: #f9e8e8;
+  background-color: ${({ theme }) => theme.colors.Pink2};
   padding: 2rem;
   border-radius: 1rem;
   width: 100%;
@@ -85,17 +86,19 @@ const StReplyTitle = styled.div`
   color: ${({ theme }) => theme.colors.MainRed};
 `;
 
-const StInput = styled.input`
-  ${({ theme }) => theme.fonts.Saeum5};
+const StTextArea = styled.textarea`
+  ${({ theme }) => theme.fonts.Saeum6};
   text-align: center;
 
   width: 100%;
   padding: 1rem;
 
-  background-color: #f9e8e8;
+  background-color: ${({ theme }) => theme.colors.Pink2};
   border-radius: 0.8rem;
   border: none;
   outline: none;
+  resize: none;
+  min-height: 5rem;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.Gray0};
@@ -111,7 +114,6 @@ const StButton = styled.button`
   border: 0.12rem solid ${({ theme }) => theme.colors.MainRed};
   border-radius: 50%;
   padding: 0.6rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,9 +128,14 @@ const StButton = styled.button`
 `;
 
 const StSentReply = styled.p`
-  ${({ theme }) => theme.fonts.Saeum5};
+  ${({ theme }) => theme.fonts.Saeum6};
   text-align: center;
 
   width: 100%;
   padding: 1rem;
+`;
+
+const StCharacterCount = styled.div`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.colors.Gray0};
 `;
