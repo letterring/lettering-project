@@ -138,7 +138,9 @@ public class KeyringServiceImpl implements KeyringService{
                 .map(k -> new KeyringManageResponse(
                         k.getId(),
                         k.getNfcName(),
-                        k.getIsFavorite()
+                        k.getIsFavorite(),
+                        k.getTagCode(),
+                        k.getDesign().getImageUrl()
                 )).toList();
     }
 
@@ -183,7 +185,9 @@ public class KeyringServiceImpl implements KeyringService{
         return new KeyringManageResponse(
                 keyring.getId(),
                 keyring.getNfcName(),
-                keyring.getIsFavorite()
+                keyring.getIsFavorite(),
+                keyring.getTagCode(),
+                keyring.getDesign().getImageUrl()
         );
     }
 

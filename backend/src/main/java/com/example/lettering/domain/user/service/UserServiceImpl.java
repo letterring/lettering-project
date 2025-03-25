@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new DbException(ExceptionCode.USER_NOT_FOUND));
 
 
-        List<Keyring> keyrings = keyringRepository.findAllByOwnerId(userId);
+        List<Keyring> keyrings = keyringRepository.findAllByOwnerIdOrderByIsFavoriteDescIdAsc(userId);
 
 
         List<KeyringInfoResponse> keyringResponses = keyrings.stream().map(keyring -> {
@@ -112,6 +112,8 @@ public class UserServiceImpl implements UserService {
                     keyringId,
                     keyring.getNfcName(),
                     keyring.getIsFavorite(),
+                    keyring.getTagCode(),
+                    keyring.getDesign().getImageUrl(),
                     abstractMessageRepository.findLastSentTimeByKeyring(keyringId),
                     abstractMessageRepository.countByKeyring(keyringId),
                     abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.RESERVATION),
