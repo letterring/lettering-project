@@ -12,7 +12,7 @@ public class KeyringDesignResponse {
     private Long id;
     private String designName;
     private String imageUrl;
-    private BigDecimal price;
+    private Long price;
 
     // ✅ 변환 메서드: Entity → DTO
     public static KeyringDesignResponse from(KeyringDesign entity) {

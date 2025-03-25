@@ -64,4 +64,13 @@ public class Keyring {
         );
     }
 
+    public void updateNfcName(String newName) {
+        this.nfcName = newName;
+    }
+
+    public void removeOwner() {
+        this.owner = null;
+        this.isFavorite = false;
+    }
+
 }

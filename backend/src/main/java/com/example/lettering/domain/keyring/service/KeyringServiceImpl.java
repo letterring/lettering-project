@@ -3,6 +3,7 @@ package com.example.lettering.domain.keyring.service;
 import com.example.lettering.controller.request.OrderRequest;
 import com.example.lettering.controller.response.KeyringDesignListResponse;
 import com.example.lettering.controller.response.KeyringDesignResponse;
+import com.example.lettering.controller.response.KeyringManageResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.entity.Order;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class KeyringServiceImpl implements KeyringService{
 
@@ -120,9 +122,61 @@ public class KeyringServiceImpl implements KeyringService{
         return keyrings.size();
     }
 
+    @Override
+    public List<KeyringManageResponse> getManageList(Long userId) {
+        List<Keyring> keyrings = keyringRepository.findAllByOwnerIdOrderByIsFavoriteDescIdAsc(userId);
+
+        return keyrings.stream()
+                .map(k -> new KeyringManageResponse(
+                        k.getId(),
+                        k.getNfcName(),
+                        k.getIsFavorite()
+                )).toList();
+    }
+
+    @Override
+    public void updateNfcName(Long keyringId, Long userId, String newName) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new DbException(ExceptionCode.KEYRING_NOT_FOUND));
+
+        if (!keyring.getOwner().getId().equals(userId)) {
+            throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
+        }
+
+        keyring.updateNfcName(newName);
+    }
+
+    @Override
+    public void removeKeyringFromUser(Long keyringId, Long userId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new DbException(ExceptionCode.KEYRING_NOT_FOUND));
+
+        if (!keyring.getOwner().getId().equals(userId)) {
+            throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
+        }
+
+        keyring.removeOwner(); // 소유 해제, but DB에 존재 유지
+    }
+
     private Long generateOrderNumber() {
         Long lastNumber = orderRepository.getMaxOrderNumber();
         return (lastNumber != null) ? lastNumber + 1 : 1000001L;
+    }
+
+    @Override
+    public KeyringManageResponse getKeyringById(Long keyringId, Long userId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new DbException(ExceptionCode.KEYRING_NOT_FOUND));
+
+        if (keyring.getOwner() == null || !keyring.getOwner().getId().equals(userId)) {
+            throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
+        }
+
+        return new KeyringManageResponse(
+                keyring.getId(),
+                keyring.getNfcName(),
+                keyring.getIsFavorite()
+        );
     }
 
 }
