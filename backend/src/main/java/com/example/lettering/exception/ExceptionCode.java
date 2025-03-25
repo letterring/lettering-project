@@ -26,8 +26,7 @@ public enum ExceptionCode {
     KEYRING_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 키링이 존재하지 않습니다.", 3003),
     SEALINGWAX_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 실링왁스가 존재하지 않습니다.", 3004),
     KEYRING_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "구매 가능한 키링이 부족합니다.", 3005),
-    KEYRING_NOT_FOUND(HttpStatus.NOT_FOUND, "구매 가능한 키링을 찾을 수 없습니다.", 3006),
-    DESIGN_NOT_FOUND(HttpStatus.NOT_FOUND, "선택한 디자인을 찾을 수 없습니다.", 3007),
+    DESIGN_NOT_FOUND(HttpStatus.NOT_FOUND, "선택한 디자인을 찾을 수 없습니다.", 3006),
 
 
     // 외부 API 사용시 발생할 수 있는 예외 작성
