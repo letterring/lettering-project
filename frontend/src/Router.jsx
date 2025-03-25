@@ -11,6 +11,8 @@ import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/sender/Homepage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
+import HomePage from './pages/sender/Homepage';
+import SelectThemePage from './pages/sender/SelectThemePage';
 
 const Router = () => {
   const location = useLocation();
@@ -25,6 +27,7 @@ const Router = () => {
               {/* sender */}
               <Route path="/" element={<OnBoadingPage />} />
               <Route path="/home" element={<HomePage />} />
+              <Route path="/theme" element={<SelectThemePage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
