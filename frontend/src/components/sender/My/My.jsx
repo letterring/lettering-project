@@ -1,10 +1,11 @@
 import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { IcArrowRight, IcPen, IcSetting } from '../../../assets/icons';
+import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import KeyringList from './KeyringList';
-import SettingItem from './SettingItem';
+import NickNameSetting from './NickNameSetting';
 
 const keyringList = [
   {
@@ -39,14 +40,17 @@ const keyringList = [
   },
 ];
 
-const nickName = 'NaNa';
-const font = 'GangwonEduAll';
-
 const My = () => {
+  const [nickName, setNickName] = useState('NaNa');
+  const [font, setFont] = useState('GangwonEduAll');
+  const [isEditing, setIsEditing] = useState(false);
+
   const navigate = useNavigate();
 
-  const handleEditNickname = () => {
-    console.log('닉네임 수정');
+  const handleEditNickname = (newName) => {
+    setNickName(newName);
+    setIsEditing(false);
+    console.log('닉네임 수정됨 : ', newName);
   };
 
   const handleChangeFont = () => {
@@ -62,9 +66,18 @@ const My = () => {
   return (
     <StMyWrapper>
       <Title>닉네임</Title>
-      <SettingItem value={nickName} icon={IcPen} onIconClick={handleEditNickname} />
+      <NickNameSetting
+        value={nickName}
+        isEditing={isEditing}
+        icon={isEditing ? IcCheckCircle : IcPen}
+        onStartEdit={() => setIsEditing(true)}
+        onIconClick={handleEditNickname}
+      />
       <Title>폰트</Title>
-      <SettingItem value={font} icon={IcArrowRight} onIconClick={handleChangeFont} />
+      <FontPreviewBox>
+        {font}
+        <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
+      </FontPreviewBox>
       <br />
       <Title>
         키링
@@ -81,7 +94,6 @@ const StMyWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   box-sizing: border-box;
   height: 100%;
@@ -99,4 +111,19 @@ const Title = styled.div`
   box-sizing: border-box;
   margin-top: 2rem;
   margin-bottom: 1rem;
+`;
+
+const FontPreviewBox = styled.div`
+  color: ${({ theme }) => theme.colors.Gray3};
+  ${({ theme }) => theme.fonts.Saeum3};
+  background-color: ${({ theme }) => theme.colors.White};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  padding: 1rem 3rem 0.75rem 3rem;
+  border-radius: 1rem;
+  box-sizing: border-box;
 `;
