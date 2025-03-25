@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Postcard extends AbstractMessage {
 
-    @Column(nullable = false)
+    @Column(name = "content", nullable = false, length = 3000)
     private String content;
 
     @Column(name = "image_url", nullable = false)
