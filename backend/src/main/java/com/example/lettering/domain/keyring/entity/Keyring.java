@@ -51,4 +51,17 @@ public class Keyring {
     public void toggleFavorite() {
         this.isFavorite = !this.isFavorite;
     }
+
+    public static Keyring createNew(String tagCode) {
+        return new Keyring(
+                null,          // id
+                false,         // isPurchase
+                null,          // owner
+                "우체통 이름",   // nfcName
+                false,         // isFavorite
+                null,          // design
+                tagCode        // tagCode
+        );
+    }
+
 }

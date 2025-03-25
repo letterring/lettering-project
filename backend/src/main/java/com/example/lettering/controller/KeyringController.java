@@ -1,9 +1,11 @@
 package com.example.lettering.controller;
 
+import com.example.lettering.controller.request.KeyringTagRequest;
 import com.example.lettering.controller.request.OrderRequest;
 import com.example.lettering.controller.response.KeyringDesignListResponse;
 import com.example.lettering.controller.response.KeyringDesignResponse;
 import com.example.lettering.controller.response.OrderResponse;
+import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.domain.user.entity.User;
@@ -18,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/keyrings")
@@ -65,5 +67,13 @@ public class KeyringController {
 
         keyringService.toggleFavorite(keyringId, userId);
         return ResponseEntity.ok(Collections.singletonMap("message", "즐겨찾기 상태가 변경되었습니다."));
+    }
+
+    @PostMapping("/backoffice")
+    public ResponseEntity<?> registerKeyrings(@RequestBody KeyringTagRequest request) {
+        int count = keyringService.registerKeyrings(request.getTagCodes());
+        return ResponseEntity.ok(
+                Map.of("message", count + "개의 키링이 등록되었습니다.")
+        );
     }
 }

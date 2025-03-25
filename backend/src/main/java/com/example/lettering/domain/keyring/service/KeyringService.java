@@ -12,4 +12,5 @@ public interface KeyringService {
     KeyringDesignListResponse getAllKeyringDesigns();
     Long processOrder(User user, OrderRequest request);
     void toggleFavorite(Long keyringId, Long userId);
+    int registerKeyrings(List<String> tagCodes);
 }

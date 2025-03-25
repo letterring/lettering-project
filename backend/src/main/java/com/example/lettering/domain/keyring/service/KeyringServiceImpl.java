@@ -110,6 +110,16 @@ public class KeyringServiceImpl implements KeyringService{
         keyringRepository.save(keyring);
     }
 
+    @Override
+    public int registerKeyrings(List<String> tagCodes) {
+        List<Keyring> keyrings = tagCodes.stream()
+                .map(Keyring::createNew)
+                .toList();
+
+        keyringRepository.saveAll(keyrings);
+        return keyrings.size();
+    }
+
     private Long generateOrderNumber() {
         Long lastNumber = orderRepository.getMaxOrderNumber();
         return (lastNumber != null) ? lastNumber + 1 : 1000001L;
