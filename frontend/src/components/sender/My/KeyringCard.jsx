@@ -9,7 +9,7 @@ const KeyringCard = ({ keyring }) => {
   return (
     <StCardWrapper>
       <CardHeader>
-        <IcStar />
+        <IcStar style={{ color: keyring.isFaivorite ? '#FFD600' : '#D3D3D3' }} />
         <LastDateText>마지막 편지 {keyring.lastDate}일 전</LastDateText>
       </CardHeader>
 
@@ -42,7 +42,7 @@ const KeyringCard = ({ keyring }) => {
 export default KeyringCard;
 
 const StCardWrapper = styled.div`
-  width: 18.125rem;
+  width: 100%;
   height: auto;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.colors.White};
@@ -51,7 +51,7 @@ const StCardWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem;
+  padding: 2rem;
 `;
 
 const CardHeader = styled.div`
@@ -59,6 +59,7 @@ const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1rem;
 `;
 
 const LastDateText = styled.div`
@@ -66,14 +67,13 @@ const LastDateText = styled.div`
   ${({ theme }) => theme.fonts.Body3};
 `;
 const PostBoxImage = styled.img`
-  width: 7.39806rem; // 예: 100px
-  height: auto; // 비율 유지
+  width: 7rem;
+  height: auto;
 `;
 
 const Nickname = styled.div`
   ${({ theme }) => theme.fonts.Saeum2};
   color: ${({ theme }) => theme.colors.Gray3};
-  margin-bottom: 0rem;
 `;
 
 const SubText = styled.div`
@@ -98,5 +98,5 @@ const InfoBox = styled.div`
   justify-content: space-around;
   border-radius: 1.25rem;
   width: 7.6875rem;
-  height: 2.125rem;
+  height: 2.5rem;
 `;

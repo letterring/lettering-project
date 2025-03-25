@@ -16,12 +16,12 @@ const KeyringList = ({ keyringArr }) => {
     slidesToScroll: 1, // 한 번에 넘어가는 카드 수
     arrows: false, // 좌우 화살표 표시
     centerMode: true, // 중심 정렬
-    centerPadding: '0px', // 중심 정렬 시 좌우 padding
+    centerPadding: '10%', // 좌우 여백
   };
 
   return (
     <StKeyringListWrapper>
-      <Slider {...settings}>
+      <Slider {...settings} tabIndex={-1}>
         {keyringArr.map((keyring) => (
           <KeyringCard keyring={keyring} key={keyring.id} />
         ))}
@@ -34,13 +34,19 @@ export default KeyringList;
 
 const StKeyringListWrapper = styled.div`
   width: 100%;
+  margin: 0 auto;
 
   .slick-list {
-    overflow: visible; // peek를 위한 설정
+    overflow: hidden;
   }
 
   .slick-track {
     display: flex;
     align-items: center;
+  }
+
+  .slick-slide {
+    display: flex;
+    justify-content: center;
   }
 `;
