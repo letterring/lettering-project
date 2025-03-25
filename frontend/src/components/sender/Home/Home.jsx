@@ -32,7 +32,7 @@ const Home = () => {
       </StHomeWrapper>
 
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" />
+        <MenuModal isShowing={menu.isShowing} status="시작 화면" target="sender" />
       </StMenuModalWrapper>
     </>
   );

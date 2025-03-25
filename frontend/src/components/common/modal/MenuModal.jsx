@@ -2,11 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-const MenuModal = ({ isShowing, status }) => {
+const MenuModal = ({ isShowing, status, target }) => {
   const navigate = useNavigate();
 
   //status: 현재 선택된 메뉴명
-  const menus = [
+  const senderMenus = [
     { id: 'home', name: '시작 화면' },
     { id: 'write', name: '편지 쓰기' },
     { id: 'mailbox', name: '보낸 편지함' },
@@ -14,6 +14,15 @@ const MenuModal = ({ isShowing, status }) => {
     { id: 'mypage', name: '마이페이지' },
     { id: 'logout', name: '로그아웃' },
   ];
+
+  const dearMenus = [
+    { id: 'home', name: '시작 화면' },
+    { id: 'mailbox', name: '받은 편지함' },
+    { id: 'logout', name: '키링 연결끊기' },
+  ];
+
+  const menus = target === 'sender' ? senderMenus : dearMenus;
+
   const handleClickMenu = (name) => {
     // console.log(name);
     navigate(`/${name}`);
@@ -27,7 +36,7 @@ const MenuModal = ({ isShowing, status }) => {
             key={id}
             onClick={() => handleClickMenu(item.id)}
             $status={status === item.name}
-            $item={item.name}
+            $item={item.id}
           >
             {item.name}
           </StMenu>
@@ -60,8 +69,7 @@ const StMenu = styled.div`
   height: 5rem;
 
   ${({ theme, $status }) => ($status ? theme.fonts.Title5 : theme.fonts.Body2)};
-  color: ${({ theme, $item }) =>
-    $item === '로그아웃' ? theme.colors.MainRed : theme.colors.Gray0};
+  color: ${({ theme, $item }) => ($item === 'logout' ? theme.colors.MainRed : theme.colors.Gray0)};
   background-color: ${({ theme, $status }) =>
     $status ? theme.colors.White : theme.colors.Background};
 `;

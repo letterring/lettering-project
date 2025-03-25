@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { IcBack, IcMenuSmall } from '../../assets/icons';
@@ -8,7 +8,10 @@ import MenuModal from './modal/MenuModal';
 
 const Header = ({ headerName }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const menu = useModal();
+
+  const target = location.pathname.includes('dear') ? 'dear' : 'sender';
 
   const handleGoBack = () => {
     navigate(-1);
@@ -27,7 +30,7 @@ const Header = ({ headerName }) => {
       </StHeaderWrapper>
 
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" />
+        <MenuModal isShowing={menu.isShowing} status="시작 화면" target={target} />
       </StMenuModalWrapper>
     </>
   );
