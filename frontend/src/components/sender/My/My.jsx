@@ -1,7 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { IcSetting } from '../../../assets/icons';
+import { IcArrowRight, IcPen, IcSetting } from '../../../assets/icons';
 import KeyringList from './KeyringList';
 import SettingItem from './SettingItem';
 
@@ -14,6 +15,7 @@ const keyringList = [
     sentTimerMailCount: 2,
     sentAlarmMailCount: 1,
     setSecretMailCount: 1,
+    isFaivorite: true,
   },
   {
     id: 2,
@@ -23,6 +25,7 @@ const keyringList = [
     sentTimerMailCount: 21,
     sentAlarmMailCount: 13,
     setSecretMailCount: 12,
+    isFaivorite: false,
   },
   {
     id: 3,
@@ -32,19 +35,40 @@ const keyringList = [
     sentTimerMailCount: 3,
     sentAlarmMailCount: 3,
     setSecretMailCount: 3,
+    isFaivorite: false,
   },
 ];
 
+const nickName = 'NaNa';
+const font = 'GangwonEduAll';
+
 const My = () => {
+  const navigate = useNavigate();
+
+  const handleEditNickname = () => {
+    console.log('닉네임 수정');
+  };
+
+  const handleChangeFont = () => {
+    console.log('폰트 변경');
+    navigate('font');
+  };
+
+  const handleKeyringSetting = () => {
+    console.log('키링 설정');
+    navigate('keyring');
+  };
+
   return (
     <StMyWrapper>
       <Title>닉네임</Title>
-      <SettingItem type="nickname" value="NaNa" />
+      <SettingItem value={nickName} icon={IcPen} onIconClick={handleEditNickname} />
       <Title>폰트</Title>
-      <SettingItem type="font" value="GangwonEduAll" />
+      <SettingItem value={font} icon={IcArrowRight} onIconClick={handleChangeFont} />
+      <br />
       <Title>
         키링
-        <IcSetting />
+        <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
       </Title>
       <KeyringList keyringArr={keyringList} />
     </StMyWrapper>
@@ -60,11 +84,8 @@ const StMyWrapper = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  width: 23.4375rem;
   height: 100%;
-  padding-left: 2.31rem;
-  padding-right: 2.25rem;
-  border: 1px solid ${({ theme }) => theme.colors.Gray1};
+  padding: 5rem;
 `;
 
 const Title = styled.div`
@@ -74,6 +95,8 @@ const Title = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-right: 2.25rem;
-  padding-left: 1rem;
+  padding-right: 3rem;
+  box-sizing: border-box;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 `;

@@ -1,25 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { IcArrowRight, IcPen } from '../../../assets/icons';
-
-const SettingItem = ({ type, value }) => {
-  if (type === 'nickname') {
-    return (
-      <StBoxWrapper>
-        {value}
-        <IcPen />
-      </StBoxWrapper>
-    );
-  } else if (type === 'font') {
-    return (
-      <StBoxWrapper>
-        {value}
-        <IcArrowRight />
-      </StBoxWrapper>
-    );
-  }
-  return value;
+const SettingItem = ({ value, icon: IconComponent, onIconClick }) => {
+  return (
+    <StBoxWrapper>
+      {value}
+      {IconComponent && <IconComponent style={{ cursor: 'pointer' }} onClick={onIconClick} />}
+    </StBoxWrapper>
+  );
 };
 
 export default SettingItem;
@@ -32,9 +20,9 @@ const StBoxWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 18.875rem;
-  height: 2.4375rem;
-  padding: 0.75rem 2.25rem 0.75rem 1rem;
-  margin-bottom: 2rem;
+  width: 100%;
+  height: 4rem;
+  padding: 1rem 3rem 0.75rem 3rem;
   border-radius: 1rem;
+  box-sizing: border-box;
 `;
