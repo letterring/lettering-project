@@ -76,10 +76,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void validateDuplicateUserInfo(SignUpRequest signUpRequestDto) {
-        if (userRepository.existsByUserNickname(signUpRequestDto.getUserNickname())) {
-            throw new BusinessException(ExceptionCode.USER_NICKNAME_DUPLICATED);
-        }
-
         // ✅ 이메일 중복 검사 (이미 `LOCAL` 계정이면 가입 불가)
         if (isLocalUser(signUpRequestDto.getEmail())) {
             throw new BusinessException(ExceptionCode.EMAIL_DUPLICATED);

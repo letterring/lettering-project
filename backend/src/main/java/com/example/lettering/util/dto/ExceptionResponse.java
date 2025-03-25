@@ -8,17 +8,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class ExcpetionResponse {
+public class ExceptionResponse {
 
     private int code;
+    private int status;
     private String message;
 
-    public static ExcpetionResponse of(ExceptionCode exceptionCode) {
-        return ExcpetionResponse.builder()
+    public static ExceptionResponse of(ExceptionCode exceptionCode) {
+        return ExceptionResponse.builder()
                 .code(exceptionCode.getCode())
                 .message(exceptionCode.getMessage())
                 .build();
+    }
+
+    public static ExceptionResponse of(ExceptionCode code, String customMessage) {
+        return new ExceptionResponse(code.getCode(), code.getHttpStatus().value(), customMessage);
     }
 }
