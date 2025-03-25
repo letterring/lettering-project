@@ -42,6 +42,14 @@ public class KeyringServiceImpl implements KeyringService{
         return KeyringDesignListResponse.from(designResponses);
     }
 
+    @Override
+    public KeyringDesignResponse getKeyringDesignById(Long designId) {
+        KeyringDesign design = keyringDesignRepository.findById(designId)
+                .orElseThrow(() -> new DbException(ExceptionCode.DESIGN_NOT_FOUND));
+
+        return KeyringDesignResponse.from(design);
+    }
+
 
     @Transactional
     @Override
@@ -178,5 +186,7 @@ public class KeyringServiceImpl implements KeyringService{
                 keyring.getIsFavorite()
         );
     }
+
+
 
 }

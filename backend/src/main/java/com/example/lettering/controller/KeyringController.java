@@ -35,11 +35,18 @@ public class KeyringController {
     private final KeyringService keyringService;
     private final UserService userService;
 
-    // ✅ 모든 키링 디자인 목록 조회 (구매 페이지에서 사용)
+    // ✅ 모든 키링 디자인 목록 조회 (구매 페  이지에서 사용)
     @Operation(summary = "키링 디자인 목록 조회", description = "모든 키링 디자인을 조회합니다.")
     @GetMapping("/designs")
     public ResponseEntity<KeyringDesignListResponse> getAllKeyringDesigns() {
         return ResponseEntity.ok(keyringService.getAllKeyringDesigns());
+    }
+
+    @GetMapping("/designs/{designId}")
+    @Operation(summary = "키링 디자인 단건 조회", description = "디자인 ID를 통해 해당 키링 디자인의 상세 정보를 조회합니다.")
+    public ResponseEntity<KeyringDesignResponse> getKeyringDesignById(@PathVariable Long designId) {
+        KeyringDesignResponse design = keyringService.getKeyringDesignById(designId);
+        return ResponseEntity.ok(design);
     }
 
 
