@@ -11,6 +11,8 @@ import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/sender/Homepage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
+import PostcardPreviewPage from './pages/sender/PostcardPreviewPage';
+import PostcardWritingPage from './pages/sender/PostcardWritingPage';
 import SelectThemePage from './pages/sender/SelectThemePage';
 
 const Router = () => {
@@ -27,6 +29,8 @@ const Router = () => {
               <Route path="/" element={<OnBoadingPage />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/theme" element={<SelectThemePage />} />
+              <Route path="/postcard/writing" element={<PostcardWritingPage />} />
+              <Route path="/postcard/preview" element={<PostcardPreviewPage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
