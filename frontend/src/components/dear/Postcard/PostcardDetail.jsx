@@ -4,8 +4,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import DummyImg from '../../../assets/dummy/postcard.jpg';
-import PostcardImg from '../../../assets/icons/postcard/postcard.png';
-import StampImg from '../../../assets/icons/postcard/stamp.png';
+import PostcardImg from '../../../assets/images/postcard/postcard.png';
+import StampImg from '../../../assets/images/postcard/stamp.png';
 import Header from '../../common/Header';
 import ReplyComponent from './ReplyComponent';
 

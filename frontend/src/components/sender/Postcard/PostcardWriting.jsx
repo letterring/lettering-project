@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { IcImageUpload, IcImageUploadTrue } from '../../../assets/icons';
-import PostcardImg from '../../../assets/icons/postcard/postcard.png';
+import PostcardImg from '../../../assets/images/postcard/postcard.png';
 import { PostcardImage, PostcardText } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';

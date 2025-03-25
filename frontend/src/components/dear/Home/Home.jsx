@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import DearHomeImage from '../../../assets/icons/images/dear_home.png';
+import DearHomeImage from '../../../assets/images/dear_home.png';
 import LongButton from '../../common/button/LongButton';
 
 const Home = () => {

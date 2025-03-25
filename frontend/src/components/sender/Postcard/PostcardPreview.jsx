@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { IcImageUpload, IcImageUploadTrue } from '../../../assets/icons';
-import PostcardImg from '../../../assets/icons/postcard/postcard.png';
-import StampImg from '../../../assets/icons/postcard/stamp.png';
+import PostcardImg from '../../../assets/images/postcard/postcard.png';
+import StampImg from '../../../assets/images/postcard/stamp.png';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 
