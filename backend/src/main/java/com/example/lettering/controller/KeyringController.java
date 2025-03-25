@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -49,5 +50,20 @@ public class KeyringController {
 
         Long orderNumber = keyringService.processOrder(user, request);
         return ResponseEntity.ok(new OrderResponse(orderNumber));
+    }
+
+    @PatchMapping("/{keyringId}/favorite")
+    @Operation(summary = "키링 즐겨찾기 토글", description = "키링 즐겨찾기 상태를 토글합니다.")
+    public ResponseEntity<?> toggleFavorite(
+            @PathVariable Long keyringId,
+            HttpSession session
+    ) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        keyringService.toggleFavorite(keyringId, userId);
+        return ResponseEntity.ok(Collections.singletonMap("message", "즐겨찾기 상태가 변경되었습니다."));
     }
 }

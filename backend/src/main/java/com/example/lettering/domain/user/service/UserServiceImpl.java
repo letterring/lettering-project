@@ -1,5 +1,11 @@
 package com.example.lettering.domain.user.service;
 
+import com.example.lettering.controller.response.KeyringInfoResponse;
+import com.example.lettering.controller.response.UserMypageResponse;
+import com.example.lettering.domain.common.repository.AbstractMessageRepository;
+import com.example.lettering.domain.keyring.entity.Keyring;
+import com.example.lettering.domain.keyring.repository.KeyringRepository;
+import com.example.lettering.domain.letter.enums.ConditionType;
 import com.example.lettering.domain.user.dto.PasswordEncryptionResult;
 import com.example.lettering.controller.request.SignUpRequest;
 import com.example.lettering.domain.user.entity.Salt;
@@ -25,6 +31,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SaltRepository saltRepository;
+    private final KeyringRepository keyringRepository;
+    private final AbstractMessageRepository abstractMessageRepository;
 
     @Override
     public void addUser(SignUpRequest signUpRequestDto) {
@@ -89,4 +97,37 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new DbException(ExceptionCode.USER_NOT_FOUND));
     }
+
+    @Override
+    public UserMypageResponse getMypageInfo(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DbException(ExceptionCode.USER_NOT_FOUND));
+
+
+        List<Keyring> keyrings = keyringRepository.findAllByOwnerId(userId);
+
+
+        List<KeyringInfoResponse> keyringResponses = keyrings.stream().map(keyring -> {
+            Long keyringId = keyring.getId();
+
+            return new KeyringInfoResponse(
+                    keyringId,
+                    keyring.getNfcName(),
+                    keyring.getIsFavorite(),
+                    abstractMessageRepository.findLastSentTimeByKeyring(keyringId),
+                    abstractMessageRepository.countByKeyring(keyringId),
+                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.RESERVATION),
+                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.TIMECAPSULE),
+                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.SECRETTYPE)
+            );
+        }).toList();
+
+        return new UserMypageResponse(
+                user.getUserNickname(),
+                user.getFont() != null ? user.getFont().name() : null,
+                keyringResponses
+        );
+    }
+
 }

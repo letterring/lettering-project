@@ -4,6 +4,7 @@ import com.example.lettering.controller.request.LoginRequest;
 import com.example.lettering.controller.response.LoginResponse;
 import com.example.lettering.controller.request.SignUpRequest;
 import com.example.lettering.controller.response.UserAddressResponse;
+import com.example.lettering.controller.response.UserMypageResponse;
 import com.example.lettering.domain.user.service.AuthService;
 import com.example.lettering.domain.user.service.AuthServiceImpl;
 import com.example.lettering.domain.user.service.UserService;
@@ -101,6 +102,18 @@ public class UserController {
         );
 
         return ResponseEntity.ok(dto);
+    }
+
+    @Operation(summary = "마이페이지 조회", description = "사용자 정보 및 키링 정보 조회")
+    @GetMapping("/mypage")
+    public ResponseEntity<UserMypageResponse> getMypage(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(userService.getMypageInfo(userId));
     }
 
 }

@@ -13,6 +13,8 @@ import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
+import com.example.lettering.exception.type.DbException;
+import com.example.lettering.exception.type.ValidationException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -93,6 +95,19 @@ public class KeyringServiceImpl implements KeyringService{
         orderRepository.save(order);
 
         return orderNumber; // ✅ 주문번호 반환
+    }
+
+    @Override
+    public void toggleFavorite(Long keyringId, Long userId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new DbException(ExceptionCode.KEYRING_NOT_FOUND));
+
+        if (!keyring.getOwner().getId().equals(userId)) {
+            throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
+        }
+
+        keyring.toggleFavorite(); // true ↔ false 변경
+        keyringRepository.save(keyring);
     }
 
     private Long generateOrderNumber() {

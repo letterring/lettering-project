@@ -1,6 +1,7 @@
 package com.example.lettering.domain.user.service;
 
 import com.example.lettering.controller.request.SignUpRequest;
+import com.example.lettering.controller.response.UserMypageResponse;
 import com.example.lettering.domain.user.entity.User;
 
 public interface UserService {
@@ -8,4 +9,5 @@ public interface UserService {
     void validateDuplicateUserInfo(SignUpRequest signUpRequestDto);
     boolean isLocalUser(String email);
     User getUserById(Long id);
+    UserMypageResponse getMypageInfo(Long userId);
 }
