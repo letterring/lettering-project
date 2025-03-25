@@ -54,4 +54,21 @@ public class Order {
     protected void onCreate() {
         this.orderDate = LocalDateTime.now();
     }
+
+    public static Order create(User user, Long orderNumber, String realName, String phoneNumber,
+                               String email, String zipcode, String roadAddress,
+                               String detailAddress, int totalPrice) {
+        return Order.builder()
+                .orderNumber(orderNumber)
+                .user(user)
+                .realName(realName)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .zipcode(zipcode)
+                .roadAddress(roadAddress)
+                .detailAddress(detailAddress)
+                .totalPrice(totalPrice)
+                .build();
+    }
+
 }
