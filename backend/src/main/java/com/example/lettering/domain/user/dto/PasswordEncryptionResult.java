@@ -1,10 +1,10 @@
 package com.example.lettering.domain.user.dto;
 
-public class PasswordEncryptionResultDto {
+public class PasswordEncryptionResult {
     private final String hashedPassword;
     private final String salt;
 
-    public PasswordEncryptionResultDto(String hashedPassword, String salt) {
+    public PasswordEncryptionResult(String hashedPassword, String salt) {
         this.hashedPassword = hashedPassword;
         this.salt = salt;
     }

@@ -7,7 +7,6 @@ import lombok.*;
 @Entity
 @Table(name = "keyring")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,4 +37,10 @@ public class Keyring {
     // 연결된 NFC 태그 값
     @Column(name = "tag_code", nullable = false, unique = true)
     private String tagCode;
+
+    public void purchase(User owner, KeyringDesign design) {
+        this.isPurchase = true;
+        this.owner = owner;
+        this.design = design;
+    }
 }
