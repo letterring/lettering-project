@@ -3,8 +3,8 @@ package com.example.lettering.domain.keyring.repository;
 
 import com.example.lettering.domain.keyring.entity.Keyring;
 
+
 import com.example.lettering.domain.keyring.entity.QKeyring;
-import com.example.lettering.domain.keyring.entity.QKeyringDesign;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
