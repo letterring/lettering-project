@@ -151,4 +151,20 @@ public class UserController {
         return ResponseEntity.ok(Map.of("message", "폰트가 성공적으로 변경되었습니다."));
     }
 
+    @Operation(summary = "현재 로그인 유저 폰트 조회", description = "세션을 통해 로그인된 사용자의 폰트를 조회합니다.")
+    @GetMapping("/font")
+    public ResponseEntity<Map<String, String>> getUserFont(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        User user = userService.getUserById(userId);
+
+        String font = (user.getFont() != null) ? user.getFont().name() : null;
+
+        return ResponseEntity.ok(Map.of("font", font));
+    }
+
 }
