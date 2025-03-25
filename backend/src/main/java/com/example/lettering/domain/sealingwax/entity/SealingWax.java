@@ -1,6 +1,7 @@
 package com.example.lettering.domain.sealingwax.entity;
 
 import com.example.lettering.controller.request.CreateSealingWaxRequest;
+import com.example.lettering.domain.sealingwax.enums.DesignType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,10 @@ public class SealingWax {
     @Column(name = "sealing_wax_name", nullable = false)
     private String sealingWaxName;
 
+    @Column(name = "design_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DesignType designType;
+
     // 이미지 개수 (추후 유효성 검사용)
     @Column(name = "image_count", nullable = false)
     private Integer imageCount;
@@ -33,6 +38,7 @@ public class SealingWax {
                 .sealingWaxName(createSealingWaxRequest.getSealingWaxName())
                 .imageCount(createSealingWaxRequest.getImageCount())
                 .imageUrl(imageUrl)
+                .designType(createSealingWaxRequest.getDesignType())
                 .build();
     }
 }
