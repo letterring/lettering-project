@@ -23,6 +23,8 @@ public enum ExceptionCode {
     // Repository에서 데이터베이스 조작시 발생할 수 있는 예외 작성
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 조작 과정에서 예외가 발생했습니다.", 3001),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 사용자가 존재하지 않습니다.", 3002),
+    KEYRING_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 키링이 존재하지 않습니다.", 3003),
+    SEALINGWAX_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 실링왁스가 존재하지 않습니다.", 3004),
     KEYRING_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "구매 가능한 키링이 부족합니다.", 3005),
     KEYRING_NOT_FOUND(HttpStatus.NOT_FOUND, "구매 가능한 키링을 찾을 수 없습니다.", 3006),
     DESIGN_NOT_FOUND(HttpStatus.NOT_FOUND, "선택한 디자인을 찾을 수 없습니다.", 3007),

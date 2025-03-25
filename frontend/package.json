@@ -10,12 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.0.4",
+    "@react-three/fiber": "^9.1.0",
     "axios": "^1.8.3",
+    "framer-motion": "^12.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
+    "react-slick": "^0.30.3",
     "recoil": "^0.7.7",
-    "styled-components": "^6.1.15"
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.15",
+    "three": "^0.174.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
