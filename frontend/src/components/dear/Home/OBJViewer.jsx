@@ -151,7 +151,7 @@ const ViewerWrapper = ({
 
   // 📬 확대 끝나고 라우터 이동
   const handleZoomComplete = () => {
-    // navigate('/dear/postcard');
+    navigate('/dear/postcard');
   };
 
   return (
@@ -183,9 +183,7 @@ const ViewerWrapper = ({
 
           {!isRising && newLetter && (
             <Html position={[0, positionY - 4, 0]} center>
-              <StFloatingText>
-                새로운 편지가 도착했어요! <br /> 우체통을 눌러보세요.
-              </StFloatingText>
+              <StFloatingText>새로운 편지가 도착했어요!</StFloatingText>
             </Html>
           )}
 
@@ -198,11 +196,11 @@ const ViewerWrapper = ({
             autoRotate={true}
             autoRotateSpeed={rotationSpeed}
           />
-          {/* <CameraZoomHelper
+          <CameraZoomHelper
             trigger={startZoom}
             targetPosition={zoomTarget}
             onComplete={handleZoomComplete}
-          /> */}
+          />
         </Canvas>
       </StCanvasWrapper>
     </StCanvasPageWrapper>

@@ -81,6 +81,7 @@ const StPostcard = styled(motion.img)`
   width: 29rem;
   z-index: 2;
 `;
+
 const StPostcardImage = styled(motion.img)`
   position: absolute;
   top: 2.45rem;
