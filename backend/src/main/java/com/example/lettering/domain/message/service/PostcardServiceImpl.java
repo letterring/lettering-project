@@ -1,6 +1,7 @@
 package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
+import com.example.lettering.controller.response.PostcardDetailResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
 import com.example.lettering.domain.message.entity.Postcard;
@@ -46,5 +47,13 @@ public class PostcardServiceImpl implements PostcardService {
 
         Postcard saved = postcardRepository.save(postcard);
         return saved.getId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostcardDetailResponse getPostcardDetail(Long messageId) {
+        Postcard postcard = postcardRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.DATABASE_ERROR)); // 또는 적절한 ExceptionCode 사용
+        return PostcardDetailResponse.fromEntity(postcard);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
+import com.example.lettering.controller.response.PostcardDetailResponse;
 import com.example.lettering.controller.response.SenderMessageSummaryListResponse;
 import com.example.lettering.controller.response.SenderMessageSummaryResponse;
 import com.example.lettering.controller.response.SealingWaxListResponse;
@@ -77,5 +78,21 @@ public class MessageController {
             throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
         }
         return ResponseEntity.ok(SenderMessageSummaryListResponse.of(messageService.getMessagesBySender(senderId, index)));
+    }
+
+    @Operation(summary = "엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
+    @GetMapping("postcards/{messageId}")
+    public ResponseEntity<PostcardDetailResponse> getPostcardDetail(
+            @PathVariable("messageId") Long messageId,
+            HttpSession session) {
+
+//        Long senderId = (Long) session.getAttribute("userId");
+        Long senderId = 1L;
+        if (senderId == null) {
+            throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
+        }
+
+        PostcardDetailResponse response = postcardService.getPostcardDetail(messageId);
+        return ResponseEntity.ok(response);
     }
 }

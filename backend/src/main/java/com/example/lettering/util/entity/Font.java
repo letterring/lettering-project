@@ -1,8 +1,8 @@
 package com.example.lettering.util.entity;
 
 public enum Font {
-    ARIAL,
-    TIMES,
-    COURIER,
-    ROBOTO
+    GOMSIN1,     // Nanum GomSinCe
+    UHBEE1,      // UhBee BEOJJI
+    SAEUM5,      // GangwonEduSaeeum
+    EDUBODY0     // GangwonEduAll
 }
