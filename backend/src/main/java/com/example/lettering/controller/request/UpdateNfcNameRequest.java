@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class UpdateNfcNameRequest {
-    @NotBlank(message = "키링 이름은 필수입니다.")
+    @NotBlank(message = "받는 사람의 이름(NFC 이름)은 필수입니다.")
     private String nfcName;
 }

@@ -11,6 +11,8 @@ public class KeyringInfoResponse {
     private Long keyringId;
     private String keyringName;
     private boolean isFavorite;
+    private String tagCode;
+    private String imageUrl;
     private LocalDateTime lastSentTime;
     private int totalMessageCount;
     private int scheduledCount;
