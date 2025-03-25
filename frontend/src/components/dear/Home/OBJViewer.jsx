@@ -1,6 +1,6 @@
 import { Html, OrbitControls } from '@react-three/drei';
 import { Canvas, useThree } from '@react-three/fiber';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import * as THREE from 'three';
@@ -35,6 +35,7 @@ const OBJViewer = ({ objPath, mtlPath, position }) => {
   return object ? <primitive object={object} position={position} /> : null;
 };
 
+// 카메라 줌 땡기는 효과(일단 보류)
 const CameraZoomHelper = ({ trigger, targetPosition, onComplete }) => {
   const { camera } = useThree();
 
@@ -44,7 +45,7 @@ const CameraZoomHelper = ({ trigger, targetPosition, onComplete }) => {
       const duration = 1000;
 
       const startPos = camera.position.clone();
-      const endPos = new THREE.Vector3(...targetPosition).add(new THREE.Vector3(0, 0, 5));
+      const endPos = new THREE.Vector3(...targetPosition);
 
       const animate = (time) => {
         const elapsed = time - start;
@@ -111,22 +112,31 @@ const ViewerWrapper = ({
   useEffect(() => {
     if (!isRising && rotationSpeed > 0) {
       let currentRotation = 0;
-      const totalRotation = Math.PI * 36;
-      const interval = setInterval(() => {
+      const totalRotation = 360;
+
+      const animateRotation = () => {
         currentRotation += rotationSpeed * 0.1;
+
         if (currentRotation >= totalRotation) {
-          setRotationSpeed(0); // 🔥 한 바퀴 돌고 멈춤
-          clearInterval(interval);
+          currentRotation = totalRotation;
+          setRotationSpeed(0); // Stop rotation
         }
-      }, 50);
+
+        if (currentRotation < totalRotation) {
+          requestAnimationFrame(animateRotation);
+        }
+      };
+
+      requestAnimationFrame(animateRotation);
     }
   }, [rotationSpeed, isRising]);
 
+  // 카메라 줌 떙기는 효과(일단 보류류)
   useEffect(() => {
     if (!isRising && rotationSpeed === 0) {
       if (newLetter) {
         const timeout = setTimeout(() => {
-          const target = [0, positionY + 3, 0];
+          const target = [0, positionY, 5];
           setZoomTarget(target);
           setStartZoom(true);
         }, 1500);
@@ -141,7 +151,7 @@ const ViewerWrapper = ({
 
   // 📬 확대 끝나고 라우터 이동
   const handleZoomComplete = () => {
-    navigate('/dear/postcard');
+    // navigate('/dear/postcard');
   };
 
   return (
@@ -173,7 +183,9 @@ const ViewerWrapper = ({
 
           {!isRising && newLetter && (
             <Html position={[0, positionY - 4, 0]} center>
-              <StFloatingText>새로운 편지가 도착했어요!</StFloatingText>
+              <StFloatingText>
+                새로운 편지가 도착했어요! <br /> 우체통을 눌러보세요.
+              </StFloatingText>
             </Html>
           )}
 
@@ -186,11 +198,11 @@ const ViewerWrapper = ({
             autoRotate={true}
             autoRotateSpeed={rotationSpeed}
           />
-          <CameraZoomHelper
+          {/* <CameraZoomHelper
             trigger={startZoom}
             targetPosition={zoomTarget}
             onComplete={handleZoomComplete}
-          />
+          /> */}
         </Canvas>
       </StCanvasWrapper>
     </StCanvasPageWrapper>
@@ -213,9 +225,9 @@ const StCanvasWrapper = styled.div`
 
 const StFloatingText = styled.div`
   font-family: 'Pretendard';
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 130%;
   text-align: center;
   background: rgba(255, 255, 255, 0.8);
