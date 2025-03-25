@@ -1,8 +1,8 @@
 import { styled } from 'styled-components';
 
-const LongButton = ({ btnName, onClick, opacity }) => {
+const LongButton = ({ btnName, onClick, disabled }) => {
   return (
-    <StLongButtonWrapper type="button" onClick={onClick} disabled={opacity} opacity={opacity}>
+    <StLongButtonWrapper type="button" onClick={onClick} disabled={disabled}>
       {btnName}
     </StLongButtonWrapper>
   );
@@ -21,13 +21,13 @@ const StLongButtonWrapper = styled.button`
 
   border-radius: 1rem;
 
-  background-color: ${({ theme, opacity }) =>
-    opacity ? `rgba(212, 177, 177, ${opacity})` : theme.colors.MainRed};
+  background-color: ${({ theme }) => theme.colors.Red2};
   color: white;
   color: ${({ theme }) => theme.colors.White};
   ${({ theme }) => theme.fonts.Title3};
 
   &:disabled {
     cursor: default;
+    background-color: rgba(212, 177, 177, 0.7);
   }
 `;
