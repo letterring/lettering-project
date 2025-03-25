@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
@@ -6,6 +7,7 @@ const AnimatedEnvelope = ({ objPath, mtlPath, basePosition }) => {
   const [object, setObject] = useState(null);
   const [floatY, setFloatY] = useState(0);
   const [frame, setFrame] = useState(0);
+  const objectRef = useRef();
 
   useEffect(() => {
     const mtlLoader = new MTLLoader();
@@ -18,6 +20,7 @@ const AnimatedEnvelope = ({ objPath, mtlPath, basePosition }) => {
 
       const obj = await objLoader.loadAsync(objPath);
       setObject(obj);
+      objectRef.current = obj;
     };
 
     load();
