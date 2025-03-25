@@ -19,6 +19,7 @@ public enum ExceptionCode {
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.", 2005),
     SALT_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "비밀번호 복호화를 위한 Salt가 존재하지 않습니다.", 2006),
     OAUTH_EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "OAuth 제공자로부터 이메일 정보를 가져올 수 없습니다.", 2007),
+    UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.", 2008),
 
     // Repository에서 데이터베이스 조작시 발생할 수 있는 예외 작성
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 조작 과정에서 예외가 발생했습니다.", 3001),
