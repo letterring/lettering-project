@@ -15,7 +15,7 @@ const StLongButtonWrapper = styled.button`
   justify-content: center;
   align-items: center;
 
-  width: 100%;
+  width: 28rem;
   height: 5rem;
   padding: 1rem 2rem;
 
@@ -27,7 +27,7 @@ const StLongButtonWrapper = styled.button`
   ${({ theme }) => theme.fonts.Title3};
 
   &:disabled {
-    cursor: default;
+    cursor: none;
     background-color: rgba(212, 177, 177, 0.7);
   }
 `;
