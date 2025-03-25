@@ -11,7 +11,6 @@ import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/sender/Homepage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
-import HomePage from './pages/sender/Homepage';
 import SelectThemePage from './pages/sender/SelectThemePage';
 
 const Router = () => {
