@@ -1,7 +1,7 @@
-package com.example.lettering.domain.common.repository;
+package com.example.lettering.domain.message.repository;
 
-import com.example.lettering.domain.common.entity.QAbstractMessage;
-import com.example.lettering.domain.letter.enums.ConditionType;
+import com.example.lettering.domain.message.entity.QAbstractMessage;
+import com.example.lettering.domain.message.enums.ConditionType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 

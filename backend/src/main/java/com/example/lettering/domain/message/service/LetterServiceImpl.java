@@ -1,15 +1,10 @@
-package com.example.lettering.domain.letter.service;
+package com.example.lettering.domain.message.service;
 
-import com.example.lettering.domain.letter.entity.Letter;
-import com.example.lettering.domain.letter.entity.LetterContent;
-import com.example.lettering.domain.letter.entity.LetterImage;
-import com.example.lettering.domain.letter.repository.LetterRepository;
-import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.message.repository.LetterRepository;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor

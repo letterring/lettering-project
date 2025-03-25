@@ -2,10 +2,10 @@ package com.example.lettering.domain.user.service;
 
 import com.example.lettering.controller.response.KeyringInfoResponse;
 import com.example.lettering.controller.response.UserMypageResponse;
-import com.example.lettering.domain.common.repository.AbstractMessageRepository;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
-import com.example.lettering.domain.letter.enums.ConditionType;
+import com.example.lettering.domain.message.enums.ConditionType;
+import com.example.lettering.domain.message.repository.AbstractMessageRepository;
 import com.example.lettering.domain.user.dto.PasswordEncryptionResult;
 import com.example.lettering.controller.request.SignUpRequest;
 import com.example.lettering.domain.user.entity.Salt;
@@ -133,7 +133,6 @@ public class UserServiceImpl implements UserService {
     public void updateNickname(Long userId, String newNickname) {
         User user = getUserById(userId);
         user.updateNickname(newNickname);
-
     }
 
     @Override

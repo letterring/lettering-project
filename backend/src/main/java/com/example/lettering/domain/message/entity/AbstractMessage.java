@@ -1,10 +1,11 @@
-package com.example.lettering.domain.common.entity;
+package com.example.lettering.domain.message.entity;
 
 import com.example.lettering.domain.keyring.entity.Keyring;
-import com.example.lettering.domain.letter.enums.ConditionType;
+import com.example.lettering.domain.message.enums.ConditionType;
 import com.example.lettering.domain.sealingwax.entity.SealingWax;
 import com.example.lettering.domain.user.entity.QuizInfo;
 import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.user.enums.Font;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,11 @@ public abstract class AbstractMessage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sealing_wax_id", nullable = false)
     protected SealingWax sealingWax;
+
+    // 폰트 선택
+    @Enumerated(EnumType.STRING)
+    @Column(name = "font", nullable = false)
+    protected Font font;
 
     // 조건 타입 (예약 전송, 타임캡슐, 퀴즈 등)
     @Enumerated(EnumType.STRING)

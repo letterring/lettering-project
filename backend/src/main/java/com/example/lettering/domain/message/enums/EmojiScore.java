@@ -1,4 +1,4 @@
-package com.example.lettering.domain.letter.enums;
+package com.example.lettering.domain.message.enums;
 
 /*
 *

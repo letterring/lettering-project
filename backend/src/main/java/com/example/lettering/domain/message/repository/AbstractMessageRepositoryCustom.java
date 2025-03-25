@@ -1,7 +1,6 @@
-package com.example.lettering.domain.common.repository;
+package com.example.lettering.domain.message.repository;
 
-import com.example.lettering.domain.letter.enums.ConditionType;
-
+import com.example.lettering.domain.message.enums.ConditionType;
 import java.time.LocalDateTime;
 
 public interface AbstractMessageRepositoryCustom {
