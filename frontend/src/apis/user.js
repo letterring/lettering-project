@@ -1,22 +1,22 @@
 import client from './axios';
 
-export const signup = async () => {
+export const signup = async (user) => {
   try {
-    const res = await client.post(`/users/signup`, {
-      user,
-    });
+    const res = await client.post(`/users/signup`, user);
     return res;
   } catch (err) {
     console.error('회원가입 오류:', err);
+    throw err;
   }
 };
 
 export const login = async (userInfo) => {
   try {
-    const res = await client.post(`/users/login`, { userInfo });
+    const res = await client.post(`/users/login`, userInfo);
     return res;
   } catch (err) {
     console.error('로그인 실패: ', err);
+    throw err;
   }
 };
 
