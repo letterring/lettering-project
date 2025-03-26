@@ -1,10 +1,13 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-// import { signup } from '../apis/users';
+import { signup } from '../../apis/user';
+import AuthInput from './AuthInput';
+import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
+import SubmitButton from './SubmitButton';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -18,6 +21,7 @@ const SignUp = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -39,151 +43,129 @@ const SignUp = () => {
       return;
     }
 
-    await signup({
-      email: user.email,
-      userNickname: user.userNickname,
-      password: user.password,
-    });
+    try {
+      const res = await signup({
+        email: user.email,
+        userNickname: user.userNickname,
+        password: user.password,
+      });
+
+      if (res && res.data) {
+        setError('');
+        setUser({
+          email: '',
+          userNickname: '',
+          password: '',
+          confirmPassword: '',
+        });
+        alert('회원가입이 완료되었습니다!');
+        navigate('/login');
+      }
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+
+      const errorMessage =
+        err.response?.data?.message || '회원가입에 실패했습니다. 다시 시도해주세요.';
+
+      setError(errorMessage);
+    }
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Lettering</h1>
+    <StSignUpWrapper>
+      Lettering
+      <ContentWrapper>
+        <KakaoLoginButton />
+        <Divider text="또는" />
+        {error && <ErrorText>{error}</ErrorText>}
+        <Form onSubmit={handleSubmit}>
+          <AuthInput
+            type="email"
+            name="email"
+            placeholder="이메일"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
+          <AuthInput
+            type="text"
+            name="userNickname"
+            placeholder="닉네임"
+            value={user.userNickname}
+            onChange={handleChange}
+            required
+          />
 
-      <KakaoLoginButton />
-
-      <p style={styles.orText}>또는</p>
-
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="email"
-          name="email"
-          placeholder="이메일"
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <input
-          type="text"
-          name="userNickname"
-          placeholder="닉네임"
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-
-        <div style={styles.passwordContainer}>
-          <input
+          <AuthInput
             type={showPassword ? 'text' : 'password'}
             name="password"
             placeholder="비밀번호"
+            value={user.password}
             onChange={handleChange}
-            required
-            style={styles.passwordInput}
-          />
-          <FontAwesomeIcon
             icon={showPassword ? faEyeSlash : faEye}
-            onClick={togglePasswordVisibility}
-            style={styles.eyeIcon}
+            onIconClick={togglePasswordVisibility}
+            required
           />
-        </div>
 
-        <div style={styles.passwordContainer}>
-          <input
+          <AuthInput
             type={showConfirmPassword ? 'text' : 'password'}
             name="confirmPassword"
             placeholder="비밀번호 확인"
             onChange={handleChange}
+            icon={showPassword ? faEyeSlash : faEye}
+            onIconClick={toggleConfirmPasswordVisibility}
             required
-            style={styles.passwordInput}
           />
-          <FontAwesomeIcon
-            icon={showConfirmPassword ? faEyeSlash : faEye}
-            onClick={toggleConfirmPasswordVisibility}
-            style={styles.eyeIcon}
-          />
-        </div>
 
-        <button type="submit" style={styles.signupButton}>
-          회원가입
-        </button>
-      </form>
-    </div>
+          <SubmitButton btnName="회원가입" type="submit" />
+        </Form>
+      </ContentWrapper>
+    </StSignUpWrapper>
   );
 };
 
 export default SignUp;
 
-const styles = {
-  container: {
-    backgroundImage: "url('/background/crumbled_paper.png')",
-    backgroundSize: 'cover',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    padding: '0 4rem',
-  },
-  title: {
-    fontFamily: "'Comic Sans MS', cursive",
-    fontSize: '2.5rem',
-    color: '#a22',
-    marginBottom: '20px',
-  },
-  orText: {
-    margin: '15px 0',
-    color: '#777',
-    fontSize: '16px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    maxWidth: '350px',
-  },
-  input: {
-    width: '100%',
-    padding: '15px',
-    marginBottom: '10px',
-    borderRadius: '10px',
-    border: '1px solid #ccc',
-    fontSize: '18px',
-    boxSizing: 'border-box', // ✅ 패딩이 width에 포함되도록 설정
-  },
-  passwordContainer: {
-    width: '100%', // ✅ 모든 입력 필드와 크기 통일
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: '10px',
-    border: '1px solid #ccc',
-    paddingRight: '15px', // ✅ 눈 아이콘 공간 확보
-    background: '#fff',
-    boxSizing: 'border-box',
-    marginBottom: '10px',
-  },
-  passwordInput: {
-    flex: 1,
-    padding: '15px',
-    border: 'none',
-    borderRadius: '10px',
-    fontSize: '18px',
-    outline: 'none',
-    width: '100%',
-  },
-  eyeIcon: {
-    cursor: 'pointer',
-    fontSize: '20px',
-    color: '#777',
-  },
-  signupButton: {
-    background: '#C62828',
-    color: 'white',
-    padding: '15px',
-    border: 'none',
-    borderRadius: '10px',
-    fontSize: '18px',
-    cursor: 'pointer',
-    marginTop: '10px',
-  },
-};
+const StSignUpWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding: 4rem;
+  padding-top: 6rem;
+  box-sizing: border-box;
+  height: 100%;
+
+  color: ${({ theme }) => theme.colors.MainRed};
+  ${({ theme }) => theme.fonts.TitleLogo};
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding-top: 6rem;
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 100%;
+  gap: 3rem;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+`;
+
+const ErrorText = styled.p`
+  color: ${({ theme }) => theme.colors.Red1};
+  ${({ theme }) => theme.fonts.Body2};
+  margin-top: -1rem;
+  text-align: center;
+`;
