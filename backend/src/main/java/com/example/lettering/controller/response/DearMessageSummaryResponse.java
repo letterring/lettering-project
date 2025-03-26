@@ -16,6 +16,7 @@ public class DearMessageSummaryResponse {
     private Long sealingWaxId;
     private Boolean favorite;
     private DesignType designType;
+    private Boolean opened;
 
     public static DearMessageSummaryResponse fromEntity(AbstractMessage message) {
         DearMessageSummaryResponse dearMessageSummaryResponse = new DearMessageSummaryResponse();
@@ -25,6 +26,7 @@ public class DearMessageSummaryResponse {
         dearMessageSummaryResponse.setSealingWaxId(message.getSealingWax().getId());
         dearMessageSummaryResponse.setFavorite(message.getFavorite());
         dearMessageSummaryResponse.setDesignType(message.getSealingWax().getDesignType());
+        dearMessageSummaryResponse.setOpened(message.getOpened());
         return dearMessageSummaryResponse;
     }
 }

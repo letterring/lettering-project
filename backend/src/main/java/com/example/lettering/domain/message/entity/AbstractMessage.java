@@ -78,4 +78,9 @@ public abstract class AbstractMessage {
     // 받은 편지 읽음 여부 (Postcard의 open, Letter의 open)
     @Column(name = "opened", nullable = false)
     protected Boolean opened;
+
+    public void updateReply(String replyText) {
+        this.replyText = replyText;
+        this.replySentTime = LocalDateTime.now();
+    }
 }
