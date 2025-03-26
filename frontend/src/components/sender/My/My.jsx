@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
+import Header from '../../common/Header';
 import KeyringList from './KeyringList';
 import NickNameSetting from './NickNameSetting';
 
@@ -65,6 +66,8 @@ const My = () => {
 
   return (
     <StMyWrapper>
+      <Header headerName="마이페이지" />
+      <br />
       <Title>닉네임</Title>
       <NickNameSetting
         value={nickName}
