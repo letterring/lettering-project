@@ -70,7 +70,7 @@ const OnBoading = () => {
             />
           ))}
         </StyledSlider>
-        <LongButton btnName={buttonText} opacity={buttonText === '옆으로 넘겨주세요' ? 0.7 : ''} />
+        <LongButton btnName={buttonText} disabled={buttonText === '옆으로 넘겨주세요'} />
       </StOnBoadingWrapper>
     </>
   );
@@ -87,7 +87,7 @@ const StOnBoadingWrapper = styled.div`
   align-items: center;
   gap: 3rem;
 
-  padding: 3rem;
+  padding: 3rem 0;
   box-sizing: border-box;
 
   height: 100%;
