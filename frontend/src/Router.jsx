@@ -6,6 +6,7 @@ import { RecoilRoot } from 'recoil';
 import ScrollToTop from './components/common/ScrollToTop';
 import DearHomePage from './pages/dear/Homepage';
 import DearLandingPage from './pages/dear/LandingPage';
+import DearMailBoxPage from './pages/dear/MailBoxPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
@@ -43,6 +44,7 @@ const Router = () => {
               <Route path="/dear/home" element={<DearHomePage />} />
               <Route path="/dear/postcard" element={<DearPostcardPage />} />
               <Route path="/dear/postcard/detail" element={<DearPostDetailPage />} />
+              <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
 
               {/* common */}
               <Route path="*" element={<ErrorPage />} />
