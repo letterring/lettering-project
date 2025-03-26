@@ -38,7 +38,7 @@ const Router = () => {
               <Route path="/mailbox" element={<MailBoxPage />} />
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/complete" element={<CompletePage />} />
-              <Route path="/delivery" element={<DeliveryTypePage />} />
+              <Route path="/deliverytype" element={<DeliveryTypePage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
