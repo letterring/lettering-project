@@ -52,6 +52,8 @@ const CarouselContainer = styled.div`
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding: 0;
+  margin-top: 6rem;
+  margin-bottom: 1rem;
 
   &::-webkit-scrollbar {
     display: none;
