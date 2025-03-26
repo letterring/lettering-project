@@ -7,7 +7,6 @@ import lombok.*;
 @Entity
 @Table(name = "keyring")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -30,6 +29,10 @@ public class Keyring {
     @Column(name = "nfc_name")
     private String nfcName;
 
+    @Builder.Default
+    @Column(name = "is_favorite", nullable = false)
+    private Boolean isFavorite = false;
+
     // 키링 디자인 (KeyringDesign 엔티티 참조)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "design_id")
@@ -38,4 +41,36 @@ public class Keyring {
     // 연결된 NFC 태그 값
     @Column(name = "tag_code", nullable = false, unique = true)
     private String tagCode;
+
+    public void purchase(User owner, KeyringDesign design) {
+        this.isPurchase = true;
+        this.owner = owner;
+        this.design = design;
+    }
+
+    public void toggleFavorite() {
+        this.isFavorite = !this.isFavorite;
+    }
+
+    public static Keyring createNew(String tagCode) {
+        return new Keyring(
+                null,          // id
+                false,         // isPurchase
+                null,          // owner
+                "우체통 이름",   // nfcName
+                false,         // isFavorite
+                null,          // design
+                tagCode        // tagCode
+        );
+    }
+
+    public void updateNfcName(String newName) {
+        this.nfcName = newName;
+    }
+
+    public void removeOwner() {
+        this.owner = null;
+        this.isFavorite = false;
+    }
+
 }

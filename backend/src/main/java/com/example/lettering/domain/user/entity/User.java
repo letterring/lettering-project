@@ -2,11 +2,10 @@ package com.example.lettering.domain.user.entity;
 
 import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.user.enums.Provider;
-import com.example.lettering.util.entity.Font;
+import com.example.lettering.domain.user.enums.Font;
 import com.example.lettering.domain.keyring.entity.Keyring;
-import com.example.lettering.domain.letter.entity.Letter;
-import com.example.lettering.domain.postcard.entity.Postcard;
-import com.example.lettering.domain.keyring.entity.Keyring;
+import com.example.lettering.domain.message.entity.Letter;
+import com.example.lettering.domain.message.entity.Postcard;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -43,11 +42,12 @@ public class User {
     @Column(name = "real_name")
     private String realName;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "font")
-    private Font font;
+    private Font font = Font.GOMSIN1;
 
-    @Column(name = "zipcode", nullable = false)
+    @Column(name = "zipcode")
     private String zipcode;
 
     @Column(name = "road_address")
@@ -91,7 +91,7 @@ public class User {
         this.userNickname = (newNickname != null) ? newNickname : this.userNickname;
     }
 
-    public void updateAddress(String realName, String phoneNumber, String zipcode, String roadAddress, String detailAddress) {
+    public void updatePersonalInfo(String realName, String phoneNumber, String zipcode, String roadAddress, String detailAddress) {
         this.realName = realName;
         this.phoneNumber = phoneNumber;
         this.zipcode = zipcode;
@@ -124,6 +124,12 @@ public class User {
         this.userNickname = userNickname;
         this.provider = provider;
         this.createdAt = LocalDateTime.now(); // 자동 생성
+    }
+
+    public void updateFont(Font newFont) {
+        if (newFont != null) {
+            this.font = newFont;
+        }
     }
 
 }

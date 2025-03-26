@@ -1,14 +1,14 @@
 package com.example.lettering.util;
 
 
-import com.example.lettering.domain.user.dto.PasswordEncryptionResultDto;
+import com.example.lettering.domain.user.dto.PasswordEncryptionResult;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class OpenCrypt {
-    public static PasswordEncryptionResultDto encryptPw(String source) {
+    public static PasswordEncryptionResult encryptPw(String source) {
 
         SecureRandom sr = new SecureRandom();
 
@@ -26,7 +26,7 @@ public class OpenCrypt {
         byte[] hashedPw = getSHA256(source, salt);
         String hashedPassword = byteArrayToHex(hashedPw);
 
-        return new PasswordEncryptionResultDto(hashedPassword, salt);
+        return new PasswordEncryptionResult(hashedPassword, salt);
     }
 
     public static byte[] getSHA256(String source, String salt) {
