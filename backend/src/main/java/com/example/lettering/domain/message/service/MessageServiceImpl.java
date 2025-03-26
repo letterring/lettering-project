@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
     public List<DearMessageSummaryResponse> getMessagesToDear(Long keyringId, int page) {
         PageRequest pageable = PageRequest.of(page, 5);
         Page<AbstractMessage> messagePage = abstractMessageRepository
-                .findByKeyring_IdAndConditionTimeLessThanEqualOrderByOpenedAscFavoriteDescConditionTimeDesc(
+                .findByKeyringIdWithCondition(
                         keyringId, LocalDateTime.now(), pageable);
         if (messagePage.isEmpty()) {
             return List.of();
