@@ -23,7 +23,6 @@ public class PostcardDetailResponse {
     private LocalDateTime replySentTime;
     private Boolean opened;
     private Long sealingWaxId;
-    private String sealingWaxName;
     private DesignType designType;
     private Font font;
     private String quizQuestion;
@@ -44,7 +43,6 @@ public class PostcardDetailResponse {
         postcardDetailResponse.setReplySentTime(postcard.getReplySentTime());
         postcardDetailResponse.setOpened(postcard.getOpened());
         postcardDetailResponse.setSealingWaxId(postcard.getSealingWax().getId());
-        postcardDetailResponse.setSealingWaxName(postcard.getSealingWax().getSealingWaxName());
         postcardDetailResponse.setDesignType(postcard.getSealingWax().getDesignType());
         postcardDetailResponse.setFont(postcard.getFont());
 

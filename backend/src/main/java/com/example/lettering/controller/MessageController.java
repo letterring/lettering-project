@@ -1,10 +1,9 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
+import com.example.lettering.controller.response.DearMessageSummaryListResponse;
 import com.example.lettering.controller.response.PostcardDetailResponse;
 import com.example.lettering.controller.response.SenderMessageSummaryListResponse;
-import com.example.lettering.controller.response.SenderMessageSummaryResponse;
-import com.example.lettering.controller.response.SealingWaxListResponse;
 import com.example.lettering.domain.message.service.MessageService;
 import com.example.lettering.domain.message.service.PostcardService;
 import com.example.lettering.exception.ExceptionCode;
@@ -19,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -69,17 +67,17 @@ public class MessageController {
     @GetMapping("/sender")
     public ResponseEntity<SenderMessageSummaryListResponse> getMessages(
             HttpSession session,
-            @RequestParam(name = "index", defaultValue = "0") int index) {
+            @RequestParam(name = "page", defaultValue = "0") int page) {
 
         Long senderId = (Long) session.getAttribute("userId");
         if (senderId == null) {
             throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
         }
-        return ResponseEntity.ok(SenderMessageSummaryListResponse.of(messageService.getMessagesBySender(senderId, index)));
+        return ResponseEntity.ok(SenderMessageSummaryListResponse.of(messageService.getMessagesBySender(senderId, page)));
     }
 
     @Operation(summary = "엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
-    @GetMapping("postcards/{messageId}")
+    @GetMapping("postcards/sender/{messageId}")
     public ResponseEntity<PostcardDetailResponse> getPostcardDetail(
             @PathVariable("messageId") Long messageId,
             HttpSession session) {
@@ -89,7 +87,21 @@ public class MessageController {
             throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
         }
 
-        PostcardDetailResponse response = postcardService.getPostcardDetail(messageId);
-        return ResponseEntity.ok(response);
+        PostcardDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
+        return ResponseEntity.ok(postcardDetailResponse);
+    }
+
+    @GetMapping("dear/{tagCode}")
+    public ResponseEntity<DearMessageSummaryListResponse> getDearMessages(
+            @PathVariable("tagCode") String tagCode,
+            @RequestParam(name = "page", defaultValue = "0") int page) {
+
+        //추후 태그 가져오는 방식 고민
+        if (tagCode == null || tagCode.isEmpty()) {
+            throw new BusinessException(ExceptionCode.VALIDATION_ERROR);
+        }
+        return ResponseEntity.ok(
+                DearMessageSummaryListResponse.of(messageService.getDearMessagesByReceiver(tagCode, page))
+        );
     }
 }
