@@ -5,4 +5,6 @@ export { ReactComponent as IcLikseTrue } from './ic_likes_true.svg';
 export { ReactComponent as IcLock } from './ic_lock.svg';
 export { ReactComponent as IcMenu } from './ic_menu.svg';
 export { ReactComponent as IcMenuSmall } from './ic_menu_small.svg';
+export { ReactComponent as IcOpened } from './ic_opened.svg';
 export { ReactComponent as IcSend } from './ic_send.svg';
+export { ReactComponent as IcUnOpened } from './ic_unopened.svg';
