@@ -8,5 +8,5 @@ import java.util.List;
 public interface MessageService {
     List<SenderMessageSummaryResponse> getMessagesBySender(Long senderId, int page);
 
-    List<DearMessageSummaryResponse> getDearMessagesByReceiver(String tagCode, int page);
+    List<DearMessageSummaryResponse> getMessagesToDear(Long keyringId, int page);
 }

@@ -23,7 +23,7 @@ public class DearMessageSummaryResponse {
         dearMessageSummaryResponse.setConditionTime(message.getConditionTime());
         dearMessageSummaryResponse.setReplied(message.getReplySentTime() != null);
         dearMessageSummaryResponse.setSealingWaxId(message.getSealingWax().getId());
-        dearMessageSummaryResponse.setFavorite(message.getFavorite() != null);
+        dearMessageSummaryResponse.setFavorite(message.getFavorite());
         dearMessageSummaryResponse.setDesignType(message.getSealingWax().getDesignType());
         return dearMessageSummaryResponse;
     }

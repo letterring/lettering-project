@@ -91,17 +91,15 @@ public class MessageController {
         return ResponseEntity.ok(postcardDetailResponse);
     }
 
-    @GetMapping("dear/{tagCode}")
+    @GetMapping("dear/{keyringId}")
     public ResponseEntity<DearMessageSummaryListResponse> getDearMessages(
-            @PathVariable("tagCode") String tagCode,
+            @PathVariable("keyringId") Long keyringId,
             @RequestParam(name = "page", defaultValue = "0") int page) {
 
         //추후 태그 가져오는 방식 고민
-        if (tagCode == null || tagCode.isEmpty()) {
+        if (keyringId == null) {
             throw new BusinessException(ExceptionCode.VALIDATION_ERROR);
         }
-        return ResponseEntity.ok(
-                DearMessageSummaryListResponse.of(messageService.getDearMessagesByReceiver(tagCode, page))
-        );
+        return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
     }
 }
