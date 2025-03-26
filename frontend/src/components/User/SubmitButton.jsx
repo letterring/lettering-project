@@ -18,6 +18,7 @@ const StLongButtonWrapper = styled.button`
   width: 28rem;
   height: 5rem;
   padding: 1rem 2rem;
+  margin-top: 2rem;
 
   border-radius: 1rem;
 

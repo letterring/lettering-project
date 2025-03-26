@@ -30,7 +30,9 @@ const Login = () => {
       if (res && res.data) {
         setError('');
         alert(`로그인 성공! 환영합니다, ${res.data.userNickname}님!`);
-        navigate('/');
+
+        console.log(res);
+        navigate('/Home');
       }
     } catch (err) {
       console.error('로그인 실패!!!:', err);
