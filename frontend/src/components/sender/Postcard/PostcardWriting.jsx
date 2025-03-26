@@ -1,30 +1,32 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { IcImageUpload, IcImageUploadTrue } from '../../../assets/icons';
 import PostcardImg from '../../../assets/images/postcard/postcard.png';
-import { PostcardImage, PostcardText } from '../../../recoil/atom';
+import { PostcardImage, PostcardImageFile, PostcardText } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 
 const PostcardWriting = () => {
   const navigate = useNavigate();
 
-  // const [image, setImage] = useRecoilState(PostcardImage);
-  // const [text, setText] = useRecoilState(PostcardText);
+  const [image, setImage] = useRecoilState(PostcardImage);
+  const [imageFile, setImageFile] = useRecoilState(PostcardImageFile);
+  const [text, setText] = useRecoilState(PostcardText);
+  const [check, setCheck] = useState(false);
 
-  const [image, setImage] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
   const fileInputRef = useRef(null);
-  const [text, setText] = useState('');
-  const textLimit = 120;
+  const textLimit = 150;
 
   const handleTextChange = (e) => {
     const value = e.target.value;
     if (value.length <= textLimit) {
       setText(value);
+    }
+    if (value.length == 0) {
+      setCheck(false);
     }
   };
 
@@ -60,6 +62,12 @@ const PostcardWriting = () => {
       fileInputRef.current.click();
     }
   };
+
+  useEffect(() => {
+    if (image != null && imageFile != null && text != '') {
+      setCheck(true);
+    }
+  }, [image, imageFile, text]);
 
   return (
     <StPageWrapper>
@@ -101,7 +109,11 @@ const PostcardWriting = () => {
       </StContentWrapper>
 
       <StButtonWrapper>
-        <LongButton onClick={() => navigate('/postcard/preview')} btnName="엽서 작성 완료하기" />
+        <LongButton
+          onClick={() => navigate('/postcard/preview')}
+          btnName="엽서 작성 완료하기"
+          disabled={check === false}
+        />
       </StButtonWrapper>
     </StPageWrapper>
   );

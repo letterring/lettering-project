@@ -10,16 +10,22 @@ const UserId = atom({
   default: 1,
 });
 
-// 엽서 쓰기 시 업로드한 이미지
+// 업로드한 이미지 미리보기
 const PostcardImage = atom({
   key: 'postcardImage',
   default: null,
 });
 
-// 엽서 쓰기 시 내용
+// 엽서 쓰기 API 시 이미지 파일
+const PostcardImageFile = atom({
+  key: 'postcardImageFile',
+  default: null,
+});
+
+// 엽서 쓰기 API 시 내용
 const PostcardText = atom({
   key: 'postcardText',
   default: '',
 });
 
-export { PostcardImage, PostcardText, UserId };
+export { PostcardImage, PostcardImageFile, PostcardText, UserId };

@@ -1,57 +1,19 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import PostcardImg from '../../../assets/images/postcard/postcard.png';
 import StampImg from '../../../assets/images/postcard/stamp.png';
+import { PostcardImage, PostcardImageFile, PostcardText } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 
 const PostcardWriting = () => {
-  const [image, setImage] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
-  const fileInputRef = useRef(null);
-  const [text, setText] = useState('');
-  const textLimit = 120;
-
-  const handleTextChange = (e) => {
-    const value = e.target.value;
-    if (value.length <= textLimit) {
-      setText(value);
-    }
-  };
-
-  // 이미지 업로드 핸들러
-  const handleImageChange = async (event) => {
-    const file = event.target.files[0];
-
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      //5MB
-      alert('5MB가 넘습니다!');
-      event.target.type = '';
-      event.target.type = 'file';
-      return;
-    }
-
-    if (file.name.endsWith('.heic') || file.name.endsWith('.heif')) {
-      //heic 이미지 처리
-      const newFile = await convertHeicToJpeg(file);
-      if (newFile) {
-        setImageFile(newFile);
-        setImage(URL.createObjectURL(newFile));
-      }
-    } else {
-      setImageFile(file);
-      setImage(URL.createObjectURL(file));
-    }
-  };
-
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  const [image, setImage] = useRecoilState(PostcardImage);
+  const [text, setText] = useRecoilState(PostcardText);
+  const [imageFile, setImageFile] = useRecoilState(PostcardImageFile);
+  console.log(image, text);
+  console.log(imageFile);
 
   return (
     <StPageWrapper>
@@ -69,13 +31,9 @@ const PostcardWriting = () => {
         {/* 엽서 뒷면 텍스트 박스 */}
         <StTextBox>
           <StPostcardContent>
-            <StPostcardTitle>사랑하는 너에게,</StPostcardTitle>
             <StPostcardStamp src={StampImg} alt="우표" />
-            <StPostcardText>
-              오늘 아침 눈을 뜨자마자 달력을 보니 우리 기념일이라는 사실에 마음이 설렌다. 우리가
-              함께 보낸 시간이 벌써 이렇게 쌓였다는 게 믿기지 않을 정도로 빠르게 느껴져. 처음 만났던
-              순간부터 지금까지 함께한 모든 기억들이 하나둘 떠오르면서 마음이 참 따뜻해졌어.
-            </StPostcardText>
+            <StPostcardTitle>사랑하는 너에게,</StPostcardTitle>
+            <StPostcardText>{text}</StPostcardText>
           </StPostcardContent>
         </StTextBox>
       </StContentWrapper>
@@ -149,8 +107,11 @@ const StPostcardContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 3rem;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
   z-index: 3;
 `;
 
