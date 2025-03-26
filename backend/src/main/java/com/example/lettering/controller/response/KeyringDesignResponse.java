@@ -15,6 +15,7 @@ public class KeyringDesignResponse {
     private Long price;
     private String description; // ✅ 추가
 
+    // ✅ 변환 메서드: Entity → DTO
     public static KeyringDesignResponse from(KeyringDesign entity) {
         return new KeyringDesignResponse(
                 entity.getId(),

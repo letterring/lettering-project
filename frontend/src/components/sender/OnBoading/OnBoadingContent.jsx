@@ -24,6 +24,7 @@ const StOnBoadingWrapper = styled.div`
   justify-content: flex-start;
 
   height: 50rem;
+  padding: 0 3rem;
 
   h2 {
     color: ${({ theme }) => theme.colors.Gray2};
