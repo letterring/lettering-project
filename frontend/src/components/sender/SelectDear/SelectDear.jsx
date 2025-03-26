@@ -42,12 +42,12 @@ const SelectDear = () => {
 
   const handleSelectOption = () => {
     console.log('전송 옵션 선택');
-    navigate('/send-type');
+    navigate('/sendtype');
   };
 
   const handleImmediateSend = () => {
     console.log('즉시 전송');
-    navigate('/send-type');
+    navigate('/send');
   };
 
   return (
