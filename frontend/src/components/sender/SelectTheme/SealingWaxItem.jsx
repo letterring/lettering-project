@@ -16,7 +16,7 @@ export default SealingWaxItem;
 const Item = styled.div`
   flex: 0 0 8rem;
   height: 8rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
   background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-position: center;

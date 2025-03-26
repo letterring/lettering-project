@@ -2,6 +2,7 @@ package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
 import com.example.lettering.controller.response.PostcardDetailResponse;
+import com.example.lettering.controller.response.PostcardToDearDetailResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
 import com.example.lettering.domain.message.entity.Postcard;
@@ -50,10 +51,29 @@ public class PostcardServiceImpl implements PostcardService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public PostcardDetailResponse getPostcardDetail(Long messageId) {
         Postcard postcard = postcardRepository.findById(messageId)
-                .orElseThrow(() -> new BusinessException(ExceptionCode.DATABASE_ERROR)); // 또는 적절한 ExceptionCode 사용
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
         return PostcardDetailResponse.fromEntity(postcard);
+    }
+
+    @Override
+    public PostcardToDearDetailResponse getPostcardToDearDetail(Long messageId) {
+        Postcard postcard = postcardRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        postcard.markAsOpened();
+
+        return PostcardToDearDetailResponse.fromEntity(postcard);
+    }
+
+    @Override
+    public void resetMessageAsUnread(Long messageId) {
+        Postcard postcard = postcardRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.DATABASE_ERROR));
+        
+        postcard.resetAsUnread();
     }
 }
