@@ -4,6 +4,8 @@ import com.example.lettering.controller.response.DearMessageSummaryResponse;
 import com.example.lettering.controller.response.SenderMessageSummaryResponse;
 import com.example.lettering.domain.message.entity.AbstractMessage;
 import com.example.lettering.domain.message.repository.AbstractMessageRepository;
+import com.example.lettering.exception.ExceptionCode;
+import com.example.lettering.exception.type.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class MessageServiceImpl implements MessageService {
 
     private final AbstractMessageRepository abstractMessageRepository;
@@ -42,5 +44,12 @@ public class MessageServiceImpl implements MessageService {
         return messagePage.stream()
                 .map(DearMessageSummaryResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createReply(Long messageId, String replyText) {
+        AbstractMessage message = abstractMessageRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.DATABASE_ERROR));
+        message.updateReply(replyText);
     }
 }
