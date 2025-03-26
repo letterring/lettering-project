@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { IcDetail } from '../../../assets/icons';
 import Closed1 from '../../../assets/images/mailbox/closed1.png';
 import Closed4 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
@@ -17,12 +18,12 @@ import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
 import Opened5 from '../../../assets/images/mailbox/opened4.png';
 
-const images = [
+const messages = [
   {
     dear: '하람',
     reply: true,
     type: 'letter',
-    openTime: '1분전',
+    openTime: '1분 전',
     closed: Closed1,
     opened: Opened1,
   },
@@ -30,7 +31,7 @@ const images = [
     dear: '효승',
     reply: false,
     type: 'letter',
-    openTime: '2시간전',
+    openTime: '2시간 전',
     closed: Closed2,
     opened: Opened2,
   },
@@ -38,7 +39,7 @@ const images = [
     dear: '지수',
     reply: false,
     type: 'postcard',
-    openTime: '1일전',
+    openTime: '1일 전',
     closed: Closed3,
     opened: Opened3,
   },
@@ -46,7 +47,7 @@ const images = [
     dear: '예슬',
     reply: false,
     type: 'letter',
-    openTime: '2025.03.18',
+    openTime: '25.03.18',
     closed: Closed4,
     opened: Opened4,
   },
@@ -54,7 +55,7 @@ const images = [
     dear: '승엽',
     reply: false,
     type: 'letter',
-    openTime: '2024.12.25',
+    openTime: '24.12.25',
     closed: Closed5,
     opened: Opened5,
   },
@@ -65,9 +66,22 @@ const SlideComponent = () => {
   const [openedIndices, setOpenedIndices] = useState([]);
 
   const handleClick = (idx) => {
-    if (activeIndex === idx && !openedIndices.includes(idx)) {
-      setOpenedIndices([...openedIndices, idx]);
-    }
+    if (activeIndex !== idx) return;
+
+    setOpenedIndices((prev) =>
+      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx],
+    );
+  };
+
+  const handleSlideChange = (swiper) => {
+    setActiveIndex(swiper.realIndex);
+  };
+
+  const getAlignType = (idx, activeIdx) => {
+    const diff = idx - activeIdx;
+    if (diff === 0) return 'center';
+    if (diff < 0) return 'flex-start';
+    return 'flex-end';
   };
 
   return (
@@ -77,7 +91,7 @@ const SlideComponent = () => {
       grabCursor
       centeredSlides
       slidesPerView={5}
-      onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+      onSlideChange={handleSlideChange}
       coverflowEffect={{
         rotate: 0,
         stretch: 0,
@@ -87,15 +101,20 @@ const SlideComponent = () => {
       }}
       modules={[EffectCoverflow]}
     >
-      {images.map((img, idx) => {
+      {messages.map((img, idx) => {
         const isVisible = Math.abs(activeIndex - idx) <= 2;
-        const isOpened = openedIndices.includes(idx) && activeIndex === idx;
         const isCenter = activeIndex === idx;
+        const isOpened = openedIndices.includes(idx);
 
         return (
           <StyledSlide key={idx} $hidden={!isVisible} onClick={() => handleClick(idx)}>
-            <SlideContent>
-              <img src={isOpened ? img.opened : img.closed} alt={`Slide ${idx + 1}`} />
+            <SlideContent $align={getAlignType(idx, activeIndex)}>
+              <ImageWrapper>
+                <img
+                  src={isCenter && isOpened ? img.opened : img.closed}
+                  alt={`Slide ${idx + 1}`}
+                />
+              </ImageWrapper>
               {isOpened && isCenter && (
                 <Comment>
                   <p>
@@ -106,7 +125,11 @@ const SlideComponent = () => {
               )}
               <Details>
                 <OpenTime>{img.openTime}</OpenTime>
-                {isOpened && isCenter && <DetailButton>상세보기</DetailButton>}
+                {isOpened && isCenter && (
+                  <DetailButton>
+                    <IcDetail />
+                  </DetailButton>
+                )}
               </Details>
             </SlideContent>
           </StyledSlide>
@@ -119,27 +142,28 @@ const SlideComponent = () => {
 export default SlideComponent;
 
 const StyledSwiper = styled(Swiper)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 90%;
   height: 45rem;
   /* overflow: hidden; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const StyledSlide = styled(SwiperSlide)`
-  width: 100%;
-  /* height: 12rem; */
   display: flex;
-  visibility: ${({ $hidden }) => ($hidden ? 'hidden' : 'visible')};
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+
+  width: 100%;
   position: relative;
-  cursor: pointer;
+
+  visibility: ${({ $hidden }) => ($hidden ? 'hidden' : 'visible')};
   transition:
     transform 0.6s ease-in-out,
     filter 0.6s ease-in-out;
+  cursor: pointer;
 
   &.swiper-slide-active {
     transform: scale(1.2);
@@ -148,61 +172,50 @@ const StyledSlide = styled(SwiperSlide)`
 `;
 
 const SlideContent = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: ${({ $align }) => $align};
+
+  position: relative;
+  width: 27rem;
+  height: 100%;
+`;
+
+const ImageWrapper = styled.div`
+  position: absolute;
+  top: 60%;
+  left: 1rem;
+  width: 20rem;
+  transform: translateY(-50%);
 
   img {
-    width: 80%;
+    width: 100%;
     object-fit: contain;
   }
 `;
 
 const Comment = styled.div`
   position: absolute;
-  left: center;
-  top: center;
-  ${({ theme }) => theme.fonts.EduBody2};
-  color: ${({ theme }) => theme.colors.Gray0};
+  left: 7rem;
+  top: 1rem;
+  ${({ theme }) => theme.fonts.EduBody1};
+  color: ${({ theme }) => theme.colors.Gray1};
   text-align: center;
 `;
 
 const Details = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const OpenTime = styled.div`
-  /* position: absolute;
-  top: 10px;
-  right: 12px; */
-  color: ${({ theme }) => theme.colors.Gray0};
-  padding: 4px 8px;
-  font-size: 0.8rem;
-  border-radius: 8px;
+  margin-top: 2rem;
+  color: ${({ theme }) => theme.colors.Gray2};
+  ${({ theme }) => theme.fonts.Body5};
 `;
 
 const DetailButton = styled.button`
-  /* position: absolute;
-  top: 50%;
-  right: 0; */
-  transform: translateY(-50%);
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  border-radius: 8px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #2563eb;
-  }
+  margin-top: 4rem;
 `;
