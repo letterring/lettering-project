@@ -4,35 +4,36 @@ import styled from 'styled-components';
 
 import { IcAlarmClock, IcEnvelop, IcLock, IcStar, IcTimeQuarter } from '../../../assets/icons';
 import PostBoxImg from '../../../assets/images/postBox.png';
+import { getRelativeDate } from '../../../util/getRelativeDate';
 
 const KeyringCard = ({ keyring }) => {
   return (
     <StCardWrapper>
       <CardHeader>
-        <IcStar style={{ color: keyring.isFaivorite ? '#FFD600' : '#D3D3D3' }} />
-        <LastDateText>마지막 편지 {keyring.lastDate}일 전</LastDateText>
+        <IcStar style={{ color: keyring.favorite ? '#FFD600' : '#D3D3D3' }} />
+        <LastDateText>{getRelativeDate(keyring.lastSentTime)}</LastDateText>
       </CardHeader>
 
       <PostBoxImage src={PostBoxImg} alt="우체통" />
-      <Nickname>{keyring.name}</Nickname>
-      <SubText>키링ID</SubText>
+      <Nickname>{keyring.keyringName}</Nickname>
+      <SubText>{keyring.keyringId}</SubText>
 
       <InfoGrid>
         <InfoBox>
           <IcEnvelop />
-          <span>{keyring.sentMailCount}</span>
+          <span>{keyring.totalMessageCount}</span>
         </InfoBox>
         <InfoBox>
           <IcTimeQuarter />
-          <span>{keyring.sentTimerMailCount}</span>
+          <span>{keyring.scheduledCount}</span>
         </InfoBox>
         <InfoBox>
           <IcAlarmClock />
-          <span>{keyring.sentAlarmMailCount}</span>
+          <span>{keyring.timeCapsuleCount}</span>
         </InfoBox>
         <InfoBox>
           <IcLock />
-          <span>{keyring.setSecretMailCount}</span>
+          <span>{keyring.secretCount}</span>
         </InfoBox>
       </InfoGrid>
     </StCardWrapper>
