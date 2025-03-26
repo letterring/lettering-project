@@ -4,8 +4,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import DummyImg from '../../../assets/dummy/postcard.jpg';
-import PostcardImg from '../../../assets/icons/postcard/postcard.png';
-import StampImg from '../../../assets/icons/postcard/stamp.png';
+import PostcardImg from '../../../assets/images/postcard/postcard.png';
+import StampImg from '../../../assets/images/postcard/stamp.png';
 import Header from '../../common/Header';
 import ReplyComponent from './ReplyComponent';
 
@@ -107,6 +107,7 @@ const StPostcard = styled.img`
   width: 29rem;
   z-index: 2;
 `;
+
 const StPostcardContent = styled.div`
   position: relative;
   display: flex;
@@ -145,7 +146,6 @@ const StPostcardWhite = styled.img`
   position: absolute;
   width: 100%;
   z-index: 2;
-  border: solid 1111 #ccc;
   background-color: white;
 `;
 const StPostcardImage = styled(motion.div)`
