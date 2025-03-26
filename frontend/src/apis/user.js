@@ -26,6 +26,7 @@ export const getUserData = async () => {
     return data;
   } catch (err) {
     console.error('세션 조회 실패', err);
+    throw err;
   }
 };
 
@@ -38,5 +39,6 @@ export const logout = async () => {
     return res;
   } catch (err) {
     console.error('로그아웃 요청 실패', err);
+    throw err;
   }
 };
