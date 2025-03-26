@@ -1,66 +1,60 @@
 import React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { getUserInfo } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
+import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
 import Header from '../../common/Header';
 import KeyringList from './KeyringList';
 import NickNameSetting from './NickNameSetting';
 
-const keyringList = [
-  {
-    id: 1,
-    name: '우체통1',
-    lastDate: 1,
-    sentMailCount: 3,
-    sentTimerMailCount: 2,
-    sentAlarmMailCount: 1,
-    setSecretMailCount: 1,
-    isFaivorite: true,
-  },
-  {
-    id: 2,
-    name: '우체통2',
-    lastDate: 2,
-    sentMailCount: 33,
-    sentTimerMailCount: 21,
-    sentAlarmMailCount: 13,
-    setSecretMailCount: 12,
-    isFaivorite: false,
-  },
-  {
-    id: 3,
-    name: '우체통3',
-    lastDate: 3,
-    sentMailCount: 3,
-    sentTimerMailCount: 3,
-    sentAlarmMailCount: 3,
-    setSecretMailCount: 3,
-    isFaivorite: false,
-  },
-];
-
 const My = () => {
-  const [nickName, setNickName] = useState('NaNa');
-  const [font, setFont] = useState('GangwonEduAll');
-  const [isEditing, setIsEditing] = useState(false);
+  const setNickname = useSetRecoilState(UserNickname);
+  const setFont = useSetRecoilState(UserFont);
+  const setKeyringList = useSetRecoilState(UserKeyringList);
+
+  const nickname = useRecoilValue(UserNickname);
+  const font = useRecoilValue(UserFont);
+  const keyringList = useRecoilValue(UserKeyringList);
 
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await getUserInfo();
+        const data = res.data;
+
+        console.log(res);
+
+        setNickname(data.nickname);
+        setFont(data.font);
+        setKeyringList(data.keyrings);
+      } catch (error) {
+        console.error('유저 정보 가져오기 실패', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   const handleEditNickname = (newName) => {
-    setNickName(newName);
+    setNickname(newName);
     setIsEditing(false);
     console.log('닉네임 수정됨 : ', newName);
   };
 
   const handleChangeFont = () => {
-    console.log('폰트 변경');
+    console.log('폰트 변경 페이지로 이동');
     navigate('font');
   };
 
   const handleKeyringSetting = () => {
-    console.log('키링 설정');
+    console.log('키링 설정 페이지로 이동');
     navigate('keyring');
   };
 
@@ -70,7 +64,7 @@ const My = () => {
       <br />
       <Title>닉네임</Title>
       <NickNameSetting
-        value={nickName}
+        value={nickname}
         isEditing={isEditing}
         icon={isEditing ? IcCheckCircle : IcPen}
         onStartEdit={() => setIsEditing(true)}
@@ -86,7 +80,7 @@ const My = () => {
         키링
         <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
       </Title>
-      <KeyringList keyringArr={keyringList} />
+      <KeyringList keyringList={keyringList} />
     </StMyWrapper>
   );
 };

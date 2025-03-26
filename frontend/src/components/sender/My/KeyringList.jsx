@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import KeyringCard from './KeyringCard';
 
-const KeyringList = ({ keyringArr }) => {
+const KeyringList = ({ keyringList }) => {
   const settings = {
     dots: true, // 아래 점 네비게이션 표시
     infinite: false, // 무한 반복
@@ -22,8 +22,8 @@ const KeyringList = ({ keyringArr }) => {
   return (
     <StKeyringListWrapper>
       <Slider {...settings} tabIndex={-1}>
-        {keyringArr.map((keyring) => (
-          <KeyringCard keyring={keyring} key={keyring.id} />
+        {keyringList.map((keyring) => (
+          <KeyringCard keyring={keyring} key={keyring.keyringId} />
         ))}
       </Slider>
     </StKeyringListWrapper>
