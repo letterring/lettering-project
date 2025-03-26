@@ -3,6 +3,7 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import React from 'react';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
@@ -35,6 +36,7 @@ const OnBoading = () => {
   const [buttonText, setButtonText] = useState('옆으로 넘겨주세요');
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef(null);
+  const navigate = useNavigate();
 
   const settings = {
     dots: true,
@@ -70,7 +72,13 @@ const OnBoading = () => {
             />
           ))}
         </StyledSlider>
-        <LongButton btnName={buttonText} disabled={buttonText === '옆으로 넘겨주세요'} />
+        <LongButton
+          btnName={buttonText}
+          disabled={buttonText === '옆으로 넘겨주세요'}
+          onClick={() => {
+            navigate(`/login`);
+          }}
+        />
       </StOnBoadingWrapper>
     </>
   );

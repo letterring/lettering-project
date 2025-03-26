@@ -8,7 +8,7 @@ const MenuModal = ({ isShowing, status, target }) => {
   //status: 현재 선택된 메뉴명
   const senderMenus = [
     { id: 'home', name: '시작 화면' },
-    { id: 'write', name: '편지 쓰기' },
+    { id: 'theme', name: '편지 쓰기' },
     { id: 'mailbox', name: '보낸 편지함' },
     { id: 'purchase', name: '키링 구매' },
     { id: 'mypage', name: '마이페이지' },
@@ -58,6 +58,7 @@ const StMenuModalWrapper = styled.div`
 
   padding-top: 5rem;
   background-color: ${({ theme }) => theme.colors.Background};
+  z-index: 1000;
 `;
 
 const StMenu = styled.div`
