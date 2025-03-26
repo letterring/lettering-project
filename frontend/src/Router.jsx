@@ -9,6 +9,7 @@ import DearLandingPage from './pages/dear/LandingPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
+import CompletePage from './pages/sender/CompletePage';
 import HomePage from './pages/sender/Homepage';
 import MailBoxPage from './pages/sender/MailBoxPage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
@@ -31,6 +32,7 @@ const Router = () => {
               <Route path="/theme" element={<SelectThemePage />} />
               <Route path="/mailbox" element={<MailBoxPage />} />
               <Route path="/selectdear" element={<SelectDearPage />} />
+              <Route path="/complete" element={<CompletePage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
