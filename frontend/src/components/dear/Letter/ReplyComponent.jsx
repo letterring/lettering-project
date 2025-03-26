@@ -50,7 +50,7 @@ const ReplyComponent = () => {
 export default ReplyComponent;
 
 const StReplyWrapper = styled.div`
-  position: absolute;
+  position: relative;
   bottom: 0;
 
   display: flex;

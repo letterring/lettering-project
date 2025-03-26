@@ -2,15 +2,60 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import DummyImg1 from '../../../assets/dummy/letter.jpg';
-import DummyImg2 from '../../../assets/dummy/letter.jpg';
-import DummyImg3 from '../../../assets/dummy/letter.jpg';
-import DummyImg4 from '../../../assets/dummy/letter.jpg';
-import DummyImg5 from '../../../assets/dummy/letter.jpg';
-import FilmImg from '../../../assets/images/letter/film.png';
+import CardTemplate from './CardTemplate';
+import FilmTemplate from './FilmTemplate';
+import MainTemplate from './MainTemplate';
+import PolarTemplate from './PolarTemplate';
+import ReplyComponent from './ReplyComponent';
 
-const FilmTemplate = () => {
-  return <>film</>;
+const LetterContent = ({ template, images, text, background }) => {
+  return (
+    <StLetterWrapper $background={background}>
+      <StContentWrapper>
+        <StLetterText>{text}</StLetterText>
+        {template === 'main' && <MainTemplate images={images} />}
+        {template === 'film' && <FilmTemplate images={images} />}
+        {template === 'polar' && <PolarTemplate images={images} />}
+        {template === 'card' && <CardTemplate images={images} />}
+        {template === 'answer' && <ReplyComponent />}
+      </StContentWrapper>
+    </StLetterWrapper>
+  );
 };
 
-export default FilmTemplate;
+export default LetterContent;
+
+const StLetterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 33rem;
+  height: 55rem;
+
+  background-image: url(${(props) => props.$background});
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
+const StContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+`;
+
+const StLetterText = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  ${({ theme }) => theme.fonts.Gomsin2};
+  word-wrap: break-word;
+  overflow: auto;
+  white-space: normal;
+`;
