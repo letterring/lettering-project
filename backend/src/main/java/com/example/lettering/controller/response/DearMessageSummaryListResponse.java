@@ -8,11 +8,11 @@ import java.util.List;
 @Getter
 @Setter
 public class DearMessageSummaryListResponse {
-    private List<DearMessageSummaryResponse> dearMessageSummaryResponses;
+    private List<DearMessageSummaryResponse> dearMessagesSummaryList;
 
     public static DearMessageSummaryListResponse of(List<DearMessageSummaryResponse> dearMessageSummaryResponses) {
         DearMessageSummaryListResponse dearMessageSummaryListResponse = new DearMessageSummaryListResponse();
-        dearMessageSummaryListResponse.setDearMessageSummaryResponses(dearMessageSummaryResponses);
+        dearMessageSummaryListResponse.setDearMessagesSummaryList(dearMessageSummaryResponses);
         return dearMessageSummaryListResponse;
     }
 }

@@ -31,11 +31,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<DearMessageSummaryResponse> getDearMessagesByReceiver(String tagCode, int page) {
+    public List<DearMessageSummaryResponse> getMessagesToDear(Long keyringId, int page) {
         PageRequest pageable = PageRequest.of(page, 5);
         Page<AbstractMessage> messagePage = abstractMessageRepository
-                .findByKeyring_TagCodeAndConditionTimeLessThanEqualOrderByOpenedAscFavoriteDescConditionTimeDesc(
-                        tagCode, LocalDateTime.now(), pageable);
+                .findByKeyring_IdAndConditionTimeLessThanEqualOrderByOpenedAscFavoriteDescConditionTimeDesc(
+                        keyringId, LocalDateTime.now(), pageable);
         if (messagePage.isEmpty()) {
             return List.of();
         }

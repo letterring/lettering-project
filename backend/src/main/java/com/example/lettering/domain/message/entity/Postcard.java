@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "postcard")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -59,5 +58,19 @@ public class Postcard extends AbstractMessage {
         postcard.content = request.getContent();
         postcard.imageUrl = imageUrl;
         return postcard;
+    }
+
+    public void markAsOpened() {
+        if (!this.opened) {
+            this.opened = true;
+            this.firstOpenedTime = LocalDateTime.now();
+        }
+    }
+
+    public void resetAsUnread() {
+        this.opened = false;
+        this.firstOpenedTime = null;
+        this.replyText = null;
+        this.replySentTime = null;
     }
 }

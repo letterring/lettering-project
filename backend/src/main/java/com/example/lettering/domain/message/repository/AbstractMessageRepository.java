@@ -11,8 +11,6 @@ public interface AbstractMessageRepository extends JpaRepository<AbstractMessage
     Page<AbstractMessage> findBySender_IdOrderByConditionTimeDesc(Long senderId, Pageable pageable);
 
     //조건1. conditionTime이 현재시간보다 <=가 되어야함. 조건2. 안읽음 - 즐겨찾기 - 최신순 정렬
-    Page<AbstractMessage> findByKeyring_TagCodeAndConditionTimeLessThanEqualOrderByOpenedAscFavoriteDescConditionTimeDesc(
-            String tagCode,
-            LocalDateTime now,
-            Pageable pageable);
+    Page<AbstractMessage> findByKeyring_IdAndConditionTimeLessThanEqualOrderByOpenedAscFavoriteDescConditionTimeDesc(
+            Long keyringId, LocalDateTime now, Pageable pageable);
 }

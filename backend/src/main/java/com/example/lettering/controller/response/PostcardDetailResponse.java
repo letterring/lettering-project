@@ -8,11 +8,14 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+//추후 이름 변경 필요 PostcardBySenderDetail 로 변경 고민중
+
 @Getter
 @Setter
 public class PostcardDetailResponse {
     private Long id;
-    private String nfcName;           // Keyring의 nfcName (받는 사람 이름)
+    private String nfcName;           // 받는 사람 이름
+    private String nickName;        // 보낸 사람의 별명
     private String content;
     private String imageUrl;
     private String conditionType;
@@ -33,6 +36,7 @@ public class PostcardDetailResponse {
         PostcardDetailResponse postcardDetailResponse = new PostcardDetailResponse();
         postcardDetailResponse.setId(postcard.getId());
         postcardDetailResponse.setNfcName(postcard.getKeyring().getNfcName());
+        postcardDetailResponse.setNickName(postcard.getSender().getUserNickname());
         postcardDetailResponse.setContent(postcard.getContent());
         postcardDetailResponse.setImageUrl(postcard.getImageUrl());
         postcardDetailResponse.setConditionType(postcard.getConditionType().toString());
