@@ -166,11 +166,11 @@ const ViewerWrapper = ({
             }
           }}
         >
-          <ambientLight intensity={1} />
-          <directionalLight castShadow position={[5, 5, 5]} intensity={3} />
+          <ambientLight intensity={0.8} />
+          <directionalLight castShadow position={[5, 5, 5]} intensity={0.8} />
           <directionalLight position={[-5, 5, 5]} intensity={0} />
-          <pointLight position={[0, 3, 3]} intensity={5} />
-          <spotLight position={[10, 10, 10]} angle={0.2} intensity={4} castShadow />
+          <pointLight position={[0, 3, 3]} intensity={1} />
+          <spotLight position={[10, 10, 10]} angle={0.2} intensity={1} castShadow />
 
           {!isRising && newLetter && (
             <AnimatedEnvelope

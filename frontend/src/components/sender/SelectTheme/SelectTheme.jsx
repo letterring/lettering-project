@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { getSealingWaxList } from '../../../apis/sealingWax';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import SealingWaxCarousel from './SealingWaxCarousel';
 
 const SelectTheme = () => {
+  const [sealingWaxes, setSealingWaxes] = useState([]);
   const [selectedTheme, setSelectedTheme] = useState(null);
 
   useEffect(() => {
-    const storedThemeId = localStorage.getItem('sealingWaxId');
-    const mockData = [
-      { id: 1, sealing_wax_name: 'Happy Birthday', image_url: '/temp-images/1.png' },
-      { id: 2, sealing_wax_name: 'Love Letter', image_url: '/temp-images/2.png' },
-      { id: 3, sealing_wax_name: 'Special Day', image_url: '/temp-images/3.png' },
-      { id: 4, sealing_wax_name: 'Thank You', image_url: '/temp-images/4.png' },
-      { id: 5, sealing_wax_name: 'Congratulations', image_url: '/temp-images/5.png' },
-    ];
+    const fetchData = async () => {
+      try {
+        const data = await getSealingWaxList();
+        setSealingWaxes(data);
 
-    if (storedThemeId) {
-      const storedTheme = mockData.find((theme) => theme.id === Number(storedThemeId));
-      setSelectedTheme(storedTheme || mockData[0]);
-    } else {
-      setSelectedTheme(mockData[0]);
-    }
+        const storedId = localStorage.getItem('sealingWaxId');
+        const matched = data.find((item) => item.id === Number(storedId));
+        setSelectedTheme(matched || data[0]);
+      } catch (error) {
+        console.error('실링왁스 불러오기 실패:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleSelectTheme = (theme) => {
@@ -33,7 +34,6 @@ const SelectTheme = () => {
   const handleConfirm = () => {
     if (selectedTheme) {
       localStorage.setItem('sealingWaxId', selectedTheme.id);
-      // console.log(`${selectedTheme.sealing_wax_name} 테마가 저장되었습니다!`);
     } else {
       alert('테마를 선택해주세요!');
     }
@@ -43,10 +43,13 @@ const SelectTheme = () => {
     <Wrapper>
       <Header headerName="디자인 선택" />
 
-      <SealingWaxCarousel onSelect={handleSelectTheme} selectedTheme={selectedTheme} />
+      <SealingWaxCarousel
+        sealingWaxes={sealingWaxes}
+        onSelect={handleSelectTheme}
+        selectedTheme={selectedTheme}
+      />
 
       {selectedTheme && <SelectedThemeName>{selectedTheme.sealing_wax_name}</SelectedThemeName>}
-
       {selectedTheme && <ExampleImage src={`/temp-images/${selectedTheme.id + 10}.png`} />}
 
       <FixedButtonWrapper>

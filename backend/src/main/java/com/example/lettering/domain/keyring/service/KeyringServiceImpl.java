@@ -10,6 +10,8 @@ import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.keyring.repository.KeyringDesignRepository;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
 import com.example.lettering.domain.keyring.repository.OrderRepository;
+import com.example.lettering.domain.message.dto.KeyringLastSentTime;
+import com.example.lettering.domain.message.repository.AbstractMessageRepository;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
@@ -20,7 +22,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,6 +36,7 @@ public class KeyringServiceImpl implements KeyringService{
     private final KeyringRepository keyringRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final AbstractMessageRepository abstractMessageRepository;
 
     // ✅ 모든 키링 디자인 조회
     @Override
@@ -133,6 +139,15 @@ public class KeyringServiceImpl implements KeyringService{
     @Override
     public List<KeyringManageResponse> getManageList(Long userId) {
         List<Keyring> keyrings = keyringRepository.findAllByOwnerIdOrderByIsFavoriteDescIdAsc(userId);
+        List<Long> keyringIds = keyrings.stream().map(Keyring::getId).toList();
+
+        Map<Long, LocalDateTime> lastSentTimeMap = abstractMessageRepository
+                .findLastSentTimesByKeyringIds(keyringIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        KeyringLastSentTime::getKeyringId,
+                        KeyringLastSentTime::getLastSentTime
+                ));
 
         return keyrings.stream()
                 .map(k -> new KeyringManageResponse(
@@ -140,8 +155,10 @@ public class KeyringServiceImpl implements KeyringService{
                         k.getNfcName(),
                         k.getIsFavorite(),
                         k.getTagCode(),
-                        k.getDesign().getImageUrl()
-                )).toList();
+                        k.getDesign().getImageUrl(),
+                        lastSentTimeMap.get(k.getId())
+                ))
+                .toList();
     }
 
     @Override
@@ -182,12 +199,15 @@ public class KeyringServiceImpl implements KeyringService{
             throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
         }
 
+        LocalDateTime lastSentTime = abstractMessageRepository.findLastSentTimeByKeyring(keyringId);
+
         return new KeyringManageResponse(
                 keyring.getId(),
                 keyring.getNfcName(),
                 keyring.getIsFavorite(),
                 keyring.getTagCode(),
-                keyring.getDesign().getImageUrl()
+                keyring.getDesign().getImageUrl(),
+                lastSentTime
         );
     }
 
