@@ -12,7 +12,7 @@ const SelectDear = () => {
   const navigate = useNavigate();
   const [keyringArr, setKeyringArr] = useState([]);
 
-  // ✅ 하드 코딩된 키링 목록 설정
+  // 하드 코딩된 키링 목록
   useEffect(() => {
     const hardCodedData = [
       {
@@ -52,24 +52,24 @@ const SelectDear = () => {
 
   return (
     <Wrapper>
-      {/* ✅ 헤더 영역 */}
+      {/* 헤더 영역 */}
       <Header headerName="받는 사람 선택" />
 
-      {/* ✅ 키링 케로셀 영역 */}
+      {/* 질문 메시지 영역 */}
+      <QuestionTextWrapper>
+        <QuestionText />
+      </QuestionTextWrapper>
+
+      {/* 키링 케로셀 영역 */}
       <ContentWrapper>
-        <InnerWrapper>
-          <QuestionText>누구에게 보내는 편지인가요?</QuestionText>
-          <SelectDearContent keyringArr={keyringArr} />
-        </InnerWrapper>
+        <SelectDearContent keyringArr={keyringArr} />
       </ContentWrapper>
 
-      {/* ✅ 버튼 영역 */}
-      <ButtonSpacing>
+      {/* 버튼 영역역 */}
+      <FixedButtonWrapper>
         <LongButton btnName="전송 옵션 선택" onClick={handleSelectOption} opacity={false} />
-      </ButtonSpacing>
-      <ButtonSpacing>
         <LongButton btnName="즉시 전송" onClick={handleImmediateSend} opacity={false} />
-      </ButtonSpacing>
+      </FixedButtonWrapper>
     </Wrapper>
   );
 };
@@ -77,13 +77,13 @@ const SelectDear = () => {
 export default SelectDear;
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
-  /* height: 100vh */
+  height: 100vh;
   background-color: ${({ theme }) => theme.colors.Background};
 `;
 
@@ -91,18 +91,26 @@ const ContentWrapper = styled.div`
   flex-grow: 1;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
 `;
 
-const ButtonSpacing = styled.div`
-  margin-bottom: 1.2rem;
-`;
-
-const InnerWrapper = styled.div`
+const FixedButtonWrapper = styled.div`
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  width: 100%;
+  gap: 1rem;
+  z-index: 10;
+  background-color: transparent;
+`;
+
+const QuestionTextWrapper = styled.div`
+  margin-top: 10rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
 `;

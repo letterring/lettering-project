@@ -283,7 +283,7 @@ const SelectDearContent = ({ keyringArr }) => {
     slidesToScroll: 1,
     arrows: false,
     centerMode: true,
-    centerPadding: '5%', // ✅ 여백 좁히기
+    centerPadding: '5%',
   };
 
   return (
@@ -308,75 +308,17 @@ const StyledSlider = styled(Slider)`
 
   .slick-list {
     overflow: hidden;
-    height: 100%;
   }
 
   .slick-track {
     display: flex;
     align-items: center;
-    height: 100%;
   }
 
   .slick-slide {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
   }
 `;
-
-// const CardWrapper = styled.div`
-//   width: 100%;
-//   max-width: 25rem;
-//   height: 30rem;
-//   border-radius: 16px;
-//   background-color: ${({ theme }) => theme.colors.White};
-//   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-//   padding: 16px;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   box-sizing: border-box;
-//   transition: transform 0.3s ease;
-// `;
-
-// const CardHeader = styled.div`
-//   width: 100%;
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-// `;
-
-// const FavoriteMark = styled.div`
-//   font-size: 20px;
-//   color: ${({ isFavorite }) => (isFavorite ? '#ff4d4f' : '#d3d3d3')};
-// `;
-
-// const CardContent = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100%;
-//   width: 100%;
-// `;
-
-// const KeyringImage = styled.img`
-//   width: 120px;
-//   height: 120px;
-//   object-fit: cover;
-//   border-radius: 12px;
-//   margin-bottom: 12px;
-// `;
-
-// const Nickname = styled.div`
-//   font-size: 4rem;
-//   font-weight: bold;
-//   color: ${({ theme }) => theme.colors.Gray3};
-//   margin-bottom: 4px;
-// `;
-
-// const TagCode = styled.div`
-//   font-size: 2rem;
-//   color: ${({ theme }) => theme.colors.Gray4};
-// `;
