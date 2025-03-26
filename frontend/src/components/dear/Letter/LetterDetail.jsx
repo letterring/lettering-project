@@ -3,11 +3,15 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import DummyImg from '../../../assets/dummy/postcard.jpg';
-import PostcardImg from '../../../assets/images/postcard/postcard.png';
-import StampImg from '../../../assets/images/postcard/stamp.png';
+import DummyImg from '../../../assets/dummy/letter.jpg';
+import LetterImg1 from '../../../assets/images/letter/letter1.png';
+import LetterImg2 from '../../../assets/images/letter/letter2.png';
+import LetterImg3 from '../../../assets/images/letter/letter3.png';
+import LetterImg4 from '../../../assets/images/letter/letter4.png';
+import LetteringImg from '../../../assets/images/letter/lettering.png';
+import StampImg from '../../../assets/images/letter/vintage_stamp.png';
 import Header from '../../common/Header';
-import ReplyComponent from './ReplyComponent';
+import ReplyComponent from '../Letter/ReplyComponent';
 
 const LetterDetail = () => {
   const [flipped, setFlipped] = useState(false);
@@ -26,9 +30,9 @@ const LetterDetail = () => {
             </StPostcardImage>
           </StCardFace>
           <StCardFace className="back">
-            <StPostcard src={PostcardImg} alt="엽서" />
+            <StPostcard src={LetterImg1} alt="엽서" />
             <StPostcardContent>
-              <StPostcardTitle>사랑하는 너에게,</StPostcardTitle>
+              <StPostcardTitle>사랑하는 너2에게,</StPostcardTitle>
               <StPostcardStamp src={StampImg} alt="우표" />
               <StPostcardText>
                 오늘 아침 눈을 뜨자마자 달력을 보니 우리 기념일이라는 사실에 마음이 설렌다. 우리가
