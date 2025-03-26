@@ -75,6 +75,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   height: auto;
+  user-select: none;
 `;
 
 const CardList = styled.div`

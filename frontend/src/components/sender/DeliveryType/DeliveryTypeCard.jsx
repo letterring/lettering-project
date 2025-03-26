@@ -91,6 +91,7 @@ const Icon = styled.img`
   width: 5.5rem;
   height: 5.5rem;
   flex-shrink: 0;
+  user-select: none;
 `;
 
 const TextBox = styled.div`
@@ -100,6 +101,7 @@ const TextBox = styled.div`
 `;
 
 const Title = styled.div`
+  user-select: none;
   color: ${({ theme }) => theme.colors.Gray1};
   ${({ theme }) => theme.fonts.Saeum2};
 `;

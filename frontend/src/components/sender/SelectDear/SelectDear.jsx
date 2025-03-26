@@ -42,7 +42,7 @@ const SelectDear = () => {
 
   const handleSelectOption = () => {
     console.log('전송 옵션 선택');
-    navigate('/sendtype');
+    navigate('/deliverytype');
   };
 
   const handleImmediateSend = () => {
@@ -95,13 +95,13 @@ const ContentWrapper = styled.div`
 `;
 
 const FixedButtonWrapper = styled.div`
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
+  position: fixed;
+  bottom: 3rem;
   width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  /* align-items: end; */
   gap: 1rem;
   z-index: 10;
 `;
