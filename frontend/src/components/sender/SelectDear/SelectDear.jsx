@@ -57,7 +57,7 @@ const SelectDear = () => {
 
       {/* 질문 메시지 영역 */}
       <QuestionTextWrapper>
-        <QuestionText />
+        <QuestionText text="누구에게 보내는 편지인가요?" />
       </QuestionTextWrapper>
 
       {/* 키링 케로셀 영역 */}
@@ -83,8 +83,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.colors.Background};
+  height: auto;
 `;
 
 const ContentWrapper = styled.div`
@@ -102,10 +101,9 @@ const FixedButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: end; */
   gap: 1rem;
   z-index: 10;
-  background-color: transparent;
 `;
 
 const QuestionTextWrapper = styled.div`

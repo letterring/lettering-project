@@ -11,6 +11,7 @@ import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
 import LoginPage from './pages/LoginPage';
 import CompletePage from './pages/sender/CompletePage';
+import DeliveryTypePage from './pages/sender/DeliveryTypePage';
 import HomePage from './pages/sender/Homepage';
 import MailBoxPage from './pages/sender/MailBoxPage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
@@ -37,6 +38,7 @@ const Router = () => {
               <Route path="/mailbox" element={<MailBoxPage />} />
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/complete" element={<CompletePage />} />
+              <Route path="/delivery" element={<DeliveryTypePage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
