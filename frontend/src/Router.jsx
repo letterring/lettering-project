@@ -12,6 +12,7 @@ import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/sender/Homepage';
 import MailBoxPage from './pages/sender/MailBoxPage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
+import SelectDearPage from './pages/sender/SelectDearPage';
 import SelectThemePage from './pages/sender/SelectThemePage';
 
 const Router = () => {
@@ -29,6 +30,7 @@ const Router = () => {
               <Route path="/home" element={<HomePage />} />
               <Route path="/theme" element={<SelectThemePage />} />
               <Route path="/mailbox" element={<MailBoxPage />} />
+              <Route path="/selectdear" element={<SelectDearPage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
