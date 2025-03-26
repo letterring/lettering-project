@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import LongButton from '../../common/button/LongButton';
+import Header from '../../common/Header';
 import SealingWaxCarousel from './SealingWaxCarousel';
 
 const SelectTheme = () => {
   const [selectedTheme, setSelectedTheme] = useState(null);
 
   useEffect(() => {
-    const storedThemeName = localStorage.getItem('sealingWaxName');
+    const storedThemeId = localStorage.getItem('sealingWaxId');
     const mockData = [
       { id: 1, sealing_wax_name: 'Happy Birthday', image_url: '/temp-images/1.png' },
       { id: 2, sealing_wax_name: 'Love Letter', image_url: '/temp-images/2.png' },
@@ -16,11 +18,11 @@ const SelectTheme = () => {
       { id: 5, sealing_wax_name: 'Congratulations', image_url: '/temp-images/5.png' },
     ];
 
-    if (storedThemeName) {
-      const storedTheme = mockData.find((theme) => theme.sealing_wax_name === storedThemeName);
-      setSelectedTheme(storedTheme || mockData[0]); // ✅ 첫 번째 실링왁스를 기본값으로 설정
+    if (storedThemeId) {
+      const storedTheme = mockData.find((theme) => theme.id === Number(storedThemeId));
+      setSelectedTheme(storedTheme || mockData[0]);
     } else {
-      setSelectedTheme(mockData[0]); // ✅ 첫 번째 실링왁스를 기본값으로 설정
+      setSelectedTheme(mockData[0]);
     }
   }, []);
 
@@ -30,8 +32,8 @@ const SelectTheme = () => {
 
   const handleConfirm = () => {
     if (selectedTheme) {
-      localStorage.setItem('sealingWaxName', selectedTheme.sealing_wax_name);
-      console.log(`${selectedTheme.sealing_wax_name} 테마가 저장되었습니다!`);
+      localStorage.setItem('sealingWaxId', selectedTheme.id);
+      // console.log(`${selectedTheme.sealing_wax_name} 테마가 저장되었습니다!`);
     } else {
       alert('테마를 선택해주세요!');
     }
@@ -39,19 +41,17 @@ const SelectTheme = () => {
 
   return (
     <Wrapper>
-      <Title>디자인 선택</Title>
+      <Header headerName="디자인 선택" />
 
       <SealingWaxCarousel onSelect={handleSelectTheme} selectedTheme={selectedTheme} />
 
-      {/* ✅ 실링왁스 이름 */}
       {selectedTheme && <SelectedThemeName>{selectedTheme.sealing_wax_name}</SelectedThemeName>}
 
-      {/* ✅ 선택한 실링왁스에 대한 예시 이미지 */}
       {selectedTheme && <ExampleImage src={`/temp-images/${selectedTheme.id + 10}.png`} />}
 
-      <ConfirmButton onClick={handleConfirm} disabled={!selectedTheme}>
-        지금 디자인으로 편지쓰기
-      </ConfirmButton>
+      <FixedButtonWrapper>
+        <LongButton btnName="지금 디자인으로 편지쓰기" onClick={handleConfirm} opacity={false} />
+      </FixedButtonWrapper>
     </Wrapper>
   );
 };
@@ -59,45 +59,36 @@ const SelectTheme = () => {
 export default SelectTheme;
 
 const Wrapper = styled.div`
-  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   align-items: center;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  color: #b13f3e;
+  gap: 1rem;
 `;
 
 const SelectedThemeName = styled.div`
   text-align: center;
-  font-size: 18px;
-  color: #b13f3e;
+  font-size: 1.8rem;
   font-weight: bold;
+  color: ${({ theme }) => theme.colors.MainRed};
 `;
 
 const ExampleImage = styled.img`
-  width: 100%;
+  width: 90%;
   height: auto;
-  border-radius: 10px;
-  margin-top: 8px;
+  border-radius: 1rem;
+  margin-top: 0.8rem;
+  padding: 1rem;
 `;
 
-const ConfirmButton = styled.button`
-  padding: 12px;
-  background-color: #b13f3e;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
+const FixedButtonWrapper = styled.div`
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
   width: 100%;
-  margin-top: 16px;
-  font-size: 16px;
-  transition: background-color 0.2s ease;
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+  background-color: transparent;
 `;
