@@ -31,6 +31,7 @@ const CardWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.White};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 16px;
+  padding-bottom: 5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,11 +53,6 @@ const FavoriteMark = styled.div`
   color: ${({ isFavorite }) => (isFavorite ? '#ff4d4f' : '#d3d3d3')};
 `;
 
-const LastDateText = styled.div`
-  color: ${({ theme }) => theme.colors.Gray4};
-  font-size: 12px;
-`;
-
 const CardContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -67,21 +63,22 @@ const CardContent = styled.div`
 `;
 
 const KeyringImage = styled.img`
-  width: 120px;
-  height: 120px;
+  /* width: 15rem; */
+  height: 17rem;
   object-fit: cover;
   border-radius: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
+  margin-top: 5.5rem;
 `;
 
 const Nickname = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.colors.Gray3};
-  margin-bottom: 4px;
+  /* font-weight: bold; */
+  color: ${({ theme }) => theme.colors.Gray2};
+  ${({ theme }) => theme.fonts.Saeum0};
 `;
 
 const TagCode = styled.div`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.Gray4};
+  margin-bottom: 3rem;
 `;

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import KeyringImg from '../../../assets/images/keyring.png';
+import KeyringImg from '../../../assets/images/sender/Mailbox.png';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
+import QuestionText from './QuestionText';
 import SelectDearContent from './SelectDearContent';
 
 const SelectDear = () => {
@@ -16,21 +17,21 @@ const SelectDear = () => {
     const hardCodedData = [
       {
         keyringId: 0,
-        nfcName: '세번째 키링',
+        nfcName: '예슬',
         tagCode: 'I9J1K2L3',
         imageUrl: KeyringImg,
         favorite: true,
       },
       {
         keyringId: 1,
-        nfcName: '나의 첫번째 키링',
+        nfcName: '하람',
         tagCode: 'A1B2C3D4',
         imageUrl: KeyringImg,
         favorite: false,
       },
       {
         keyringId: 2,
-        nfcName: '두번째 키링',
+        nfcName: '승엽',
         tagCode: 'E5F6G7H8',
         imageUrl: KeyringImg,
         favorite: true,
@@ -46,6 +47,7 @@ const SelectDear = () => {
 
   const handleImmediateSend = () => {
     console.log('즉시 전송');
+    navigate('/send-type');
   };
 
   return (
@@ -55,14 +57,19 @@ const SelectDear = () => {
 
       {/* ✅ 키링 케로셀 영역 */}
       <ContentWrapper>
-        <SelectDearContent keyringArr={keyringArr} />
+        <InnerWrapper>
+          <QuestionText>누구에게 보내는 편지인가요?</QuestionText>
+          <SelectDearContent keyringArr={keyringArr} />
+        </InnerWrapper>
       </ContentWrapper>
 
       {/* ✅ 버튼 영역 */}
-      <ButtonWrapper>
+      <ButtonSpacing>
         <LongButton btnName="전송 옵션 선택" onClick={handleSelectOption} opacity={false} />
+      </ButtonSpacing>
+      <ButtonSpacing>
         <LongButton btnName="즉시 전송" onClick={handleImmediateSend} opacity={false} />
-      </ButtonWrapper>
+      </ButtonSpacing>
     </Wrapper>
   );
 };
@@ -76,6 +83,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  /* height: 100vh */
   background-color: ${({ theme }) => theme.colors.Background};
 `;
 
@@ -87,10 +95,14 @@ const ContentWrapper = styled.div`
   justify-content: center;
 `;
 
-const ButtonWrapper = styled.div`
+const ButtonSpacing = styled.div`
+  margin-bottom: 1.2rem;
+`;
+
+const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  width: 80%;
-  margin-bottom: 2rem;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
 `;
