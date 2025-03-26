@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcMenu } from '../../../assets/icons';
-import DearHomeImage from '../../../assets/icons/images/dear_home.png';
+import DearHomeImage from '../../../assets/images/dear_home.png';
 import useModal from '../../../hooks/common/useModal';
 import LongButton from '../../common/button/LongButton';
 import MenuModal from '../../common/modal/MenuModal';
