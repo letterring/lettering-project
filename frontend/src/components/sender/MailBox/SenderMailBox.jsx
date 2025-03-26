@@ -33,13 +33,13 @@ const StContentWrapper = styled.div`
 
   box-sizing: border-box;
   height: 100%;
-  padding-right: 4rem;
+  padding: 0 2rem;
   padding-top: 7rem;
 
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.TitleLogo};
 
-  overflow: hidden;
+  /* overflow: hidden; */
 
   img {
     width: 100%;
