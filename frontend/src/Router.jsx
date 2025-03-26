@@ -9,6 +9,8 @@ import DearLandingPage from './pages/dear/LandingPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
+import LoginPage from './pages/LoginPage';
+import CompletePage from './pages/sender/CompletePage';
 import FontSettingPage from './pages/sender/FontSettingPage';
 import HomePage from './pages/sender/Homepage';
 import KeyringSettingPage from './pages/sender/KeyringSettingPage';
