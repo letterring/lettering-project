@@ -3,11 +3,13 @@ package com.example.lettering.controller;
 import com.example.lettering.controller.request.CreatePostcardRequest;
 import com.example.lettering.controller.response.DearMessageSummaryListResponse;
 import com.example.lettering.controller.response.PostcardDetailResponse;
+import com.example.lettering.controller.response.PostcardToDearDetailResponse;
 import com.example.lettering.controller.response.SenderMessageSummaryListResponse;
 import com.example.lettering.domain.message.service.MessageService;
 import com.example.lettering.domain.message.service.PostcardService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
+import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
-@Tag(name = "Mesasge", description = "메시지 관련 API")
+@Tag(name = "Messasge", description = "메시지 관련 API")
 public class MessageController {
 
     private final PostcardService postcardService;
@@ -65,7 +67,7 @@ public class MessageController {
 
     @Operation(summary = "보낸 사람 기준 메시지 목록 조회", description = "현재 사용자가 작성한 모든 메시지를 conditionTime 내림차순 정렬 후, 기준 인덱스(-3~+3)를 중심으로 최대 7개의 목록 정보를 반환합니다. 각 메시지에는 받는 사람의 NFC 이름, conditionTime, replyText 여부, 그리고 sealingWax의 id가 포함됩니다.")
     @GetMapping("/sender")
-    public ResponseEntity<SenderMessageSummaryListResponse> getMessages(
+    public ResponseEntity<SenderMessageSummaryListResponse> getMessagesBySender(
             HttpSession session,
             @RequestParam(name = "page", defaultValue = "0") int page) {
 
@@ -78,7 +80,7 @@ public class MessageController {
 
     @Operation(summary = "엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
     @GetMapping("postcards/sender/{messageId}")
-    public ResponseEntity<PostcardDetailResponse> getPostcardDetail(
+    public ResponseEntity<PostcardDetailResponse> getPostcardBySenderDetail(
             @PathVariable("messageId") Long messageId,
             HttpSession session) {
 
@@ -91,15 +93,36 @@ public class MessageController {
         return ResponseEntity.ok(postcardDetailResponse);
     }
 
+    @Operation(summary = "키링 기준 받은 메시지 목록 조회", description = "안읽은순, 즐겨찾기순, 최신순으로 정렬")
     @GetMapping("dear/{keyringId}")
-    public ResponseEntity<DearMessageSummaryListResponse> getDearMessages(
+    public ResponseEntity<DearMessageSummaryListResponse> getMessagesToDear(
             @PathVariable("keyringId") Long keyringId,
             @RequestParam(name = "page", defaultValue = "0") int page) {
 
         //추후 태그 가져오는 방식 고민
         if (keyringId == null) {
-            throw new BusinessException(ExceptionCode.VALIDATION_ERROR);
+            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
         }
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
+    }
+
+    @Operation(summary = "엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환")
+    @GetMapping("postcards/dear/{messageId}")
+    public ResponseEntity<PostcardToDearDetailResponse> getPostcardToDearDetail(
+            @PathVariable("messageId") Long messageId) {
+
+        PostcardToDearDetailResponse postcardToDearDetailResponse = postcardService.getPostcardToDearDetail(messageId);
+        return ResponseEntity.ok(postcardToDearDetailResponse);
+    }
+
+    @Operation(summary = "엽서 읽지 않음 상태로 재설정",
+            description = "path vairable로 전달된 messageId의 opened와 first_opened_time 초기화")
+    @PutMapping("/unread/backoffice/{messageId}")
+    public ResponseEntity<BooleanResponse> resetMessageAsUnread(
+            @PathVariable("messageId") Long messageId) {
+
+        postcardService.resetMessageAsUnread(messageId);
+
+        return ResponseEntity.ok(new BooleanResponse(true));
     }
 }
