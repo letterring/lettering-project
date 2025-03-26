@@ -1,9 +1,16 @@
 package com.example.lettering.domain.user.service;
 
+import com.example.lettering.controller.response.KeyringInfoResponse;
+import com.example.lettering.controller.response.UserMypageResponse;
+import com.example.lettering.domain.keyring.entity.Keyring;
+import com.example.lettering.domain.keyring.repository.KeyringRepository;
+import com.example.lettering.domain.message.enums.ConditionType;
+import com.example.lettering.domain.message.repository.AbstractMessageRepository;
 import com.example.lettering.domain.user.dto.PasswordEncryptionResult;
 import com.example.lettering.controller.request.SignUpRequest;
 import com.example.lettering.domain.user.entity.Salt;
 import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.user.enums.Font;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.domain.user.repository.SaltRepository;
 import com.example.lettering.domain.user.repository.UserRepository;
@@ -25,6 +32,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SaltRepository saltRepository;
+    private final KeyringRepository keyringRepository;
+    private final AbstractMessageRepository abstractMessageRepository;
 
     @Override
     public void addUser(SignUpRequest signUpRequestDto) {
@@ -67,10 +76,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void validateDuplicateUserInfo(SignUpRequest signUpRequestDto) {
-        if (userRepository.existsByUserNickname(signUpRequestDto.getUserNickname())) {
-            throw new BusinessException(ExceptionCode.USER_NICKNAME_DUPLICATED);
-        }
-
         // ✅ 이메일 중복 검사 (이미 `LOCAL` 계정이면 가입 불가)
         if (isLocalUser(signUpRequestDto.getEmail())) {
             throw new BusinessException(ExceptionCode.EMAIL_DUPLICATED);
@@ -89,4 +94,51 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new DbException(ExceptionCode.USER_NOT_FOUND));
     }
+
+    @Override
+    public UserMypageResponse getMypageInfo(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DbException(ExceptionCode.USER_NOT_FOUND));
+
+
+        List<Keyring> keyrings = keyringRepository.findAllByOwnerIdOrderByIsFavoriteDescIdAsc(userId);
+
+
+        List<KeyringInfoResponse> keyringResponses = keyrings.stream().map(keyring -> {
+            Long keyringId = keyring.getId();
+
+            return new KeyringInfoResponse(
+                    keyringId,
+                    keyring.getNfcName(),
+                    keyring.getIsFavorite(),
+                    keyring.getTagCode(),
+                    keyring.getDesign().getImageUrl(),
+                    abstractMessageRepository.findLastSentTimeByKeyring(keyringId),
+                    abstractMessageRepository.countByKeyring(keyringId),
+                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.RESERVATION),
+                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.TIMECAPSULE),
+                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.SECRETTYPE)
+            );
+        }).toList();
+
+        return new UserMypageResponse(
+                user.getUserNickname(),
+                user.getFont() != null ? user.getFont().name() : null,
+                keyringResponses
+        );
+    }
+
+    @Override
+    public void updateNickname(Long userId, String newNickname) {
+        User user = getUserById(userId);
+        user.updateNickname(newNickname);
+    }
+
+    @Override
+    public void updateFont(Long userId, Font newFont) {
+        User user = getUserById(userId);
+        user.updateFont(newFont); // ✅ setter 대신 명시적 도메인 메서드 사용
+    }
+
 }

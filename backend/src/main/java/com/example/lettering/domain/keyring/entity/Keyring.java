@@ -29,6 +29,10 @@ public class Keyring {
     @Column(name = "nfc_name")
     private String nfcName;
 
+    @Builder.Default
+    @Column(name = "is_favorite", nullable = false)
+    private Boolean isFavorite = false;
+
     // 키링 디자인 (KeyringDesign 엔티티 참조)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "design_id")
@@ -43,4 +47,30 @@ public class Keyring {
         this.owner = owner;
         this.design = design;
     }
+
+    public void toggleFavorite() {
+        this.isFavorite = !this.isFavorite;
+    }
+
+    public static Keyring createNew(String tagCode) {
+        return new Keyring(
+                null,          // id
+                false,         // isPurchase
+                null,          // owner
+                "우체통 이름",   // nfcName
+                false,         // isFavorite
+                null,          // design
+                tagCode        // tagCode
+        );
+    }
+
+    public void updateNfcName(String newName) {
+        this.nfcName = newName;
+    }
+
+    public void removeOwner() {
+        this.owner = null;
+        this.isFavorite = false;
+    }
+
 }

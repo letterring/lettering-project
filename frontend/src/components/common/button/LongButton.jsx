@@ -27,7 +27,7 @@ const StLongButtonWrapper = styled.button`
   ${({ theme }) => theme.fonts.Title3};
 
   &:disabled {
-    cursor: default;
+    cursor: none;
     background-color: rgba(212, 177, 177, 0.7);
   }
 `;

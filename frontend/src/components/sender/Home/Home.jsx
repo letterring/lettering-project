@@ -32,7 +32,7 @@ const Home = () => {
       </StHomeWrapper>
 
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" />
+        <MenuModal isShowing={menu.isShowing} status="시작 화면" target="sender" />
       </StMenuModalWrapper>
     </>
   );
@@ -92,8 +92,8 @@ const StMenuModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
 
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 
   background-color: rgba(0, 0, 0, 0.5);
 `;

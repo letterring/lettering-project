@@ -27,5 +27,8 @@ public class KeyringDesign {
 
     // 가격 정보를 추가 (각 디자인에 고정된 가격)
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Long price;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 }
