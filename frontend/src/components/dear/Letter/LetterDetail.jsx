@@ -41,6 +41,7 @@ const LetterDetail = () => {
     {
       template: 'answer',
       images: [DummyImg],
+      text: '2025년 3월 16일에 보낸 편지를 2025년 3월 18일에 열었습니다.',
       background: null,
     },
   ];
