@@ -15,8 +15,11 @@ import ErrorPage from './pages/ErrorPage';
 import LoginPage from './pages/LoginPage';
 import CompletePage from './pages/sender/CompletePage';
 import DeliveryTypePage from './pages/sender/DeliveryTypePage';
+import FontSettingPage from './pages/sender/FontSettingPage';
 import HomePage from './pages/sender/Homepage';
+import KeyringSettingPage from './pages/sender/KeyringSettingPage';
 import MailBoxPage from './pages/sender/MailBoxPage';
+import MyPage from './pages/sender/MyPage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
 import PostcardPreviewPage from './pages/sender/PostcardPreviewPage';
 import PostcardWritingPage from './pages/sender/PostcardWritingPage';
@@ -46,6 +49,9 @@ const Router = () => {
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/complete" element={<CompletePage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/mypage/font" element={<FontSettingPage />} />
+              <Route path="/mypage/keyring" element={<KeyringSettingPage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
