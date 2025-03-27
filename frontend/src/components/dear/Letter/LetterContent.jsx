@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import CardTemplate from './CardTemplate';
+import EndTemplate from './EndTemplate';
 import FilmTemplate from './FilmTemplate';
 import MainTemplate from './MainTemplate';
 import PolarTemplate from './PolarTemplate';
@@ -36,7 +37,13 @@ const LetterContent = ({ template, images, text, background }) => {
             <CardTemplate images={images} />
           </>
         )}
-        {template === 'answer' && <ReplyComponent />}
+        {template === 'answer' && (
+          <>
+            <StLetterText>{text}</StLetterText>
+            <EndTemplate images={images} />
+            <ReplyComponent />
+          </>
+        )}
       </StContentWrapper>
     </StLetterWrapper>
   );
@@ -74,6 +81,7 @@ const StLetterText = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 1rem;
+  min-height: 4rem;
 
   ${({ theme }) => theme.fonts.Gomsin2};
   word-wrap: break-word;
