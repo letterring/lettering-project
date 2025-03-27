@@ -58,9 +58,10 @@ const StMenuModalWrapper = styled.div`
   right: 0;
 
   width: 12rem;
-  height: 100%;
+  height: 100vh;
 
   padding-top: 5rem;
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.Background};
   z-index: 1000;
 `;
