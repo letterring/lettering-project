@@ -72,13 +72,15 @@ const OnBoading = () => {
             />
           ))}
         </StyledSlider>
-        <LongButton
-          btnName={buttonText}
-          disabled={buttonText === '옆으로 넘겨주세요'}
-          onClick={() => {
-            navigate(`/login`);
-          }}
-        />
+        <StBtnWrapper>
+          <LongButton
+            btnName={buttonText}
+            disabled={buttonText === '옆으로 넘겨주세요'}
+            onClick={() => {
+              navigate(`/login`);
+            }}
+          />
+        </StBtnWrapper>
       </StOnBoadingWrapper>
     </>
   );
@@ -131,4 +133,10 @@ const StyledSlider = styled(Slider)`
     justify-content: center;
     align-items: center;
   }
+`;
+
+const StBtnWrapper = styled.div`
+  position: relative;
+  width: 80%;
+  padding: 0 2rem;
 `;
