@@ -39,7 +39,7 @@ const PostcardWriting = () => {
       </StContentWrapper>
 
       <StButtonWrapper>
-        <LongButton onClick={() => navigate('/postcard/preview')} btnName="엽서 전송하기" />
+        <LongButton onClick={() => navigate('/selectdear')} btnName="엽서 전송하기" />
       </StButtonWrapper>
     </StPageWrapper>
   );
