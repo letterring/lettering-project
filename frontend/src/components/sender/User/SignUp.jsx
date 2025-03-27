@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { signup } from '../../apis/user';
+import { signup } from '../../../apis/user';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
@@ -43,32 +43,22 @@ const SignUp = () => {
       return;
     }
 
-    try {
-      const res = await signup({
-        email: user.email,
-        userNickname: user.userNickname,
-        password: user.password,
-      });
+    const data = await signup({
+      email: user.email,
+      userNickname: user.userNickname,
+      password: user.password,
+    });
 
-      if (res && res.data) {
-        setError('');
-        setUser({
-          email: '',
-          userNickname: '',
-          password: '',
-          confirmPassword: '',
-        });
-        alert('회원가입이 완료되었습니다!');
-        navigate('/login');
-      }
-    } catch (err) {
-      console.error('회원가입 실패:', err);
+    if (!data) return;
 
-      const errorMessage =
-        err.response?.data?.message || '회원가입에 실패했습니다. 다시 시도해주세요.';
-
-      setError(errorMessage);
-    }
+    setUser({
+      email: '',
+      userNickname: '',
+      password: '',
+      confirmPassword: '',
+    });
+    alert('회원가입이 완료되었습니다!');
+    navigate('/login');
   };
 
   return (
@@ -129,13 +119,9 @@ export default SignUp;
 const StSignUpWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-
-  padding: 4rem;
-  padding-top: 6rem;
   box-sizing: border-box;
-  height: 100%;
+  padding: 6rem 2rem;
 
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.TitleLogo};

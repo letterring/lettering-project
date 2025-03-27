@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import KakaoLoginButtonImg from '../../assets/images/kakao_login_button.png';
+import KakaoLoginButtonImg from '../../../assets/images/kakao_login_button.png';
 
 const KakaoLoginButton = () => {
   const handleKakaoLogin = () => {
@@ -22,7 +22,7 @@ export default KakaoLoginButton;
 
 const StBtnWrapper = styled.button`
   width: 28rem;
-  height: 5rem;
+  height: 4rem;
 
   border: none;
   border-radius: 1rem;
