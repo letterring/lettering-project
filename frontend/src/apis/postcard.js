@@ -1,20 +1,27 @@
-// src/apis/postcard.js
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import client from './axios';
 
-export const sendPostcard = async (formData) => {
+export const sendPostcard = async ({ postcardData, imageFile }) => {
   try {
-    const response = await fetch(`${BASE_URL}/messages/postcards`, {
-      method: 'POST',
-      body: formData,
+    // const formData = new FormData();
+    // formData.append('postcard', JSON.stringify(postcardData));
+    // formData.append('image', imageFile);
+
+    const requestBody = new FormData();
+    const jsonDraftData = JSON.stringify(postcardData);
+    const post = new Blob([jsonDraftData], { type: 'application/json' });
+    requestBody.append('postcard', post);
+    requestBody.append('image', imageFile);
+
+    console.log(requestBody);
+
+    const response = await client.post('/messages/postcards', requestBody, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
 
-    if (!response.ok) {
-      throw new Error('엽서 전송 실패');
-    }
-
-    const result = await response.json();
-    console.log('📮 엽서 전송 성공:', result);
-    return result;
+    console.log('📮 엽서 전송 성공:', response.data);
+    return response.data;
   } catch (error) {
     console.error('❌ 엽서 전송 중 오류 발생:', error);
     throw error;

@@ -28,9 +28,10 @@ const PostcardText = atom({
   default: '',
 });
 
+// 전송 대상 선택 시 (키링id)
 const SelectedKeyringId = atom({
   key: 'selectedKeyringId',
-  default: null,
+  default: 'null',
 });
 
 export { PostcardImage, PostcardImageFile, PostcardText, SelectedKeyringId, UserId };
