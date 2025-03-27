@@ -14,7 +14,6 @@ const FontSetting = () => {
   const [selectedFont, setSelectedFont] = useState(userFont);
 
   const handleFontChange = (font) => {
-    console.log('선택된 폰트:', font);
     setUserFont(font);
     // TODO: 여기에 API 저장 로직 추가 가능
     navigate('/mypage');

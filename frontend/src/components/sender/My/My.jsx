@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { getUserInfo } from '../../../apis/mypage';
@@ -12,13 +12,9 @@ import KeyringList from './KeyringList';
 import NickNameSetting from './NickNameSetting';
 
 const My = () => {
-  const setNickname = useSetRecoilState(UserNickname);
-  const setFont = useSetRecoilState(UserFont);
-  const setKeyringList = useSetRecoilState(UserKeyringList);
-
-  const nickname = useRecoilValue(UserNickname);
-  const font = useRecoilValue(UserFont);
-  const keyringList = useRecoilValue(UserKeyringList);
+  const [nickname, setNickname] = useRecoilState(UserNickname);
+  const [font, setFont] = useRecoilState(UserFont);
+  const [keyringList, setKeyringList] = useRecoilState(UserKeyringList);
 
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -28,8 +24,6 @@ const My = () => {
       try {
         const res = await getUserInfo();
         const data = res.data;
-
-        console.log(res);
 
         setNickname(data.nickname);
         setFont(data.font);
@@ -45,16 +39,13 @@ const My = () => {
   const handleEditNickname = (newName) => {
     setNickname(newName);
     setIsEditing(false);
-    console.log('닉네임 수정됨 : ', newName);
   };
 
   const handleChangeFont = () => {
-    console.log('폰트 변경 페이지로 이동');
     navigate('font');
   };
 
   const handleKeyringSetting = () => {
-    console.log('키링 설정 페이지로 이동');
     navigate('keyring');
   };
 
