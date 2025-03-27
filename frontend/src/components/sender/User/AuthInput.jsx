@@ -40,7 +40,7 @@ const AuthInput = ({
 export default AuthInput;
 
 const StInputWrapper = styled.div`
-  width: 100%;
+  width: 28rem;
 `;
 
 const InputBox = styled.div`
@@ -48,9 +48,9 @@ const InputBox = styled.div`
   justify-content: space-around;
   align-items: center;
 
-  width: 28rem;
+  width: 100%;
   height: 4rem;
-  padding: 0.75rem 1.875rem 0.75rem 0.875rem;
+  box-sizing: border-box;
 
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.colors.White};
@@ -59,10 +59,10 @@ const InputBox = styled.div`
 const StyledInput = styled.input`
   width: 100%;
   height: 90%;
+  padding: 1rem 2rem;
   border: none;
   outline: none;
   background-color: transparent;
-  padding-left: 1rem;
 
   ${({ theme }) => theme.fonts.Body1}
 
@@ -80,6 +80,7 @@ const ErrorText = styled.span`
 
 const Icon = styled.div`
   cursor: pointer;
+  padding: 1rem 2rem;
   font-size: 1.5rem;
   color: ${({ theme }) => theme.colors.Gray2};
 `;
