@@ -27,7 +27,7 @@ const RealTimer = ({ msg }) => {
 export default RealTimer;
 
 const TimerText = styled.p`
-  ${({ theme }) => theme.fonts.Body2};
+  ${({ theme }) => theme.fonts.EduBody0};
   color: white;
   text-align: center;
 `;

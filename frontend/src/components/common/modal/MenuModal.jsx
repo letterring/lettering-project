@@ -78,4 +78,6 @@ const StMenu = styled.div`
   color: ${({ theme, $item }) => ($item === 'logout' ? theme.colors.MainRed : theme.colors.Gray0)};
   background-color: ${({ theme, $status }) =>
     $status ? theme.colors.White : theme.colors.Background};
+
+  cursor: pointer;
 `;
