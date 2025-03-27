@@ -57,60 +57,41 @@ public class KeyringServiceImpl implements KeyringService{
     }
 
 
-    @Transactional
     @Override
-    public Long processOrder(User user, OrderRequest request) {
-        // ✅ 구매 가능한 키링 개수 확인
+    public Order processOrderAndReturnOrder(User user, OrderRequest request) {
         long availableCount = keyringRepository.countAvailableKeyrings();
         if (availableCount < request.getQuantity()) {
             throw new BusinessException(ExceptionCode.KEYRING_NOT_ENOUGH);
         }
 
-        // ✅ 디자인 확인
         KeyringDesign selectedDesign = keyringDesignRepository.findById(request.getKeyringDesignId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.DESIGN_NOT_FOUND));
 
-        // ✅ 구매 가능한 키링 가져오기
-        List<Keyring> availableKeyrings = keyringRepository.findAvailableKeyrings(request.getQuantity());
-        if (availableKeyrings.isEmpty()) {
+        List<Keyring> keyrings = keyringRepository.findAvailableKeyrings(request.getQuantity());
+        if (keyrings.isEmpty()) {
             throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
         }
 
-        // ✅ 주소 저장
         user.updatePersonalInfo(
-                request.getRealName(),
-                request.getPhoneNumber(),
-                request.getZipcode(),
-                request.getRoadAddress(),
-                request.getDetailAddress()
-        );
+                request.getRealName(), request.getPhoneNumber(),
+                request.getZipcode(), request.getRoadAddress(), request.getDetailAddress());
         userRepository.save(user);
 
-        // ✅ 키링 상태 업데이트
-        for (Keyring keyring : availableKeyrings) {
+        for (Keyring keyring : keyrings) {
             keyring.purchase(user, selectedDesign);
         }
-        keyringRepository.saveAll(availableKeyrings);
+        keyringRepository.saveAll(keyrings);
 
-        // ✅ 주문번호 생성 및 주문 저장
-        Long orderNumber = generateOrderNumber();
-        int totalPrice = selectedDesign.getPrice().intValue() * request.getQuantity();
+        int totalPrice = (int) (selectedDesign.getPrice() * request.getQuantity());
 
         Order order = Order.create(
-                user,
-                orderNumber,
-                request.getRealName(),
-                request.getPhoneNumber(),
-                request.getEmail(),
-                request.getZipcode(),
-                request.getRoadAddress(),
-                request.getDetailAddress(),
+                user, null, // 🚨 orderNumber는 approval에서 세팅
+                request.getRealName(), request.getPhoneNumber(), request.getEmail(),
+                request.getZipcode(), request.getRoadAddress(), request.getDetailAddress(),
                 totalPrice
         );
 
-        orderRepository.save(order);
-
-        return orderNumber; // ✅ 주문번호 반환
+        return order;
     }
 
     @Override
@@ -185,10 +166,6 @@ public class KeyringServiceImpl implements KeyringService{
         keyring.removeOwner(); // 소유 해제, but DB에 존재 유지
     }
 
-    private Long generateOrderNumber() {
-        Long lastNumber = orderRepository.getMaxOrderNumber();
-        return (lastNumber != null) ? lastNumber + 1 : 1000001L;
-    }
 
     @Override
     public KeyringManageResponse getKeyringById(Long keyringId, Long userId) {
@@ -211,6 +188,15 @@ public class KeyringServiceImpl implements KeyringService{
         );
     }
 
+    @Override
+    public void saveOrder(Order order) {
+        orderRepository.save(order);
+    }
 
+    @Override
+    public Long generateTempOrderNumber() {
+        Long lastNumber = orderRepository.getMaxOrderNumber();
+        return (lastNumber != null) ? lastNumber + 1 : 1000001L;
+    }
 
 }
