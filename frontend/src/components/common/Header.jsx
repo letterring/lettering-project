@@ -56,7 +56,7 @@ const StHeaderWrapper = styled.button`
 
 const StMenuModalWrapper = styled.div`
   display: ${({ $showing }) => ($showing ? 'block' : 'none')};
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -65,7 +65,7 @@ const StMenuModalWrapper = styled.div`
   align-items: center;
 
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   background-color: rgba(0, 0, 0, 0.5);
 `;
