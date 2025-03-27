@@ -11,7 +11,7 @@ const Header = ({ headerName }) => {
   const location = useLocation();
   const menu = useModal();
 
-  const target = location.pathname.includes('dear') ? 'dear' : 'sender';
+  const target = location.pathname.includes('/dear') ? 'dear' : 'sender';
 
   const handleGoBack = () => {
     navigate(-1);
