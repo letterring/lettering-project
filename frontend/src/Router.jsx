@@ -8,6 +8,7 @@ import DearHomePage from './pages/dear/Homepage';
 import DearLandingPage from './pages/dear/LandingPage';
 import DearLetterDetailPage from './pages/dear/LetterDetailPage';
 import DearLetterPage from './pages/dear/LetterPage';
+import DearMailBoxPage from './pages/dear/MailBoxPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
@@ -53,6 +54,7 @@ const Router = () => {
               <Route path="/dear/postcard/detail" element={<DearPostDetailPage />} />
               <Route path="/dear/letter" element={<DearLetterPage />} />
               <Route path="/dear/letter/detail" element={<DearLetterDetailPage />} />
+              <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
 
               {/* common */}
               <Route path="*" element={<ErrorPage />} />
