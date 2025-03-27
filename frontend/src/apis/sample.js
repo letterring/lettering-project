@@ -1,7 +1,17 @@
 //axios 사용 예시
 //선언해둔 client 불러와서 사용
 
-// import { client } from './axios';
+import client from './axios';
+
+export const getMypage = async () => {
+  try {
+    const { data } = await client.get(`/users/mypage`);
+    console.log(data);
+    return data.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 // // 게시글 조회
 // export const getPostDetail = async (postId) => {
