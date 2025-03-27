@@ -113,7 +113,7 @@ const fonts = {
     font-size: 3.2rem;
     font-style: normal;
     font-weight: normal;
-    line-height: 130%;
+    line-height: 100%;
   `,
   Saeum3: css`
     font-family: 'GangwonEduSaeeum_OTFMediumA';

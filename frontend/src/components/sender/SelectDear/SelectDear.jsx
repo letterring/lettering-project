@@ -42,7 +42,7 @@ const SelectDear = () => {
 
   const handleSelectOption = () => {
     console.log('전송 옵션 선택');
-    navigate('/sendtype');
+    navigate('/deliverytype');
   };
 
   const handleImmediateSend = () => {
@@ -57,7 +57,7 @@ const SelectDear = () => {
 
       {/* 질문 메시지 영역 */}
       <QuestionTextWrapper>
-        <QuestionText />
+        <QuestionText text="누구에게 보내는 편지인가요?" />
       </QuestionTextWrapper>
 
       {/* 키링 케로셀 영역 */}
@@ -83,8 +83,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.colors.Background};
+  height: auto;
 `;
 
 const ContentWrapper = styled.div`
@@ -96,16 +95,15 @@ const ContentWrapper = styled.div`
 `;
 
 const FixedButtonWrapper = styled.div`
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
+  position: fixed;
+  bottom: 3rem;
   width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1rem;
   z-index: 10;
-  background-color: transparent;
 `;
 
 const QuestionTextWrapper = styled.div`
