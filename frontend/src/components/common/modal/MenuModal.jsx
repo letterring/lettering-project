@@ -24,8 +24,11 @@ const MenuModal = ({ isShowing, status, target }) => {
   const menus = target === 'sender' ? senderMenus : dearMenus;
 
   const handleClickMenu = (name) => {
-    // console.log(name);
-    navigate(`/${name}`);
+    if (target === 'sender') {
+      navigate(`/${name}`);
+    } else {
+      navigate(`/dear/${name}`);
+    }
   };
 
   return (
