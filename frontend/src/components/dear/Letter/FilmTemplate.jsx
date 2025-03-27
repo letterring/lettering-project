@@ -118,5 +118,4 @@ const StFilmOverlay = styled.img`
   width: ${(props) => props.$width};
   z-index: 3;
   pointer-events: none;
-  opacity: 0.9;
 `;

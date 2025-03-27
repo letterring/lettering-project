@@ -2,9 +2,9 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import CardTemplate from './CardTemplate';
 import EndTemplate from './EndTemplate';
 import FilmTemplate from './FilmTemplate';
+import GridTemplate from './GridTemplate';
 import MainTemplate from './MainTemplate';
 import PolarTemplate from './PolarTemplate';
 import ReplyComponent from './ReplyComponent';
@@ -16,30 +16,34 @@ const LetterContent = ({ template, images, text, background }) => {
         {template === 'main' && (
           <>
             <MainTemplate images={images} />
-            <StLetterText>{text}</StLetterText>
+            <StLetterText>{text[0]}</StLetterText>
           </>
         )}
         {template === 'film' && (
           <>
-            <StLetterText>{text}</StLetterText>
+            <StLetterText>{text[0]}</StLetterText>
             <FilmTemplate images={images} />
           </>
         )}
         {template === 'polar' && (
           <>
             <PolarTemplate images={images} />
-            <StLetterText>{text}</StLetterText>
+            <StLetterText>{text[0]}</StLetterText>
           </>
         )}
         {template === 'card' && (
           <>
-            <StLetterText>{text}</StLetterText>
-            <CardTemplate images={images} />
+            <StLetterText>{text[0]}</StLetterText>
+            <GridTemplate images={images} />
+            <StLetterText>{text[1]}</StLetterText>
           </>
         )}
         {template === 'answer' && (
           <>
-            <StLetterText>{text}</StLetterText>
+            <StLetterText>
+              {text[0]}
+              <br /> {text[1]}
+            </StLetterText>
             <EndTemplate images={images} />
             <ReplyComponent />
           </>

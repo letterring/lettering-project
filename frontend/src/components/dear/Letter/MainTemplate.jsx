@@ -7,7 +7,7 @@ import LetteringImg from '../../../assets/images/letter/lettering.png';
 import StampImg from '../../../assets/images/letter/vintage_stamp.png';
 
 const MainTemplate = ({ images }) => {
-  const mainImg = images[0];
+  const mainImg = images;
   return (
     <StWrapper>
       <StLetterImage src={mainImg} alt="편지 사진" />

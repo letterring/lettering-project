@@ -9,7 +9,7 @@ import EnvelopeTopImg from '../../../assets/images/letter/top_fold.png';
 import StampImg from '../../../assets/images/letter/vintage_stamp.png';
 
 const EndTemplate = ({ images }) => {
-  const mainImg = images[0];
+  const mainImg = images;
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 200;
 
