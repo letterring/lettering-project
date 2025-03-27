@@ -1,16 +1,17 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-const MenuModal = ({ isShowing, status, target }) => {
+const MenuModal = ({ isShowing, target }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   //status: 현재 선택된 메뉴명
   const senderMenus = [
     { id: 'home', name: '시작 화면' },
     { id: 'theme', name: '편지 쓰기' },
     { id: 'mailbox', name: '보낸 편지함' },
-    { id: 'purchase', name: '키링 구매' },
+    { id: 'keyring', name: '키링 구매' },
     { id: 'mypage', name: '마이페이지' },
     { id: 'logout', name: '로그아웃' },
   ];
@@ -38,7 +39,7 @@ const MenuModal = ({ isShowing, status, target }) => {
           <StMenu
             key={id}
             onClick={() => handleClickMenu(item.id)}
-            $status={status === item.name}
+            $status={location.pathname.includes(item.id)}
             $item={item.id}
           >
             {item.name}
@@ -57,9 +58,10 @@ const StMenuModalWrapper = styled.div`
   right: 0;
 
   width: 12rem;
-  height: 100%;
+  height: 100vh;
 
   padding-top: 5rem;
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.Background};
   z-index: 1000;
 `;
