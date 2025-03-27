@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { login } from '../../apis/user';
+import { login } from '../../../apis/user';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
@@ -13,7 +13,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
@@ -24,26 +23,12 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await login({ email, password });
+    const data = await login({ email, password });
 
-      if (res && res.data) {
-        setError('');
-        alert(`로그인 성공! 환영합니다, ${res.data.userNickname}님!`);
+    if (!data) return;
 
-        console.log(res);
-        navigate('/Home');
-      }
-    } catch (err) {
-      console.error('로그인 실패!!!:', err);
-
-      const errorMessage =
-        err.response?.data?.message || '로그인에 실패하였습니다. 다시 시도해 주세요.';
-
-      console.log('에러 메시지:', errorMessage);
-
-      setError(errorMessage);
-    }
+    alert(`로그인 성공! 환영합니다, ${data.userNickname}님!`);
+    navigate('/Home');
   };
 
   return (
@@ -52,7 +37,6 @@ const Login = () => {
       <ContentWrapper>
         <KakaoLoginButton />
         <Divider text="또는" />
-        {error && <ErrorText>{error}</ErrorText>}
         <Form onSubmit={handleLogin}>
           <AuthInput
             type="email"
@@ -86,13 +70,9 @@ export default Login;
 const StLoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-
-  padding: 4rem;
-  padding-top: 6rem;
   box-sizing: border-box;
-  height: 100%;
+  padding: 6rem 2rem;
 
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.TitleLogo};
@@ -116,6 +96,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
   gap: 1rem;
 `;
@@ -133,11 +114,4 @@ const SignupLink = styled.span`
   font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
-`;
-
-const ErrorText = styled.p`
-  color: ${({ theme }) => theme.colors.Red1};
-  ${({ theme }) => theme.fonts.Body2};
-  margin-top: -1rem;
-  text-align: center;
 `;
