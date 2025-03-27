@@ -1,5 +1,6 @@
 package com.example.lettering.domain.keyring.entity;
 
+import com.example.lettering.domain.keyring.enums.OrderStatus;
 import com.example.lettering.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -50,9 +51,24 @@ public class Order {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
+    @Column(name = "tid")
+    private String tid;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private OrderStatus status = OrderStatus.WAITING;
+
     @PrePersist
     protected void onCreate() {
         this.orderDate = LocalDateTime.now();
+    }
+
+    public void setTid(String tid) {
+        this.tid = tid;
+    }
+
+    public void markAsPaid() {
+        this.status = OrderStatus.PAID;
     }
 
     public static Order create(User user, Long orderNumber, String realName, String phoneNumber,
@@ -68,6 +84,7 @@ public class Order {
                 .roadAddress(roadAddress)
                 .detailAddress(detailAddress)
                 .totalPrice(totalPrice)
+                .status(OrderStatus.WAITING) // ✅ 여기 추가!
                 .build();
     }
 
