@@ -8,11 +8,13 @@ import DearHomePage from './pages/dear/Homepage';
 import DearLandingPage from './pages/dear/LandingPage';
 import DearLetterDetailPage from './pages/dear/LetterDetailPage';
 import DearLetterPage from './pages/dear/LetterPage';
+import DearMailBoxPage from './pages/dear/MailBoxPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
 import LoginPage from './pages/LoginPage';
 import CompletePage from './pages/sender/CompletePage';
+import DeliveryTypePage from './pages/sender/DeliveryTypePage';
 import FontSettingPage from './pages/sender/FontSettingPage';
 import HomePage from './pages/sender/Homepage';
 import KeyringSettingPage from './pages/sender/KeyringSettingPage';
@@ -46,6 +48,7 @@ const Router = () => {
               <Route path="/postcard/preview" element={<PostcardPreviewPage />} />
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/complete" element={<CompletePage />} />
+              <Route path="/deliverytype" element={<DeliveryTypePage />} />
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/mypage/font" element={<FontSettingPage />} />
               <Route path="/mypage/keyring" element={<KeyringSettingPage />} />
@@ -57,6 +60,7 @@ const Router = () => {
               <Route path="/dear/postcard/detail" element={<DearPostDetailPage />} />
               <Route path="/dear/letter" element={<DearLetterPage />} />
               <Route path="/dear/letter/detail" element={<DearLetterDetailPage />} />
+              <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
 
               {/* common */}
               <Route path="*" element={<ErrorPage />} />

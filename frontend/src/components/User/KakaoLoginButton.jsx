@@ -21,12 +21,11 @@ const KakaoLoginButton = () => {
 export default KakaoLoginButton;
 
 const StBtnWrapper = styled.button`
-  width: 100%;
-
-  margin: 1rem 0;
+  width: 28rem;
+  height: 5rem;
 
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   box-sizing: border-box;
 
   background-color: #fee500;
