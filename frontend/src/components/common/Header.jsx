@@ -30,7 +30,7 @@ const Header = ({ headerName }) => {
       </StHeaderWrapper>
 
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" target={target} />
+        <MenuModal isShowing={menu.isShowing} target={target} />
       </StMenuModalWrapper>
     </>
   );
