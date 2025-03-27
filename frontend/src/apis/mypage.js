@@ -10,18 +10,26 @@ export const getUserInfo = async () => {
   }
 };
 
-export const updateNickname = async () => {
+export const updateNickname = async (newName) => {
   try {
+    const res = await client.patch('users/nickname', {
+      newNickname: newName,
+    });
+    return res.data;
   } catch (err) {
     console.error('닉네임 수정에 실패하였습니다', err);
-    throw err;
+    return null;
   }
 };
 
-export const updateFont = async () => {
+export const updateFont = async (newFont) => {
   try {
+    const res = await client.patch('users/font', {
+      font: newFont,
+    });
+    return res.data;
   } catch (err) {
     console.error('폰트 수정에 실패하였습니다', err);
-    throw err;
+    return null;
   }
 };
