@@ -8,7 +8,7 @@ import { getUserInfo } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
 import Header from '../../common/Header';
-import KeyringList from './KeyringList';
+import KeyringList from './Keyring/KeyringList';
 import NickNameSetting from './NickNameSetting';
 
 const My = () => {
@@ -21,16 +21,10 @@ const My = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        const res = await getUserInfo();
-        const data = res.data;
-
-        setNickname(data.nickname);
-        setFont(data.font);
-        setKeyringList(data.keyrings);
-      } catch (error) {
-        console.error('유저 정보 가져오기 실패', error);
-      }
+      const data = await getUserInfo();
+      setNickname(data.nickname);
+      setFont(data.font);
+      setKeyringList(data.keyrings);
     };
 
     fetchUserInfo();

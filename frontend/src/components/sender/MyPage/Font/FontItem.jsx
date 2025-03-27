@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { IcCheckCircle } from '../../../assets/icons';
+import { IcCheckCircle } from '../../../../assets/icons';
 
 const FontItem = ({ fontName, isSelected, onClick, onConfirm }) => {
   return (
