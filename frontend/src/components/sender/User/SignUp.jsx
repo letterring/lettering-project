@@ -21,7 +21,6 @@ const SignUp = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -67,7 +66,6 @@ const SignUp = () => {
       <ContentWrapper>
         <KakaoLoginButton />
         <Divider text="또는" />
-        {error && <ErrorText>{error}</ErrorText>}
         <Form onSubmit={handleSubmit}>
           <AuthInput
             type="email"
