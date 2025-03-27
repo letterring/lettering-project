@@ -21,10 +21,10 @@ const Landing = () => {
     <StHomeWrapper>
       <div>
         <OBJViewer
-          objPath="/src/assets/models/postbox.obj"
-          mtlPath="/src/assets/models/postbox.mtl"
-          envelopeObjPath="/src/assets/models/envelope.obj"
-          envelopeMtlPath="/src/assets/models/envelope.mtl"
+          objPath="/models/postbox.obj"
+          mtlPath="/models/postbox.mtl"
+          envelopeObjPath="/models/envelope.obj"
+          envelopeMtlPath="/models/envelope.mtl"
           newLetter={newLetter}
           onMissedClick={newLetter ? handleNewLetterClick : handleMissedClick}
         />

@@ -8,7 +8,7 @@ const floatAnimation = keyframes`
 `;
 
 const SealingWaxItem = ({ theme, isSelected, onClick }) => {
-  return <Item $backgroundImage={theme.image_url} $isSelected={isSelected} onClick={onClick} />;
+  return <Item $backgroundImage={theme.imageUrl} $isSelected={isSelected} onClick={onClick} />;
 };
 
 export default SealingWaxItem;

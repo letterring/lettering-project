@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import DummyImg from '../../../assets/dummy/postcard.jpg';
-import EnvelopeBottomImg from '../../../assets/icons/postcard/bottom_fold.png';
-import PostcardImg from '../../../assets/icons/postcard/postcard_paper.png';
-import EnvelopeTopImg from '../../../assets/icons/postcard/top_fold.png';
+import EnvelopeBottomImg from '../../../assets/images/postcard/bottom_fold.png';
+import PostcardImg from '../../../assets/images/postcard/postcard_paper.png';
+import EnvelopeTopImg from '../../../assets/images/postcard/top_fold.png';
 
 const Postcard = () => {
   const navigate = useNavigate();

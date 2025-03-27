@@ -4,6 +4,7 @@ import com.example.lettering.controller.response.KeyringInfoResponse;
 import com.example.lettering.controller.response.UserMypageResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
+import com.example.lettering.domain.message.dto.KeyringLastSentTime;
 import com.example.lettering.domain.message.enums.ConditionType;
 import com.example.lettering.domain.message.repository.AbstractMessageRepository;
 import com.example.lettering.domain.user.dto.PasswordEncryptionResult;
@@ -24,7 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -103,22 +106,34 @@ public class UserServiceImpl implements UserService {
 
 
         List<Keyring> keyrings = keyringRepository.findAllByOwnerIdOrderByIsFavoriteDescIdAsc(userId);
+        List<Long> keyringIds = keyrings.stream().map(Keyring::getId).toList();
 
+        // ✅ 메시지 관련 정보 일괄 조회
+        Map<Long, LocalDateTime> lastSentTimeMap = abstractMessageRepository.findLastSentTimesByKeyringIds(keyringIds).stream()
+                .collect(Collectors.toMap(
+                        KeyringLastSentTime::getKeyringId,
+                        KeyringLastSentTime::getLastSentTime
+                ));
 
+        Map<Long, Integer> totalCountMap = abstractMessageRepository.countMessagesByKeyringIds(keyringIds);
+        Map<Long, Integer> reservationCountMap = abstractMessageRepository.countMessagesByKeyringIdsAndConditionType(keyringIds, ConditionType.RESERVATION);
+        Map<Long, Integer> timeCapsuleCountMap = abstractMessageRepository.countMessagesByKeyringIdsAndConditionType(keyringIds, ConditionType.TIMECAPSULE);
+        Map<Long, Integer> secretCountMap = abstractMessageRepository.countMessagesByKeyringIdsAndConditionType(keyringIds, ConditionType.SECRETTYPE);
+
+        // ✅ DTO 매핑
         List<KeyringInfoResponse> keyringResponses = keyrings.stream().map(keyring -> {
-            Long keyringId = keyring.getId();
-
+            Long id = keyring.getId();
             return new KeyringInfoResponse(
-                    keyringId,
+                    id,
                     keyring.getNfcName(),
                     keyring.getIsFavorite(),
                     keyring.getTagCode(),
                     keyring.getDesign().getImageUrl(),
-                    abstractMessageRepository.findLastSentTimeByKeyring(keyringId),
-                    abstractMessageRepository.countByKeyring(keyringId),
-                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.RESERVATION),
-                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.TIMECAPSULE),
-                    abstractMessageRepository.countByKeyringAndConditionType(keyringId, ConditionType.SECRETTYPE)
+                    lastSentTimeMap.get(id),
+                    totalCountMap.getOrDefault(id, 0),
+                    reservationCountMap.getOrDefault(id, 0),
+                    timeCapsuleCountMap.getOrDefault(id, 0),
+                    secretCountMap.getOrDefault(id, 0)
             );
         }).toList();
 

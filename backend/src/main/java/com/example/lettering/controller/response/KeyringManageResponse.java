@@ -3,6 +3,8 @@ package com.example.lettering.controller.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 public class KeyringManageResponse {
@@ -11,4 +13,5 @@ public class KeyringManageResponse {
     private boolean isFavorite;
     private String tagCode;
     private String imageUrl;
+    private LocalDateTime lastSentTime;
 }
