@@ -19,7 +19,7 @@ const KeyringItem = ({
 
   return (
     <StItemWrapper $isEditing={isEditing}>
-      <IdText>키링 ID : {keyring.keyringId}</IdText>
+      <IdText>키링 ID : {keyring.tagCode}</IdText>
       <SettingBox>
         <IcStar
           style={{ color: keyring.favorite ? '#FFD600' : '#D3D3D3' }}
