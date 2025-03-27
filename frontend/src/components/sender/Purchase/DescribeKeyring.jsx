@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import KeyringImg from '../../../assets/images/keyring.png';
@@ -8,6 +9,7 @@ import Header from '../../common/Header';
 import QuantityInput from './QuantitiyInput';
 
 const DescribeKeyring = () => {
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
 
   const handleCount = (num) => {
@@ -38,7 +40,12 @@ const DescribeKeyring = () => {
                 수 있습니다.
               </p>
               <p>키링을 통해 마음을 소중한 사람에게 전해보세요.</p>
-              <LongButton btnName="구매하기" />
+              <LongButton
+                btnName="구매하기"
+                onClick={() => {
+                  navigate(`/mypage`);
+                }}
+              />
             </StText>
           </StTextWrapper>
         </StContent>
@@ -58,10 +65,11 @@ const StWrapper = styled.div`
 const StContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  gap: 3rem;
 
-  flex: 1;
+  padding-top: 7rem;
 
   img {
     width: 15rem;
