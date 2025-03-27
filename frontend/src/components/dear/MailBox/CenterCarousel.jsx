@@ -88,7 +88,16 @@ const SlideComponent = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
 
+  const isPastDate = (conditionTime) => {
+    const openDate = new Date(conditionTime);
+    const now = new Date();
+    return openDate <= now;
+  };
+
   const handleClick = (idx) => {
+    const message = dearMessagesSummaryList[idx];
+    if (!isPastDate(message.conditionTime)) return;
+
     if (activeIndex !== idx) return;
 
     setOpenedIndices((prev) =>
@@ -128,10 +137,7 @@ const SlideComponent = () => {
         const isVisible = Math.abs(activeIndex - idx) <= 2;
         const isCenter = activeIndex === idx;
         const isOpened = openedIndices.includes(idx);
-
-        const openDate = new Date(msg.conditionTime);
-        const now = new Date();
-        const isPast = openDate <= now;
+        const isPast = isPastDate(msg.conditionTime);
 
         let commentText = '';
         if (!isPast) {
@@ -246,16 +252,20 @@ const ImageWrapper = styled.div`
 `;
 
 const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
   border-radius: 1rem;
+
+  background-color: rgba(0, 0, 0, 0.3);
   color: white;
   ${({ theme }) => theme.fonts.Body2};
 `;
@@ -265,11 +275,14 @@ const Comment = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   width: 13rem;
   height: 3rem;
+
   position: absolute;
   left: 5rem;
   top: 2rem;
+
   ${({ theme }) => theme.fonts.EduBody1};
   color: ${({ theme }) => theme.colors.Gray1};
   text-align: center;
@@ -283,19 +296,21 @@ const Details = styled.div`
 `;
 
 const OpenTime = styled.div`
-  text-align: end;
   margin-right: 1rem;
+
   color: ${({ theme }) => theme.colors.Gray2};
   ${({ theme }) => theme.fonts.Body5};
+
+  text-align: end;
 `;
 
 const StyledIcon = styled.div`
-  width: 9rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 
+  width: 9rem;
   margin-top: 2rem;
 
   svg {
