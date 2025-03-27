@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
@@ -9,6 +10,7 @@ import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 
 const PostcardWriting = () => {
+  const navigate = useNavigate();
   const [image, setImage] = useRecoilState(PostcardImage);
   const [text, setText] = useRecoilState(PostcardText);
   const [imageFile, setImageFile] = useRecoilState(PostcardImageFile);
