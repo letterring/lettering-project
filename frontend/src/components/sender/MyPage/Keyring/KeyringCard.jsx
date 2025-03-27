@@ -2,9 +2,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { IcAlarmClock, IcEnvelop, IcLock, IcStar, IcTimeQuarter } from '../../../assets/icons';
-import PostBoxImg from '../../../assets/images/postBox.png';
-import { getRelativeDate } from '../../../util/getRelativeDate';
+import { IcAlarmClock, IcEnvelop, IcLock, IcStar, IcTimeQuarter } from '../../../../assets/icons';
+import PostBoxImg from '../../../../assets/images/postBox.png';
+import { getRelativeDate } from '../../../../util/getRelativeDate';
 
 const KeyringCard = ({ keyring }) => {
   const {
