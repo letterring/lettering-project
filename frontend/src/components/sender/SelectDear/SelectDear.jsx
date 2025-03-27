@@ -115,9 +115,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import { getKeyringList } from '../../../apis/keyring'; // ✅ 추가
+import { getKeyringList } from '../../../apis/keyring';
+import { PostcardImageFile, PostcardText, SelectedKeyringId } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import QuestionText from './QuestionText';
@@ -126,8 +128,11 @@ import SelectDearContent from './SelectDearContent';
 const SelectDear = () => {
   const navigate = useNavigate();
   const [keyringArr, setKeyringArr] = useState([]);
+  const selectedKeyringId = useRecoilValue(SelectedKeyringId);
+  const postcardImageFile = useRecoilValue(PostcardImageFile);
+  const postcardText = useRecoilValue(PostcardText);
 
-  // ✅ 키링 목록 API 호출
+  // 키링 목록 API 호출
   useEffect(() => {
     const fetchKeyrings = async () => {
       try {
@@ -143,6 +148,9 @@ const SelectDear = () => {
 
   const handleSelectOption = () => {
     console.log('전송 옵션 선택');
+    console.log('📦 Selected Keyring ID:', selectedKeyringId);
+    console.log('🖼️ Postcard Image File:', postcardImageFile);
+    console.log('📝 Postcard Text:', postcardText);
     navigate('/deliverytype');
   };
 

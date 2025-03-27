@@ -28,4 +28,9 @@ const PostcardText = atom({
   default: '',
 });
 
-export { PostcardImage, PostcardImageFile, PostcardText, UserId };
+const SelectedKeyringId = atom({
+  key: 'selectedKeyringId',
+  default: null,
+});
+
+export { PostcardImage, PostcardImageFile, PostcardText, SelectedKeyringId, UserId };
