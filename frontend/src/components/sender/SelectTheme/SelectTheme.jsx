@@ -84,14 +84,13 @@ const ExampleImage = styled.img`
 `;
 
 const FixedButtonWrapper = styled.div`
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
+  position: fixed;
+  bottom: 3rem;
   width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box; // ✅ 이거 추가!
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1rem;
   z-index: 10;
-  background-color: transparent;
 `;
