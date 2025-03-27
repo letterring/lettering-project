@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock } from '../../../assets/icons';
+import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/icons';
 import Closed1 from '../../../assets/images/mailbox/closed1.png';
 import Closed4 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
@@ -174,7 +174,7 @@ const SlideComponent = () => {
               <Details>
                 <StyledIcon>
                   <OpenTime>{getRelativeDate(msg.conditionTime)}</OpenTime>
-                  {isPast ? msg.favorite ? <IcLikesTrue /> : <IcLikesFalse /> : <IcLock />}
+                  {isPast ? msg.favorite ? <IcLikesTrue /> : <IcLikesFalse /> : <IcLock2 />}
                 </StyledIcon>
                 {isPast && isOpened && isCenter && (
                   <DetailButton>
