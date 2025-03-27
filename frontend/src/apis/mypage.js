@@ -3,10 +3,10 @@ import client from './axios';
 export const getUserInfo = async () => {
   try {
     const res = await client.get('users/mypage');
-    return res;
+    return res.data;
   } catch (err) {
     console.error('마이페이지 정보를 가져오지 못했습니다.', err);
-    throw err;
+    return null;
   }
 };
 

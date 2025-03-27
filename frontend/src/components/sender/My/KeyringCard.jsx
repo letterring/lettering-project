@@ -7,33 +7,44 @@ import PostBoxImg from '../../../assets/images/postBox.png';
 import { getRelativeDate } from '../../../util/getRelativeDate';
 
 const KeyringCard = ({ keyring }) => {
+  const {
+    keyringId,
+    keyringName,
+    lastSentTime,
+    totalMessageCount,
+    scheduledCount,
+    timeCapsuleCount,
+    secretCount,
+    favorite,
+  } = keyring;
+
   return (
     <StCardWrapper>
       <CardHeader>
-        <IcStar style={{ color: keyring.favorite ? '#FFD600' : '#D3D3D3' }} />
-        <LastDateText>{getRelativeDate(keyring.lastSentTime)}</LastDateText>
+        <IcStar style={{ color: favorite ? '#FFD600' : '#D3D3D3' }} />
+        <LastDateText>{getRelativeDate(lastSentTime)}</LastDateText>
       </CardHeader>
 
       <PostBoxImage src={PostBoxImg} alt="우체통" />
-      <Nickname>{keyring.keyringName}</Nickname>
-      <SubText>{keyring.keyringId}</SubText>
+      <Nickname>{keyringName}</Nickname>
+      <SubText>{keyringId}</SubText>
 
       <InfoGrid>
         <InfoBox>
           <IcEnvelop />
-          <span>{keyring.totalMessageCount}</span>
+          <span>{totalMessageCount}</span>
         </InfoBox>
         <InfoBox>
           <IcTimeQuarter />
-          <span>{keyring.scheduledCount}</span>
+          <span>{scheduledCount}</span>
         </InfoBox>
         <InfoBox>
           <IcAlarmClock />
-          <span>{keyring.timeCapsuleCount}</span>
+          <span>{timeCapsuleCount}</span>
         </InfoBox>
         <InfoBox>
           <IcLock />
-          <span>{keyring.secretCount}</span>
+          <span>{secretCount}</span>
         </InfoBox>
       </InfoGrid>
     </StCardWrapper>
