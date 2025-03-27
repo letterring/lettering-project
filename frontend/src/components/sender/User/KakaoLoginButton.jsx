@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import KakaoLoginButtonImg from '../../assets/images/kakao_login_button.png';
+import KakaoLoginButtonImg from '../../../assets/images/kakao_login_button.png';
 
 const KakaoLoginButton = () => {
   const handleKakaoLogin = () => {

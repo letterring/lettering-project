@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
+import { updateFont } from '../../../../apis/mypage';
 import { UserFont } from '../../../../recoil/userInfo';
 import Header from '../../../common/Header';
 import FontItem from './FontItem';
@@ -13,9 +14,9 @@ const FontSetting = () => {
   const [userFont, setUserFont] = useRecoilState(UserFont);
   const [selectedFont, setSelectedFont] = useState(userFont);
 
-  const handleFontChange = (font) => {
-    setUserFont(font);
-    // TODO: 여기에 API 저장 로직 추가 가능
+  const handleFontChange = async (newFont) => {
+    const data = await updateFont(newFont);
+    setUserFont(newFont);
     navigate('/mypage');
   };
 
@@ -43,13 +44,14 @@ const FontSetting = () => {
 export default FontSetting;
 
 const StFontSettingWrapper = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  position: relative;
   box-sizing: border-box;
   height: 100%;
-  padding: 5rem;
+  padding: 6rem 2rem;
   gap: 1rem;
 `;
 

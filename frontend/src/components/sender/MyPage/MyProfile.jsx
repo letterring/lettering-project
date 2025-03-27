@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { getUserInfo } from '../../../apis/mypage';
+import { getUserInfo, updateNickname } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
 import Header from '../../common/Header';
 import KeyringList from './Keyring/KeyringList';
 import NickNameSetting from './NickNameSetting';
 
-const My = () => {
+const MyProfile = () => {
   const [nickname, setNickname] = useRecoilState(UserNickname);
   const [font, setFont] = useRecoilState(UserFont);
   const [keyringList, setKeyringList] = useRecoilState(UserKeyringList);
@@ -30,7 +30,8 @@ const My = () => {
     fetchUserInfo();
   }, []);
 
-  const handleEditNickname = (newName) => {
+  const handleEditNickname = async (newName) => {
+    const data = await updateNickname(newName);
     setNickname(newName);
     setIsEditing(false);
   };
@@ -74,7 +75,7 @@ const My = () => {
   );
 };
 
-export default My;
+export default MyProfile;
 
 const StWrapper = styled.div`
   position: relative;

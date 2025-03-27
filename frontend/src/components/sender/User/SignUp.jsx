@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { signup } from '../../apis/user';
+import { signup } from '../../../apis/user';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
