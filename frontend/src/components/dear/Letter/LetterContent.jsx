@@ -12,11 +12,30 @@ const LetterContent = ({ template, images, text, background }) => {
   return (
     <StLetterWrapper $background={background}>
       <StContentWrapper>
-        <StLetterText>{text}</StLetterText>
-        {template === 'main' && <MainTemplate images={images} />}
-        {template === 'film' && <FilmTemplate images={images} />}
-        {template === 'polar' && <PolarTemplate images={images} />}
-        {template === 'card' && <CardTemplate images={images} />}
+        {template === 'main' && (
+          <>
+            <MainTemplate images={images} />
+            <StLetterText>{text}</StLetterText>
+          </>
+        )}
+        {template === 'film' && (
+          <>
+            <StLetterText>{text}</StLetterText>
+            <FilmTemplate images={images} />
+          </>
+        )}
+        {template === 'polar' && (
+          <>
+            <PolarTemplate images={images} />
+            <StLetterText>{text}</StLetterText>
+          </>
+        )}
+        {template === 'card' && (
+          <>
+            <StLetterText>{text}</StLetterText>
+            <CardTemplate images={images} />
+          </>
+        )}
         {template === 'answer' && <ReplyComponent />}
       </StContentWrapper>
     </StLetterWrapper>
@@ -46,6 +65,7 @@ const StContentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 70%;
+  height: 100%;
 `;
 
 const StLetterText = styled.div`
@@ -53,6 +73,7 @@ const StLetterText = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  padding: 1rem;
 
   ${({ theme }) => theme.fonts.Gomsin2};
   word-wrap: break-word;
