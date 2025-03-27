@@ -50,42 +50,49 @@ const My = () => {
   };
 
   return (
-    <StMyWrapper>
-      <Header headerName="마이페이지" />
-      <br />
-      <Title>닉네임</Title>
-      <NickNameSetting
-        value={nickname}
-        isEditing={isEditing}
-        icon={isEditing ? IcCheckCircle : IcPen}
-        onStartEdit={() => setIsEditing(true)}
-        onIconClick={handleEditNickname}
-      />
-      <Title>폰트</Title>
-      <FontPreviewBox>
-        {font}
-        <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
-      </FontPreviewBox>
-      <br />
-      <Title>
-        키링
-        <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
-      </Title>
-      <KeyringList keyringList={keyringList} />
-    </StMyWrapper>
+    <>
+      <StWrapper>
+        <Header headerName="마이페이지" />
+        {/* <br /> */}
+        <StMyWrapper>
+          <Title>닉네임</Title>
+          <NickNameSetting
+            value={nickname}
+            isEditing={isEditing}
+            icon={isEditing ? IcCheckCircle : IcPen}
+            onStartEdit={() => setIsEditing(true)}
+            onIconClick={handleEditNickname}
+          />
+          <Title>폰트</Title>
+          <FontPreviewBox>
+            {font}
+            <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
+          </FontPreviewBox>
+          <br />
+          <Title>
+            키링
+            <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
+          </Title>
+          <KeyringList keyringList={keyringList} />
+        </StMyWrapper>
+      </StWrapper>
+    </>
   );
 };
 
 export default My;
 
-const StMyWrapper = styled.div`
+const StWrapper = styled.div`
   position: relative;
+  height: 100%;
+`;
+
+const StMyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  height: 100%;
-  padding: 5rem;
+  padding: 6rem 2rem;
 `;
 
 const Title = styled.div`
