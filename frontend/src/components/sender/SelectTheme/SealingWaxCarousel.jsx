@@ -1,36 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 import SealingWaxItem from './SealingWaxItem';
 
-const SealingWaxCarousel = ({ onSelect, selectedTheme }) => {
-  const [themes, setThemes] = useState([]);
+const SealingWaxCarousel = ({ sealingWaxes, onSelect, selectedTheme }) => {
   const sliderRef = useRef(null);
 
-  useEffect(() => {
-    const mockData = [
-      { id: 1, sealing_wax_name: 'Happy Birthday', image_url: '/temp-images/1.png' },
-      { id: 2, sealing_wax_name: 'Love Letter', image_url: '/temp-images/2.png' },
-      { id: 3, sealing_wax_name: 'Special Day', image_url: '/temp-images/3.png' },
-      { id: 4, sealing_wax_name: 'Thank You', image_url: '/temp-images/4.png' },
-      { id: 5, sealing_wax_name: 'Congratulations', image_url: '/temp-images/5.png' },
-    ];
-
-    setThemes(mockData);
-  }, []);
-
   const handleSelect = (index) => {
-    onSelect(themes[index]);
+    onSelect(sealingWaxes[index]);
   };
 
   return (
     <Wrapper>
       <CarouselContainer ref={sliderRef}>
-        {themes.map((theme, index) => (
+        {sealingWaxes.map((theme, index) => (
           <SealingWaxItem
             key={`${theme.id}-${index}`}
             theme={theme}
-            isSelected={theme.sealing_wax_name === selectedTheme?.sealing_wax_name}
+            isSelected={theme.id === selectedTheme?.id}
             onClick={() => handleSelect(index)}
           />
         ))}

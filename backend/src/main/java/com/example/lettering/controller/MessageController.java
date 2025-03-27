@@ -1,10 +1,7 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.CreatePostcardRequest;
-import com.example.lettering.controller.response.DearMessageSummaryListResponse;
-import com.example.lettering.controller.response.PostcardDetailResponse;
-import com.example.lettering.controller.response.PostcardToDearDetailResponse;
-import com.example.lettering.controller.response.SenderMessageSummaryListResponse;
+import com.example.lettering.controller.response.*;
 import com.example.lettering.domain.keyring.service.SessionService;
 import com.example.lettering.domain.keyring.service.TokenService;
 import com.example.lettering.domain.message.service.MessageService;
@@ -14,7 +11,6 @@ import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +37,7 @@ public class MessageController {
     @PostMapping(path = "/postcards",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createPostcard(
             @RequestPart("postcard") CreatePostcardRequest createPostcardRequest,
-            @RequestPart("image") MultipartFile imageFile,
-            HttpSession session) throws IOException {
+            @RequestPart("image") MultipartFile imageFile, HttpSession httpSession) throws IOException {
 
 //        Long senderId = (Long) session.getAttribute("userId");
         Long senderId = 1L;
@@ -131,6 +126,16 @@ public class MessageController {
 
         postcardService.resetMessageAsUnread(messageId);
 
+        return ResponseEntity.ok(new BooleanResponse(true));
+    }
+
+    @Operation(summary = "메시지(우편 또는 엽서) 답장 작성", description = "받는 사람이 답장 작성시 사용하는 API")
+    @PatchMapping("reply/{messageId}")
+    public ResponseEntity<BooleanResponse> createReply(
+            @PathVariable("messageId") Long messageId,
+            @RequestBody CreateReplyRequest createReplyRequest) {
+
+        messageService.createReply(messageId, createReplyRequest.getReplyText());
         return ResponseEntity.ok(new BooleanResponse(true));
     }
 
