@@ -1,16 +1,39 @@
 import { motion } from 'framer-motion';
-import React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import DummyImg from '../../../assets/dummy/postcard.jpg';
-import PostcardImg from '../../../assets/images/postcard/postcard.png';
-import StampImg from '../../../assets/images/postcard/stamp.png';
+import { getPostcardDetail } from '/src/apis/postcard';
+import DummyImg from '/src/assets/dummy/postcard.jpg';
+import PostcardImg from '/src/assets/images/postcard/postcard.png';
+import StampImg from '/src/assets/images/postcard/stamp.png';
+
 import Header from '../../common/Header';
 import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
   const [flipped, setFlipped] = useState(false);
+  const messageId = 9;
+
+  const [postcard, setPostcard] = useState(null);
+
+  useEffect(() => {
+    const fetchPostcard = async () => {
+      try {
+        const data = await getPostcardDetail(messageId);
+        setPostcard(data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchPostcard();
+  }, [messageId]);
+
+  // postcard가 아직 없으면 로딩 처리
+  if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
+
+  // 구조분해 할당
+  const { imageUrl, content, nfcName, font, replyText } = postcard;
 
   return (
     <StPageWrapper>
@@ -22,26 +45,21 @@ const PostcardDetail = () => {
             {/* <StPostcard src={PostcardImg} alt="엽서" /> */}
             <StPostcardWhite />
             <StPostcardImage>
-              <img src={DummyImg} alt="엽서사진" />
+              <img src={imageUrl || DummyImg} alt="엽서사진" />
             </StPostcardImage>
           </StCardFace>
           <StCardFace className="back">
             <StPostcard src={PostcardImg} alt="엽서" />
             <StPostcardContent>
-              <StPostcardTitle>사랑하는 너에게,</StPostcardTitle>
               <StPostcardStamp src={StampImg} alt="우표" />
-              <StPostcardText>
-                오늘 아침 눈을 뜨자마자 달력을 보니 우리 기념일이라는 사실에 마음이 설렌다. 우리가
-                함께 보낸 시간이 벌써 이렇게 쌓였다는 게 믿기지 않을 정도로 빠르게 느껴져. 처음
-                만났던 순간부터 지금까지 함께한 모든 기억들이 하나둘 떠오르면서 마음이 참
-                따뜻해졌어.
-              </StPostcardText>
+              <StPostcardTitle $font={font}>사랑하는 {nfcName || '너'}에게,</StPostcardTitle>
+              <StPostcardText $font={font}>{content}</StPostcardText>
             </StPostcardContent>
           </StCardFace>
         </StFlipCard>
       </StFlipContainer>
 
-      <ReplyComponent />
+      <ReplyComponent messageId={messageId} replyText={replyText} />
     </StPageWrapper>
   );
 };
@@ -113,8 +131,11 @@ const StPostcardContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 3rem;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
   z-index: 3;
 `;
 

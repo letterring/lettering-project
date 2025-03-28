@@ -35,11 +35,11 @@ const Postcard = () => {
           initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
           animate={{ x, y, opacity: 1, rotate: -3.7 }}
           transition={{ duration: 1.2 }}
-          // onAnimationComplete={() => {
-          //   setTimeout(() => {
-          //     navigate('/dear/postcard/detail');
-          //   }, 800); // 1초 뒤 이동
-          // }}
+          onAnimationComplete={() => {
+            setTimeout(() => {
+              navigate('/dear/postcard/detail');
+            }, 800);
+          }}
         />
         <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />
         <StBlankWhite />
