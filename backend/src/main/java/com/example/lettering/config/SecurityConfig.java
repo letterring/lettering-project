@@ -28,17 +28,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**", "/api/**").permitAll() // ❗️ `/login` 삭제
+                        .requestMatchers("/","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "login/oauth2/**", "/api/**").permitAll() // ❗️ `/login` 삭제
                         .anyRequest().authenticated()
                 )
-//                .oauth2Login(oauth2 -> oauth2
-//                        .loginPage("/oauth2/authorization/kakao") // 🔹 `/login` 대신 명확하게 설정
-//                        .successHandler((request, response, authentication) -> {
-//                            response.sendRedirect(domainName); // React로 이동
-//                        })
-//                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-//                )
-                .oauth2Login(oauth2 -> oauth2.disable())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/oauth2/authorization/kakao") // 🔹 `/login` 대신 명확하게 설정
+                        .successHandler((request, response, authentication) -> {
+                            response.sendRedirect(domainName); // React로 이동
+                        })
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                )
                 .logout(logout -> logout
                         .logoutUrl("/api/users/logout") // 로그아웃 엔드포인트 지정
                         .logoutSuccessHandler(customLogoutSuccessHandler()) // 커스텀 핸들러 추가
