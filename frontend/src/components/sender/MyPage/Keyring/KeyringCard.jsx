@@ -8,7 +8,6 @@ import { getRelativeDate } from '../../../../util/getRelativeDate';
 
 const KeyringCard = ({ keyring }) => {
   const {
-    tagCode,
     keyringName,
     tagCode,
     lastSentTime,
