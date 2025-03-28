@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { UserKeyringList } from '../../../recoil/userInfo';
-import CancelButton from '../../common/button/CancelButton';
-import ConfirmButton from '../../common/button/ConfirmButton';
-import Header from '../../common/Header';
-import ConfirmModal from '../../common/modal/ConfirmModal';
+import { UserKeyringList } from '../../../../recoil/userInfo';
+import CancelButton from '../../../common/button/CancelButton';
+import ConfirmButton from '../../../common/button/ConfirmButton';
+import Header from '../../../common/Header';
+import ConfirmModal from '../../../common/modal/ConfirmModal';
 import KeyringItem from './KeyringItem';
 
 const KeyringSetting = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SignUp from '../components/User/SignUp';
+import SignUp from '../../components/sender/User/SignUp';
 
 const SignUpPage = () => {
   return (

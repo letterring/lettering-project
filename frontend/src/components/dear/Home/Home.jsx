@@ -47,12 +47,12 @@ const Home = () => {
         >
           <StButtonWrapper>
             {/* <StButton onClick={() => navigate('/dear/postcard')}>새로운 편지 보러가기</StButton> */}
-            <LongButton onClick={() => navigate('/dear')} btnName="받은 편지함" />
+            <LongButton onClick={() => navigate('/dear/mailbox')} btnName="받은 편지함" />
           </StButtonWrapper>
         </StMotionFadeIn>
       </StPageWrapper>
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" target="dear" />
+        <MenuModal isShowing={menu.isShowing} target="dear" />
       </StMenuModalWrapper>
     </>
   );

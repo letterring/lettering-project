@@ -1,11 +1,11 @@
 import React from 'react';
 
-import My from '../../components/sender/My/My';
+import MyProfile from '../../components/sender/MyPage/MyProfile';
 
 const MyPage = () => {
   return (
     <>
-      <My />
+      <MyProfile />
     </>
   );
 };

@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import { FontList, UserFont } from '../../../recoil/userInfo';
-import Header from '../../common/Header';
+import { UserFont } from '../../../../recoil/userInfo';
+import Header from '../../../common/Header';
 import FontItem from './FontItem';
 
 const FontSetting = () => {
   const navigate = useNavigate();
-  const fontList = useRecoilValue(FontList);
+  const fontList = ['Gomsin', 'GangwonEduAll'];
   const [userFont, setUserFont] = useRecoilState(UserFont);
   const [selectedFont, setSelectedFont] = useState(userFont);
 

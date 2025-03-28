@@ -2,6 +2,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -27,7 +28,7 @@ const dearMessagesSummaryList = [
     replied: false,
     sealingWaxId: 1,
     favorite: false,
-    designType: 'POSTCARD',
+    designType: 'LETTER',
     opened: false,
   },
   {
@@ -36,7 +37,7 @@ const dearMessagesSummaryList = [
     replied: false,
     sealingWaxId: 1,
     favorite: false,
-    designType: 'POSTCARD',
+    designType: 'LETTER',
     opened: false,
   },
   {
@@ -54,7 +55,7 @@ const dearMessagesSummaryList = [
     replied: true,
     sealingWaxId: 1,
     favorite: false,
-    designType: 'POSTCARD',
+    designType: 'LETTER',
     opened: true,
   },
   {
@@ -63,7 +64,7 @@ const dearMessagesSummaryList = [
     replied: false,
     sealingWaxId: 1,
     favorite: false,
-    designType: 'POSTCARD',
+    designType: 'LETTER',
     opened: false,
   },
 ];
@@ -85,6 +86,7 @@ const openedImages = {
 };
 
 const SlideComponent = () => {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
 
@@ -107,6 +109,14 @@ const SlideComponent = () => {
 
   const handleSlideChange = (swiper) => {
     setActiveIndex(swiper.realIndex);
+  };
+
+  const handleOpenMsg = (type) => {
+    if (type === 'POSTCARD') {
+      navigate(`/dear/postcard/detail`);
+    } else {
+      navigate(`/dear/letter/detail`);
+    }
   };
 
   const getAlignType = (idx, activeIdx) => {
@@ -178,7 +188,7 @@ const SlideComponent = () => {
                 </StyledIcon>
                 {isPast && isOpened && isCenter && (
                   <DetailButton>
-                    <IcDetail />
+                    <IcDetail onClick={() => handleOpenMsg(msg.designType)} />
                   </DetailButton>
                 )}
               </Details>

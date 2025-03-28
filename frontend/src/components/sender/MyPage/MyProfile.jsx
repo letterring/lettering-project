@@ -8,7 +8,7 @@ import { getUserInfo } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
 import Header from '../../common/Header';
-import KeyringList from './KeyringList';
+import KeyringList from './Keyring/KeyringList';
 import NickNameSetting from './NickNameSetting';
 
 const My = () => {
@@ -21,16 +21,10 @@ const My = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        const res = await getUserInfo();
-        const data = res.data;
-
-        setNickname(data.nickname);
-        setFont(data.font);
-        setKeyringList(data.keyrings);
-      } catch (error) {
-        console.error('유저 정보 가져오기 실패', error);
-      }
+      const data = await getUserInfo();
+      setNickname(data.nickname);
+      setFont(data.font);
+      setKeyringList(data.keyrings);
     };
 
     fetchUserInfo();
@@ -50,42 +44,49 @@ const My = () => {
   };
 
   return (
-    <StMyWrapper>
-      <Header headerName="마이페이지" />
-      <br />
-      <Title>닉네임</Title>
-      <NickNameSetting
-        value={nickname}
-        isEditing={isEditing}
-        icon={isEditing ? IcCheckCircle : IcPen}
-        onStartEdit={() => setIsEditing(true)}
-        onIconClick={handleEditNickname}
-      />
-      <Title>폰트</Title>
-      <FontPreviewBox>
-        {font}
-        <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
-      </FontPreviewBox>
-      <br />
-      <Title>
-        키링
-        <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
-      </Title>
-      <KeyringList keyringList={keyringList} />
-    </StMyWrapper>
+    <>
+      <StWrapper>
+        <Header headerName="마이페이지" />
+        {/* <br /> */}
+        <StMyWrapper>
+          <Title>닉네임</Title>
+          <NickNameSetting
+            value={nickname}
+            isEditing={isEditing}
+            icon={isEditing ? IcCheckCircle : IcPen}
+            onStartEdit={() => setIsEditing(true)}
+            onIconClick={handleEditNickname}
+          />
+          <Title>폰트</Title>
+          <FontPreviewBox>
+            {font}
+            <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
+          </FontPreviewBox>
+          <br />
+          <Title>
+            키링
+            <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
+          </Title>
+          <KeyringList keyringList={keyringList} />
+        </StMyWrapper>
+      </StWrapper>
+    </>
   );
 };
 
 export default My;
 
-const StMyWrapper = styled.div`
+const StWrapper = styled.div`
   position: relative;
+  height: 100%;
+`;
+
+const StMyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  height: 100%;
-  padding: 5rem;
+  padding: 6rem 2rem;
 `;
 
 const Title = styled.div`
