@@ -1,5 +1,6 @@
 package com.example.lettering.domain.keyring.service;
 
+import com.example.lettering.controller.request.KeyringDesignRequest;
 import com.example.lettering.controller.request.OrderRequest;
 import com.example.lettering.controller.response.KeyringDesignListResponse;
 import com.example.lettering.controller.response.KeyringDesignResponse;
@@ -17,11 +18,15 @@ import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.exception.type.DbException;
+import com.example.lettering.exception.type.ExternalApiException;
 import com.example.lettering.exception.type.ValidationException;
+import com.example.lettering.util.S3ImageUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +42,7 @@ public class KeyringServiceImpl implements KeyringService{
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final AbstractMessageRepository abstractMessageRepository;
+    private final S3ImageUtil s3ImageUtil;
 
     // ✅ 모든 키링 디자인 조회
     @Override
@@ -197,6 +203,16 @@ public class KeyringServiceImpl implements KeyringService{
     public Long generateTempOrderNumber() {
         Long lastNumber = orderRepository.getMaxOrderNumber();
         return (lastNumber != null) ? lastNumber + 1 : 1000001L;
+    }
+
+
+    @Override
+    public KeyringDesignResponse createKeyringDesign(KeyringDesignRequest request, MultipartFile image) throws IOException {
+        String imageUrl = s3ImageUtil.uploadImage(image, "keyring-designs");
+
+        KeyringDesign design = KeyringDesign.fromDto(request, imageUrl);
+
+        return KeyringDesignResponse.from(keyringDesignRepository.save(design));
     }
 
 }
