@@ -17,6 +17,7 @@ import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class PostcardServiceImpl implements PostcardService {
     private final SealingWaxRepository sealingWaxRepository;
 
     @Override
-    public Long createPostcard(CreatePostcardRequest createPostcardRequest, org.springframework.web.multipart.MultipartFile imageFile, Long senderId) throws IOException {
+    public Long createPostcard(CreatePostcardRequest createPostcardRequest, MultipartFile imageFile, Long senderId) throws IOException {
         User sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
 
@@ -46,8 +47,7 @@ public class PostcardServiceImpl implements PostcardService {
 
         Postcard postcard = Postcard.fromDto(createPostcardRequest, sender, keyring, sealingWax, imageUrl, sender.getFont());
 
-        Postcard saved = postcardRepository.save(postcard);
-        return saved.getId();
+        return postcardRepository.save(postcard).getId();
     }
 
     @Override
