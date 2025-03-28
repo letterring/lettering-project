@@ -15,7 +15,8 @@ public class LetterContent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 어느 편지에 속하는 글인지
+    // 양방향 연관관계 설정을 위한 setter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "letter_id", nullable = false)
     private Letter letter;
@@ -23,4 +24,10 @@ public class LetterContent {
     // 글 내용 (단락별로 저장; 필요시 MySQL ALTER TABLE 로 VARCHAR 길이 증대)
     @Column(name = "text", nullable = false, length = 3000)
     private String text;
+
+    public static LetterContent fromText(String text) {
+        return LetterContent.builder()
+                .text(text)
+                .build();
+    }
 }
