@@ -1,20 +1,28 @@
 package com.example.lettering.controller;
 
+import com.example.lettering.controller.request.KeyringDesignRequest;
 import com.example.lettering.controller.request.KeyringTagRequest;
 import com.example.lettering.controller.request.UpdateNfcNameRequest;
 import com.example.lettering.controller.response.*;
+import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.ValidationException;
+import com.example.lettering.util.SwaggerBody;
 import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +75,18 @@ public class KeyringController {
         return ResponseEntity.ok(
                 Map.of("message", count + "개의 키링이 등록되었습니다.")
         );
+    }
+
+    @Operation(summary = "키링 디자인 등록 API", description = "디자인 정보와 이미지를 함께 등록합니다.")
+    @SwaggerBody(content = @Content(
+            encoding = @Encoding(name = "keyringDesign", contentType = MediaType.APPLICATION_JSON_VALUE)
+    ))
+    @PostMapping(value = "/designs/backoffice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<KeyringDesignResponse> createDesign(
+            @RequestPart("keyringDesign") KeyringDesignRequest request,
+            @RequestPart("image") MultipartFile image
+    ) throws IOException {
+        return ResponseEntity.ok(keyringService.createKeyringDesign(request, image));
     }
 
     @GetMapping("/manage")
