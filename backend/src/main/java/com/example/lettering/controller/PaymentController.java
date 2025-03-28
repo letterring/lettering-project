@@ -5,6 +5,7 @@ import com.example.lettering.controller.request.KakaoPayReadyRequest;
 import com.example.lettering.controller.request.KakaoPayApproveRequest;
 import com.example.lettering.controller.response.KakaoPayReadyResponse;
 import com.example.lettering.controller.response.KakaoPayApproveResponse;
+import com.example.lettering.controller.response.PaymentReadyResponse;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.keyring.repository.KeyringDesignRepository;
@@ -37,7 +38,7 @@ public class PaymentController {
 
     @PostMapping("/order")
     @Operation(summary = "결제 준비", description = "주문 생성 없이 결제 준비 후 결제창 URL 반환")
-    public ResponseEntity<?> placeOrder(HttpSession session, @RequestBody OrderRequest request) {
+    public ResponseEntity<PaymentReadyResponse> placeOrder(HttpSession session, @RequestBody OrderRequest request) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
 
@@ -65,9 +66,9 @@ public class PaymentController {
                 "tid", kakao.getTid()
         ));
 
-        return ResponseEntity.ok(Map.of(
-                "orderNumber", tempOrderNumber,
-                "paymentUrl", kakao.getNext_redirect_pc_url()
+        return ResponseEntity.ok(new PaymentReadyResponse(
+                tempOrderNumber,
+                kakao.getNext_redirect_pc_url()
         ));
     }
 

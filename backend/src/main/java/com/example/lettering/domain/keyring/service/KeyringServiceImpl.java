@@ -82,7 +82,7 @@ public class KeyringServiceImpl implements KeyringService{
         }
         keyringRepository.saveAll(keyrings);
 
-        int totalPrice = (int) (selectedDesign.getPrice() * request.getQuantity());
+        Long totalPrice =  selectedDesign.getPrice() * request.getQuantity();
 
         Order order = Order.create(
                 user, null, // 🚨 orderNumber는 approval에서 세팅
