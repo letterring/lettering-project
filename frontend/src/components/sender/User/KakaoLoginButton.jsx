@@ -22,7 +22,7 @@ export default KakaoLoginButton;
 
 const StBtnWrapper = styled.button`
   width: 28rem;
-  height: 5rem;
+  height: 4rem;
 
   border: none;
   border-radius: 1rem;

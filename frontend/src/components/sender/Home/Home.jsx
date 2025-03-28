@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import Background from '/src/assets/background2.png';
 import SendermainImg from '/src/assets/images/sender_main.png';
 
-import { getMypage } from '../../../apis/sample';
 import { IcMenu } from '../../../assets/icons';
 import useModal from '../../../hooks/common/useModal';
 import LongButton from '../../common/button/LongButton';
@@ -30,6 +29,7 @@ const Home = () => {
           <StButtonsWrapper>
             <LongButton
               btnName="편지 쓰기"
+              s
               onClick={() => {
                 navigate(`/theme`);
               }}
@@ -45,7 +45,7 @@ const Home = () => {
       </StHomeWrapper>
 
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" target="sender" />
+        <MenuModal isShowing={menu.isShowing} target="sender" />
       </StMenuModalWrapper>
     </>
   );
