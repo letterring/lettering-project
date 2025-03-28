@@ -1,16 +1,25 @@
-// src/components/sender/DeliveryType/DeliveryType.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
+import { sendPostcard } from '../../../apis/postcard';
 import IconLetter from '../../../assets/images/sender/NormalOption.png';
 import IconTimer from '../../../assets/images/sender/OpenTimerOption.png';
 import IconCalendar from '../../../assets/images/sender/ScheduledOption.png';
 import IconLock from '../../../assets/images/sender/SecretOption.png';
+import { PostcardImageFile, PostcardText, SelectedKeyringId } from '../../../recoil/atom';
 import Header from '../../common/Header';
 import QuestionText from '../SelectDear/QuestionText';
 import DeliveryTypeCard from './DeliveryTypeCard';
 
 const DeliveryType = () => {
+  const navigate = useNavigate();
+
+  const selectedKeyringId = useRecoilValue(SelectedKeyringId);
+  const postcardImageFile = useRecoilValue(PostcardImageFile);
+  const postcardText = useRecoilValue(PostcardText);
+
   const deliveryTypes = [
     {
       icon: IconLetter,
@@ -21,13 +30,13 @@ const DeliveryType = () => {
     {
       icon: IconTimer,
       title: '오픈 타이머',
-      description: '타이머 종료 후 읽을 수 있습니다!',
+      description: '타이머가 종료되어야 열릴 수 있어요!',
       value: 'TIMER',
     },
     {
       icon: IconLock,
       title: '비밀 편지',
-      description: '정답을 맞추면 열리는 편지입니다!',
+      description: '내가 낸 퀴즈를 맞혀야 편지가 열려요!',
       value: 'LOCKED',
     },
     {
@@ -38,9 +47,38 @@ const DeliveryType = () => {
     },
   ];
 
-  const handleSelect = (type) => {
+  const handleSelect = async (type) => {
     console.log('선택된 전송 방식:', type);
-    // 추후: Recoil 저장 또는 페이지 이동
+
+    const sealingWaxId = localStorage.getItem('sealingWaxId');
+    if (!sealingWaxId) {
+      alert('실링왁스 ID가 없습니다.');
+      return;
+    }
+
+    if (type === 'NORMAL') {
+      const postcardData = {
+        keyringId: selectedKeyringId,
+        sealingWaxId: Number(sealingWaxId),
+        conditionType: 'NONE',
+        content: postcardText,
+      };
+
+      try {
+        await sendPostcard({
+          postcardData,
+          imageFile: postcardImageFile,
+        });
+
+        alert('엽서가 전송되었습니다!');
+        navigate('/complete');
+      } catch (error) {
+        console.error('엽서 전송 실패:', error);
+        alert('엽서 전송에 실패했어요.');
+      }
+    } else {
+      alert('해당 전송 방식은 준비 중입니다.');
+    }
   };
 
   return (
@@ -75,7 +113,6 @@ const Wrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   height: auto;
-  user-select: none;
 `;
 
 const CardList = styled.div`
