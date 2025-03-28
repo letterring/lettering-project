@@ -11,27 +11,3 @@ export const getKeyringList = async () => {
     throw error;
   }
 };
-
-export const updateKeyringName = async () => {
-  try {
-  } catch (err) {
-    console.error('키링 이름 수정 실패', err);
-    throw err;
-  }
-};
-
-export const toggleKeyringFavoirite = async () => {
-  try {
-  } catch (err) {
-    console.error('키링 즐겨찾기 토글 실패', err);
-    throw err;
-  }
-};
-
-export const deleteKeyring = async () => {
-  try {
-  } catch (err) {
-    console.error('키링 삭제 실패', err);
-    throw err;
-  }
-};
