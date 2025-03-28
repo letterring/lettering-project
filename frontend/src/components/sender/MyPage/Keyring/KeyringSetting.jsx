@@ -84,7 +84,7 @@ const StKeyringSettingWrapper = styled.div`
   align-items: center;
   box-sizing: border-box;
   height: 100%;
-  padding: 5rem;
+  padding: 6rem 2rem;
   gap: 1rem;
 `;
 

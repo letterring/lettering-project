@@ -11,24 +11,25 @@ const KeyringItem = ({
   onDelete,
   onChangeName,
 }) => {
-  const [newName, setNewName] = useState(keyring.keyringName);
+  const { tagCode, favorite, keyringId, keyringName } = keyring;
+  const [newName, setNewName] = useState(keyringName);
 
   const handleSave = () => {
-    onChangeName(keyring.keyringId, newName);
+    onChangeName(keyringId, newName);
   };
 
   return (
     <StItemWrapper $isEditing={isEditing}>
-      <IdText>키링 ID : {keyring.keyringId}</IdText>
+      <IdText>키링 ID : {tagCode}</IdText>
       <SettingBox>
         <IcStar
-          style={{ color: keyring.favorite ? '#FFD600' : '#D3D3D3' }}
-          onClick={() => onToggleFavorite(keyring.keyringId)}
+          style={{ color: favorite ? '#FFD600' : '#D3D3D3' }}
+          onClick={() => onToggleFavorite(keyringId)}
         />
         {isEditing ? (
           <NameInput value={newName} onChange={(e) => setNewName(e.target.value)} />
         ) : (
-          <NameText>{keyring.keyringName}</NameText>
+          <NameText>{keyringName}</NameText>
         )}
         <IconWrapper>
           {isEditing ? (
@@ -36,7 +37,7 @@ const KeyringItem = ({
           ) : (
             <IcPen onClick={onStartEdit} style={{ cursor: 'pointer' }} />
           )}
-          <IcTrash onClick={() => onDelete(keyring.keyringId)} style={{ cursor: 'pointer' }} />
+          <IcTrash onClick={() => onDelete(keyringId)} style={{ cursor: 'pointer' }} />
         </IconWrapper>
       </SettingBox>
     </StItemWrapper>

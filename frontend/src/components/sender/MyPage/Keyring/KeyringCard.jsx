@@ -10,6 +10,7 @@ const KeyringCard = ({ keyring }) => {
   const {
     keyringId,
     keyringName,
+    tagCode,
     lastSentTime,
     totalMessageCount,
     scheduledCount,
@@ -27,7 +28,7 @@ const KeyringCard = ({ keyring }) => {
 
       <PostBoxImage src={PostBoxImg} alt="우체통" />
       <Nickname>{keyringName}</Nickname>
-      <SubText>{keyringId}</SubText>
+      <SubText>{tagCode}</SubText>
 
       <InfoGrid>
         <InfoBox>
