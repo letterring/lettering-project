@@ -13,35 +13,3 @@ export const getKeyringList = async () => {
     throw error;
   }
 };
-
-export const updateKeyringName = async ({ keyringId, newName }) => {
-  try {
-    await client.patch(`/api/keyrings/${keyringId}/nfcname`, {
-      nfcName: newName,
-    });
-    return true;
-  } catch (err) {
-    console.error('키링 이름 수정 실패', err);
-    return false;
-  }
-};
-
-export const toggleKeyringFavoirite = async ({ keyringId }) => {
-  try {
-    await client.patch(`/keyrings/${keyringId}/favorite`);
-    return true;
-  } catch (err) {
-    console.error('키링 즐겨찾기 토글 실패', err);
-    return false;
-  }
-};
-
-export const deleteKeyring = async ({ keyringId }) => {
-  try {
-    await client.delete(`keyrings/${keyringId}`);
-    return true;
-  } catch (err) {
-    console.error('키링 삭제 실패', err);
-    return false;
-  }
-};
