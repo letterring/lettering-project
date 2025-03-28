@@ -52,7 +52,7 @@ const Home = () => {
         </StMotionFadeIn>
       </StPageWrapper>
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" target="dear" />
+        <MenuModal isShowing={menu.isShowing} target="dear" />
       </StMenuModalWrapper>
     </>
   );
