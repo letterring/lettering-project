@@ -29,6 +29,7 @@ public enum ExceptionCode {
     KEYRING_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "구매 가능한 키링이 부족합니다.", 3005),
     DESIGN_NOT_FOUND(HttpStatus.NOT_FOUND, "선택한 디자인을 찾을 수 없습니다.", 3006),
     MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "선택된 메시지(편지 또는 우편)을 찾을 수 없습니다.", 3007),
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다.", 3008),
 
     // 외부 API 사용시 발생할 수 있는 예외 작성
     EXTERNAL_API_ERROR(HttpStatus.BAD_GATEWAY, "외부 API를 호출하는 과정에서 예외가 발생했습니다.", 4001),
