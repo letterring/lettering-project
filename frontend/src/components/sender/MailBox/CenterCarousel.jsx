@@ -1,11 +1,12 @@
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { getSenderMessages } from '../../../apis/mailbox';
 import { IcDetail } from '../../../assets/icons';
 import Closed1 from '../../../assets/images/mailbox/closed1.png';
 import Closed4 from '../../../assets/images/mailbox/closed1.png';
@@ -64,6 +65,13 @@ const messages = [
 const SlideComponent = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  const getSenderMailbox = async () => {
+    const { senderMessageSummaryList } = await getSenderMessages(0);
+    setMessages(senderMessageSummaryList);
+    console.log(senderMessageSummaryList);
+  };
 
   const handleClick = (idx) => {
     if (activeIndex !== idx) return;
@@ -84,6 +92,10 @@ const SlideComponent = () => {
     return 'flex-end';
   };
 
+  useEffect(() => {
+    getSenderMailbox();
+  }, []);
+
   return (
     <StyledSwiper
       direction="vertical"
@@ -101,30 +113,28 @@ const SlideComponent = () => {
       }}
       modules={[EffectCoverflow]}
     >
-      {messages.map((img, idx) => {
+      {messages.map((msg, idx) => {
+        const { conditionTime, designType, id, replied, repliedName, sealingWaxId } = msg;
         const isVisible = Math.abs(activeIndex - idx) <= 2;
         const isCenter = activeIndex === idx;
         const isOpened = openedIndices.includes(idx);
 
         return (
-          <StyledSlide key={idx} $hidden={!isVisible} onClick={() => handleClick(idx)}>
+          <StyledSlide key={id} $hidden={!isVisible} onClick={() => handleClick(idx)}>
             <SlideContent $align={getAlignType(idx, activeIndex)}>
               <ImageWrapper>
-                <img
-                  src={isCenter && isOpened ? img.opened : img.closed}
-                  alt={`Slide ${idx + 1}`}
-                />
+                <img src={isCenter && isOpened ? Opened1 : Closed1} alt={`Slide ${idx + 1}`} />
               </ImageWrapper>
               {isOpened && isCenter && (
                 <Comment>
                   <p>
-                    {img.dear}님께 보낸 {img.type === 'letter' ? '편지' : '엽서'}
+                    {repliedName}님께 보낸 {designType === 'letter' ? '편지' : '엽서'}
                   </p>
-                  <p>답장 : {img.reply ? 1 : 0}</p>
+                  <p>답장 : {replied ? 1 : 0}</p>
                 </Comment>
               )}
               <Details>
-                <OpenTime>{img.openTime}</OpenTime>
+                <OpenTime>{conditionTime}</OpenTime>
                 {isOpened && isCenter && (
                   <DetailButton>
                     <IcDetail />
