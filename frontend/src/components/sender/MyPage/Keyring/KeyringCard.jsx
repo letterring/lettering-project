@@ -8,7 +8,7 @@ import { getRelativeDate } from '../../../../util/getRelativeDate';
 
 const KeyringCard = ({ keyring }) => {
   const {
-    keyringId,
+    tagCode,
     keyringName,
     lastSentTime,
     totalMessageCount,
@@ -27,7 +27,7 @@ const KeyringCard = ({ keyring }) => {
 
       <PostBoxImage src={PostBoxImg} alt="우체통" />
       <Nickname>{keyringName}</Nickname>
-      <SubText>{keyringId}</SubText>
+      <SubText>{tagCode}</SubText>
 
       <InfoGrid>
         <InfoBox>

@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { deleteKeyring, toggleKeyringFavoirite, updateKeyringName } from '../../../../apis/keyring';
+import {
+  deleteKeyring,
+  getKeyringList,
+  toggleKeyringFavoirite,
+  updateKeyringName,
+} from '../../../../apis/mypage';
 import { UserKeyringList } from '../../../../recoil/userInfo';
 import CancelButton from '../../../common/button/CancelButton';
 import ConfirmButton from '../../../common/button/ConfirmButton';
@@ -16,14 +21,29 @@ const KeyringSetting = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
 
-  const toggleFavorite = (keyringId) => {
+  useEffect(() => {
+    const fetchKeyrings = async () => {
+      const keyringList = await getKeyringList();
+
+      const formatted = keyringList.map((k) => ({
+        ...k,
+        keyringName: k.nfcName,
+      }));
+
+      setKeyrings(formatted);
+    };
+
+    fetchKeyrings();
+  }, []);
+
+  const toggleFavorite = async (keyringId) => {
     const prevKeyrings = [...keyrings];
 
     setKeyrings((prev) =>
       prev.map((k) => (k.keyringId === keyringId ? { ...k, favorite: !k.favorite } : k)),
     );
 
-    const result = toggleKeyringFavoirite(keyringId);
+    const result = await toggleKeyringFavoirite({ keyringId });
 
     if (!result) {
       setKeyrings(prevKeyrings);
