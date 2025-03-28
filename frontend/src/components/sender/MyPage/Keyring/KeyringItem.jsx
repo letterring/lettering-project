@@ -11,11 +11,11 @@ const KeyringItem = ({
   onDelete,
   onChangeName,
 }) => {
-  const { keyringId, keyringName, tagCode, favorite } = keyring;
-  const [newName, setNewName] = useState(keyring.keyringName);
+  const { tagCode, favorite, keyringId, keyringName } = keyring;
+  const [newName, setNewName] = useState(keyringName);
 
   const handleSave = () => {
-    onChangeName(keyring.keyringId, newName);
+    onChangeName(keyringId, newName);
   };
 
   return (
