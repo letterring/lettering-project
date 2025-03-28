@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import KeyringImg from '../../../assets/images/keyring.png';
+import { getKeyringData } from '../../../apis/keyring';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import QuantityInput from './QuantitiyInput';
@@ -11,26 +11,38 @@ import QuantityInput from './QuantitiyInput';
 const DescribeKeyring = () => {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const [details, setDetails] = useState(null);
+  const { designName, imageUrl, price, description } = details || {};
+
+  const getKeyrings = async () => {
+    const { designs } = await getKeyringData();
+    setDetails(designs[0]);
+  };
 
   const handleCount = (num) => {
     setQuantity((prev) => prev + num);
     setTotal((prev) => prev + product.price * num);
   };
 
+  useEffect(() => {
+    getKeyrings();
+  }, []);
+
   return (
     <>
       <StWrapper>
         <Header headerName="키링 구매" />
         <StContent>
-          <img src={KeyringImg} alt="키링 이미지" />
+          <img src={imageUrl} alt="키링 이미지" />
           <StTextWrapper>
             <StText>
-              <h3>NFC 우체통 키링</h3>
+              <h3>{designName}</h3>
               <QuantityWrapper>
                 <QuantityInput quantity={quantity} onClick={handleCount} />
-                <h3>15000원</h3>
+                <h3>{price}</h3>
               </QuantityWrapper>
               <h4>설명</h4>
+              {description}
               <p>
                 내장된 NFC 태그를 통해, 연인이나 소중한 친구에게 전하고 싶은 편지를 간편하게 공유할
                 수 있습니다.
@@ -57,9 +69,12 @@ const DescribeKeyring = () => {
 export default DescribeKeyring;
 
 const StWrapper = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   position: relative;
+  height: 100%;
 `;
 
 const StContent = styled.div`
@@ -70,6 +85,7 @@ const StContent = styled.div`
   gap: 3rem;
 
   padding-top: 7rem;
+  height: 100%;
 
   img {
     width: 15rem;
@@ -80,7 +96,7 @@ const StContent = styled.div`
 const StTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: center;
 
   background-color: rgba(255, 255, 255, 0.36);
   height: 100%;

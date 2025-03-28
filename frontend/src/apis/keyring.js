@@ -1,23 +1,22 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import client from './axios';
 
+//전송 대상 키링정보 조회
 export const getKeyringList = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/keyrings/manage`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch keyring list');
-    }
-
-    const data = await response.json();
+    const { data } = await client.get(`/keyrings/manage`);
     console.log('Keyring List:', data);
     return data; // 배열 형태로 반환됨
   } catch (error) {
-    console.error('Error fetching keyring list:', error);
-    throw error;
+    console.error('키링 목록 조회 실패:', error);
+  }
+};
+
+//판매 키링정보 조회
+export const getKeyringData = async () => {
+  try {
+    const { data } = await client.get(`/keyrings/designs`);
+    return data;
+  } catch (error) {
+    console.error('판매 키링 조회 실패:', error);
   }
 };
