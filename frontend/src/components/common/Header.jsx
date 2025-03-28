@@ -11,7 +11,7 @@ const Header = ({ headerName }) => {
   const location = useLocation();
   const menu = useModal();
 
-  const target = location.pathname.includes('dear') ? 'dear' : 'sender';
+  const target = location.pathname.includes('/dear') ? 'dear' : 'sender';
 
   const handleGoBack = () => {
     navigate(-1);
@@ -30,7 +30,7 @@ const Header = ({ headerName }) => {
       </StHeaderWrapper>
 
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" target={target} />
+        <MenuModal isShowing={menu.isShowing} target={target} />
       </StMenuModalWrapper>
     </>
   );
@@ -56,7 +56,7 @@ const StHeaderWrapper = styled.button`
 
 const StMenuModalWrapper = styled.div`
   display: ${({ $showing }) => ($showing ? 'block' : 'none')};
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -65,7 +65,7 @@ const StMenuModalWrapper = styled.div`
   align-items: center;
 
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   background-color: rgba(0, 0, 0, 0.5);
 `;

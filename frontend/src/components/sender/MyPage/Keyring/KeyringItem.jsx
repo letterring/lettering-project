@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { IcCheckCircle, IcPen, IcStar, IcTrash } from '../../../assets/icons';
+import { IcCheckCircle, IcPen, IcStar, IcTrash } from '../../../../assets/icons';
 
 const KeyringItem = ({
   keyring,

@@ -1,11 +1,11 @@
 // 컴포넌트 명은 무조건 대문자 카멜케이스 적용
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Background from '/src/assets/background2.png';
 import SendermainImg from '/src/assets/images/sender_main.png';
 
-import { getMypage } from '../../../apis/sample';
 import { IcMenu } from '../../../assets/icons';
 import useModal from '../../../hooks/common/useModal';
 import LongButton from '../../common/button/LongButton';
@@ -13,13 +13,10 @@ import MenuModal from '../../common/modal/MenuModal';
 
 const Home = () => {
   const menu = useModal();
+  const navigate = useNavigate();
 
-  const handleMenuClick = () => {
+  const handleMenuClick = async () => {
     menu.toggle();
-  };
-
-  const handleClick = async () => {
-    const data = await getMypage();
   };
 
   return (
@@ -30,14 +27,25 @@ const Home = () => {
           Lettering
           <img src={SendermainImg} alt="senderMainImg" />
           <StButtonsWrapper>
-            <LongButton btnName="편지 쓰기" onClick={handleClick} />
-            <LongButton btnName="보낸 편지함" />
+            <LongButton
+              btnName="편지 쓰기"
+              s
+              onClick={() => {
+                navigate(`/theme`);
+              }}
+            />
+            <LongButton
+              btnName="보낸 편지함"
+              onClick={() => {
+                navigate(`/mailbox`);
+              }}
+            />
           </StButtonsWrapper>
         </StContentWrapper>
       </StHomeWrapper>
 
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
-        <MenuModal isShowing={menu.isShowing} status="시작 화면" target="sender" />
+        <MenuModal isShowing={menu.isShowing} target="sender" />
       </StMenuModalWrapper>
     </>
   );
