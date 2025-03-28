@@ -36,6 +36,12 @@ public class KakaoPayServiceImpl implements KakaoPayService {
     @Value("${kakaopay.approval-url}")
     private String approvalUrl;
 
+    @Value("${kakaopay.cancel-url}")
+    private String cancelUrl;
+
+    @Value("${kakaopay.fail-url}")
+    private String failUrl;
+
     @Override
     public Mono<KakaoPayReadyResponse> ready(KakaoPayReadyRequest req) {
         Map<String, Object> body = new HashMap<>();
@@ -47,6 +53,8 @@ public class KakaoPayServiceImpl implements KakaoPayService {
         body.put("total_amount", req.getTotalAmount());
         body.put("tax_free_amount", 0);
         body.put("approval_url", approvalUrl + "?orderNumber=" + req.getPartnerOrderId());
+        body.put("cancel_url", cancelUrl);
+        body.put("fail_url", failUrl);
 
         return webClientBuilder.build()
                 .post()
