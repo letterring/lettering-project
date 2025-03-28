@@ -8,6 +8,7 @@ import { getUserInfo, updateNickname } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
 import Header from '../../common/Header';
+import { FONT_DISPLAY_MAP } from './Font/fontMap';
 import KeyringList from './Keyring/KeyringList';
 import NickNameSetting from './NickNameSetting';
 
@@ -18,6 +19,8 @@ const MyProfile = () => {
 
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+
+  const fontKey = FONT_DISPLAY_MAP[font];
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -59,7 +62,7 @@ const MyProfile = () => {
             onIconClick={handleEditNickname}
           />
           <Title>폰트</Title>
-          <FontPreviewBox>
+          <FontPreviewBox $fontKey={fontKey}>
             {font}
             <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
           </FontPreviewBox>
@@ -105,7 +108,7 @@ const Title = styled.div`
 
 const FontPreviewBox = styled.div`
   color: ${({ theme }) => theme.colors.Gray3};
-  ${({ theme }) => theme.fonts.Saeum3};
+  ${({ theme, $fontKey }) => theme.fonts[$fontKey]};
   background-color: ${({ theme }) => theme.colors.White};
   display: flex;
   flex-direction: row;

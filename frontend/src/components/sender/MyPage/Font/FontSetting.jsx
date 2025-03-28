@@ -7,16 +7,20 @@ import { updateFont } from '../../../../apis/mypage';
 import { UserFont } from '../../../../recoil/userInfo';
 import Header from '../../../common/Header';
 import FontItem from './FontItem';
+import { FONT_DISPLAY_MAP } from './fontMap';
 
 const FontSetting = () => {
   const navigate = useNavigate();
-  const fontList = ['Gomsin', 'GangwonEduAll'];
+  const fontEnumList = ['GOMSIN1', 'UHBEE1', 'SAEUM5', 'EDUBODY0'];
   const [userFont, setUserFont] = useRecoilState(UserFont);
   const [selectedFont, setSelectedFont] = useState(userFont);
 
-  const handleFontChange = async (newFont) => {
-    const data = await updateFont(newFont);
-    setUserFont(newFont);
+  const handleFontChange = async (newFontEnum) => {
+    const result = await updateFont(newFontEnum);
+
+    if (!result) return;
+
+    setUserFont(newFontEnum);
     navigate('/mypage');
   };
 
@@ -28,15 +32,18 @@ const FontSetting = () => {
     <StFontSettingWrapper>
       <Header headerName="마이페이지" />
       <Title>폰트 설정</Title>
-      {fontList.map((font) => (
-        <FontItem
-          key={font}
-          fontName={font}
-          isSelected={selectedFont === font}
-          onClick={() => setSelectedFont(font)}
-          onConfirm={() => handleFontChange(font)}
-        />
-      ))}
+      {fontEnumList.map((fontEnum) => {
+        const fontkey = FONT_DISPLAY_MAP[fontEnum];
+        return (
+          <FontItem
+            key={fontEnum}
+            fontName={fontkey}
+            isSelected={selectedFont === fontEnum}
+            onClick={() => setSelectedFont(fontEnum)}
+            onConfirm={() => handleFontChange(fontEnum)}
+          />
+        );
+      })}
     </StFontSettingWrapper>
   );
 };

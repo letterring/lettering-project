@@ -27,9 +27,33 @@ export const updateFont = async (newFont) => {
     const res = await client.patch('users/font', {
       font: newFont,
     });
-    return res.data;
+    return true;
   } catch (err) {
     console.error('폰트 수정에 실패하였습니다', err);
-    return null;
+    return false;
+  }
+};
+
+export const updateKeyringName = async () => {
+  try {
+  } catch (err) {
+    console.error('키링 이름 수정 실패', err);
+    throw err;
+  }
+};
+
+export const toggleKeyringFavoirite = async () => {
+  try {
+  } catch (err) {
+    console.error('키링 즐겨찾기 토글 실패', err);
+    throw err;
+  }
+};
+
+export const deleteKeyring = async () => {
+  try {
+  } catch (err) {
+    console.error('키링 삭제 실패', err);
+    throw err;
   }
 };
