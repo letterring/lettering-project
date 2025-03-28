@@ -7,8 +7,8 @@ import styled from 'styled-components';
 import { getUserInfo, updateNickname } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
+import { getFontName, getFontStyle } from '../../../util/getFont';
 import Header from '../../common/Header';
-import { FONT_DISPLAY_MAP } from './Font/fontMap';
 import KeyringList from './Keyring/KeyringList';
 import NickNameSetting from './NickNameSetting';
 
@@ -20,7 +20,8 @@ const MyProfile = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
-  const fontKey = FONT_DISPLAY_MAP[font];
+  const fontStyle = getFontStyle(font);
+  const fontName = getFontName(font);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -62,8 +63,8 @@ const MyProfile = () => {
             onIconClick={handleEditNickname}
           />
           <Title>폰트</Title>
-          <FontPreviewBox $fontKey={fontKey}>
-            {font}
+          <FontPreviewBox $fontKey={fontStyle}>
+            {fontName}
             <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
           </FontPreviewBox>
           <br />

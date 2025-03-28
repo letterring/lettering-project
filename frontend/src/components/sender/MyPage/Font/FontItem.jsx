@@ -2,10 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { IcCheckCircle } from '../../../../assets/icons';
+import { getFontName, getFontStyle } from '../../../../util/getFont';
 
-const FontItem = ({ fontName, isSelected, onClick, onConfirm }) => {
+const FontItem = ({ fontEnum, isSelected, onClick, onConfirm }) => {
+  const fontName = getFontName(fontEnum);
+  const fontStyle = getFontStyle(fontEnum);
+
   return (
-    <StFontBox $isSelected={isSelected} onClick={onClick} $fontKey={fontName}>
+    <StFontBox $isSelected={isSelected} onClick={onClick} $fontKey={fontStyle}>
       {fontName}
       {isSelected && (
         <IcCheckCircle
