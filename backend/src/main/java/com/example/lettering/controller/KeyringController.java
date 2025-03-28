@@ -6,6 +6,7 @@ import com.example.lettering.controller.response.*;
 import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.ValidationException;
+import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
@@ -43,7 +44,7 @@ public class KeyringController {
 
     @PatchMapping("/{keyringId}/favorite")
     @Operation(summary = "키링 즐겨찾기 토글", description = "키링 즐겨찾기 상태를 토글합니다.")
-    public ResponseEntity<?> toggleFavorite(
+    public ResponseEntity<BooleanResponse> toggleFavorite(
             @PathVariable Long keyringId,
             HttpSession session
     ) {
@@ -53,7 +54,7 @@ public class KeyringController {
         }
 
         keyringService.toggleFavorite(keyringId, userId);
-        return ResponseEntity.ok(Collections.singletonMap("message", "즐겨찾기 상태가 변경되었습니다."));
+        return ResponseEntity.ok(BooleanResponse.success());
     }
 
     @PostMapping("/backoffice")
