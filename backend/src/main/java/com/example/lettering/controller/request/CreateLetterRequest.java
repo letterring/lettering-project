@@ -12,19 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class CreateLetterRequest {
+    // 필수
+    private Long keyringId;
+    private Long sealingWaxId;
+    private ConditionType conditionType;
     private List<String> contents;
 
-    private ConditionType conditionType;
-
+    //선택
     private LocalDateTime conditionTime;
-
-    private Boolean favorite;
-
-    private Long senderId;
-
     private String quizQuestion;
     private String quizHint;
     private String quizAnswer;
-
-    private List<Long> receiverKeyringIds;
 }
