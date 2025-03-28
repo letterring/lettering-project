@@ -10,6 +10,7 @@ const KeyringCard = ({ keyring }) => {
   const {
     tagCode,
     keyringName,
+    tagCode,
     lastSentTime,
     totalMessageCount,
     scheduledCount,

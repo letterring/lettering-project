@@ -1,6 +1,7 @@
 package com.example.lettering.domain.user.service;
 
 import com.example.lettering.domain.user.entity.User;
+import com.example.lettering.domain.user.enums.Font;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
@@ -40,9 +41,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         // ✅ 사용자 정보 조회 및 저장
-        User user = userRepository.findByEmailAndProvider(email, provider).orElseGet(() ->
-                new User(email, nickname, provider)
-        );
+        User user = userRepository.findByEmailAndProvider(email, provider).orElseGet(() -> {
+            User newUser = new User(email, nickname, provider);
+            newUser.updateFont(Font.GOMSIN1); // ✅ 기본 폰트 설정
+            return newUser;
+        });
 
         user.updateNickname(nickname); // 닉네임이 변경될 수도 있으므로 업데이트
         User savedUser = userRepository.save(user);
