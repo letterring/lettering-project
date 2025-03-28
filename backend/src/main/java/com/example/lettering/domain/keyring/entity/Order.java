@@ -49,7 +49,7 @@ public class Order {
     private LocalDateTime orderDate;
 
     @Column(name = "total_price", nullable = false)
-    private int totalPrice;
+    private Long totalPrice;
 
     @Column(name = "tid")
     private String tid;
@@ -73,7 +73,7 @@ public class Order {
 
     public static Order create(User user, Long orderNumber, String realName, String phoneNumber,
                                String email, String zipcode, String roadAddress,
-                               String detailAddress, int totalPrice) {
+                               String detailAddress, Long totalPrice) {
         return Order.builder()
                 .orderNumber(orderNumber)
                 .user(user)
