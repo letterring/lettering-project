@@ -8,16 +8,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { getSenderMessages } from '../../../apis/mailbox';
 import { IcDetail } from '../../../assets/icons';
-import Closed1 from '../../../assets/images/mailbox/closed1.png';
 import Closed4 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
+import Closed1 from '../../../assets/images/mailbox/closed3.png';
 import Closed3 from '../../../assets/images/mailbox/closed3.png';
 import Closed5 from '../../../assets/images/mailbox/closed4.png';
-import Opened1 from '../../../assets/images/mailbox/opened1.png';
 import Opened4 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
+import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
 import Opened5 from '../../../assets/images/mailbox/opened4.png';
+import { getFormatDate } from '../../../util/getFormatDate';
 
 const messages = [
   {
@@ -62,6 +63,19 @@ const messages = [
   },
 ];
 
+const images = {
+  Closed1,
+  Closed2,
+  Closed3,
+  Closed4,
+  Closed5,
+  Opened1,
+  Opened2,
+  Opened3,
+  Opened4,
+  Opened5,
+};
+
 const SlideComponent = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
@@ -70,7 +84,6 @@ const SlideComponent = () => {
   const getSenderMailbox = async () => {
     const { senderMessageSummaryList } = await getSenderMessages(0);
     setMessages(senderMessageSummaryList);
-    console.log(senderMessageSummaryList);
   };
 
   const handleClick = (idx) => {
@@ -87,7 +100,7 @@ const SlideComponent = () => {
 
   const getAlignType = (idx, activeIdx) => {
     const diff = idx - activeIdx;
-    if (diff === 0) return 'center';
+    if (diff === 0) return 'flex-start';
     if (diff < 0) return 'flex-start';
     return 'flex-end';
   };
@@ -123,18 +136,25 @@ const SlideComponent = () => {
           <StyledSlide key={id} $hidden={!isVisible} onClick={() => handleClick(idx)}>
             <SlideContent $align={getAlignType(idx, activeIndex)}>
               <ImageWrapper>
-                <img src={isCenter && isOpened ? Opened1 : Closed1} alt={`Slide ${idx + 1}`} />
+                <img
+                  src={
+                    isCenter && isOpened
+                      ? images[`Opened${sealingWaxId}`]
+                      : images[`Closed${sealingWaxId}`]
+                  }
+                  alt={`Slide ${idx + 1}`}
+                />
               </ImageWrapper>
               {isOpened && isCenter && (
                 <Comment>
                   <p>
-                    {repliedName}님께 보낸 {designType === 'letter' ? '편지' : '엽서'}
+                    {repliedName}님께 보낸 {designType !== 'POSTCARD' ? '편지' : '엽서'}
                   </p>
                   <p>답장 : {replied ? 1 : 0}</p>
                 </Comment>
               )}
               <Details>
-                <OpenTime>{conditionTime}</OpenTime>
+                <OpenTime>{getFormatDate(conditionTime)}</OpenTime>
                 {isOpened && isCenter && (
                   <DetailButton>
                     <IcDetail />
@@ -205,12 +225,16 @@ const ImageWrapper = styled.div`
 `;
 
 const Comment = styled.div`
-  position: absolute;
-  left: 7rem;
-  top: 1rem;
+  width: 80%;
+
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+
   ${({ theme }) => theme.fonts.EduBody1};
   color: ${({ theme }) => theme.colors.Gray1};
   text-align: center;
+
+  z-index: 1;
 `;
 
 const Details = styled.div`
