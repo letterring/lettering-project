@@ -43,7 +43,7 @@ const KeyringSetting = () => {
       prev.map((k) => (k.keyringId === keyringId ? { ...k, favorite: !k.favorite } : k)),
     );
 
-    const result = await toggleKeyringFavoirite({ keyringId });
+    const result = await toggleKeyringFavoirite(keyringId);
 
     if (!result) {
       setKeyrings(prevKeyrings);
@@ -62,7 +62,7 @@ const KeyringSetting = () => {
     setIsModalOpen(false);
     setDeleteTargetId(null);
 
-    const result = await deleteKeyring({ keyringId: deleteTargetId });
+    const result = await deleteKeyring({ deleteTargetId });
 
     if (!result) {
       setKeyrings(prevKeyrings);
@@ -82,7 +82,7 @@ const KeyringSetting = () => {
     );
     setEditingId(null);
 
-    const result = await updateKeyringName({ keyringId: id, newName });
+    const result = await updateKeyringName(id, newName);
 
     if (!result) {
       setKeyrings(prevKeyrings);
