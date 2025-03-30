@@ -13,9 +13,23 @@ const KeyringItem = ({
 }) => {
   const { tagCode, favorite, keyringId, keyringName } = keyring;
   const [newName, setNewName] = useState(keyringName);
+  const [showWarning, setShowWarning] = useState(false);
 
   const handleSave = () => {
     onChangeName(keyringId, newName);
+    setShowWarning(false);
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const length = [...value].length;
+
+    if (length <= 5) {
+      setNewName(value);
+      setShowWarning(false);
+    } else {
+      setShowWarning(true);
+    }
   };
 
   return (
@@ -27,7 +41,10 @@ const KeyringItem = ({
           onClick={() => onToggleFavorite(keyringId)}
         />
         {isEditing ? (
-          <NameInput value={newName} onChange={(e) => setNewName(e.target.value)} />
+          <div style={{ flex: 1 }}>
+            <NameInput value={newName} onChange={handleChange} />
+            {showWarning && <WarningText>최대 5글자까지만 입력할 수 있어요</WarningText>}
+          </div>
         ) : (
           <NameText>{keyringName}</NameText>
         )}
@@ -93,4 +110,11 @@ const NameInput = styled.input`
 const IconWrapper = styled.div`
   display: flex;
   gap: 1rem;
+`;
+
+const WarningText = styled.div`
+  color: ${({ theme }) => theme.colors.Red1 || 'red'};
+  ${({ theme }) => theme.fonts.Body2};
+  margin-top: 0.25rem;
+  padding-left: 0.25rem;
 `;
