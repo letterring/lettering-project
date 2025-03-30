@@ -18,7 +18,7 @@ import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
 import Opened5 from '../../../assets/images/mailbox/opened4.png';
-import { getFormatDate } from '../../../util/getFormatDate';
+import { getRelativeFormat } from '../../../util/getRelativeDate';
 
 const messages = [
   {
@@ -84,6 +84,7 @@ const SlideComponent = () => {
   const getSenderMailbox = async () => {
     const { senderMessageSummaryList } = await getSenderMessages(0);
     setMessages(senderMessageSummaryList);
+    console.log(senderMessageSummaryList);
   };
 
   const handleClick = (idx) => {
@@ -154,7 +155,7 @@ const SlideComponent = () => {
                 </Comment>
               )}
               <Details>
-                <OpenTime>{getFormatDate(conditionTime)}</OpenTime>
+                <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
                 {isOpened && isCenter && (
                   <DetailButton>
                     <IcDetail />
