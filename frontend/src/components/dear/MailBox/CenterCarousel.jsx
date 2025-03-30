@@ -18,7 +18,7 @@ import Opened4 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
 import Opened5 from '../../../assets/images/mailbox/opened4.png';
-import { getRelativeDate } from '../../../util/getTimer';
+import { getRelativeDate } from '../../../util/getRelativeDate';
 import RealTimer from './RealTimer';
 
 const dearMessagesSummaryList = [
