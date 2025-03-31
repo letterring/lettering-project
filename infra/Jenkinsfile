@@ -1,4 +1,4 @@
-pipeline {
+pipeline { 
   agent any
 
   environment {
@@ -24,20 +24,11 @@ pipeline {
       }
     }
 
-    stage('도커 종료 및 정리') {
+    stage('도커 이미지 빌드 및 변경 서비스만 재시작') {
       steps {
-        echo "🧹 기존 컨테이너 정리 중..."
+        echo "🚀 변경된 서비스만 빌드 및 재시작 (DB는 중단 없이 유지)"
         sh '''
-          docker compose -f infra/docker-compose.yml down || true
-        '''
-      }
-    }
-
-    stage('도커 이미지 재빌드 및 배포') {
-      steps {
-        echo "🚀 이미지 빌드 및 컨테이너 재실행"
-        sh '''
-          docker compose -f infra/docker-compose.yml up --build -d
+          docker compose -f infra/docker-compose.yml up -d --build
         '''
       }
     }
