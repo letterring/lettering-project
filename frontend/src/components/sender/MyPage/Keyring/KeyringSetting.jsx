@@ -8,7 +8,7 @@ import {
   toggleKeyringFavoirite,
   updateKeyringName,
 } from '../../../../apis/mypage';
-import { UserKeyringList } from '../../../../recoil/userInfo';
+import { UserKeyringList } from '../../../../recoil/atom';
 import CancelButton from '../../../common/button/CancelButton';
 import ConfirmButton from '../../../common/button/ConfirmButton';
 import Header from '../../../common/Header';
@@ -62,7 +62,7 @@ const KeyringSetting = () => {
     setIsModalOpen(false);
     setDeleteTargetId(null);
 
-    const result = await deleteKeyring({ deleteTargetId });
+    const result = await deleteKeyring(deleteTargetId);
 
     if (!result) {
       setKeyrings(prevKeyrings);

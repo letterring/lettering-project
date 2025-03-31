@@ -94,7 +94,7 @@ const SettingBox = styled.div`
 
 const NameText = styled.span`
   flex: 1;
-  font: inherit;
+  ${({ theme }) => theme.fonts.Saeum2};
   width: 100%;
 `;
 
@@ -102,7 +102,7 @@ const NameInput = styled.input`
   flex: 1;
   outline: none;
   background: transparent;
-  font: inherit;
+  ${({ theme }) => theme.fonts.Saeum2};
   width: 100%;
   border: none;
 `;
@@ -113,7 +113,7 @@ const IconWrapper = styled.div`
 `;
 
 const WarningText = styled.div`
-  color: ${({ theme }) => theme.colors.Red1 || 'red'};
+  color: ${({ theme }) => theme.colors.Red1};
   ${({ theme }) => theme.fonts.Body2};
   margin-top: 0.25rem;
   padding-left: 0.25rem;
