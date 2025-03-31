@@ -2,21 +2,21 @@ pipeline {
   agent any
 
   environment {
-    COMPOSE_PROJECT_DIR = "${WORKSPACE}"
+    COMPOSE_PROJECT_DIR = "${WORKSPACE}/infra"
   }
 
   stages {
     stage('Secret 파일 다운로드') {
       steps {
         withCredentials([
-          file(credentialsId: 'compose-env', variable: 'COMPOSE_ENV'),
-          file(credentialsId: 'spring-secrets', variable: 'SPRING_SECRETS'),
-          file(credentialsId: 'frontend-env', variable: 'FRONTEND_ENV')
+          file(credentialsId: 'env-docker-compose', variable: 'ENV_FILE'),
+          file(credentialsId: 'secrets-properties', variable: 'SECRETS_FILE'),
+          file(credentialsId: 'env-frontend', variable: 'FRONTEND_ENV_FILE')
         ]) {
           sh '''
-            cp "$COMPOSE_ENV" .env
-            cp "$SPRING_SECRETS" secrets.properties
-            cp "$FRONTEND_ENV" frontend/.env
+            cp "$ENV_FILE" .env
+            cp "$SECRETS_FILE" secrets.properties
+            cp "$FRONTEND_ENV_FILE" frontend/.env
           '''
         }
       }
