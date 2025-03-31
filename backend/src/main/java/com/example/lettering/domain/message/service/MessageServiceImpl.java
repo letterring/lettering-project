@@ -2,10 +2,12 @@ package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.response.DearMessageSummaryResponse;
 import com.example.lettering.controller.response.SenderMessageSummaryResponse;
+import com.example.lettering.controller.response.UnreadMessageResponse;
 import com.example.lettering.domain.message.entity.AbstractMessage;
 import com.example.lettering.domain.message.entity.Letter;
 import com.example.lettering.domain.message.entity.Postcard;
 import com.example.lettering.domain.message.repository.AbstractMessageRepository;
+import com.example.lettering.domain.sealingwax.enums.DesignType;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -72,5 +74,20 @@ public class MessageServiceImpl implements MessageService {
         } else {
             throw new BusinessException(ExceptionCode.INVALID_MESSAGE_TYPE);
         }
+    }
+
+    @Override
+    public UnreadMessageResponse getLatestUnreadMessage(Long keyringId) {
+        LocalDateTime now = LocalDateTime.now();
+        List<AbstractMessage> messages = abstractMessageRepository
+                .findByKeyringIdAndOpenedFalseAndConditionTimeLessThanEqualOrderByConditionTimeDesc(keyringId, now);
+
+        if (messages == null || messages.isEmpty()) {
+            return new UnreadMessageResponse(false, null, null, null);
+        }
+
+        AbstractMessage latest = messages.get(0);
+
+        return UnreadMessageResponse.of(true, latest.getId(), latest.getSealingWax().getId(), latest.getSealingWax().getDesignType());
     }
 }
