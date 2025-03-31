@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.lettering.config.S3Config;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.ExternalApiException;
+import com.example.lettering.util.enums.ImageQuality;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,69 @@ public class S3ImageUtil {
         }
 
         return s3Config.amazonS3Client().getUrl(bucket, s3Key).toString();
+    }
+
+    // 고화질 이미지 업로드 (원본 그대로)
+    public String uploadHighQualityImage(MultipartFile file, String folderName) throws IOException {
+        return uploadImageWithImageQuality(file, folderName+"/high", ImageQuality.HIGH);
+    }
+
+    // 저화질 이미지 업로드 (압축/리사이징 적용)
+    public String uploadLowQualityImage(MultipartFile file, String folderName) throws IOException {
+        return uploadImageWithImageQuality(file, folderName+"/low", ImageQuality.LOW);
+    }
+
+    private String uploadImageWithImageQuality(MultipartFile file, String folderName, ImageQuality imageQuality) throws IOException {
+        // 파일 이름에서 확장자 추출
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null || !originalFileName.contains(".")) {
+            throw new ExternalApiException(ExceptionCode.S3_UPLOAD_ERROR);
+        }
+        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+
+        // 만약 저화질이고, HEIC/HEIF 파일이라면 JPEG로 변환 (확장자와 contentType 변경)
+        String updatedContentType = file.getContentType();
+        if (imageQuality == ImageQuality.LOW &&
+                (extension.equalsIgnoreCase(".heic") || extension.equalsIgnoreCase(".heif"))) {
+            extension = ".jpg";
+            updatedContentType = "image/jpeg";
+        }
+
+        // 허용 확장자 검증 (HEIC/HEIF는 변환 후 .jpg로 저장되므로, 여기서는 .png, .jpg, .jpeg만 허용)
+        if (!isAllowedExtension(extension)) {
+            throw new ExternalApiException(ExceptionCode.INVALID_IMAGE_FORMAT);
+        }
+
+        // UUID 생성; 폴더명은 이미 caller에서 "high" 또는 "low"가 붙은 상태
+        String uuid = UUID.randomUUID().toString();
+        String s3Key = folderName + "/" + uuid + extension;
+
+        InputStream inputStream;
+        // 저화질의 경우 이미지 압축/리사이징 로직 적용
+        if (imageQuality == ImageQuality.LOW) {
+            inputStream = ImageProcessingUtils.compressImage(file.getInputStream(), file.getContentType());
+        } else {
+            inputStream = file.getInputStream();
+        }
+
+        try (InputStream is = inputStream) {
+            ObjectMetadata metadata = new ObjectMetadata();
+            // 실제 압축 후의 사이즈로 업데이트할 수 있다면 적용 (여기서는 원본 사이즈 사용)
+            metadata.setContentLength(file.getSize());
+            // 변환된 경우 updatedContentType를 사용
+            metadata.setContentType(updatedContentType);
+
+            s3Config.amazonS3Client().putObject(new PutObjectRequest(bucket, s3Key, is, metadata));
+        }
+
+        return s3Config.amazonS3Client().getUrl(bucket, s3Key).toString();
+    }
+
+    // 파일 확장자 검증 메서드 (예: .png, .jpg, .jpeg, .heic, .heif 허용)
+    private boolean isAllowedExtension(String extension) {
+        String ext = extension.toLowerCase();
+        return ext.equals(".png") || ext.equals(".jpg") || ext.equals(".jpeg")
+                || ext.equals(".heic") || ext.equals(".heif");
     }
 
     /**
