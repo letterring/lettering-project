@@ -15,8 +15,11 @@ public class LetterImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Column(name = "image_high_url", nullable = false)
+    private String imageHighUrl;
+
+    @Column(name = "image_low_url", nullable = false)
+    private String imageLowUrl;
 
     @Column(name = "order_index", nullable = false)
     private int orderIndex;
@@ -26,9 +29,10 @@ public class LetterImage {
     @JoinColumn(name = "letter_id", nullable = false)
     private Letter letter;
 
-    public static LetterImage fromImageUrl(String imageUrl, int orderIndex) {
+    public static LetterImage fromImageUrl(String imageHighUrl, String imageLowUrl, int orderIndex) {
         return LetterImage.builder()
-                .imageUrl(imageUrl)
+                .imageHighUrl(imageHighUrl)
+                .imageLowUrl(imageLowUrl)
                 .orderIndex(orderIndex)
                 .build();
     }

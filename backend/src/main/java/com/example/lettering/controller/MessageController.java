@@ -32,10 +32,17 @@ public class MessageController {
 
     private final PostcardService postcardService;
     private final MessageService messageService;
-    //private final LetterService letterService;
+    private final LetterService letterService;
     private final TokenService tokenService;
     private final SessionService sessionService;
-    private final LetterService letterService;
+
+    @Operation(summary = "고화질 이미지 API", description = "해당 메시지(우편 또는 엽서)의 고화질 이미지를 얻습니다.")
+    @GetMapping("/highimage")
+    public ResponseEntity<Map<String, String>> getHighQualityImage(   @RequestParam("messageId") Long messageId,
+                                                                      @RequestParam(value = "index", defaultValue = "0") int index) {
+        String imageUrl = messageService.getHighQualityImageUrl(messageId, index);
+        return ResponseEntity.ok(Map.of("imageHighUrl", imageUrl));
+    }
 
     @Operation(summary = "엽서 작성 API", description = "엽서를 작성하여 등록합니다.")
     @PostMapping(path = "/postcards",consumes = "multipart/form-data")
@@ -44,7 +51,7 @@ public class MessageController {
             @RequestPart("image") MultipartFile imageFile, HttpSession httpSession) throws IOException {
 
 //        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L;
+        Long senderId = 23L;
         Long postcardId = postcardService.createPostcard(createPostcardRequest, imageFile, senderId);
 
         Map<String, Object> result = new HashMap<>();
@@ -60,7 +67,7 @@ public class MessageController {
             @RequestPart("images") List<MultipartFile> imageFiles, HttpSession httpSession) throws IOException {
 
 //        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L;
+        Long senderId = 23L;
         Long letterId = letterService.createLetter(createLetterRequest, imageFiles, senderId);
 
         Map<String, Object> result = new HashMap<>();
@@ -76,7 +83,7 @@ public class MessageController {
             @RequestParam(name = "page", defaultValue = "0") int page) {
 
 //        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L;
+        Long senderId = 23L;
         if (senderId == null) {
             throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
         }
@@ -90,7 +97,7 @@ public class MessageController {
             HttpSession session) {
 
 //        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 1L;
+        Long senderId = 23L;
         if (senderId == null) {
             throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
         }
