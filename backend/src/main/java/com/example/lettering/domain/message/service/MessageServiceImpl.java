@@ -3,6 +3,8 @@ package com.example.lettering.domain.message.service;
 import com.example.lettering.controller.response.DearMessageSummaryResponse;
 import com.example.lettering.controller.response.SenderMessageSummaryResponse;
 import com.example.lettering.domain.message.entity.AbstractMessage;
+import com.example.lettering.domain.message.entity.Letter;
+import com.example.lettering.domain.message.entity.Postcard;
 import com.example.lettering.domain.message.repository.AbstractMessageRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
@@ -51,5 +53,24 @@ public class MessageServiceImpl implements MessageService {
         AbstractMessage message = abstractMessageRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.DATABASE_ERROR));
         message.updateReply(replyText);
+    }
+
+    @Override
+    public String getHighQualityImageUrl(Long messageId, int orderIndex) {
+        AbstractMessage message = abstractMessageRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        if (message instanceof Postcard) {
+            return ((Postcard) message).getImageHighUrl();
+        } else if (message instanceof Letter) {
+            Letter letter = (Letter) message;
+            if (letter.getImages() != null && !letter.getImages().isEmpty()) {
+                return letter.getImages().get(orderIndex).getImageHighUrl();
+            } else {
+                throw new BusinessException(ExceptionCode.MESSAGE_NO_IMAGE);
+            }
+        } else {
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_TYPE);
+        }
     }
 }

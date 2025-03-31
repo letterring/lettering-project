@@ -56,8 +56,10 @@ public class LetterServiceImpl implements LetterService {
         List<LetterImage> images = new ArrayList<>();
         int orderIndex = 0;
         for (MultipartFile imageFile : imageFiles) {
-            String imageUrl = s3ImageUtil.uploadImage(imageFile, "letter_images");
-            images.add(LetterImage.fromImageUrl(imageUrl, orderIndex++));
+            String imageHighUrl = s3ImageUtil.uploadHighQualityImage(imageFile, "letter_images");
+            String imageLowUrl = s3ImageUtil.uploadLowQualityImage(imageFile, "letter_images");
+            images.add(LetterImage.fromImageUrl(imageHighUrl, imageLowUrl, orderIndex));
+            orderIndex++;
         }
 
         Letter letter = Letter.fromDto(createLetterRequest, sender, keyring, sealingWax, sender.getFont(), contents, images);
