@@ -26,12 +26,8 @@ const PostcardWriting = () => {
 
   useEffect(() => {
     const fetchFont = async () => {
-      try {
-        const { font } = await getUserFont();
-        setUserFont(getFontStyle(font));
-      } catch (err) {
-        console.error('폰트 로딩 실패');
-      }
+      const { font } = await getUserFont();
+      setUserFont(getFontStyle(font));
     };
 
     fetchFont();
