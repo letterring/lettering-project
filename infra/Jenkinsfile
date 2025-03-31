@@ -44,7 +44,7 @@ pipeline {
       steps {
         echo "🚀 변경된 서비스만 빌드 및 재시작 (DB는 중단 없이 유지)"
         sh '''
-          docker compose -f infra/docker-compose.yml up -d --build
+          docker compose -f infra/docker-compose.yml up -d --build --no-cache
         '''
       }
     }
