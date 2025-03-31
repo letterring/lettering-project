@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import { updateFont } from '../../../../apis/mypage';
-import { UserFont } from '../../../../recoil/userInfo';
+import { UserFont } from '../../../../recoil/atom';
 import Header from '../../../common/Header';
 import FontItem from './FontItem';
 

@@ -39,9 +39,7 @@ export const getUserData = async () => {
 
 export const logout = async () => {
   try {
-    const res = await client.post(`/users/logout`, {
-      mode: 'cors',
-    });
+    const res = await client.post(`/users/logout`);
 
     return res;
   } catch (err) {
