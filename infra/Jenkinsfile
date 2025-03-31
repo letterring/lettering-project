@@ -10,7 +10,7 @@ pipeline {
       steps {
         withCredentials([
           file(credentialsId: 'env-docker-compose', variable: 'ENV_FILE'),
-          file(credentialsId: 'secrets-properties', variable: 'SECRETS_FILE'),
+          file(credentialsId: 'spring-secrets', variable: 'SECRETS_FILE'),
           file(credentialsId: 'env-frontend', variable: 'FRONTEND_ENV_FILE')
         ]) {
           sh '''
