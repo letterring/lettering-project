@@ -64,7 +64,7 @@ const Router = () => {
               <Route path="/dear" element={<DearLandingPage />} />
               <Route path="/dear/home" element={<DearHomePage />} />
               <Route path="/dear/notag" element={<DearNoTagPage />} />
-              <Route path="/dear/postcard" element={<DearPostcardPage />} />
+              <Route path="/dear/postcard/:messageId" element={<DearPostcardPage />} />
               <Route path="/dear/postcard/detail/:messageId" element={<DearPostDetailPage />} />
               <Route path="/dear/letter" element={<DearLetterPage />} />
               <Route path="/dear/letter/detail" element={<DearLetterDetailPage />} />
