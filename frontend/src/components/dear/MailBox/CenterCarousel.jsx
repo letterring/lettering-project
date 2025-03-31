@@ -15,19 +15,19 @@ import Closed3 from '../../../assets/images/mailbox/closed3.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
-import { getRelativeDate } from '../../../util/getRelativeDate';
+import { getRelativeFormat } from '../../../util/getRelativeDate';
 import RealTimer from './RealTimer';
 
 const closedImages = {
-  1: Closed1,
+  1: Closed3,
   2: Closed2,
-  3: Closed3,
+  3: Closed1,
 };
 
 const openedImages = {
-  1: Opened1,
+  1: Opened3,
   2: Opened2,
-  3: Opened3,
+  3: Opened1,
 };
 
 const SlideComponent = () => {
@@ -35,11 +35,26 @@ const SlideComponent = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [initialLoaded, setInitialLoaded] = useState(false);
 
-  const getDearMailbox = async () => {
-    const { dearMessagesSummaryList } = await getDearMessages(0, 2);
-    setMessages(dearMessagesSummaryList);
-    // console.log(dearMessagesSummaryList);
+  const getDearMailbox = async (currentPage) => {
+    setLoading(true);
+    const { dearMessagesSummaryList } = await getDearMessages(currentPage, 2);
+
+    if (dearMessagesSummaryList.length === 0) {
+      setHasMore(false);
+    } else {
+      setMessages((prev) => [...prev, ...dearMessagesSummaryList]);
+    }
+
+    setLoading(false);
+
+    if (currentPage === 0) {
+      setInitialLoaded(true);
+    }
   };
 
   const isPastDate = (conditionTime) => {
@@ -60,7 +75,15 @@ const SlideComponent = () => {
   };
 
   const handleSlideChange = (swiper) => {
-    setActiveIndex(swiper.realIndex);
+    const newIndex = swiper.realIndex;
+
+    if (newIndex > activeIndex && !loading && hasMore && newIndex === page * 7 + 2) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      getDearMailbox(nextPage);
+    }
+
+    setActiveIndex(newIndex);
   };
 
   const handleOpenMsg = (type, messageId) => {
@@ -79,8 +102,10 @@ const SlideComponent = () => {
   };
 
   useEffect(() => {
-    getDearMailbox();
-  }, []);
+    if (!initialLoaded) {
+      getDearMailbox(0);
+    }
+  }, [initialLoaded]);
 
   return (
     <StyledSwiper
@@ -107,9 +132,7 @@ const SlideComponent = () => {
         const isPast = isPastDate(conditionTime);
 
         let commentText = '';
-        if (!isPast) {
-          commentText = '편지가 열리기 까지..';
-        } else if (isPast && !opened) {
+        if (isPast && !opened) {
           commentText = '아직 읽지 않은 편지입니다.';
         } else if (opened && !replied) {
           commentText = '아직 답장을 하지 않았어요.';
@@ -144,7 +167,7 @@ const SlideComponent = () => {
               )}
               <Details>
                 <StyledIcon>
-                  <OpenTime>{getRelativeDate(conditionTime)}</OpenTime>
+                  <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
                   {isPast ? favorite ? <IcLikesTrue /> : <IcLikesFalse /> : <IcLock2 />}
                 </StyledIcon>
                 {isPast && isOpened && isCenter && (
