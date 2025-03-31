@@ -4,18 +4,16 @@ import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageProcessingUtils {
 
-    public static InputStream compressImage(InputStream originalInputStream, String contentType) throws IOException {
+    public static byte[] compressImage(InputStream originalInputStream, String contentType) throws IOException {
         BufferedImage originalImage = ImageIO.read(originalInputStream);
         BufferedImage resizedImage = Thumbnails.of(originalImage)
-                .size(300, 300)
-                .outputQuality(0.5)
+                .scale(0.2)
                 .asBufferedImage();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -23,7 +21,7 @@ public class ImageProcessingUtils {
         String lowerContentType = contentType.toLowerCase();
         String formatName;
         if (lowerContentType.contains("heic") || lowerContentType.contains("heif")) {
-            formatName = "jpg";
+            formatName = "jpg"; // HEIC/HEIF는 JPEG로 변환
         } else if (lowerContentType.contains("png")) {
             formatName = "png";
         } else {
@@ -31,6 +29,6 @@ public class ImageProcessingUtils {
         }
 
         ImageIO.write(resizedImage, formatName, baos);
-        return new ByteArrayInputStream(baos.toByteArray());
+        return baos.toByteArray();
     }
 }
