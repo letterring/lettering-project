@@ -75,6 +75,7 @@ const CenterCarousel = () => {
       getSenderMailbox(0);
     }
   }, [initialLoaded]);
+
   const getAlignType = (idx, activeIdx) => {
     const diff = idx - activeIdx;
     if (diff === 0) return 'flex-start';
