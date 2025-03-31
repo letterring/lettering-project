@@ -49,3 +49,12 @@ export const logout = async () => {
     throw err;
   }
 };
+
+export const getUserFont = async () => {
+  try {
+    const { data } = await client.get('/users/font');
+    return data;
+  } catch (err) {
+    console.error('유저 폰트 조회 실패', err);
+  }
+};

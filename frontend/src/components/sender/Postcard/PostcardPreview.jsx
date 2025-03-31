@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { getFontStyle } from '/src/util/getFont';
+
+import { getUserFont } from '../../../apis/user';
 import PostcardImg from '../../../assets/images/postcard/postcard.png';
 import StampImg from '../../../assets/images/postcard/stamp.png';
 import { PostcardImage, PostcardImageFile, PostcardText } from '../../../recoil/atom';
@@ -14,8 +17,20 @@ const PostcardWriting = () => {
   const [image, setImage] = useRecoilState(PostcardImage);
   const [text, setText] = useRecoilState(PostcardText);
   const [imageFile, setImageFile] = useRecoilState(PostcardImageFile);
-  console.log(image, text);
-  console.log(imageFile);
+  const [userFont, setUserFont] = useState(undefined);
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      try {
+        const { font } = await getUserFont();
+        setUserFont(getFontStyle(font));
+      } catch (err) {
+        console.error('폰트 로딩 실패');
+      }
+    };
+
+    fetchFont();
+  }, []);
 
   return (
     <StPageWrapper>
@@ -34,8 +49,8 @@ const PostcardWriting = () => {
         <StTextBox>
           <StPostcardContent>
             <StPostcardStamp src={StampImg} alt="우표" />
-            <StPostcardTitle>사랑하는 너에게,</StPostcardTitle>
-            <StPostcardText>{text}</StPostcardText>
+            <StPostcardTitle $font={userFont}>사랑하는 너에게,</StPostcardTitle>
+            <StPostcardText $font={userFont}>{text}</StPostcardText>
           </StPostcardContent>
         </StTextBox>
       </StContentWrapper>
@@ -118,7 +133,7 @@ const StPostcardContent = styled.div`
 `;
 
 const StPostcardTitle = styled.div`
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ theme, $font }) => theme.fonts[$font]};
   margin-bottom: 3rem;
   z-index: 3;
 `;
@@ -133,7 +148,7 @@ const StPostcardStamp = styled.img`
 `;
 
 const StPostcardText = styled.div`
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ theme, $font }) => theme.fonts[$font]};
   word-wrap: break-word;
   max-height: 13rem;
   overflow: auto;
