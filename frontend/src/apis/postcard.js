@@ -43,3 +43,12 @@ export const replyToPostcard = async (messageId, replyText) => {
     console.error(error);
   }
 };
+
+export const markPostcardAsUnread = async (messageId) => {
+  try {
+    const response = await client.patch(`/messages/unread/backoffice/${messageId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

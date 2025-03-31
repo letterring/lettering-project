@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import DummyImg from '../../../assets/dummy/postcard.jpg';
@@ -10,6 +10,7 @@ import EnvelopeTopImg from '../../../assets/images/postcard/top_fold.png';
 
 const Postcard = () => {
   const navigate = useNavigate();
+  const { messageId } = useParams();
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 80;
@@ -19,7 +20,7 @@ const Postcard = () => {
 
   return (
     <StWrapper>
-      <StEnvelopeWrapper onClick={() => navigate('/dear/postcard/detail')}>
+      <StEnvelopeWrapper onClick={() => navigate(`/dear/postcard/detail/${messageId}`)}>
         <StEnvelopeTop src={EnvelopeTopImg} alt="편지 봉투 윗부분" />
 
         <StPostcard
@@ -37,7 +38,7 @@ const Postcard = () => {
           transition={{ duration: 1.2 }}
           onAnimationComplete={() => {
             setTimeout(() => {
-              navigate('/dear/postcard/detail');
+              navigate(`/dear/postcard/detail/${messageId}`);
             }, 800);
           }}
         />
