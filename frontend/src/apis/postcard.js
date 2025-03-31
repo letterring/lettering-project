@@ -22,3 +22,24 @@ export const sendPostcard = async ({ postcardData, imageFile }) => {
     throw new Error('엽서 전송 실패');
   }
 };
+
+export const getPostcardDetail = async (messageId) => {
+  try {
+    const response = await client.get(`/messages/postcards/dear/${messageId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const replyToPostcard = async (messageId, replyText) => {
+  try {
+    const response = await client.patch(`/messages/reply/${messageId}`, {
+      replyText,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

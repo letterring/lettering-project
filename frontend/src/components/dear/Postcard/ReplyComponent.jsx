@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
+import { replyToPostcard } from '/src/apis/postcard';
 
 import { IcSend } from '../../../assets/icons';
 
-const ReplyComponent = () => {
+const ReplyComponent = ({ messageId, replyText }) => {
   const [reply, setReply] = useState(''); // 입력값 상태
   const [isSent, setIsSent] = useState(false); // 전송 여부 상태
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (replyText) {
+      setReply(replyText);
+      setIsSent(true);
+    }
+  }, [replyText]);
 
   const handleReplyChange = (e) => {
     const value = e.target.value;
@@ -14,8 +24,19 @@ const ReplyComponent = () => {
     }
   };
 
-  const handleSendClick = () => {
-    setIsSent(true);
+  const handleSendClick = async () => {
+    if (!reply) return;
+    setIsLoading(true);
+
+    try {
+      await replyToPostcard(messageId, reply);
+      setIsSent(true);
+    } catch (error) {
+      alert('답장 전송에 실패했어요.');
+      console.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

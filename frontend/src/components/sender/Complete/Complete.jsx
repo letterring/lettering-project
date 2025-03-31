@@ -4,9 +4,12 @@ import styled from 'styled-components';
 import PaperBackground from '/src/assets/background2.png';
 import CompleteImage from '/src/assets/images/sender/TransmissionComplete.png';
 
+import Header from '../../common/Header';
+
 const Complete = () => {
   return (
     <CompleteWrapper $Background={PaperBackground}>
+      <Header headerName="편지 전송" />
       <img src={CompleteImage} alt="전송 완료 이미지" />
       <CompleteText>전송 완료!!</CompleteText>
       <SubText>키링을 태그하면 도착한 편지를 바로 확인할 수 있어요!</SubText>
@@ -18,7 +21,7 @@ export default Complete;
 
 const CompleteWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-image: url(${({ $Background }) => $Background});
   background-size: cover;
   background-position: center;

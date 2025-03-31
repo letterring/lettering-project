@@ -6,7 +6,7 @@ import Header from '../../common/Header';
 import CenterCarousel from './CenterCarousel';
 
 const SenderMailBox = () => {
-  const dears = ['ALL', '예슬', '승엽', '지수', '하람', '효승'];
+  const dears = ['ALL', '예슬', '바나나', '바보멍청이', '하람쥐', '효승'];
   const [selectedDear, setSelectedDear] = useState('ALL');
 
   return (
@@ -69,6 +69,7 @@ const FilterOptions = styled.div`
   width: 100%;
   margin-bottom: 5rem;
   padding: 1rem 0;
+  padding-right: 3rem;
 
   overflow-x: scroll;
   white-space: nowrap;
@@ -79,7 +80,7 @@ const FilterOptions = styled.div`
 `;
 
 const FilterButton = styled.button`
-  width: 5rem;
+  width: fit-content;
   padding: 0.6rem 1rem;
   flex-shrink: 0;
 
