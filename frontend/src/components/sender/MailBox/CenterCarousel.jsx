@@ -8,83 +8,46 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { getSenderMessages } from '../../../apis/mailbox';
 import { IcDetail } from '../../../assets/icons';
-import Closed4 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
 import Closed1 from '../../../assets/images/mailbox/closed3.png';
 import Closed3 from '../../../assets/images/mailbox/closed3.png';
-import Closed5 from '../../../assets/images/mailbox/closed4.png';
-import Opened4 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
-import Opened5 from '../../../assets/images/mailbox/opened4.png';
 import { getRelativeFormat } from '../../../util/getRelativeDate';
-
-const messages = [
-  {
-    dear: '하람',
-    reply: true,
-    type: 'letter',
-    openTime: '1분 전',
-    closed: Closed1,
-    opened: Opened1,
-  },
-  {
-    dear: '효승',
-    reply: false,
-    type: 'letter',
-    openTime: '2시간 전',
-    closed: Closed2,
-    opened: Opened2,
-  },
-  {
-    dear: '지수',
-    reply: false,
-    type: 'postcard',
-    openTime: '1일 전',
-    closed: Closed3,
-    opened: Opened3,
-  },
-  {
-    dear: '예슬',
-    reply: false,
-    type: 'letter',
-    openTime: '25.03.18',
-    closed: Closed4,
-    opened: Opened4,
-  },
-  {
-    dear: '승엽',
-    reply: false,
-    type: 'letter',
-    openTime: '24.12.25',
-    closed: Closed5,
-    opened: Opened5,
-  },
-];
 
 const images = {
   Closed1,
   Closed2,
   Closed3,
-  Closed4,
-  Closed5,
   Opened1,
   Opened2,
   Opened3,
-  Opened4,
-  Opened5,
 };
 
-const SlideComponent = () => {
+const CenterCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [initialLoaded, setInitialLoaded] = useState(false);
 
-  const getSenderMailbox = async () => {
-    const { senderMessageSummaryList } = await getSenderMessages(0);
-    setMessages(senderMessageSummaryList);
-    console.log(senderMessageSummaryList);
+  const getSenderMailbox = async (currentPage) => {
+    setLoading(true);
+    const { senderMessageSummaryList } = await getSenderMessages(currentPage);
+
+    if (senderMessageSummaryList.length === 0) {
+      setHasMore(false);
+    } else {
+      setMessages((prev) => [...prev, ...senderMessageSummaryList]);
+    }
+
+    setLoading(false);
+    if (currentPage === 0) {
+      setInitialLoaded(true);
+    }
   };
 
   const handleClick = (idx) => {
@@ -96,19 +59,28 @@ const SlideComponent = () => {
   };
 
   const handleSlideChange = (swiper) => {
-    setActiveIndex(swiper.realIndex);
+    const newIndex = swiper.realIndex;
+
+    if (newIndex > activeIndex && !loading && hasMore && newIndex === page * 7 + 2) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      getSenderMailbox(nextPage);
+    }
+
+    setActiveIndex(newIndex);
   };
 
+  useEffect(() => {
+    if (!initialLoaded) {
+      getSenderMailbox(0);
+    }
+  }, [initialLoaded]);
   const getAlignType = (idx, activeIdx) => {
     const diff = idx - activeIdx;
     if (diff === 0) return 'flex-start';
     if (diff < 0) return 'flex-start';
     return 'flex-end';
   };
-
-  useEffect(() => {
-    getSenderMailbox();
-  }, []);
 
   return (
     <StyledSwiper
@@ -134,7 +106,7 @@ const SlideComponent = () => {
         const isOpened = openedIndices.includes(idx);
 
         return (
-          <StyledSlide key={id} $hidden={!isVisible} onClick={() => handleClick(idx)}>
+          <StyledSlide key={idx} $hidden={!isVisible} onClick={() => handleClick(idx)}>
             <SlideContent $align={getAlignType(idx, activeIndex)}>
               <ImageWrapper>
                 <img
@@ -146,14 +118,12 @@ const SlideComponent = () => {
                   alt={`Slide ${idx + 1}`}
                 />
               </ImageWrapper>
-              {isOpened && isCenter && (
-                <Comment>
-                  <p>
-                    {repliedName}님께 보낸 {designType !== 'POSTCARD' ? '편지' : '엽서'}
-                  </p>
-                  <p>답장 : {replied ? 1 : 0}</p>
-                </Comment>
-              )}
+              <Comment $isVisible={isOpened && isCenter}>
+                <p>
+                  {repliedName}님께 보낸 {designType !== 'POSTCARD' ? '편지' : '엽서'}
+                </p>
+                <p>답장 : {replied ? 1 : 0}</p>
+              </Comment>
               <Details>
                 <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
                 {isOpened && isCenter && (
@@ -170,7 +140,7 @@ const SlideComponent = () => {
   );
 };
 
-export default SlideComponent;
+export default CenterCarousel;
 
 const StyledSwiper = styled(Swiper)`
   display: flex;
@@ -204,7 +174,7 @@ const StyledSlide = styled(SwiperSlide)`
 
 const SlideContent = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   align-items: ${({ $align }) => $align};
 
   position: relative;
@@ -226,16 +196,15 @@ const ImageWrapper = styled.div`
 `;
 
 const Comment = styled.div`
-  width: 80%;
-
+  width: 19rem;
   padding-left: 1rem;
   padding-top: 0.5rem;
-
   ${({ theme }) => theme.fonts.EduBody1};
   color: ${({ theme }) => theme.colors.Gray1};
   text-align: center;
-
   z-index: 1;
+
+  visibility: ${({ $isVisible }) => ($isVisible ? 'visible' : 'hidden')};
 `;
 
 const Details = styled.div`
