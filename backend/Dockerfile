@@ -15,7 +15,7 @@ RUN chmod +x gradlew
 
 # 🔥 소스 코드 및 설정 파일 복사
 COPY src ./src
-COPY src/main/resources/secrets.properties /app/resources/secrets.properties
+COPY src/main/resources/secrets.properties /app/resources/
 
 # Gradle 의존성 미리 다운로드 (빌드 속도 개선)
 RUN ./gradlew dependencies --no-daemon
