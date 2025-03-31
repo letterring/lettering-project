@@ -3,39 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
+import { updateFont } from '../../../../apis/mypage';
 import { UserFont } from '../../../../recoil/userInfo';
 import Header from '../../../common/Header';
 import FontItem from './FontItem';
 
 const FontSetting = () => {
   const navigate = useNavigate();
-  const fontList = ['Gomsin', 'GangwonEduAll'];
+  const fontEnumList = ['GOMSIN1', 'UHBEE1', 'SAEUM5', 'EDUBODY0'];
   const [userFont, setUserFont] = useRecoilState(UserFont);
   const [selectedFont, setSelectedFont] = useState(userFont);
-
-  const handleFontChange = (font) => {
-    setUserFont(font);
-    // TODO: 여기에 API 저장 로직 추가 가능
-    navigate('/mypage');
-  };
 
   useEffect(() => {
     setSelectedFont(userFont);
   }, [userFont]);
 
+  const handleFontChange = async (newFontEnum) => {
+    const result = await updateFont(newFontEnum);
+
+    if (!result) return;
+
+    setUserFont(newFontEnum);
+    navigate('/mypage');
+  };
+
   return (
     <StFontSettingWrapper>
       <Header headerName="마이페이지" />
       <Title>폰트 설정</Title>
-      {fontList.map((font) => (
-        <FontItem
-          key={font}
-          fontName={font}
-          isSelected={selectedFont === font}
-          onClick={() => setSelectedFont(font)}
-          onConfirm={() => handleFontChange(font)}
-        />
-      ))}
+      {fontEnumList.map((fontEnum) => {
+        return (
+          <FontItem
+            key={fontEnum}
+            fontEnum={fontEnum}
+            isSelected={selectedFont === fontEnum}
+            onClick={() => setSelectedFont(fontEnum)}
+            onConfirm={() => handleFontChange(fontEnum)}
+          />
+        );
+      })}
     </StFontSettingWrapper>
   );
 };
@@ -43,13 +49,14 @@ const FontSetting = () => {
 export default FontSetting;
 
 const StFontSettingWrapper = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  position: relative;
   box-sizing: border-box;
   height: 100%;
-  padding: 5rem;
+  padding: 6rem 2rem;
   gap: 1rem;
 `;
 

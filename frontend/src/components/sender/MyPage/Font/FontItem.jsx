@@ -2,10 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { IcCheckCircle } from '../../../../assets/icons';
+import { getFontName, getFontStyle } from '../../../../util/getFont';
 
-const FontItem = ({ fontName, isSelected, onClick, onConfirm }) => {
+const FontItem = ({ fontEnum, isSelected, onClick, onConfirm }) => {
+  const fontName = getFontName(fontEnum);
+  const fontStyle = getFontStyle(fontEnum);
+
   return (
-    <StFontBox $isSelected={isSelected} onClick={onClick}>
+    <StFontBox $isSelected={isSelected} onClick={onClick} $fontKey={fontStyle}>
       {fontName}
       {isSelected && (
         <IcCheckCircle
@@ -24,7 +28,7 @@ export default FontItem;
 
 const StFontBox = styled.div`
   color: ${({ theme }) => theme.colors.Gray3};
-  ${({ theme }) => theme.fonts.Saeum3};
+  ${({ theme, $fontKey }) => theme.fonts[$fontKey]};
   background-color: ${({ theme }) => theme.colors.White};
   width: 100%;
   height: 4rem;

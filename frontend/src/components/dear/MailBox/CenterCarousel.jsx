@@ -1,24 +1,25 @@
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { getDearMessages } from '../../../apis/mailbox';
 import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/icons';
-import Closed1 from '../../../assets/images/mailbox/closed1.png';
 import Closed4 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
+import Closed1 from '../../../assets/images/mailbox/closed3.png';
 import Closed3 from '../../../assets/images/mailbox/closed3.png';
 import Closed5 from '../../../assets/images/mailbox/closed4.png';
-import Opened1 from '../../../assets/images/mailbox/opened1.png';
 import Opened4 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
+import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
 import Opened5 from '../../../assets/images/mailbox/opened4.png';
-import { getRelativeDate } from '../../../util/getTimer';
+import { getRelativeDate } from '../../../util/getRelativeDate';
 import RealTimer from './RealTimer';
 
 const dearMessagesSummaryList = [
@@ -89,6 +90,13 @@ const SlideComponent = () => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  const getDearMailbox = async () => {
+    const { dearMessagesSummaryList } = await getDearMessages(0, 2);
+    setMessages(dearMessagesSummaryList);
+    // console.log(dearMessagesSummaryList);
+  };
 
   const isPastDate = (conditionTime) => {
     const openDate = new Date(conditionTime);
@@ -126,6 +134,10 @@ const SlideComponent = () => {
     return 'flex-end';
   };
 
+  useEffect(() => {
+    getDearMailbox();
+  }, []);
+
   return (
     <StyledSwiper
       direction="vertical"
@@ -143,7 +155,7 @@ const SlideComponent = () => {
       }}
       modules={[EffectCoverflow]}
     >
-      {dearMessagesSummaryList.map((msg, idx) => {
+      {messages.map((msg, idx) => {
         const isVisible = Math.abs(activeIndex - idx) <= 2;
         const isCenter = activeIndex === idx;
         const isOpened = openedIndices.includes(idx);
@@ -166,7 +178,11 @@ const SlideComponent = () => {
               <ImageWrapper>
                 <img
                   // className={!isPast && isCenter ? 'blurred' : ''}
-                  src={isCenter && isOpened && isPast ? openedImages[msg.id] : closedImages[msg.id]}
+                  src={
+                    isCenter && isOpened && isPast
+                      ? openedImages[msg.sealingWaxId]
+                      : closedImages[msg.sealingWaxId]
+                  }
                   alt={`Slide ${idx + 1}`}
                 />
                 {!isPast && isCenter && (

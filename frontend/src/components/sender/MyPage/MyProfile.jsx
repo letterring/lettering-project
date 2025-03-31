@@ -4,20 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { getUserInfo } from '../../../apis/mypage';
+import { getUserInfo, updateNickname } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
+import { getFontName, getFontStyle } from '../../../util/getFont';
 import Header from '../../common/Header';
 import KeyringList from './Keyring/KeyringList';
 import NickNameSetting from './NickNameSetting';
 
-const My = () => {
+const MyProfile = () => {
   const [nickname, setNickname] = useRecoilState(UserNickname);
   const [font, setFont] = useRecoilState(UserFont);
   const [keyringList, setKeyringList] = useRecoilState(UserKeyringList);
 
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+
+  const fontStyle = getFontStyle(font);
+  const fontName = getFontName(font);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -30,7 +34,8 @@ const My = () => {
     fetchUserInfo();
   }, []);
 
-  const handleEditNickname = (newName) => {
+  const handleEditNickname = async (newName) => {
+    const data = await updateNickname(newName);
     setNickname(newName);
     setIsEditing(false);
   };
@@ -58,8 +63,8 @@ const My = () => {
             onIconClick={handleEditNickname}
           />
           <Title>폰트</Title>
-          <FontPreviewBox>
-            {font}
+          <FontPreviewBox $fontKey={fontStyle}>
+            {fontName}
             <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
           </FontPreviewBox>
           <br />
@@ -74,7 +79,7 @@ const My = () => {
   );
 };
 
-export default My;
+export default MyProfile;
 
 const StWrapper = styled.div`
   position: relative;
@@ -104,7 +109,7 @@ const Title = styled.div`
 
 const FontPreviewBox = styled.div`
   color: ${({ theme }) => theme.colors.Gray3};
-  ${({ theme }) => theme.fonts.Saeum3};
+  ${({ theme, $fontKey }) => theme.fonts[$fontKey]};
   background-color: ${({ theme }) => theme.colors.White};
   display: flex;
   flex-direction: row;

@@ -11,24 +11,42 @@ const KeyringItem = ({
   onDelete,
   onChangeName,
 }) => {
-  const [newName, setNewName] = useState(keyring.keyringName);
+  const { tagCode, favorite, keyringId, keyringName } = keyring;
+  const [newName, setNewName] = useState(keyringName);
+  const [showWarning, setShowWarning] = useState(false);
 
   const handleSave = () => {
-    onChangeName(keyring.keyringId, newName);
+    onChangeName(keyringId, newName);
+    setShowWarning(false);
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const length = [...value].length;
+
+    if (length <= 5) {
+      setNewName(value);
+      setShowWarning(false);
+    } else {
+      setShowWarning(true);
+    }
   };
 
   return (
     <StItemWrapper $isEditing={isEditing}>
-      <IdText>키링 ID : {keyring.keyringId}</IdText>
+      <IdText>키링 ID : {tagCode}</IdText>
       <SettingBox>
         <IcStar
-          style={{ color: keyring.favorite ? '#FFD600' : '#D3D3D3' }}
-          onClick={() => onToggleFavorite(keyring.keyringId)}
+          style={{ color: favorite ? '#FFD600' : '#D3D3D3' }}
+          onClick={() => onToggleFavorite(keyringId)}
         />
         {isEditing ? (
-          <NameInput value={newName} onChange={(e) => setNewName(e.target.value)} />
+          <div style={{ flex: 1 }}>
+            <NameInput value={newName} onChange={handleChange} />
+            {showWarning && <WarningText>최대 5글자까지만 입력할 수 있어요</WarningText>}
+          </div>
         ) : (
-          <NameText>{keyring.keyringName}</NameText>
+          <NameText>{keyringName}</NameText>
         )}
         <IconWrapper>
           {isEditing ? (
@@ -36,7 +54,7 @@ const KeyringItem = ({
           ) : (
             <IcPen onClick={onStartEdit} style={{ cursor: 'pointer' }} />
           )}
-          <IcTrash onClick={() => onDelete(keyring.keyringId)} style={{ cursor: 'pointer' }} />
+          <IcTrash onClick={() => onDelete(keyringId)} style={{ cursor: 'pointer' }} />
         </IconWrapper>
       </SettingBox>
     </StItemWrapper>
@@ -92,4 +110,11 @@ const NameInput = styled.input`
 const IconWrapper = styled.div`
   display: flex;
   gap: 1rem;
+`;
+
+const WarningText = styled.div`
+  color: ${({ theme }) => theme.colors.Red1 || 'red'};
+  ${({ theme }) => theme.fonts.Body2};
+  margin-top: 0.25rem;
+  padding-left: 0.25rem;
 `;

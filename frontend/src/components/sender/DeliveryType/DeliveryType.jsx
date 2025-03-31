@@ -70,8 +70,8 @@ const DeliveryType = () => {
           imageFile: postcardImageFile,
         });
 
-        alert('엽서가 전송되었습니다!');
-        navigate('/complete');
+        // alert('엽서가 전송되었습니다!');
+        navigate('/complete/postcard');
       } catch (error) {
         console.error('엽서 전송 실패:', error);
         alert('엽서 전송에 실패했어요.');
