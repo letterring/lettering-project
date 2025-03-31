@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getSealingWaxList } from '../../../apis/sealingWax';
@@ -7,6 +8,8 @@ import Header from '../../common/Header';
 import SealingWaxCarousel from './SealingWaxCarousel';
 
 const SelectTheme = () => {
+  const navigate = useNavigate();
+
   const [sealingWaxes, setSealingWaxes] = useState([]);
   const [selectedTheme, setSelectedTheme] = useState(null);
 
@@ -34,6 +37,7 @@ const SelectTheme = () => {
   const handleConfirm = () => {
     if (selectedTheme) {
       localStorage.setItem('sealingWaxId', selectedTheme.id);
+      navigate('/postcard/writing');
     } else {
       alert('테마를 선택해주세요!');
     }
