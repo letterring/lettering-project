@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getPostcardDetail } from '/src/apis/postcard';
+import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
@@ -20,16 +20,17 @@ const PostcardDetail = () => {
 
   useEffect(() => {
     const fetchPostcard = async () => {
-      try {
-        const data = await getPostcardDetail(messageId);
-        setPostcard(data);
-      } catch (error) {
-        console.error(error.message);
-      }
+      const data = await getPostcardDetail(messageId);
+      setPostcard(data);
     };
 
     fetchPostcard();
   }, [messageId]);
+
+  const handleMarkAsUnread = async () => {
+    await markPostcardAsUnread(messageId);
+    alert('안읽음 처리 완료!');
+  };
 
   // postcard가 아직 없으면 로딩 처리
   if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
@@ -62,6 +63,8 @@ const PostcardDetail = () => {
           </StCardFace>
         </StFlipCard>
       </StFlipContainer>
+
+      <button onClick={handleMarkAsUnread}>안읽음 처리</button>
 
       <ReplyComponent messageId={messageId} replyText={replyText} />
     </StPageWrapper>

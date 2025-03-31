@@ -6,11 +6,12 @@ import OBJViewer from './OBJViewer';
 
 const Landing = () => {
   const navigate = useNavigate();
+  const messageId = 13;
 
   const [newLetter, setNewLetter] = useState(true);
 
   const handleNewLetterClick = () => {
-    navigate('/dear/postcard');
+    navigate(`/dear/postcard/${messageId}`);
   };
 
   const handleMissedClick = () => {
