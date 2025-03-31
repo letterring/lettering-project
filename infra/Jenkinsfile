@@ -14,7 +14,7 @@ pipeline {
           file(credentialsId: 'env-frontend', variable: 'FRONTEND_ENV_FILE')
         ]) {
           sh '''
-            cp "$ENV_FILE" .env
+            cp "$ENV_FILE" infra/.env
             cp "$SECRETS_FILE" backend/src/main/resources/secrets.properties
             cp "$FRONTEND_ENV_FILE" frontend/.env
           '''
