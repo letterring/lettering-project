@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getPostcardDetail } from '/src/apis/postcard';
@@ -13,7 +14,7 @@ import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
   const [flipped, setFlipped] = useState(false);
-  const messageId = 11;
+  const { messageId } = useParams();
 
   const [postcard, setPostcard] = useState(null);
 
