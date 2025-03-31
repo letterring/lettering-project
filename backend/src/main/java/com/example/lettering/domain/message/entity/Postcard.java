@@ -23,10 +23,13 @@ public class Postcard extends AbstractMessage {
     @Column(name = "content", nullable = false, length = 3000)
     private String content;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Column(name = "image_high_url", nullable = false)
+    private String imageHighUrl;
 
-    public static Postcard fromDto(CreatePostcardRequest createPostcardRequest, User sender, Keyring keyring, SealingWax sealingWax, String imageUrl, Font font) {
+    @Column(name = "image_low_url", nullable = false)
+    private String imageLowUrl;
+
+    public static Postcard fromDto(CreatePostcardRequest createPostcardRequest, User sender, Keyring keyring, SealingWax sealingWax, String imageHighUrl, String imageLowUrl, Font font) {
         Postcard postcard = new Postcard();
         postcard.sender = sender;
         postcard.keyring = keyring;
@@ -56,7 +59,8 @@ public class Postcard extends AbstractMessage {
         }
 
         postcard.content = createPostcardRequest.getContent();
-        postcard.imageUrl = imageUrl;
+        postcard.imageHighUrl = imageHighUrl;
+        postcard.imageLowUrl = imageLowUrl;
         return postcard;
     }
 
