@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -83,18 +84,19 @@ public class S3ImageUtil {
         String s3Key = folderName + "/" + uuid + extension;
 
         InputStream inputStream;
-        // 저화질의 경우 이미지 압축/리사이징 로직 적용
+        long contentLength;
         if (imageQuality == ImageQuality.LOW) {
-            inputStream = ImageProcessingUtils.compressImage(file.getInputStream(), file.getContentType());
+            byte[] compressedBytes = ImageProcessingUtils.compressImage(file.getInputStream(), file.getContentType());
+            inputStream = new ByteArrayInputStream(compressedBytes);
+            contentLength = compressedBytes.length;
         } else {
             inputStream = file.getInputStream();
+            contentLength = file.getSize();
         }
 
         try (InputStream is = inputStream) {
             ObjectMetadata metadata = new ObjectMetadata();
-            // 실제 압축 후의 사이즈로 업데이트할 수 있다면 적용 (여기서는 원본 사이즈 사용)
-            metadata.setContentLength(file.getSize());
-            // 변환된 경우 updatedContentType를 사용
+            metadata.setContentLength(contentLength);
             metadata.setContentType(updatedContentType);
 
             s3Config.amazonS3Client().putObject(new PutObjectRequest(bucket, s3Key, is, metadata));
