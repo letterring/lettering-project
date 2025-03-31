@@ -107,6 +107,7 @@ services:
       KAKAO_CLIENT_SECRET: ${KAKAO_CLIENT_SECRET}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
       DOMAIN_NAME: ${DOMAIN_NAME}
+      SPRING_CONFIG_ADDITIONAL_LOCATION: classpath:/secrets.properties
     depends_on:
       db:
         condition: service_healthy

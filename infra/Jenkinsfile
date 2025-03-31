@@ -15,7 +15,7 @@ pipeline {
         ]) {
           sh '''
             cp "$ENV_FILE" .env
-            cp "$SECRETS_FILE" backend/secrets.properties
+            cp "$SECRETS_FILE" backend/src/main/resources/secrets.properties
             cp "$FRONTEND_ENV_FILE" frontend/.env
           '''
         }
