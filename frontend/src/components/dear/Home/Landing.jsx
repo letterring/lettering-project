@@ -6,7 +6,7 @@ import OBJViewer from './OBJViewer';
 
 const Landing = () => {
   const navigate = useNavigate();
-  const messageId = 10;
+  const messageId = 13;
 
   const [newLetter, setNewLetter] = useState(true);
 
