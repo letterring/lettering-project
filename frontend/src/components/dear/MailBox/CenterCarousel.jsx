@@ -63,9 +63,9 @@ const SlideComponent = () => {
     setActiveIndex(swiper.realIndex);
   };
 
-  const handleOpenMsg = (type) => {
+  const handleOpenMsg = (type, messageId) => {
     if (type === 'POSTCARD') {
-      navigate(`/dear/postcard/detail`);
+      navigate(`/dear/postcard/detail/${messageId}`);
     } else {
       navigate(`/dear/letter/detail`);
     }
@@ -100,19 +100,20 @@ const SlideComponent = () => {
       modules={[EffectCoverflow]}
     >
       {messages.map((msg, idx) => {
+        const { id, conditionTime, replied, sealingWaxId, favorite, designType, opened } = msg;
         const isVisible = Math.abs(activeIndex - idx) <= 2;
         const isCenter = activeIndex === idx;
         const isOpened = openedIndices.includes(idx);
-        const isPast = isPastDate(msg.conditionTime);
+        const isPast = isPastDate(conditionTime);
 
         let commentText = '';
         if (!isPast) {
           commentText = '편지가 열리기 까지..';
-        } else if (isPast && !msg.opened) {
+        } else if (isPast && !opened) {
           commentText = '아직 읽지 않은 편지입니다.';
-        } else if (msg.opened && !msg.replied) {
+        } else if (opened && !replied) {
           commentText = '아직 답장을 하지 않았어요.';
-        } else if (msg.opened && msg.replied) {
+        } else if (opened && replied) {
           commentText = '답장을 완료했어요!';
         }
 
@@ -124,8 +125,8 @@ const SlideComponent = () => {
                   // className={!isPast && isCenter ? 'blurred' : ''}
                   src={
                     isCenter && isOpened && isPast
-                      ? openedImages[msg.sealingWaxId]
-                      : closedImages[msg.sealingWaxId]
+                      ? openedImages[sealingWaxId]
+                      : closedImages[sealingWaxId]
                   }
                   alt={`Slide ${idx + 1}`}
                 />
@@ -143,12 +144,12 @@ const SlideComponent = () => {
               )}
               <Details>
                 <StyledIcon>
-                  <OpenTime>{getRelativeDate(msg.conditionTime)}</OpenTime>
-                  {isPast ? msg.favorite ? <IcLikesTrue /> : <IcLikesFalse /> : <IcLock2 />}
+                  <OpenTime>{getRelativeDate(conditionTime)}</OpenTime>
+                  {isPast ? favorite ? <IcLikesTrue /> : <IcLikesFalse /> : <IcLock2 />}
                 </StyledIcon>
                 {isPast && isOpened && isCenter && (
                   <DetailButton>
-                    <IcDetail onClick={() => handleOpenMsg(msg.designType)} />
+                    <IcDetail onClick={() => handleOpenMsg(designType, id)} />
                   </DetailButton>
                 )}
               </Details>
