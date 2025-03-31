@@ -2,6 +2,8 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
+import { logout } from '../../../apis/user';
+
 const MenuModal = ({ isShowing, target }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,13 +27,17 @@ const MenuModal = ({ isShowing, target }) => {
   const menus = target === 'sender' ? senderMenus : dearMenus;
 
   const handleClickMenu = (name) => {
-    if (target === 'sender') {
-      navigate(`/${name}`);
+    if (name === 'logout') {
+      logout();
+      navigate('/');
     } else {
-      navigate(`/dear/${name}`);
+      if (target === 'sender') {
+        navigate(`/${name}`);
+      } else {
+        navigate(`/dear/${name}`);
+      }
     }
   };
-
   return (
     isShowing && (
       <StMenuModalWrapper>

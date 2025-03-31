@@ -34,4 +34,31 @@ const SelectedKeyringId = atom({
   default: 'null',
 });
 
-export { PostcardImage, PostcardImageFile, PostcardText, SelectedKeyringId, UserId };
+// 유저 닉네임
+const UserNickname = atom({
+  key: 'userNickname',
+  default: '',
+});
+
+// 유저 폰트
+const UserFont = atom({
+  key: 'userFont',
+  default: 'Gomsin',
+});
+
+// 유저 키링 리스트
+const UserKeyringList = atom({
+  key: 'userKeyringlist',
+  default: [],
+});
+
+export {
+  PostcardImage,
+  PostcardImageFile,
+  PostcardText,
+  SelectedKeyringId,
+  UserFont,
+  UserId,
+  UserKeyringList,
+  UserNickname,
+};
