@@ -4,3 +4,4 @@ infra/nginx/letsencrypt/*
 !infra/nginx/letsencrypt/.gitkeep
 .env
 secrets.properties
+!infra/nginx/conf.d/default.conf
