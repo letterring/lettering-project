@@ -21,6 +21,7 @@ import DescribeKeyringPage from './pages/sender/DescribeKeyringPage';
 import FontSettingPage from './pages/sender/FontSettingPage';
 import HomePage from './pages/sender/Homepage';
 import KeyringSettingPage from './pages/sender/KeyringSettingPage';
+import LetterWritingPage from './pages/sender/LetterWritingPage';
 import LoginPage from './pages/sender/LoginPage';
 import MailBoxPage from './pages/sender/MailBoxPage';
 import MyPage from './pages/sender/MyPage';
@@ -59,6 +60,7 @@ const Router = () => {
               <Route path="/mypage/font" element={<FontSettingPage />} />
               <Route path="/mypage/keyring" element={<KeyringSettingPage />} />
               <Route path="/keyring" element={<DescribeKeyringPage />} />
+              <Route path="/letter/writing" element={<LetterWritingPage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />

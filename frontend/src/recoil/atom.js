@@ -34,6 +34,18 @@ const SelectedKeyringId = atom({
   default: 'null',
 });
 
+// 이미지 리스트 (file과 url 함께 저장)
+const LetterImageList = atom({
+  key: 'LetterImageList',
+  default: [],
+});
+
+// 편지 텍스트
+const LetterText = atom({
+  key: 'LetterText',
+  default: '',
+});
+
 // 유저 닉네임
 const UserNickname = atom({
   key: 'userNickname',
@@ -43,7 +55,7 @@ const UserNickname = atom({
 // 유저 폰트
 const UserFont = atom({
   key: 'userFont',
-  default: 'Gomsin',
+  default: 'GOMSIN1',
 });
 
 // 유저 키링 리스트
@@ -53,6 +65,8 @@ const UserKeyringList = atom({
 });
 
 export {
+  LetterImageList,
+  LetterText,
   PostcardImage,
   PostcardImageFile,
   PostcardText,
