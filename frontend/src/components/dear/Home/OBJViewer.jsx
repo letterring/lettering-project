@@ -151,7 +151,7 @@ const ViewerWrapper = ({
 
   // 📬 확대 끝나고 라우터 이동
   const handleZoomComplete = () => {
-    navigate('/dear/postcard');
+    onMissedClick();
   };
 
   return (
