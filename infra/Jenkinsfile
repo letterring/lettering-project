@@ -1,8 +1,17 @@
-pipeline { 
+pipeline {
   agent any
 
   environment {
-    COMPOSE_PROJECT_DIR = "${WORKSPACE}"
+    COMPOSE_PROJECT_DIR     = "${WORKSPACE}"
+    MYSQL_ROOT_PASSWORD     = credentials('MYSQL_ROOT_PASSWORD')
+    MYSQL_DATABASE          = credentials('MYSQL_DATABASE')
+    MYSQL_USER              = credentials('MYSQL_USER')
+    MYSQL_PASSWORD          = credentials('MYSQL_PASSWORD')
+    SPRING_DATASOURCE_URL   = credentials('SPRING_DATASOURCE_URL')
+    KAKAO_CLIENT_ID         = credentials('KAKAO_CLIENT_ID')
+    KAKAO_CLIENT_SECRET     = credentials('KAKAO_CLIENT_SECRET')
+    ALLOWED_ORIGINS         = credentials('ALLOWED_ORIGINS')
+    DOMAIN_NAME             = credentials('DOMAIN_NAME')
   }
 
   stages {
