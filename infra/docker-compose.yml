@@ -38,7 +38,7 @@ services:
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
       DOMAIN_NAME: ${DOMAIN_NAME}
     volumes:
-      - ../secrets.properties:/app/resources/secrets.properties
+      - ../backend/secrets.properties:/app/resources/secrets.properties
     depends_on:
       db:
         condition: service_healthy
