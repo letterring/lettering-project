@@ -9,81 +9,25 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { getDearMessages } from '../../../apis/mailbox';
 import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/icons';
-import Closed4 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
 import Closed1 from '../../../assets/images/mailbox/closed3.png';
 import Closed3 from '../../../assets/images/mailbox/closed3.png';
-import Closed5 from '../../../assets/images/mailbox/closed4.png';
-import Opened4 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened3 from '../../../assets/images/mailbox/opened3.png';
-import Opened5 from '../../../assets/images/mailbox/opened4.png';
 import { getRelativeDate } from '../../../util/getRelativeDate';
 import RealTimer from './RealTimer';
-
-const dearMessagesSummaryList = [
-  {
-    id: 1,
-    conditionTime: '2025-03-27T20:55:16.706828',
-    replied: false,
-    sealingWaxId: 1,
-    favorite: false,
-    designType: 'LETTER',
-    opened: false,
-  },
-  {
-    id: 2,
-    conditionTime: '2025-03-26T19:55:12.537608',
-    replied: false,
-    sealingWaxId: 1,
-    favorite: false,
-    designType: 'LETTER',
-    opened: false,
-  },
-  {
-    id: 3,
-    conditionTime: '2025-03-25T12:55:12.537608',
-    replied: false,
-    sealingWaxId: 1,
-    favorite: true,
-    designType: 'POSTCARD',
-    opened: true,
-  },
-  {
-    id: 4,
-    conditionTime: '2025-03-24T16:55:09.787599',
-    replied: true,
-    sealingWaxId: 1,
-    favorite: false,
-    designType: 'LETTER',
-    opened: true,
-  },
-  {
-    id: 5,
-    conditionTime: '2025-03-20T16:55:06.715816',
-    replied: false,
-    sealingWaxId: 1,
-    favorite: false,
-    designType: 'LETTER',
-    opened: false,
-  },
-];
 
 const closedImages = {
   1: Closed1,
   2: Closed2,
   3: Closed3,
-  4: Closed4,
-  5: Closed5,
 };
 
 const openedImages = {
   1: Opened1,
   2: Opened2,
   3: Opened3,
-  4: Opened4,
-  5: Opened5,
 };
 
 const SlideComponent = () => {
@@ -105,7 +49,7 @@ const SlideComponent = () => {
   };
 
   const handleClick = (idx) => {
-    const message = dearMessagesSummaryList[idx];
+    const message = messages[idx];
     if (!isPastDate(message.conditionTime)) return;
 
     if (activeIndex !== idx) return;
