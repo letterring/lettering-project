@@ -1,0 +1,54 @@
+pipeline {
+  agent any
+
+  environment {
+    COMPOSE_PROJECT_DIR = "${WORKSPACE}"
+  }
+
+  stages {
+    stage('GitLab 연동 확인') {
+      steps {
+        echo "✅ GitLab 소스 코드 정상 연동 완료!"
+      }
+    }
+
+    stage('프론트엔드 빌드') {
+      steps {
+        echo "🛠️ 프론트엔드 빌드 시작"
+        dir('frontend') {
+          sh '''
+            npm install
+            npm run build
+          '''
+        }
+      }
+    }
+
+    stage('도커 종료 및 정리') {
+      steps {
+        echo "🧹 기존 컨테이너 정리 중..."
+        sh '''
+          docker compose -f infra/docker-compose.yml down || true
+        '''
+      }
+    }
+
+    stage('도커 이미지 재빌드 및 배포') {
+      steps {
+        echo "🚀 이미지 빌드 및 컨테이너 재실행"
+        sh '''
+          docker compose -f infra/docker-compose.yml up --build -d
+        '''
+      }
+    }
+  }
+
+  post {
+    failure {
+      echo '❌ 빌드 실패! 에러 로그를 확인해주세요.'
+    }
+    success {
+      echo '🎉 배포 성공! Letterring 서비스가 자동으로 배포되었습니다.'
+    }
+  }
+}
