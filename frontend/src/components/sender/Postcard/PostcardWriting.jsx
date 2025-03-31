@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { getFontStyle } from '/src/util/getFont';
+
+import { getUserFont } from '../../../apis/user';
 import { IcImageUpload, IcImageUploadTrue } from '../../../assets/icons';
 import PostcardImg from '../../../assets/images/postcard/postcard.png';
 import { PostcardImage, PostcardImageFile, PostcardText } from '../../../recoil/atom';
@@ -16,9 +19,23 @@ const PostcardWriting = () => {
   const [imageFile, setImageFile] = useRecoilState(PostcardImageFile);
   const [text, setText] = useRecoilState(PostcardText);
   const [check, setCheck] = useState(false);
+  const [userFont, setUserFont] = useState(undefined);
 
   const fileInputRef = useRef(null);
   const textLimit = 150;
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      try {
+        const { font } = await getUserFont();
+        setUserFont(getFontStyle(font));
+      } catch (err) {
+        console.error('폰트 로딩 실패');
+      }
+    };
+
+    fetchFont();
+  }, []);
 
   const handleTextChange = (e) => {
     const value = e.target.value;
@@ -98,6 +115,7 @@ const PostcardWriting = () => {
         <StTextBox>
           <StTextArea
             value={text}
+            $font={userFont}
             onChange={handleTextChange}
             maxLength={textLimit}
             placeholder="내용을 입력해주세요"
@@ -216,7 +234,7 @@ const StTextBox = styled.div`
 `;
 
 const StTextArea = styled.textarea`
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ theme, $font }) => theme.fonts[$font]};
   text-align: center;
 
   width: 24rem;

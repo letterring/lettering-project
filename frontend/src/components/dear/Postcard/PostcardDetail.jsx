@@ -6,13 +6,14 @@ import { getPostcardDetail } from '/src/apis/postcard';
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
+import { getFontStyle } from '/src/util/getFont';
 
 import Header from '../../common/Header';
 import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
   const [flipped, setFlipped] = useState(false);
-  const messageId = 9;
+  const messageId = 11;
 
   const [postcard, setPostcard] = useState(null);
 
@@ -52,8 +53,10 @@ const PostcardDetail = () => {
             <StPostcard src={PostcardImg} alt="엽서" />
             <StPostcardContent>
               <StPostcardStamp src={StampImg} alt="우표" />
-              <StPostcardTitle $font={font}>사랑하는 {nfcName || '너'}에게,</StPostcardTitle>
-              <StPostcardText $font={font}>{content}</StPostcardText>
+              <StPostcardTitle $font={getFontStyle(font)}>
+                사랑하는 {nfcName || '너'}에게,
+              </StPostcardTitle>
+              <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
             </StPostcardContent>
           </StCardFace>
         </StFlipCard>
@@ -140,7 +143,7 @@ const StPostcardContent = styled.div`
 `;
 
 const StPostcardTitle = styled.div`
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ theme, $font }) => theme.fonts[$font]};
   margin-bottom: 3rem;
   z-index: 3;
 `;
@@ -155,7 +158,7 @@ const StPostcardStamp = styled.img`
 `;
 
 const StPostcardText = styled.div`
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ theme, $font }) => theme.fonts[$font]};
   word-wrap: break-word;
   max-height: 13rem;
   overflow: auto;
