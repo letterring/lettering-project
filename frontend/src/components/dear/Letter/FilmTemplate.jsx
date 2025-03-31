@@ -1,48 +1,48 @@
-import React, { useRef } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 
 import FilmImg from '../../../assets/images/letter/film.png';
 
 const FilmTemplate = ({ images }) => {
-  const scrollRef = useRef();
-  const imageHeight = 135;
-  const imageWidth = 136;
-  const imageGap = 6;
-  const filmWidth = 715;
-  const filmHeight = 180;
+  const [animate, setAnimate] = useState(true);
+  const sliderRef = useRef(null);
 
-  const handleTouch = (e) => {
-    e.stopPropagation();
-  };
+  useEffect(() => {
+    const handleTouchOutside = (e) => {
+      if (sliderRef.current && !sliderRef.current.contains(e.target)) {
+        setAnimate(true);
+      }
+    };
+
+    document.addEventListener('touchstart', handleTouchOutside);
+    return () => {
+      document.removeEventListener('touchstart', handleTouchOutside);
+    };
+  }, []);
 
   return (
     <StWrapper>
       <StMaskWrapper>
         <StRotateWrapper>
           <StSliderContainer
-            ref={scrollRef}
-            onTouchStart={handleTouch}
-            onTouchMove={handleTouch}
-            onTouchEnd={handleTouch}
+            ref={sliderRef}
+            onMouseEnter={() => setAnimate(false)}
+            onTouchStart={() => setAnimate(false)}
           >
             <StImageSlider>
-              {images.map((src, idx) => (
-                <StPhoto
-                  $width={`${imageWidth}px`}
-                  $height={`${imageHeight}px`}
-                  $gap={`${imageGap}px`}
-                  key={idx}
-                  src={src}
-                  alt={`film-${idx}`}
-                />
-              ))}
+              <StSlide $animate={animate}>
+                {images.map((src, idx) => (
+                  <StPhoto key={`orig-${idx}`} src={src} alt={`film-${idx}`} />
+                ))}
+              </StSlide>
+              <StSlide $animate={animate} $clone>
+                {images.map((src, idx) => (
+                  <StPhoto key={`clone-${idx}`} src={src} alt={`film-${idx}`} />
+                ))}
+              </StSlide>
             </StImageSlider>
-            <StFilmOverlay
-              $width={`${filmWidth}px`}
-              $height={`${filmHeight}px`}
-              src={FilmImg}
-              alt="필름 배경"
-            />
+            <StFilmOverlay src={FilmImg} alt="필름 배경" $animate={animate} />
+            <StFilmOverlay src={FilmImg} alt="필름 배경" $animate={animate} $clone />
           </StSliderContainer>
         </StRotateWrapper>
       </StMaskWrapper>
@@ -52,6 +52,18 @@ const FilmTemplate = ({ images }) => {
 
 export default FilmTemplate;
 
+const slideAnimation1 = keyframes`
+  0% { transform: translateX(0%); }
+  50% { transform: translateX(-100%); }
+  50.1% { transform: translateX(100%); }
+  100% { transform: translateX(0%); }
+`;
+
+const slideAnimation2 = keyframes`
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-200%); }
+`;
+
 const StWrapper = styled.div`
   width: 100%;
   height: 22rem;
@@ -59,7 +71,7 @@ const StWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 3rem;
+  margin-top: 2rem;
 `;
 
 const StMaskWrapper = styled.div`
@@ -72,7 +84,7 @@ const StMaskWrapper = styled.div`
 
 const StRotateWrapper = styled.div`
   position: relative;
-  width: 31rem;
+  width: 28rem;
   height: 250px;
   display: flex;
   align-items: center;
@@ -84,13 +96,10 @@ const StSliderContainer = styled.div`
   position: relative;
   height: 182px;
   width: max-content;
-  left: -2rem;
+  left: 2rem;
   transform: rotate(-7deg);
   transform-origin: center;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  overflow: visible;
 
   &::-webkit-scrollbar {
     display: none;
@@ -99,23 +108,57 @@ const StSliderContainer = styled.div`
 
 const StImageSlider = styled.div`
   display: flex;
-  align-items: center;
-  z-index: 2;
+  flex-wrap: nowrap;
+`;
+
+const StSlide = styled.div`
+  display: flex;
+  padding-top: 25px;
+  flex-wrap: nowrap;
+
+  ${({ $animate, $clone }) =>
+    $animate &&
+    css`
+      animation: ${$clone ? slideAnimation2 : slideAnimation1} 50s linear infinite;
+    `}
+
+  ${({ $animate }) =>
+    !$animate &&
+    css`
+      animation-play-state: paused;
+    `}
 `;
 
 const StPhoto = styled.img`
-  width: ${(props) => props.$width};
-  height: ${(props) => props.$height};
+  width: 136.5px;
+  height: 135px;
   object-fit: cover;
-  scroll-snap-align: center;
-  margin-left: ${(props) => props.$gap};
+  margin: 0 3.2px;
 `;
 
 const StFilmOverlay = styled.img`
   position: absolute;
   top: 4px;
-  height: ${(props) => props.$height};
-  width: ${(props) => props.$width};
+  height: 180px;
+  width: 715px;
   z-index: 3;
   pointer-events: none;
+
+  ${({ $clone }) =>
+    $clone &&
+    css`
+      left: 715px;
+    `}
+
+  ${({ $animate, $clone }) =>
+    $animate &&
+    css`
+      animation: ${$clone ? slideAnimation2 : slideAnimation1} 50s linear infinite;
+    `}
+
+  ${({ $animate }) =>
+    $animate === false &&
+    css`
+      animation-play-state: paused;
+    `}
 `;
