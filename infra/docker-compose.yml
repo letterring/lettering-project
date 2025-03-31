@@ -1,3 +1,74 @@
+# services:
+#   db:
+#     container_name: db
+#     image: mysql:8.0
+#     ports:
+#       - "3306:3306"
+#     environment:
+#       TZ: "Asia/Seoul"
+#       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#       MYSQL_DATABASE: ${MYSQL_DATABASE}
+#       MYSQL_USER: ${MYSQL_USER}
+#       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#     volumes:
+#       - db_data:/var/lib/mysql
+#     networks:
+#       - app_network
+#     healthcheck:
+#       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 3
+
+#   backend:
+#     container_name: backend
+#     build:
+#       context: ../backend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       TZ: "Asia/Seoul"
+#       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+#       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+#       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+#       KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+#       KAKAO_CLIENT_SECRET: ${KAKAO_CLIENT_SECRET}
+#       SPRING_CONFIG_ADDITIONAL_LOCATION: /app/resources/secrets.properties
+#       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+#       DOMAIN_NAME: ${DOMAIN_NAME}
+#     volumes:
+#       - ../backend/secrets.properties:/app/resources/secrets.properties
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#     networks:
+#       - app_network
+
+#   nginx:
+#     image: nginx:latest
+#     container_name: nginx
+#     ports:
+#       - "443:443"
+#     environment:
+#       TZ: "Asia/Seoul"
+#     volumes:
+#       - ../frontend/dist:/usr/share/nginx/html
+#       - ./nginx/conf.d:/etc/nginx/conf.d
+#       - ./nginx/letsencrypt:/etc/nginx/letsencrypt
+#     depends_on:
+#       - backend
+#     networks:
+#       - app_network
+
+# volumes:
+#   db_data:
+#     external: true
+#     name: s12p21a203_db_data
+
+# networks:
+#   app_network:
+#     driver: bridge
 services:
   db:
     container_name: db
@@ -34,11 +105,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
       KAKAO_CLIENT_SECRET: ${KAKAO_CLIENT_SECRET}
-      SPRING_CONFIG_ADDITIONAL_LOCATION: /app/resources/secrets.properties
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
       DOMAIN_NAME: ${DOMAIN_NAME}
-    volumes:
-      - ../backend/secrets.properties:/app/resources/secrets.properties
     depends_on:
       db:
         condition: service_healthy
