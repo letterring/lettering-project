@@ -63,6 +63,8 @@ services:
 
 volumes:
   db_data:
+    external: true
+    name: s12p21a203_db_data
 
 networks:
   app_network:
