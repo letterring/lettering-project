@@ -35,7 +35,7 @@ public class PostcardToDearDetailResponse {
         postcardToDearDetailResponse.setNfcName(postcard.getKeyring().getNfcName());
         postcardToDearDetailResponse.setNickName(postcard.getSender().getUserNickname());
         postcardToDearDetailResponse.setContent(postcard.getContent());
-        postcardToDearDetailResponse.setImageUrl(postcard.getImageLowUrl());
+        postcardToDearDetailResponse.setImageUrl(postcard.getImageHighUrl());
         postcardToDearDetailResponse.setConditionType(postcard.getConditionType().toString());
         postcardToDearDetailResponse.setConditionTime(postcard.getConditionTime());
         postcardToDearDetailResponse.setSentTime(postcard.getSentTime());
