@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { getUserInfo, updateNickname } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
-import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/userInfo';
+import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/atom';
 import { getFontName, getFontStyle } from '../../../util/getFont';
 import Header from '../../common/Header';
 import KeyringList from './Keyring/KeyringList';
