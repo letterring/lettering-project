@@ -52,14 +52,7 @@ const UserKeyringList = atom({
   default: [],
 });
 
-// 유저 로그인 여부
-const IsLoggedInState = atom({
-  key: 'isLoggedInState',
-  default: null,
-});
-
 export {
-  IsLoggedInState as IsLoggedIn,
   PostcardImage,
   PostcardImageFile,
   PostcardText,
