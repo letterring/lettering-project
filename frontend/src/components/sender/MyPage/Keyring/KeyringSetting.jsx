@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import {
+  deleteKeyring,
+  getKeyringList,
+  toggleKeyringFavoirite,
+  updateKeyringName,
+} from '../../../../apis/mypage';
 import { UserKeyringList } from '../../../../recoil/userInfo';
 import CancelButton from '../../../common/button/CancelButton';
 import ConfirmButton from '../../../common/button/ConfirmButton';
@@ -15,25 +21,52 @@ const KeyringSetting = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
 
-  const toggleFavorite = (id) => {
+  useEffect(() => {
+    const fetchKeyrings = async () => {
+      const keyringList = await getKeyringList();
+
+      const formatted = keyringList.map((k) => ({
+        ...k,
+        keyringName: k.nfcName,
+      }));
+
+      setKeyrings(formatted);
+    };
+
+    fetchKeyrings();
+  }, []);
+
+  const toggleFavorite = async (keyringId) => {
+    const prevKeyrings = [...keyrings];
+
     setKeyrings((prev) =>
-      prev.map((k) => (k.keyringId === id ? { ...k, favorite: !k.favorite } : k)),
+      prev.map((k) => (k.keyringId === keyringId ? { ...k, favorite: !k.favorite } : k)),
     );
 
-    // TODO: 즐겨찾기 상태 서버에 반영
+    const result = await toggleKeyringFavoirite(keyringId);
+
+    if (!result) {
+      setKeyrings(prevKeyrings);
+    }
   };
 
-  const handleDeleteClick = (id) => {
-    setDeleteTargetId(id);
+  const handleDeleteClick = (keyringId) => {
+    setDeleteTargetId(keyringId);
     setIsModalOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
+    const prevKeyrings = [...keyrings];
+
     setKeyrings((prev) => prev.filter((k) => k.keyringId !== deleteTargetId));
     setIsModalOpen(false);
     setDeleteTargetId(null);
 
-    // TODO: 키링 삭제 요청
+    const result = await deleteKeyring({ deleteTargetId });
+
+    if (!result) {
+      setKeyrings(prevKeyrings);
+    }
   };
 
   const cancelDelete = () => {
@@ -41,13 +74,19 @@ const KeyringSetting = () => {
     setDeleteTargetId(null);
   };
 
-  const handleNameChange = (id, newName) => {
+  const handleNameChange = async (id, newName) => {
+    const prevKeyrings = [...keyrings];
+
     setKeyrings((prev) =>
       prev.map((k) => (k.keyringId === id ? { ...k, keyringName: newName } : k)),
     );
     setEditingId(null);
 
-    // TODO: 이름 변경 요청 (body에 newName 포함)
+    const result = await updateKeyringName(id, newName);
+
+    if (!result) {
+      setKeyrings(prevKeyrings);
+    }
   };
 
   return (
@@ -84,7 +123,7 @@ const StKeyringSettingWrapper = styled.div`
   align-items: center;
   box-sizing: border-box;
   height: 100%;
-  padding: 5rem;
+  padding: 6rem 2rem;
   gap: 1rem;
 `;
 
