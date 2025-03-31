@@ -1,5 +1,6 @@
 package com.example.lettering.domain.keyring.entity;
 
+import com.example.lettering.controller.request.KeyringDesignRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -31,4 +32,13 @@ public class KeyringDesign {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    public static KeyringDesign fromDto(KeyringDesignRequest request, String imageUrl) {
+        return KeyringDesign.builder()
+                .designName(request.getDesignName())
+                .price(request.getPrice())
+                .description(request.getDescription())
+                .imageUrl(imageUrl)
+                .build();
+    }
 }

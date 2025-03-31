@@ -18,7 +18,18 @@ public class LetterImage {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @Column(name = "order_index", nullable = false)
+    private int orderIndex;
+
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "letter_id", nullable = false)
     private Letter letter;
+
+    public static LetterImage fromImageUrl(String imageUrl, int orderIndex) {
+        return LetterImage.builder()
+                .imageUrl(imageUrl)
+                .orderIndex(orderIndex)
+                .build();
+    }
 }
