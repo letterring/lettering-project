@@ -1,1 +1,6 @@
-infra/nginx/letsencrypt/
+# infra/nginx/letsencrypt 폴더는 무시하지만,
+# 안에 있는 .gitkeep 파일은 추적
+infra/nginx/letsencrypt/*
+!infra/nginx/letsencrypt/.gitkeep
+.env
+secrets.properties

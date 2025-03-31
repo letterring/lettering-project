@@ -11,4 +11,6 @@ public interface MessageService {
     List<DearMessageSummaryResponse> getMessagesToDear(Long keyringId, int page);
 
     void createReply(Long messageId, String replyText);
+
+    public String getHighQualityImageUrl(Long messageId, int orderIndex);
 }
