@@ -13,7 +13,7 @@ const LetterWriting = () => {
   const [ImageList, setImageList] = useState([]);
 
   const navigate = useNavigate();
-  const { nfcName } = getKeyringInfo(useRecoilValue(SelectedKeyringId));
+  // const { nfcName } = getKeyringInfo(useRecoilValue(SelectedKeyringId));
   const fileInputRef = useRef(null);
   const fontStyle = getFontStyle(useRecoilValue(UserFont));
 
@@ -76,7 +76,7 @@ const LetterWriting = () => {
           </ImagesWrapper>
         </ContentWrapper>
         <ContentWrapper>
-          <Text>사랑하는 {nfcName} 에게</Text>
+          <Text>사랑하는 너 에게</Text>
           <InputTextBox
             maxLength={600}
             value={letterContent}
