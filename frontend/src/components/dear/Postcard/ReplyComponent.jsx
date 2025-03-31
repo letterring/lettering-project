@@ -33,7 +33,6 @@ const ReplyComponent = ({ messageId, replyText }) => {
       setIsSent(true);
     } catch (error) {
       alert('답장 전송에 실패했어요.');
-      console.error(error.message);
     } finally {
       setIsLoading(false);
     }

@@ -20,12 +20,8 @@ const PostcardDetail = () => {
 
   useEffect(() => {
     const fetchPostcard = async () => {
-      try {
-        const data = await getPostcardDetail(messageId);
-        setPostcard(data);
-      } catch (error) {
-        console.error(error.message);
-      }
+      const data = await getPostcardDetail(messageId);
+      setPostcard(data);
     };
 
     fetchPostcard();
