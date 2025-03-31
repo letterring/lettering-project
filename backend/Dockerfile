@@ -16,17 +16,20 @@ RUN chmod +x gradlew
 # 🔥 소스 코드 및 설정 파일 복사
 COPY src ./src
 
+# 🔥 secrets.properties도 이미지에 포함시킴
+COPY src/main/resources/secrets.properties ./src/main/resources/secrets.properties
+
 # Gradle 의존성 미리 다운로드 (빌드 속도 개선)
 RUN ./gradlew dependencies --no-daemon
 
 # Gradle 빌드 시 테스트 제외
 RUN ./gradlew build -x test --no-daemon
 
-# 🔥 JAR 파일 복사 (정확한 파일명 명시)
+# 🔥 JAR 파일 복사
 RUN cp build/libs/lettering-0.0.1-SNAPSHOT.jar /app/app.jar || echo "No JAR file found"
 
 # 포트 설정
 EXPOSE 8080
 
-# 실행 명령 (secrets.properties 경로 명시)
-ENTRYPOINT ["java", "-Dspring.config.additional-location=/app/resources/secrets.properties", "-jar", "/app/app.jar"]
+# 실행 명령 (경로 명시)
+ENTRYPOINT ["java", "-Dspring.config.additional-location=classpath:/secrets.properties", "-jar", "/app/app.jar"]
