@@ -16,6 +16,7 @@ pipeline {
           sh '''
             cp "$ENV_FILE" infra/.env
             cp "$SECRETS_FILE" backend/src/main/resources/secrets.properties
+            mkdir -p frontend
             cp "$FRONTEND_ENV_FILE" frontend/.env
           '''
         }
@@ -35,10 +36,6 @@ pipeline {
           sh '''
             npm install
             npm run build
-            
-            rm -rf ../frontend/dist
-            mkdir -p ../frontend/dist
-            cp -r dist/* ../frontend/dist/
           '''
         }
       }
