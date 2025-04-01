@@ -36,6 +36,16 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<SenderMessageSummaryResponse> getMessagesByKeyring(Long keyringId, int page) {
+        PageRequest pageable = PageRequest.of(page, 7);
+        Page<AbstractMessage> pageResult = abstractMessageRepository
+                .findByKeyring_IdOrderByConditionTimeDesc(keyringId, pageable);
+        return pageResult.stream()
+                .map(SenderMessageSummaryResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<DearMessageSummaryResponse> getMessagesToDear(Long keyringId, int page) {
         PageRequest pageable = PageRequest.of(page, 7);
         Page<AbstractMessage> messagePage = abstractMessageRepository
