@@ -3,19 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { getKeyringInfo } from '../../../apis/letter';
-import { LetterImageList, LetterText, SelectedKeyringId, UserFont } from '../../../recoil/atom';
+import { LetterImageList, LetterText, UserFont } from '../../../recoil/atom';
 import { getFontStyle } from '../../../util/getFont';
 import Header from '../../common/Header';
 
 const LetterWriting = () => {
-  const [letterContent, setLetterContent] = useState('');
-  const [ImageList, setImageList] = useState([]);
-
   const navigate = useNavigate();
-  // const { nfcName } = getKeyringInfo(useRecoilValue(SelectedKeyringId));
-  const fileInputRef = useRef(null);
+
+  const [ImageList, setImageList] = useState([]);
+  const [letterContent, setLetterContent] = useState('');
+
   const fontStyle = getFontStyle(useRecoilValue(UserFont));
+
+  const fileInputRef = useRef(null);
 
   const setLetterImages = useSetRecoilState(LetterImageList);
   const setLetterText = useSetRecoilState(LetterText);
@@ -42,15 +42,16 @@ const LetterWriting = () => {
 
   const isValid = ImageList.length >= 8;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLetterImages(ImageList);
     setLetterText(letterContent);
+
     navigate('/letter/preview');
   };
 
   return (
     <StLetterWritingWrapper>
-      <Header headerName="Lettering" />
+      <Header headerName="편지쓰기" />
       <WritingContentWrapper>
         <ContentWrapper>
           <Text>이미지 업로드</Text>
@@ -76,7 +77,7 @@ const LetterWriting = () => {
           </ImagesWrapper>
         </ContentWrapper>
         <ContentWrapper>
-          <Text>사랑하는 너 에게</Text>
+          <Text>사랑하는 너에게</Text>
           <InputTextBox
             maxLength={600}
             value={letterContent}
@@ -213,7 +214,7 @@ const WarnText = styled.p`
 const CharCount = styled.p`
   width: 5rem;
   color: ${({ theme }) => theme.colors.MainRed};
-  ${({ theme }) => theme.fonts.Body4};
+  ${({ theme }) => theme.fonts.Body3};
 `;
 
 const SubmitButton = styled.button`
