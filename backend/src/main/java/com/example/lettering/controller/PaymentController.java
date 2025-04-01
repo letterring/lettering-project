@@ -74,7 +74,7 @@ public class PaymentController {
 
     @GetMapping("/approve")
     @Operation(summary = "결제 승인", description = "카카오페이 결제 승인 처리 후 DB 저장")
-    public ResponseEntity<?> approve(
+    public ResponseEntity<Map<String, Object>> approve(
             @RequestParam("pg_token") String pgToken,
             @RequestParam("orderNumber") String orderNumberStr,
             HttpSession session

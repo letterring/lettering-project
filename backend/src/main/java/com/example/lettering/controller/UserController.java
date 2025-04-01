@@ -43,7 +43,7 @@ public class UserController {
 
     @Operation(summary = "로그인", description = "이메일을 통해 로그인합니다.")
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequestDto, HttpSession session) {
+    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequestDto, HttpSession session) {
         LoginResponse responseDto = authService.loginUser(loginRequestDto);
 
         session.setAttribute("userId", responseDto.getUserId());
@@ -54,7 +54,7 @@ public class UserController {
 
     @Operation(summary = "현재 로그인 회원정보 조회 기능", description = "세션을 활용하여 로그인한 회원 정보를 조회합니다.")
     @GetMapping("/me")
-    public ResponseEntity<?> getUserProfile(HttpSession session) {
+    public ResponseEntity<LoginResponse> getUserProfile(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         String userNickname = (String) session.getAttribute("userNickname");
 
@@ -81,7 +81,7 @@ public class UserController {
 
     @Operation(summary = "회원 주소 조회", description = "로그인된 사용자의 주소 정보를 불러옵니다.")
     @GetMapping("/address")
-    public ResponseEntity<?> getUserAddress(HttpSession session) {
+    public ResponseEntity<UserAddressResponse> getUserAddress(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId == null) {
@@ -117,7 +117,7 @@ public class UserController {
 
     @PatchMapping("/nickname")
     @Operation(summary = "닉네임 수정", description = "로그인한 사용자의 닉네임을 수정합니다.")
-    public ResponseEntity<?> updateNickname(
+    public ResponseEntity<Map<String, Object>> updateNickname(
             @RequestBody @Valid UpdateNicknameRequest request,
             HttpSession session
     ) {
@@ -132,7 +132,7 @@ public class UserController {
 
     @PatchMapping("/font")
     @Operation(summary = "폰트 수정", description = "로그인한 사용자의 폰트를 수정합니다.")
-    public ResponseEntity<?> updateFont(
+    public ResponseEntity<Map<String, Object>> updateFont(
             @RequestBody @Valid UpdateFontRequest request,
             HttpSession session
     ) {

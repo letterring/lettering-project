@@ -15,6 +15,7 @@ import com.example.lettering.domain.message.service.MessageService;
 import com.example.lettering.domain.message.service.PostcardService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
+import com.example.lettering.exception.type.ValidationException;
 import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,11 +54,13 @@ public class MessageController {
     @PostMapping(path = "/postcards",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createPostcard(
             @RequestPart("postcard") CreatePostcardRequest createPostcardRequest,
-            @RequestPart("image") MultipartFile imageFile, HttpSession httpSession) throws IOException {
+            @RequestPart("image") MultipartFile imageFile, HttpSession session) throws IOException {
 
-//        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 23L;
-        Long postcardId = postcardService.createPostcard(createPostcardRequest, imageFile, senderId);
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+        Long postcardId = postcardService.createPostcard(createPostcardRequest, imageFile, userId);
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", postcardId);
@@ -69,11 +72,13 @@ public class MessageController {
     @PostMapping(path = "/letters",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createLetter(
             @RequestPart("letter") CreateLetterRequest createLetterRequest,
-            @RequestPart("images") List<MultipartFile> imageFiles, HttpSession httpSession) throws IOException {
+            @RequestPart("images") List<MultipartFile> imageFiles, HttpSession session) throws IOException {
 
-//        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 23L;
-        Long letterId = letterService.createLetter(createLetterRequest, imageFiles, senderId);
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+        Long letterId = letterService.createLetter(createLetterRequest, imageFiles, userId);
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", letterId);
@@ -87,12 +92,11 @@ public class MessageController {
             HttpSession session,
             @RequestParam(name = "page", defaultValue = "0") int page) {
 
-//        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 23L;
-        if (senderId == null) {
-            throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
         }
-        return ResponseEntity.ok(SenderMessageSummaryListResponse.of(messageService.getMessagesBySender(senderId, page)));
+        return ResponseEntity.ok(SenderMessageSummaryListResponse.of(messageService.getMessagesBySender(userId, page)));
     }
 
     @Operation(summary = "엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
@@ -101,12 +105,10 @@ public class MessageController {
             @PathVariable("messageId") Long messageId,
             HttpSession session) {
 
-//        Long senderId = (Long) session.getAttribute("userId");
-        Long senderId = 23L;
-        if (senderId == null) {
-            throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
         }
-
         PostcardDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
         return ResponseEntity.ok(postcardDetailResponse);
     }
@@ -155,11 +157,11 @@ public class MessageController {
     }
 
     @GetMapping("/unread")
-    public ResponseEntity<UnreadMessageResponse> getUnreadMessage(HttpSession httpSession) throws IOException  {
+    public ResponseEntity<UnreadMessageResponse> getUnreadMessagebackoffice(HttpSession session)  {
 //        Long keyringId = (Long) session.getAttribute("keyringId");
         Long keyringId = 2L;
         if (keyringId == null) {
-            throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
+            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
         }
 
         UnreadMessageResponse unreadMessageResponse = messageService.getLatestUnreadMessage(keyringId);
@@ -225,7 +227,7 @@ public class MessageController {
      * @return 엽서 상세 데이터
      */
 //    @GetMapping("postcards/detail")
-//    public ResponseEntity<?> getDetail(
+//    public ResponseEntity<Map<String, Object>> getDetail(
 //            @RequestHeader("Authorization") String auth,
 //            @RequestParam("keyringId") Long keyringId,
 //            HttpServletRequest request) {
