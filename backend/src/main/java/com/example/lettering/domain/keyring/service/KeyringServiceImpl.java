@@ -215,4 +215,14 @@ public class KeyringServiceImpl implements KeyringService{
         return KeyringDesignResponse.from(keyringDesignRepository.save(design));
     }
 
+    @Override
+    public void deleteKeyring(Long keyringId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
+
+        keyringRepository.delete(keyring);
+    }
+
+
+
 }
