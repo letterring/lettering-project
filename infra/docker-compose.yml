@@ -53,7 +53,7 @@ services:
     environment:
       TZ: "Asia/Seoul"
     volumes:
-      - /var/jenkins_home/workspace/letterring-dev-pipeline/frontend/dist:/usr/share/nginx/html
+      - ./infra/nginx/html:/usr/share/nginx/html
       - ${WORKSPACE}/infra/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
       - /home/ubuntu/nginx/letsencrypt:/etc/nginx/letsencrypt
     depends_on:
