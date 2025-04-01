@@ -1,6 +1,6 @@
 package com.example.lettering.domain.sealingwax.entity;
 
-import com.example.lettering.controller.request.CreateSealingWaxRequest;
+import com.example.lettering.controller.request.sender.CreateSealingWaxRequest;
 import com.example.lettering.domain.sealingwax.enums.DesignType;
 import jakarta.persistence.*;
 import lombok.*;

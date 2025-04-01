@@ -1,7 +1,8 @@
 package com.example.lettering.domain.message.service;
 
-import com.example.lettering.controller.response.DearMessageSummaryResponse;
-import com.example.lettering.controller.response.SenderMessageSummaryResponse;
+import com.example.lettering.controller.response.dear.DearMessageSummaryResponse;
+import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
+import com.example.lettering.controller.response.dear.UnreadMessageResponse;
 import com.example.lettering.domain.message.entity.AbstractMessage;
 import com.example.lettering.domain.message.entity.Letter;
 import com.example.lettering.domain.message.entity.Postcard;
@@ -72,5 +73,20 @@ public class MessageServiceImpl implements MessageService {
         } else {
             throw new BusinessException(ExceptionCode.INVALID_MESSAGE_TYPE);
         }
+    }
+
+    @Override
+    public UnreadMessageResponse getLatestUnreadMessage(Long keyringId) {
+        LocalDateTime now = LocalDateTime.now();
+        List<AbstractMessage> messages = abstractMessageRepository
+                .findByKeyringIdAndOpenedFalseAndConditionTimeLessThanEqualOrderByConditionTimeDesc(keyringId, now);
+
+        if (messages == null || messages.isEmpty()) {
+            return new UnreadMessageResponse(false, null, null, null);
+        }
+
+        AbstractMessage latest = messages.get(0);
+
+        return UnreadMessageResponse.of(true, latest.getId(), latest.getSealingWax().getId(), latest.getSealingWax().getDesignType());
     }
 }

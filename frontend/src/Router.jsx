@@ -48,15 +48,23 @@ const Router = () => {
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/theme" element={<SelectThemePage />} />
+
+              <Route path="/purchase" element={<DescribeKeyringPage />} />
               <Route path="/mailbox" element={<MailBoxPage />} />
+
+              <Route path="/theme" element={<SelectThemePage />} />
+
+              <Route path="/letter/writing" element={<LetterWritingPage />} />
               <Route path="/postcard/writing" element={<PostcardWritingPage />} />
               <Route path="/postcard/preview" element={<PostcardPreviewPage />} />
+
               <Route path="/selectdear" element={<SelectDearPage />} />
+              <Route path="/deliverytype" element={<DeliveryTypePage />} />
+
               <Route path="/complete" element={<CompletePage />} />
               <Route path="/complete/postcard" element={<CompletePostcardPage />} />
               <Route path="/complete/letter" element={<CompleteLetterPage />} />
-              <Route path="/deliverytype" element={<DeliveryTypePage />} />
+
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/mypage/font" element={<FontSettingPage />} />
               <Route path="/mypage/keyring" element={<KeyringSettingPage />} />

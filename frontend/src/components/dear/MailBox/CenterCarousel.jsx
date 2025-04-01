@@ -42,18 +42,21 @@ const SlideComponent = () => {
 
   const getDearMailbox = async (currentPage) => {
     setLoading(true);
-    const { dearMessagesSummaryList } = await getDearMessages(currentPage, 2);
+    const response = await getDearMessages(currentPage, 2);
+    const { dearMessagesSummaryList } = response || {};
 
-    if (dearMessagesSummaryList.length === 0) {
-      setHasMore(false);
-    } else {
-      setMessages((prev) => [...prev, ...dearMessagesSummaryList]);
-    }
+    if (dearMessagesSummaryList) {
+      if (dearMessagesSummaryList.length === 0) {
+        setHasMore(false);
+      } else {
+        setMessages((prev) => [...prev, ...dearMessagesSummaryList]);
+      }
 
-    setLoading(false);
+      setLoading(false);
 
-    if (currentPage === 0) {
-      setInitialLoaded(true);
+      if (currentPage === 0) {
+        setInitialLoaded(true);
+      }
     }
   };
 

@@ -1,11 +1,10 @@
 package com.example.lettering.domain.keyring.service;
 
-import com.example.lettering.controller.request.KeyringDesignRequest;
-import com.example.lettering.controller.request.OrderRequest;
-import com.example.lettering.controller.response.KeyringDesignListResponse;
-import com.example.lettering.controller.response.KeyringDesignResponse;
-import com.example.lettering.controller.response.KeyringManageResponse;
-import com.example.lettering.domain.keyring.entity.KeyringDesign;
+import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
+import com.example.lettering.controller.request.user.OrderRequest;
+import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
+import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
+import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,4 +25,5 @@ public interface KeyringService {
     void saveOrder(Order order);
     Long generateTempOrderNumber();
     KeyringDesignResponse createKeyringDesign(KeyringDesignRequest request, MultipartFile image) throws IOException;
+    void deleteKeyring(Long keyringId);
 }

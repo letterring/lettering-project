@@ -1,10 +1,10 @@
 package com.example.lettering.domain.keyring.service;
 
-import com.example.lettering.controller.request.KeyringDesignRequest;
-import com.example.lettering.controller.request.OrderRequest;
-import com.example.lettering.controller.response.KeyringDesignListResponse;
-import com.example.lettering.controller.response.KeyringDesignResponse;
-import com.example.lettering.controller.response.KeyringManageResponse;
+import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
+import com.example.lettering.controller.request.user.OrderRequest;
+import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
+import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
+import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.entity.Order;
@@ -18,7 +18,6 @@ import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.exception.type.DbException;
-import com.example.lettering.exception.type.ExternalApiException;
 import com.example.lettering.exception.type.ValidationException;
 import com.example.lettering.util.S3ImageUtil;
 import jakarta.transaction.Transactional;
@@ -214,5 +213,15 @@ public class KeyringServiceImpl implements KeyringService{
 
         return KeyringDesignResponse.from(keyringDesignRepository.save(design));
     }
+
+    @Override
+    public void deleteKeyring(Long keyringId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
+
+        keyringRepository.delete(keyring);
+    }
+
+
 
 }
