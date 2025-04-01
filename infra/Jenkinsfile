@@ -37,7 +37,7 @@ pipeline {
             rm -rf node_modules dist
 
             echo "📦 의존성 설치 (npm ci)"
-            npm ci
+            npm ci --no-optional
 
             echo "🏗️ Vite 빌드 시작"
             npm run build || {
