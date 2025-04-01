@@ -62,14 +62,11 @@ pipeline {
       steps {
         echo "📁 dist를 /home/ubuntu/nginx/html 로 복사"
         sh '''
-          sudo mkdir -p /home/ubuntu/nginx/html
+          mkdir -p /home/ubuntu/nginx/html
 
           # dist 내부 파일 복사
-          sudo cp -r frontend/dist/* /home/ubuntu/nginx/html/
-
-          # 퍼미션 설정
-          sudo find /home/ubuntu/nginx/html -type d -exec chmod 755 {} +
-          sudo find /home/ubuntu/nginx/html -type f -exec chmod 644 {} +
+          cp -r frontend/dist/* /home/ubuntu/nginx/html/
+          chmod -R 755 /home/ubuntu/nginx/html
         '''
       }
     }
