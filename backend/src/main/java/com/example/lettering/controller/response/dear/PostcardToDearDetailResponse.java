@@ -30,28 +30,28 @@ public class PostcardToDearDetailResponse {
     private String quizAnswer;
 
     public static PostcardToDearDetailResponse fromEntity(Postcard postcard) {
-        PostcardToDearDetailResponse postcardToDearDetailResponse = new PostcardToDearDetailResponse();
-        postcardToDearDetailResponse.setId(postcard.getId());
-        postcardToDearDetailResponse.setNfcName(postcard.getKeyring().getNfcName());
-        postcardToDearDetailResponse.setNickName(postcard.getSender().getUserNickname());
-        postcardToDearDetailResponse.setContent(postcard.getContent());
-        postcardToDearDetailResponse.setImageUrl(postcard.getImageHighUrl());
-        postcardToDearDetailResponse.setConditionType(postcard.getConditionType().toString());
-        postcardToDearDetailResponse.setConditionTime(postcard.getConditionTime());
-        postcardToDearDetailResponse.setSentTime(postcard.getSentTime());
-        postcardToDearDetailResponse.setFirstOpenedTime(postcard.getFirstOpenedTime());
-        postcardToDearDetailResponse.setReplyText(postcard.getReplyText());
-        postcardToDearDetailResponse.setReplySentTime(postcard.getReplySentTime());
-        postcardToDearDetailResponse.setSealingWaxId(postcard.getSealingWax().getId());
-        postcardToDearDetailResponse.setDesignType(postcard.getSealingWax().getDesignType());
-        postcardToDearDetailResponse.setFont(postcard.getFont());
+        PostcardToDearDetailResponse response = new PostcardToDearDetailResponse();
+        response.setId(postcard.getId());
+        response.setNfcName(postcard.getKeyring().getNfcName());
+        response.setNickName(postcard.getSender().getUserNickname());
+        response.setContent(postcard.getContent());
+        response.setImageUrl(postcard.getImageHighUrl());
+        response.setConditionType(postcard.getConditionType().toString());
+        response.setConditionTime(postcard.getConditionTime());
+        response.setSentTime(postcard.getSentTime());
+        response.setFirstOpenedTime(postcard.getFirstOpenedTime());
+        response.setReplyText(postcard.getReplyText());
+        response.setReplySentTime(postcard.getReplySentTime());
+        response.setSealingWaxId(postcard.getSealingWax().getId());
+        response.setDesignType(postcard.getSealingWax().getDesignType());
+        response.setFont(postcard.getFont());
 
         if (postcard.getQuizInfo() != null) {
-            postcardToDearDetailResponse.setQuizQuestion(postcard.getQuizInfo().getQuizQuestion());
-            postcardToDearDetailResponse.setQuizHint(postcard.getQuizInfo().getQuizHint());
-            postcardToDearDetailResponse.setQuizAnswer(postcard.getQuizInfo().getQuizAnswer());
+            response.setQuizQuestion(postcard.getQuizInfo().getQuizQuestion());
+            response.setQuizHint(postcard.getQuizInfo().getQuizHint());
+            response.setQuizAnswer(postcard.getQuizInfo().getQuizAnswer());
         }
 
-        return postcardToDearDetailResponse;
+        return response;
     }
 }
