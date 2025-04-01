@@ -123,6 +123,14 @@ public class KeyringController {
         return ResponseEntity.ok(Map.of("message", "키링이 내 목록에서 제거되었습니다."));
     }
 
+    @DeleteMapping("/{keyringId}/delete")
+    @Operation(summary = "키링 삭제", description = "키링 ID를 통해 키링을 완전히 삭제합니다.")
+    public ResponseEntity<BooleanResponse> deleteKeyring(@PathVariable Long keyringId) {
+        keyringService.deleteKeyring(keyringId);
+        return ResponseEntity.ok(BooleanResponse.success());
+    }
+
+
     @GetMapping("/{keyringId}")
     @Operation(summary = "키링 단건 조회", description = "키링 ID를 통해 해당 키링의 상세 정보를 조회합니다.")
     public ResponseEntity<KeyringManageResponse> getKeyringById(

@@ -26,4 +26,5 @@ public interface KeyringService {
     void saveOrder(Order order);
     Long generateTempOrderNumber();
     KeyringDesignResponse createKeyringDesign(KeyringDesignRequest request, MultipartFile image) throws IOException;
+    void deleteKeyring(Long keyringId);
 }
