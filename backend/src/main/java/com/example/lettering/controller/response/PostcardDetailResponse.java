@@ -38,7 +38,7 @@ public class PostcardDetailResponse {
         postcardDetailResponse.setNfcName(postcard.getKeyring().getNfcName());
         postcardDetailResponse.setNickName(postcard.getSender().getUserNickname());
         postcardDetailResponse.setContent(postcard.getContent());
-        postcardDetailResponse.setImageUrl(postcard.getImageLowUrl());
+        postcardDetailResponse.setImageUrl(postcard.getImageHighUrl());
         postcardDetailResponse.setConditionType(postcard.getConditionType().toString());
         postcardDetailResponse.setConditionTime(postcard.getConditionTime());
         postcardDetailResponse.setSentTime(postcard.getSentTime());
