@@ -1,16 +1,18 @@
-# app/services/openai_service.py
-import base64
-from fastapi import UploadFile
-from openai import OpenAI
+from openai import AsyncOpenAI
 from app.core.settings import settings
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
-async def chat_with_gpt_and_image(prompt: str, image: UploadFile) -> str:
-    image_bytes = await image.read()
-    base64_image = base64.b64encode(image_bytes).decode("utf-8")
+async def ask_gpt(prompt: str, model="gpt-4o-mini") -> str:
+    response = await client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1024
+    )
+    return response.choices[0].message.content
 
-    response = client.chat.completions.create(
+async def ask_gpt_with_image(prompt: str, base64_image: str) -> str:
+    response = await client.chat.completions.create(
         model="gpt-4o",
         messages=[
             {
@@ -28,5 +30,4 @@ async def chat_with_gpt_and_image(prompt: str, image: UploadFile) -> str:
         ],
         max_tokens=1024
     )
-
     return response.choices[0].message.content
