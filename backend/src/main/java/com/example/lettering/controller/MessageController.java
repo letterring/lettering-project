@@ -3,9 +3,12 @@ package com.example.lettering.controller;
 import com.example.lettering.controller.request.sender.CreateLetterRequest;
 import com.example.lettering.controller.request.sender.CreatePostcardRequest;
 import com.example.lettering.controller.response.dear.*;
+import com.example.lettering.controller.response.keyring.KeyringFilterListResponse;
+import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
 import com.example.lettering.controller.response.sender.LetterBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.PostcardBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryListResponse;
+import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.domain.keyring.service.SessionService;
 import com.example.lettering.domain.keyring.service.TokenService;
 import com.example.lettering.domain.message.service.LetterService;
@@ -37,6 +40,7 @@ public class MessageController {
     private final PostcardService postcardService;
     private final MessageService messageService;
     private final LetterService letterService;
+    private final KeyringService keyringService;
     private final TokenService tokenService;
     private final SessionService sessionService;
 
@@ -207,6 +211,18 @@ public class MessageController {
 
         UnreadMessageResponse unreadMessageResponse = messageService.getLatestUnreadMessage(keyringId);
         return ResponseEntity.ok(unreadMessageResponse);
+    }
+
+    @Operation(summary = "보낸 사람 기준 키링 필터",
+            description = "세션의 userId(즉, ownerId)와 일치하는 keyring의 id와 nfcName을 반환합니다.")
+    @GetMapping("/filter")
+    public ResponseEntity<KeyringFilterListResponse> filterKeyringsByOwner(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(KeyringFilterListResponse.of(keyringService.getKeyringsByOwner(userId)));
     }
 
     /**
