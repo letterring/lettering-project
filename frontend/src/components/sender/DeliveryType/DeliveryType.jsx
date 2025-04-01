@@ -83,7 +83,7 @@ const DeliveryType = () => {
 
   return (
     <Wrapper>
-      <Header headerName="전송유형선택" />
+      <Header headerName="전송유형 선택" />
       <QuestionTextWrapper>
         <QuestionText text="전송 방식을 선택해주세요!" />
       </QuestionTextWrapper>

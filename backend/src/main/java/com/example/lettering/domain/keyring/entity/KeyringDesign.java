@@ -1,9 +1,8 @@
 package com.example.lettering.domain.keyring.entity;
 
-import com.example.lettering.controller.request.KeyringDesignRequest;
+import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "keyring_design")
