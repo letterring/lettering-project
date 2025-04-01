@@ -6,6 +6,7 @@ import com.example.lettering.controller.response.dear.CreateReplyRequest;
 import com.example.lettering.controller.response.dear.DearMessageSummaryListResponse;
 import com.example.lettering.controller.response.dear.PostcardToDearDetailResponse;
 import com.example.lettering.controller.response.dear.UnreadMessageResponse;
+import com.example.lettering.controller.response.sender.LetterBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.PostcardDetailResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryListResponse;
 import com.example.lettering.domain.keyring.service.SessionService;
@@ -99,7 +100,7 @@ public class MessageController {
         return ResponseEntity.ok(SenderMessageSummaryListResponse.of(messageService.getMessagesBySender(userId, page)));
     }
 
-    @Operation(summary = "엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
+    @Operation(summary = "보낸 사람 기준 엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
     @GetMapping("postcards/sender/{messageId}")
     public ResponseEntity<PostcardDetailResponse> getPostcardBySenderDetail(
             @PathVariable("messageId") Long messageId,
@@ -111,6 +112,20 @@ public class MessageController {
         }
         PostcardDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
         return ResponseEntity.ok(postcardDetailResponse);
+    }
+
+    @Operation(summary = "보낸 사람 기준 편지 상세 조회", description = "path variable로 전달된 messageId에 해당하는 편지 상세 정보를 반환합니다.")
+    @GetMapping("letters/sender/{messageId}")
+    public ResponseEntity<LetterBySenderDetailResponse> getLetterBySenderDetail(
+            @PathVariable("messageId") Long messageId,
+            HttpSession session) {
+
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+        LetterBySenderDetailResponse letterBySenderDetailResponse = letterService.getLetterBySenderDetail(messageId);
+        return ResponseEntity.ok(letterBySenderDetailResponse);
     }
 
     @Operation(summary = "받는 사람 기준 메시지 목록 조회", description = "안읽은순, 즐겨찾기순, 최신순으로 정렬합니다.")
@@ -126,7 +141,7 @@ public class MessageController {
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
     }
 
-    @Operation(summary = "엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다.")
+    @Operation(summary = "받은 사람 기준 엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다.")
     @GetMapping("postcards/dear/{messageId}")
     public ResponseEntity<PostcardToDearDetailResponse> getPostcardToDearDetail(
             @PathVariable("messageId") Long messageId) {
