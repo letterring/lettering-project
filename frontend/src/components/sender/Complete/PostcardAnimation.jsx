@@ -1,15 +1,18 @@
 import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import DummyImg from '../../../assets/dummy/postcard.jpg';
 import EnvelopeBottomImg from '../../../assets/images/postcard/bottom_fold.png';
+import EnvelopeBodyImg from '../../../assets/images/postcard/envelope_body.png';
+import SealingWaxImg from '../../../assets/images/postcard/envelope_wax.png';
 import PostcardImg from '../../../assets/images/postcard/postcard_paper.png';
-import EnvelopeTopImg from '../../../assets/images/postcard/top_fold.png';
+import EnvelopeTopPartImg from '../../../assets/images/postcard/top_fold_part.png';
 
 const PostcardAnimation = () => {
   const navigate = useNavigate();
+  const [isClosed, setIsClosed] = useState(false);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 120;
@@ -20,7 +23,8 @@ const PostcardAnimation = () => {
   return (
     <StWrapper>
       <StEnvelopeWrapper onClick={() => navigate('/dear/postcard/detail')}>
-        <StEnvelopeTop src={EnvelopeTopImg} alt="편지 봉투 윗부분" />
+        <StEnvelopeTop $isClosed={isClosed} src={EnvelopeTopPartImg} alt="편지 봉투 윗부분" />
+        <StEnvelopeBody $isClosed={isClosed} src={EnvelopeBodyImg} alt="편지 봉투 바닥" />
 
         <StPostcard
           src={PostcardImg}
@@ -37,11 +41,13 @@ const PostcardAnimation = () => {
           transition={{ duration: 2 }}
           onAnimationComplete={() => {
             setTimeout(() => {
-              navigate('/complete');
+              setIsClosed(true);
+              // navigate('/complete');
             }, 800);
           }}
         />
         <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />
+        <StSealingWax src={SealingWaxImg} alt="실링왁스" />
       </StEnvelopeWrapper>
     </StWrapper>
   );
@@ -67,26 +73,38 @@ const StEnvelopeWrapper = styled.div`
 const StEnvelopeTop = styled.img`
   position: absolute;
   width: 34rem;
-  top: -9.5rem;
+  top: -9.3rem;
   left: -2.4rem;
+  z-index: ${({ $isClosed }) => ($isClosed ? 8 : 1)};
+
+  transform-origin: bottom center;
+  transform: ${({ $isClosed }) =>
+    $isClosed ? 'rotateZ(-3.71deg) rotateX(180deg)' : 'rotateZ(-3.71deg) rotateX(0deg)'};
+  transition: transform 5s ease;
+`;
+const StEnvelopeBody = styled.img`
+  position: absolute;
+  width: 29rem;
+  top: 1.5rem;
+  left: 0.5rem;
   z-index: 1;
 `;
 
 const StPostcard = styled(motion.img)`
   position: absolute;
   left: -0.1rem;
-  top: -12rem;
+  top: -8.5rem;
   width: 29rem;
-  height: 23rem;
+  height: 20rem;
   z-index: 2;
 `;
 
 const StPostcardImage = styled(motion.img)`
   position: absolute;
-  top: -10.6rem;
+  top: -7.1rem;
   left: 1.15rem;
   width: 26.4rem;
-  height: 20.2rem;
+  height: 17.2rem;
   object-fit: cover;
   z-index: 3;
 `;
@@ -96,4 +114,13 @@ const StEnvelope = styled.img`
   width: 31rem;
   top: 1rem;
   z-index: 5;
+`;
+
+const StSealingWax = styled.img`
+  position: absolute;
+  width: 8rem;
+  top: 8.5rem;
+  left: 11.3rem;
+  z-index: 100;
+  /* display: ${({ $isClosed }) => ($isClosed ? 'block' : 'none')}; */
 `;
