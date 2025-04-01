@@ -46,7 +46,9 @@ services:
       - app_network
 
   nginx:
-    image: nginx:latest
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     container_name: nginx
     ports:
       - "443:443"
