@@ -1,4 +1,3 @@
-// components/sender/Letter/TextAreaEditor.jsx
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';

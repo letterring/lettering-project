@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import LongButton from '../../common/button/LongButton';
@@ -9,15 +8,12 @@ import MainTemplateEditor from './MainTemplateEditor';
 import PolarTemplateEditor from './PolarTemplateEditor';
 import TextAreaEditor from './TextAreaEditor';
 
-const MAX_LENGTH = 150;
-
 const LetterEditor = ({
   template,
   images,
   background,
   textList,
   textStartIndex = 0,
-  textCount = 0,
   onTextChange,
 }) => {
   const renderTextArea = (index) => {
