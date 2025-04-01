@@ -55,12 +55,21 @@ pipeline {
             }
           '''
         }
+      }
+    }
 
-        // 🔧 정적 파일을 nginx가 접근 가능한 호스트 경로로 복사
+    stage('프론트 dist를 EC2 공유 디렉토리로 복사') {
+      steps {
+        echo "📁 dist를 /home/ubuntu/nginx/html 로 복사"
         sh '''
-          echo "📂 dist 파일을 infra/nginx/html 디렉토리로 복사"
-          mkdir -p infra/nginx/html
-          cp -r frontend/dist/* infra/nginx/html/
+          sudo mkdir -p /home/ubuntu/nginx/html
+
+          # dist 내부 파일 복사
+          sudo cp -r frontend/dist/* /home/ubuntu/nginx/html/
+
+          # 퍼미션 설정
+          sudo find /home/ubuntu/nginx/html -type d -exec chmod 755 {} +
+          sudo find /home/ubuntu/nginx/html -type f -exec chmod 644 {} +
         '''
       }
     }
