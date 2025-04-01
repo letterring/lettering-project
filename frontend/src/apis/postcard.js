@@ -52,3 +52,12 @@ export const markPostcardAsUnread = async (messageId) => {
     console.error(error);
   }
 };
+
+export const getSentPostcardDetail = async (messageId) => {
+  try {
+    const { data } = await client.get(`/messages/postcards/sender/${messageId}`);
+    return data;
+  } catch (err) {
+    console.error('엽서상세조회에 실패했습니다.', err);
+  }
+};
