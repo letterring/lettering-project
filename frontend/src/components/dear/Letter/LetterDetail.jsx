@@ -71,8 +71,9 @@ const LetterDetail = () => {
       background,
     };
   });
-  // const [currentSlide, setCurrentSlide] = useState(0);
+
   const sliderRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const settings = {
     dots: false,
@@ -84,10 +85,7 @@ const LetterDetail = () => {
     arrows: false,
     swipe: true,
     fade: true,
-    // afterChange: (current) => {
-    //   setCurrentSlide(current);
-    //   setButtonText(current === pageInfo.length - 1 ? '시작하기' : '옆으로 넘겨주세요');
-    // },
+    afterChange: setCurrentSlide,
   };
 
   return (
@@ -102,6 +100,7 @@ const LetterDetail = () => {
             images={item.images}
             text={item.text}
             background={item.background}
+            isActive={currentSlide === id}
           />
         ))}
       </StyledSlider>
