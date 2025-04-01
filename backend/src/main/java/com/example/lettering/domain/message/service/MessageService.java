@@ -1,7 +1,8 @@
 package com.example.lettering.domain.message.service;
 
-import com.example.lettering.controller.response.DearMessageSummaryResponse;
-import com.example.lettering.controller.response.SenderMessageSummaryResponse;
+import com.example.lettering.controller.response.dear.DearMessageSummaryResponse;
+import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
+import com.example.lettering.controller.response.dear.UnreadMessageResponse;
 
 import java.util.List;
 
@@ -12,5 +13,7 @@ public interface MessageService {
 
     void createReply(Long messageId, String replyText);
 
-    public String getHighQualityImageUrl(Long messageId, int orderIndex);
+    String getHighQualityImageUrl(Long messageId, int orderIndex);
+
+    public UnreadMessageResponse getLatestUnreadMessage(Long keyringId);
 }
