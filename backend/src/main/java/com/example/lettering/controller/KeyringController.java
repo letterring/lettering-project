@@ -70,7 +70,7 @@ public class KeyringController {
             summary = "키링 태그 등록 (Backoffice 전용)",
             description = "NFC 태그 코드를 받아 서버에 키링을 일괄 등록합니다. 구매되지 않은 초기 키링 생성 시 사용됩니다."
     )
-    public ResponseEntity<?> registerKeyrings(@RequestBody KeyringTagRequest request) {
+    public ResponseEntity<Map<String, Object>> registerKeyrings(@RequestBody KeyringTagRequest request) {
         int count = keyringService.registerKeyrings(request.getTagCodes());
         return ResponseEntity.ok(
                 Map.of("message", count + "개의 키링이 등록되었습니다.")
@@ -100,7 +100,7 @@ public class KeyringController {
 
     @PatchMapping("/{keyringId}/nfcname")
     @Operation(summary = "키링 이름 수정", description = "선택한 키링의 NFC 이름(우체통 이름)을 수정합니다.")
-    public ResponseEntity<?> updateKeyringName(
+    public ResponseEntity<Map<String, Object>> updateKeyringName(
             @PathVariable Long keyringId,
             @RequestBody @Valid UpdateNfcNameRequest request,
             HttpSession session
@@ -115,7 +115,7 @@ public class KeyringController {
 
     @DeleteMapping("/{keyringId}")
     @Operation(summary = "키링 소유 해제", description = "해당 키링을 내 리스트에서 삭제합니다.")
-    public ResponseEntity<?> removeKeyring(@PathVariable Long keyringId, HttpSession session) {
+    public ResponseEntity<Map<String, Object>> removeKeyring(@PathVariable Long keyringId, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
 
