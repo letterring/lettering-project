@@ -1,14 +1,11 @@
 from redis.asyncio import Redis
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from app.core.settings import settings
 
 redis = Redis(
-    host=os.getenv("REDIS_HOST", "localhost"),
-    port=int(os.getenv("REDIS_PORT", 6379)),
-    db=int(os.getenv("REDIS_DB", 0)),
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=settings.REDIS_DB,
     decode_responses=True
 )
 
-REDIS_PREFIX = os.getenv("REDIS_PREFIX", "lettering")
+REDIS_PREFIX = settings.REDIS_PREFIX
