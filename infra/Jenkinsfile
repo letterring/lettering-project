@@ -58,40 +58,6 @@ pipeline {
       }
     }
 
-    stage('프론트 dist를 EC2 공유 디렉토리로 복사') {
-      steps {
-        echo "📁 dist를 /home/ubuntu/nginx/html 로 복사"
-        sh '''
-          echo "📍 현재 경로: $(pwd)"
-          echo "📂 frontend/dist 파일 목록:"
-          ls -al frontend/dist || {
-            echo "❌ dist 디렉토리 없음"
-            exit 1
-          }
-
-          echo "📂 /home/ubuntu/nginx/html 디렉토리 생성 (없으면)"
-          mkdir -p /home/ubuntu/nginx/html || {
-            echo "❌ 디렉토리 생성 실패"
-            exit 1
-          }
-
-          echo "📦 dist 파일 복사 시작"
-          cp -r frontend/dist/* /home/ubuntu/nginx/html/ || {
-            echo "❌ dist 복사 실패"
-            exit 1
-          }
-
-          echo "🔐 권한 설정 중..."
-          chmod -R 755 /home/ubuntu/nginx/html
-
-          echo "📂 복사 완료 후 파일 목록:"
-          ls -al /home/ubuntu/nginx/html || {
-            echo "❌ 복사 후에도 html 경로가 비어 있음"
-            exit 1
-          }
-        '''
-      }
-    }
 
     stage('도커 이미지 빌드 및 변경 서비스만 재시작') {
       steps {
