@@ -1,10 +1,11 @@
 package com.example.lettering.controller;
 
-import com.example.lettering.controller.request.KeyringDesignRequest;
-import com.example.lettering.controller.request.KeyringTagRequest;
-import com.example.lettering.controller.request.UpdateNfcNameRequest;
-import com.example.lettering.controller.response.*;
-import com.example.lettering.domain.keyring.entity.KeyringDesign;
+import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
+import com.example.lettering.controller.request.keyring.KeyringTagRequest;
+import com.example.lettering.controller.request.keyring.UpdateNfcNameRequest;
+import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
+import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
+import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.ValidationException;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

@@ -1,23 +1,19 @@
 package com.example.lettering.controller;
 
-import com.example.lettering.controller.request.LoginRequest;
-import com.example.lettering.controller.request.UpdateFontRequest;
-import com.example.lettering.controller.request.UpdateNicknameRequest;
-import com.example.lettering.controller.response.LoginResponse;
-import com.example.lettering.controller.request.SignUpRequest;
-import com.example.lettering.controller.response.UserAddressResponse;
-import com.example.lettering.controller.response.UserMypageResponse;
+import com.example.lettering.controller.request.user.LoginRequest;
+import com.example.lettering.controller.request.user.UpdateFontRequest;
+import com.example.lettering.controller.request.keyring.UpdateNicknameRequest;
+import com.example.lettering.controller.response.user.LoginResponse;
+import com.example.lettering.controller.request.user.SignUpRequest;
+import com.example.lettering.controller.response.user.UserAddressResponse;
+import com.example.lettering.controller.response.user.UserMypageResponse;
 import com.example.lettering.domain.user.service.AuthService;
-import com.example.lettering.domain.user.service.AuthServiceImpl;
 import com.example.lettering.domain.user.service.UserService;
-import com.example.lettering.domain.user.service.UserServiceImpl;
 import com.example.lettering.domain.user.entity.User;
-import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.ValidationException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.AuthenticationFailedException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")

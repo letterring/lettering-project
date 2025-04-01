@@ -1,11 +1,11 @@
 package com.example.lettering.controller;
 
-import com.example.lettering.controller.request.OrderRequest;
-import com.example.lettering.controller.request.KakaoPayReadyRequest;
-import com.example.lettering.controller.request.KakaoPayApproveRequest;
-import com.example.lettering.controller.response.KakaoPayReadyResponse;
-import com.example.lettering.controller.response.KakaoPayApproveResponse;
-import com.example.lettering.controller.response.PaymentReadyResponse;
+import com.example.lettering.controller.request.user.OrderRequest;
+import com.example.lettering.controller.request.user.KakaoPayReadyRequest;
+import com.example.lettering.controller.request.user.KakaoPayApproveRequest;
+import com.example.lettering.controller.response.user.KakaoPayReadyResponse;
+import com.example.lettering.controller.response.user.KakaoPayApproveResponse;
+import com.example.lettering.controller.response.user.PaymentReadyResponse;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.keyring.repository.KeyringDesignRepository;

@@ -1,8 +1,13 @@
 package com.example.lettering.controller;
 
-import com.example.lettering.controller.request.CreateLetterRequest;
-import com.example.lettering.controller.request.CreatePostcardRequest;
-import com.example.lettering.controller.response.*;
+import com.example.lettering.controller.request.sender.CreateLetterRequest;
+import com.example.lettering.controller.request.sender.CreatePostcardRequest;
+import com.example.lettering.controller.response.dear.CreateReplyRequest;
+import com.example.lettering.controller.response.dear.DearMessageSummaryListResponse;
+import com.example.lettering.controller.response.dear.PostcardToDearDetailResponse;
+import com.example.lettering.controller.response.dear.UnreadMessageResponse;
+import com.example.lettering.controller.response.sender.PostcardDetailResponse;
+import com.example.lettering.controller.response.sender.SenderMessageSummaryListResponse;
 import com.example.lettering.domain.keyring.service.SessionService;
 import com.example.lettering.domain.keyring.service.TokenService;
 import com.example.lettering.domain.message.service.LetterService;
