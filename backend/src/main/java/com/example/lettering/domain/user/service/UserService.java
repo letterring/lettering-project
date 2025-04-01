@@ -1,7 +1,7 @@
 package com.example.lettering.domain.user.service;
 
-import com.example.lettering.controller.request.SignUpRequest;
-import com.example.lettering.controller.response.UserMypageResponse;
+import com.example.lettering.controller.request.user.SignUpRequest;
+import com.example.lettering.controller.response.user.UserMypageResponse;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.enums.Font;
 

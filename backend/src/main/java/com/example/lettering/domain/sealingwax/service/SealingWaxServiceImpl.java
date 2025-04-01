@@ -1,7 +1,7 @@
 package com.example.lettering.domain.sealingwax.service;
 
-import com.example.lettering.controller.request.CreateSealingWaxRequest;
-import com.example.lettering.controller.response.SealingWaxResponse;
+import com.example.lettering.controller.request.sender.CreateSealingWaxRequest;
+import com.example.lettering.controller.response.sender.SealingWaxResponse;
 import com.example.lettering.domain.sealingwax.entity.SealingWax;
 import com.example.lettering.domain.sealingwax.repository.SealingWaxRepository;
 import com.example.lettering.util.S3ImageUtil;

@@ -1,8 +1,8 @@
 package com.example.lettering.domain.message.service;
 
-import com.example.lettering.controller.request.CreatePostcardRequest;
-import com.example.lettering.controller.response.PostcardDetailResponse;
-import com.example.lettering.controller.response.PostcardToDearDetailResponse;
+import com.example.lettering.controller.request.sender.CreatePostcardRequest;
+import com.example.lettering.controller.response.sender.PostcardDetailResponse;
+import com.example.lettering.controller.response.dear.PostcardToDearDetailResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
