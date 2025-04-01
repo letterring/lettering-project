@@ -13,7 +13,7 @@ const MenuModal = ({ isShowing, target }) => {
     { id: 'home', name: '시작 화면' },
     { id: 'theme', name: '편지 쓰기' },
     { id: 'mailbox', name: '보낸 편지함' },
-    { id: 'keyring', name: '키링 구매' },
+    { id: 'purchase', name: '키링 구매' },
     { id: 'mypage', name: '마이페이지' },
     { id: 'logout', name: '로그아웃' },
   ];
@@ -25,6 +25,21 @@ const MenuModal = ({ isShowing, target }) => {
   ];
 
   const menus = target === 'sender' ? senderMenus : dearMenus;
+
+  const handleStatus = (id) => {
+    const writingPaths = [
+      '/theme',
+      '/selectdear',
+      '/deliverytype',
+      '/writing',
+      '/postcard/preview',
+      '/complete',
+    ];
+    if (id === 'theme') {
+      return writingPaths.some((path) => location.pathname.includes(path));
+    }
+    return location.pathname.includes(id);
+  };
 
   const handleClickMenu = (name) => {
     if (name === 'logout') {
@@ -45,7 +60,7 @@ const MenuModal = ({ isShowing, target }) => {
           <StMenu
             key={id}
             onClick={() => handleClickMenu(item.id)}
-            $status={location.pathname.includes(item.id)}
+            $status={handleStatus(item.id)}
             $item={item.id}
           >
             {item.name}
