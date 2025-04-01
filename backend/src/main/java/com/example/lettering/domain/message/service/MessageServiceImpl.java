@@ -1,13 +1,12 @@
 package com.example.lettering.domain.message.service;
 
-import com.example.lettering.controller.response.DearMessageSummaryResponse;
-import com.example.lettering.controller.response.SenderMessageSummaryResponse;
-import com.example.lettering.controller.response.UnreadMessageResponse;
+import com.example.lettering.controller.response.dear.DearMessageSummaryResponse;
+import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
+import com.example.lettering.controller.response.dear.UnreadMessageResponse;
 import com.example.lettering.domain.message.entity.AbstractMessage;
 import com.example.lettering.domain.message.entity.Letter;
 import com.example.lettering.domain.message.entity.Postcard;
 import com.example.lettering.domain.message.repository.AbstractMessageRepository;
-import com.example.lettering.domain.sealingwax.enums.DesignType;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
 import lombok.RequiredArgsConstructor;

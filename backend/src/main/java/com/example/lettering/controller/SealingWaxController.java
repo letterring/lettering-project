@@ -1,8 +1,8 @@
 package com.example.lettering.controller;
 
-import com.example.lettering.controller.request.CreateSealingWaxRequest;
-import com.example.lettering.controller.response.SealingWaxListResponse;
-import com.example.lettering.controller.response.SealingWaxResponse;
+import com.example.lettering.controller.request.sender.CreateSealingWaxRequest;
+import com.example.lettering.controller.response.sender.SealingWaxListResponse;
+import com.example.lettering.controller.response.sender.SealingWaxResponse;
 import com.example.lettering.domain.sealingwax.service.SealingWaxService;
 import com.example.lettering.util.SwaggerBody;
 import io.swagger.v3.oas.annotations.Operation;

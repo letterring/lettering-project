@@ -1,7 +1,7 @@
 package com.example.lettering.domain.user.service;
 
-import com.example.lettering.controller.request.LoginRequest;
-import com.example.lettering.controller.response.LoginResponse;
+import com.example.lettering.controller.request.user.LoginRequest;
+import com.example.lettering.controller.response.user.LoginResponse;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.enums.Provider;
 import com.example.lettering.domain.user.repository.SaltRepository;
@@ -11,7 +11,6 @@ import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.util.OpenCrypt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import jakarta.mail.AuthenticationFailedException;
 
 @Service
 @RequiredArgsConstructor

@@ -1,8 +1,8 @@
 package com.example.lettering.domain.message.service;
 
-import com.example.lettering.controller.response.DearMessageSummaryResponse;
-import com.example.lettering.controller.response.SenderMessageSummaryResponse;
-import com.example.lettering.controller.response.UnreadMessageResponse;
+import com.example.lettering.controller.response.dear.DearMessageSummaryResponse;
+import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
+import com.example.lettering.controller.response.dear.UnreadMessageResponse;
 
 import java.util.List;
 
