@@ -61,10 +61,9 @@ public class MessageServiceImpl implements MessageService {
         AbstractMessage message = abstractMessageRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
 
-        if (message instanceof Postcard) {
-            return ((Postcard) message).getImageHighUrl();
-        } else if (message instanceof Letter) {
-            Letter letter = (Letter) message;
+        if (message instanceof Postcard postcard) {
+            return postcard.getImageHighUrl();
+        } else if (message instanceof Letter letter) {
             if (letter.getImages() != null && !letter.getImages().isEmpty()) {
                 return letter.getImages().get(orderIndex).getImageHighUrl();
             } else {
@@ -73,6 +72,14 @@ public class MessageServiceImpl implements MessageService {
         } else {
             throw new BusinessException(ExceptionCode.INVALID_MESSAGE_TYPE);
         }
+    }
+
+    @Override
+    public void toggleFavorite(Long messageId) {
+        AbstractMessage message = abstractMessageRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        message.toggleFavorite();
     }
 
     @Override

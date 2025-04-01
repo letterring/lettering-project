@@ -185,6 +185,18 @@ public class MessageController {
         return ResponseEntity.ok(new BooleanResponse(true));
     }
 
+    @Operation(summary = "받은 메시지 즐겨찾기 토글",
+            description = "메시지의 즐겨찾기 상태를 토글합니다. 현재 상태가 true이면 false로, false이면 true로 변경합니다. (로그인 없이 keyringId로 검증)")
+    @PatchMapping("favorite/{messageId}")
+    public ResponseEntity<BooleanResponse> toggleFavorite(
+            @PathVariable("messageId") Long messageId) {
+        //키링 관련 session 검증 필요
+
+        messageService.toggleFavorite(messageId);
+        return ResponseEntity.ok(new BooleanResponse(true));
+    }
+
+
     @GetMapping("/unread")
     public ResponseEntity<UnreadMessageResponse> getUnreadMessagebackoffice(HttpSession session)  {
 //        Long keyringId = (Long) session.getAttribute("keyringId");

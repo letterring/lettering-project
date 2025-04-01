@@ -15,5 +15,7 @@ public interface MessageService {
 
     String getHighQualityImageUrl(Long messageId, int orderIndex);
 
-    public UnreadMessageResponse getLatestUnreadMessage(Long keyringId);
+    void toggleFavorite(Long messageId);
+
+    UnreadMessageResponse getLatestUnreadMessage(Long keyringId);
 }
