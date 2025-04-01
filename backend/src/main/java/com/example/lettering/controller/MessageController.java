@@ -149,6 +149,18 @@ public class MessageController {
         return ResponseEntity.ok(new BooleanResponse(true));
     }
 
+    @GetMapping("/unread")
+    public ResponseEntity<UnreadMessageResponse> getUnreadMessage(HttpSession httpSession) throws IOException  {
+//        Long keyringId = (Long) session.getAttribute("keyringId");
+        Long keyringId = 2L;
+        if (keyringId == null) {
+            throw new BusinessException(ExceptionCode.USER_NOT_FOUND);
+        }
+
+        UnreadMessageResponse unreadMessageResponse = messageService.getLatestUnreadMessage(keyringId);
+        return ResponseEntity.ok(unreadMessageResponse);
+    }
+
     /**
      * 🔐 메시지 수신자 기준 메시지 조회 API
      *
