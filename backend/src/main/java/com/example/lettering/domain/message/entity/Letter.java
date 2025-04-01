@@ -1,6 +1,6 @@
 package com.example.lettering.domain.message.entity;
 
-import com.example.lettering.controller.request.CreateLetterRequest;
+import com.example.lettering.controller.request.sender.CreateLetterRequest;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.message.enums.ConditionType;
 import com.example.lettering.domain.sealingwax.entity.SealingWax;

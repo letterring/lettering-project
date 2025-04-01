@@ -36,17 +36,20 @@ const CenterCarousel = () => {
 
   const getSenderMailbox = async (currentPage) => {
     setLoading(true);
-    const { senderMessageSummaryList } = await getSenderMessages(currentPage);
+    const response = await getSenderMessages(currentPage);
+    const { senderMessageSummaryList } = response || {};
 
-    if (senderMessageSummaryList.length === 0) {
-      setHasMore(false);
-    } else {
-      setMessages((prev) => [...prev, ...senderMessageSummaryList]);
-    }
+    if (senderMessageSummaryList) {
+      if (senderMessageSummaryList.length === 0) {
+        setHasMore(false);
+      } else {
+        setMessages((prev) => [...prev, ...senderMessageSummaryList]);
+      }
 
-    setLoading(false);
-    if (currentPage === 0) {
-      setInitialLoaded(true);
+      setLoading(false);
+      if (currentPage === 0) {
+        setInitialLoaded(true);
+      }
     }
   };
 
@@ -100,43 +103,44 @@ const CenterCarousel = () => {
       }}
       modules={[EffectCoverflow]}
     >
-      {messages.map((msg, idx) => {
-        const { conditionTime, designType, id, replied, repliedName, sealingWaxId } = msg;
-        const isVisible = Math.abs(activeIndex - idx) <= 2;
-        const isCenter = activeIndex === idx;
-        const isOpened = openedIndices.includes(idx);
+      {messages &&
+        messages.map((msg, idx) => {
+          const { conditionTime, designType, id, replied, repliedName, sealingWaxId } = msg;
+          const isVisible = Math.abs(activeIndex - idx) <= 2;
+          const isCenter = activeIndex === idx;
+          const isOpened = openedIndices.includes(idx);
 
-        return (
-          <StyledSlide key={idx} $hidden={!isVisible} onClick={() => handleClick(idx)}>
-            <SlideContent $align={getAlignType(idx, activeIndex)}>
-              <ImageWrapper>
-                <img
-                  src={
-                    isCenter && isOpened
-                      ? images[`Opened${sealingWaxId}`]
-                      : images[`Closed${sealingWaxId}`]
-                  }
-                  alt={`Slide ${idx + 1}`}
-                />
-              </ImageWrapper>
-              <Comment $isVisible={isOpened && isCenter}>
-                <p>
-                  {repliedName}님께 보낸 {designType !== 'POSTCARD' ? '편지' : '엽서'}
-                </p>
-                <p>답장 : {replied ? 1 : 0}</p>
-              </Comment>
-              <Details>
-                <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
-                {isOpened && isCenter && (
-                  <DetailButton>
-                    <IcDetail />
-                  </DetailButton>
-                )}
-              </Details>
-            </SlideContent>
-          </StyledSlide>
-        );
-      })}
+          return (
+            <StyledSlide key={idx} $hidden={!isVisible} onClick={() => handleClick(idx)}>
+              <SlideContent $align={getAlignType(idx, activeIndex)}>
+                <ImageWrapper>
+                  <img
+                    src={
+                      isCenter && isOpened
+                        ? images[`Opened${sealingWaxId}`]
+                        : images[`Closed${sealingWaxId}`]
+                    }
+                    alt={`Slide ${idx + 1}`}
+                  />
+                </ImageWrapper>
+                <Comment $isVisible={isOpened && isCenter}>
+                  <p>
+                    {repliedName}님께 보낸 {designType !== 'POSTCARD' ? '편지' : '엽서'}
+                  </p>
+                  <p>답장 : {replied ? 1 : 0}</p>
+                </Comment>
+                <Details>
+                  <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
+                  {isOpened && isCenter && (
+                    <DetailButton>
+                      <IcDetail />
+                    </DetailButton>
+                  )}
+                </Details>
+              </SlideContent>
+            </StyledSlide>
+          );
+        })}
     </StyledSwiper>
   );
 };

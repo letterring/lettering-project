@@ -1,4 +1,3 @@
-// 컴포넌트 명은 무조건 대문자 카멜케이스 적용
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,17 +5,32 @@ import styled from 'styled-components';
 import Background from '/src/assets/background2.png';
 import SendermainImg from '/src/assets/images/sender_main.png';
 
+import { getKeyringList } from '../../../apis/keyring';
 import { IcMenu } from '../../../assets/icons';
+import CoinBirdImg from '../../../assets/images/bird_coin.png';
 import useModal from '../../../hooks/common/useModal';
+import ConfirmButton from '../../common/button/ConfirmButton';
 import LongButton from '../../common/button/LongButton';
+import AlertModal from '../../common/modal/AlertModal';
 import MenuModal from '../../common/modal/MenuModal';
 
 const Home = () => {
   const menu = useModal();
   const navigate = useNavigate();
+  const alarm = useModal();
 
   const handleMenuClick = async () => {
     menu.toggle();
+  };
+
+  const handleAuth = async () => {
+    const res = await getKeyringList();
+
+    if (!res || res.length == 0) {
+      alarm.setShowing(true);
+    } else {
+      navigate(`/theme`);
+    }
   };
 
   return (
@@ -27,13 +41,7 @@ const Home = () => {
           Lettering
           <img src={SendermainImg} alt="senderMainImg" />
           <StButtonsWrapper>
-            <LongButton
-              btnName="편지 쓰기"
-              s
-              onClick={() => {
-                navigate(`/theme`);
-              }}
-            />
+            <LongButton btnName="편지 쓰기" onClick={handleAuth} />
             <LongButton
               btnName="보낸 편지함"
               onClick={() => {
@@ -47,6 +55,15 @@ const Home = () => {
       <StMenuModalWrapper $showing={menu.isShowing} onClick={menu.toggle}>
         <MenuModal isShowing={menu.isShowing} target="sender" />
       </StMenuModalWrapper>
+
+      <AlertModal
+        title="키링을 구매한 뒤 편지를 써주세요."
+        imgSrc={CoinBirdImg}
+        isOpen={alarm.isShowing}
+        onClose={alarm.toggle}
+      >
+        <ConfirmButton onClick={() => navigate(`/purchase`)} btnName="키링 구매하러 가기" />
+      </AlertModal>
     </>
   );
 };
