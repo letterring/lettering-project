@@ -2,12 +2,9 @@ package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.sender.CreateLetterRequest;
 import com.example.lettering.controller.request.sender.CreatePostcardRequest;
-import com.example.lettering.controller.response.dear.CreateReplyRequest;
-import com.example.lettering.controller.response.dear.DearMessageSummaryListResponse;
-import com.example.lettering.controller.response.dear.PostcardToDearDetailResponse;
-import com.example.lettering.controller.response.dear.UnreadMessageResponse;
+import com.example.lettering.controller.response.dear.*;
 import com.example.lettering.controller.response.sender.LetterBySenderDetailResponse;
-import com.example.lettering.controller.response.sender.PostcardDetailResponse;
+import com.example.lettering.controller.response.sender.PostcardBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryListResponse;
 import com.example.lettering.domain.keyring.service.SessionService;
 import com.example.lettering.domain.keyring.service.TokenService;
@@ -46,7 +43,13 @@ public class MessageController {
     @Operation(summary = "고화질 이미지 API", description = "해당 메시지(우편 또는 엽서)의 고화질 이미지를 얻습니다.")
     @GetMapping("/highimage")
     public ResponseEntity<Map<String, String>> getHighQualityImage(   @RequestParam("messageId") Long messageId,
-                                                                      @RequestParam(value = "index", defaultValue = "0") int index) {
+                                                                      @RequestParam(value = "index", defaultValue = "0") int index, HttpSession session)  {
+
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
         String imageUrl = messageService.getHighQualityImageUrl(messageId, index);
         return ResponseEntity.ok(Map.of("imageHighUrl", imageUrl));
     }
@@ -90,8 +93,7 @@ public class MessageController {
     @Operation(summary = "보낸 사람 기준 메시지 목록 조회", description = "현재 사용자가 작성한 모든 메시지를 conditionTime 내림차순 정렬 후 제공합니다.")
     @GetMapping("/sender")
     public ResponseEntity<SenderMessageSummaryListResponse> getMessagesBySender(
-            HttpSession session,
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "0") int page, HttpSession session) {
 
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
@@ -102,7 +104,7 @@ public class MessageController {
 
     @Operation(summary = "보낸 사람 기준 엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
     @GetMapping("postcards/sender/{messageId}")
-    public ResponseEntity<PostcardDetailResponse> getPostcardBySenderDetail(
+    public ResponseEntity<PostcardBySenderDetailResponse> getPostcardBySenderDetail(
             @PathVariable("messageId") Long messageId,
             HttpSession session) {
 
@@ -110,7 +112,7 @@ public class MessageController {
         if (userId == null) {
             throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
         }
-        PostcardDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
+        PostcardBySenderDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
         return ResponseEntity.ok(postcardDetailResponse);
     }
 
@@ -145,9 +147,20 @@ public class MessageController {
     @GetMapping("postcards/dear/{messageId}")
     public ResponseEntity<PostcardToDearDetailResponse> getPostcardToDearDetail(
             @PathVariable("messageId") Long messageId) {
+        //키링 관련 session 검증 필요
 
         PostcardToDearDetailResponse postcardToDearDetailResponse = postcardService.getPostcardToDearDetail(messageId);
         return ResponseEntity.ok(postcardToDearDetailResponse);
+    }
+
+    @Operation(summary = "받은 사람 기준 편지 상세 조회", description = "path variable로 전달된 messageId에 해당하는 편지 상세 정보를 반환합니다.")
+    @GetMapping("letters/dear/{messageId}")
+    public ResponseEntity<LetterToDearDetailResponse> getLetterToDearDetail(
+            @PathVariable("messageId") Long messageId) {
+        //키링 관련 session 검증 필요
+
+        LetterToDearDetailResponse letterToDearDetailResponse = letterService.getLetterToDearDetail(messageId);
+        return ResponseEntity.ok(letterToDearDetailResponse);
     }
 
     @Operation(summary = "엽서 읽지 않음 상태로 재설정",
@@ -166,6 +179,7 @@ public class MessageController {
     public ResponseEntity<BooleanResponse> createReply(
             @PathVariable("messageId") Long messageId,
             @RequestBody CreateReplyRequest createReplyRequest) {
+        //키링 관련 session 검증 필요
 
         messageService.createReply(messageId, createReplyRequest.getReplyText());
         return ResponseEntity.ok(new BooleanResponse(true));

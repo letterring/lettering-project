@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class PostcardDetailResponse {
+public class PostcardBySenderDetailResponse {
     private Long id;
     private String nfcName;           // 받는 사람 이름
     private String nickName;        // 보낸 사람의 별명
@@ -32,8 +32,8 @@ public class PostcardDetailResponse {
     private String quizHint;
     private String quizAnswer;
 
-    public static PostcardDetailResponse fromEntity(Postcard postcard) {
-        PostcardDetailResponse response = new PostcardDetailResponse();
+    public static PostcardBySenderDetailResponse fromEntity(Postcard postcard) {
+        PostcardBySenderDetailResponse response = new PostcardBySenderDetailResponse();
         response.setId(postcard.getId());
         response.setNfcName(postcard.getKeyring().getNfcName());
         response.setNickName(postcard.getSender().getUserNickname());
