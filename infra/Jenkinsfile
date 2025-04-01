@@ -39,6 +39,9 @@ pipeline {
             echo "📦 의존성 설치 (npm ci)"
             npm ci --no-optional
 
+            echo "🛠️ Rollup 네이티브 모듈 수동 설치"
+            npm install @rollup/rollup-linux-x64-gnu --save-dev
+
             echo "🏗️ Vite 빌드 시작"
             npm run build || {
               echo "❌ Vite 빌드 실패"
