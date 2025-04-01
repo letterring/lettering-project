@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface AbstractMessageRepository extends JpaRepository<AbstractMessage, Long>, AbstractMessageRepositoryCustom {
     Page<AbstractMessage> findBySender_IdOrderByConditionTimeDesc(Long senderId, Pageable pageable);
@@ -21,4 +22,7 @@ public interface AbstractMessageRepository extends JpaRepository<AbstractMessage
             @Param("keyringId") Long keyringId,
             @Param("now") LocalDateTime now,
             Pageable pageable);
+
+    //조건1. conditionTime이 미래면 안됨 
+    List<AbstractMessage> findByKeyringIdAndOpenedFalseAndConditionTimeLessThanEqualOrderByConditionTimeDesc(Long keyringId, LocalDateTime now);
 }
