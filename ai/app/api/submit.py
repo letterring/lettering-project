@@ -2,8 +2,8 @@ from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from typing import List
 from uuid import uuid4
-from redis_conf import redis, REDIS_PREFIX
-from utils import save_image
+from app.core.redis_conf import redis, REDIS_PREFIX
+from app.utils.utils import save_image
 import json
 
 router = APIRouter()
