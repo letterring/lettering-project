@@ -26,6 +26,7 @@ import LoginPage from './pages/sender/LoginPage';
 import MailBoxPage from './pages/sender/MailBoxPage';
 import MyPage from './pages/sender/MyPage';
 import OnBoadingPage from './pages/sender/OnBoadingPage';
+import PostcardDetailPage from './pages/sender/PostcardDetailPage';
 import PostcardPreviewPage from './pages/sender/PostcardPreviewPage';
 import PostcardWritingPage from './pages/sender/PostcardWritingPage';
 import SelectDearPage from './pages/sender/SelectDearPage';
@@ -56,6 +57,7 @@ const Router = () => {
               <Route path="/letter/writing" element={<LetterWritingPage />} />
               <Route path="/postcard/writing" element={<PostcardWritingPage />} />
               <Route path="/postcard/preview" element={<PostcardPreviewPage />} />
+              <Route path="/postcard/detail/:messageId" element={<PostcardDetailPage />} />
 
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />

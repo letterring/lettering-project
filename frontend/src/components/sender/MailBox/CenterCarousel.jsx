@@ -2,6 +2,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -26,6 +27,7 @@ const images = {
 };
 
 const CenterCarousel = () => {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -86,6 +88,14 @@ const CenterCarousel = () => {
     return 'flex-end';
   };
 
+  const handleOpenMsg = (type, messageId) => {
+    if (type === 'POSTCARD') {
+      navigate(`/postcard/detail/${messageId}`);
+    } else {
+      navigate(`/letter/detail/${messageId}`);
+    }
+  };
+
   return (
     <StyledSwiper
       direction="vertical"
@@ -133,7 +143,7 @@ const CenterCarousel = () => {
                   <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
                   {isOpened && isCenter && (
                     <DetailButton>
-                      <IcDetail />
+                      <IcDetail onClick={() => handleOpenMsg(designType, id)} />
                     </DetailButton>
                   )}
                 </Details>
