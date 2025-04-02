@@ -3,6 +3,8 @@ export { ReactComponent as IcArrowRight } from './arrow-right.svg';
 export { ReactComponent as IcCheckCircle } from './check-circle.svg';
 export { ReactComponent as IcClose } from './close.svg';
 export { ReactComponent as IcEnvelop } from './envelop.svg';
+export { ReactComponent as IcArrowLeft } from './ic_arrow_left.svg';
+export { ReactComponent as IcArrowRight2 } from './ic_arrow_right.svg';
 export { ReactComponent as IcBack } from './ic_back.svg';
 export { ReactComponent as IcDetail } from './ic_detail.svg';
 export { ReactComponent as IcImageUpload } from './ic_image_upload.svg';

@@ -17,7 +17,11 @@ import LetterImg2 from '/src/assets/images/letter/letter2.png';
 import LetterImg3 from '/src/assets/images/letter/letter3.png';
 import LetterImg4 from '/src/assets/images/letter/letter4.png';
 
+import { IcArrowLeft, IcArrowRight2 } from '../../../assets/icons';
 import Header from '../../common/Header';
+import AiButton from './AiButton';
+import AiEnhanceModal from './AiEnhanceModal';
+import AiRefineModal from './AiRefineModal';
 import LetterEditor from './LetterEditor';
 
 const LetterPreview = () => {
@@ -44,11 +48,16 @@ const LetterPreview = () => {
   ];
 
   const [textList, setTextList] = useState([...textDummy]);
+  const [activeModal, setActiveModal] = useState(null);
 
   const handleTextChange = (index, value) => {
     const updated = [...textList];
     updated[index] = value;
     setTextList(updated);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
   };
 
   const contentConfig = [
@@ -90,11 +99,13 @@ const LetterPreview = () => {
     arrows: true,
     swipe: true,
     fade: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   return (
     <StLetterPreview>
-      <Header headerName="편지 미리보기" />
+      <Header headerName="편지쓰기" />
       <ContentWrapper>
         <StyledSlider ref={sliderRef} {...settings}>
           {contents.map((item, id) => (
@@ -111,6 +122,16 @@ const LetterPreview = () => {
           ))}
         </StyledSlider>
       </ContentWrapper>
+
+      <AiButton
+        onOpenModal={(type) => {
+          setActiveModal(type);
+        }}
+      />
+
+      {/* 모달 */}
+      {activeModal === 'add' && <AiEnhanceModal onClose={closeModal} />}
+      {activeModal === 'edit' && <AiRefineModal onClose={closeModal} />}
     </StLetterPreview>
   );
 };
@@ -149,4 +170,44 @@ const StyledSlider = styled(Slider)`
     justify-content: center;
     align-items: center;
   }
+`;
+
+const NextArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <ArrowRight onClick={onClick}>
+      <IcArrowRight2 />
+    </ArrowRight>
+  );
+};
+
+const PrevArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <ArrowLeft onClick={onClick}>
+      <IcArrowLeft />
+    </ArrowLeft>
+  );
+};
+
+const ArrowBase = styled.div`
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  font-size: 2.4rem;
+  color: #aaa;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    color: #333;
+  }
+`;
+
+const ArrowLeft = styled(ArrowBase)`
+  left: -2rem;
+`;
+
+const ArrowRight = styled(ArrowBase)`
+  right: -2rem;
 `;
