@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { getHighImage } from '/src/apis/dear';
 
 import DummyImg from '../../../assets/dummy/postcard.jpg';
 import EnvelopeBottomImg from '../../../assets/images/postcard/bottom_fold.png';
@@ -11,12 +13,23 @@ import EnvelopeTopImg from '../../../assets/images/postcard/top_fold.png';
 const Postcard = () => {
   const navigate = useNavigate();
   const { messageId } = useParams();
+  const [imageUrl, setImageUrl] = useState(DummyImg);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 80;
-
   const x = Math.cos(angle) * distance;
   const y = -Math.sin(angle) * distance;
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const data = await getHighImage(messageId);
+      if (data?.imageHighUrl) {
+        setImageUrl(data.imageHighUrl);
+      }
+    };
+
+    fetchImage();
+  }, [messageId]);
 
   return (
     <StWrapper>
@@ -31,7 +44,7 @@ const Postcard = () => {
           transition={{ duration: 1.2 }}
         />
         <StPostcardImage
-          src={DummyImg}
+          src={imageUrl}
           alt="엽서사진"
           initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
           animate={{ x, y, opacity: 1, rotate: -3.7 }}

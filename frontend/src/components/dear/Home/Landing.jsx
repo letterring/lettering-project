@@ -1,17 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { getUnreadMessage } from '/src/apis/dear';
 
 import OBJViewer from './OBJViewer';
 
 const Landing = () => {
   const navigate = useNavigate();
-  const messageId = 13;
+  const [newLetter, setNewLetter] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(null);
 
-  const [newLetter, setNewLetter] = useState(true);
+  useEffect(() => {
+    const fetchUnreadMessage = async () => {
+      const data = await getUnreadMessage();
+      if (data?.exist) {
+        setNewLetter(true);
+        setMessageInfo(data);
+      }
+    };
+
+    fetchUnreadMessage();
+  }, []);
 
   const handleNewLetterClick = () => {
-    navigate(`/dear/postcard/${messageId}`);
+    if (!messageInfo) return;
+
+    const { messageId, designType } = messageInfo;
+
+    if (designType === 'POSTCARD') {
+      navigate(`/dear/postcard/${messageId}`);
+    } else if (designType === 'LETTER') {
+      navigate(`/dear/letter/${messageId}`);
+    } else {
+      navigate('/dear/home'); // fallback
+    }
   };
 
   const handleMissedClick = () => {
