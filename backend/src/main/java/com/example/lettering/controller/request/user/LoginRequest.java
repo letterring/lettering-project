@@ -22,6 +22,5 @@ public class LoginRequest {
     @Size(min = 8, max = 20, message = "sealingWaxName 8~20자 사이가 되야합니다.")
     private String password;
 
-    @NotNull(message = "Provider 필수입니다.")
     private Provider provider;
 }
