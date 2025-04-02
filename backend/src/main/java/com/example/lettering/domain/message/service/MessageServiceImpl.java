@@ -36,6 +36,16 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<SenderMessageSummaryResponse> getMessagesByKeyring(Long keyringId, int page) {
+        PageRequest pageable = PageRequest.of(page, 7);
+        Page<AbstractMessage> pageResult = abstractMessageRepository
+                .findByKeyring_IdOrderByConditionTimeDesc(keyringId, pageable);
+        return pageResult.stream()
+                .map(SenderMessageSummaryResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<DearMessageSummaryResponse> getMessagesToDear(Long keyringId, int page) {
         PageRequest pageable = PageRequest.of(page, 7);
         Page<AbstractMessage> messagePage = abstractMessageRepository
@@ -61,10 +71,9 @@ public class MessageServiceImpl implements MessageService {
         AbstractMessage message = abstractMessageRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
 
-        if (message instanceof Postcard) {
-            return ((Postcard) message).getImageHighUrl();
-        } else if (message instanceof Letter) {
-            Letter letter = (Letter) message;
+        if (message instanceof Postcard postcard) {
+            return postcard.getImageHighUrl();
+        } else if (message instanceof Letter letter) {
             if (letter.getImages() != null && !letter.getImages().isEmpty()) {
                 return letter.getImages().get(orderIndex).getImageHighUrl();
             } else {
@@ -73,6 +82,14 @@ public class MessageServiceImpl implements MessageService {
         } else {
             throw new BusinessException(ExceptionCode.INVALID_MESSAGE_TYPE);
         }
+    }
+
+    @Override
+    public void toggleFavorite(Long messageId) {
+        AbstractMessage message = abstractMessageRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        message.toggleFavorite();
     }
 
     @Override
@@ -89,4 +106,15 @@ public class MessageServiceImpl implements MessageService {
 
         return UnreadMessageResponse.of(true, latest.getId(), latest.getSealingWax().getId(), latest.getSealingWax().getDesignType());
     }
+
+    // 추후 토큰 인증시 해당 토큰 -> keyringId 찾기, 이후 message값이랑 같은지 검증
+//    private boolean validateMessageOwnership(Long messageId, Long tokenKeyringId) {
+//        AbstractMessage message = abstractMessageRepository.findById(messageId)
+//                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+//
+//        if (!message.getKeyring().getId().equals(tokenKeyringId)) {
+//            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
+//        }
+//        return true;
+//    }
 }

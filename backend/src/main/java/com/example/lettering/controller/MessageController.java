@@ -3,9 +3,13 @@ package com.example.lettering.controller;
 import com.example.lettering.controller.request.sender.CreateLetterRequest;
 import com.example.lettering.controller.request.sender.CreatePostcardRequest;
 import com.example.lettering.controller.response.dear.*;
+import com.example.lettering.controller.response.keyring.KeyringFilterListResponse;
+import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
 import com.example.lettering.controller.response.sender.LetterBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.PostcardBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryListResponse;
+import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
+import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.domain.keyring.service.SessionService;
 import com.example.lettering.domain.keyring.service.TokenService;
 import com.example.lettering.domain.message.service.LetterService;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +42,7 @@ public class MessageController {
     private final PostcardService postcardService;
     private final MessageService messageService;
     private final LetterService letterService;
+    private final KeyringService keyringService;
     private final TokenService tokenService;
     private final SessionService sessionService;
 
@@ -93,13 +99,22 @@ public class MessageController {
     @Operation(summary = "보낸 사람 기준 메시지 목록 조회", description = "현재 사용자가 작성한 모든 메시지를 conditionTime 내림차순 정렬 후 제공합니다.")
     @GetMapping("/sender")
     public ResponseEntity<SenderMessageSummaryListResponse> getMessagesBySender(
-            @RequestParam(name = "page", defaultValue = "0") int page, HttpSession session) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "keyringId", required = false) Long keyringId, HttpSession session) {
 
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
             throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
         }
-        return ResponseEntity.ok(SenderMessageSummaryListResponse.of(messageService.getMessagesBySender(userId, page)));
+
+        List<SenderMessageSummaryResponse> senderMessageSummaryResponseList;
+        if (keyringId != null) {
+            senderMessageSummaryResponseList = messageService.getMessagesByKeyring(keyringId, page);
+        } else {
+            senderMessageSummaryResponseList = messageService.getMessagesBySender(userId, page);
+        }
+
+        return ResponseEntity.ok(SenderMessageSummaryListResponse.of(senderMessageSummaryResponseList));
     }
 
     @Operation(summary = "보낸 사람 기준 엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
@@ -185,6 +200,18 @@ public class MessageController {
         return ResponseEntity.ok(new BooleanResponse(true));
     }
 
+    @Operation(summary = "받은 메시지 즐겨찾기 토글",
+            description = "메시지의 즐겨찾기 상태를 토글합니다. 현재 상태가 true이면 false로, false이면 true로 변경합니다. (로그인 없이 keyringId로 검증)")
+    @PatchMapping("favorite/{messageId}")
+    public ResponseEntity<BooleanResponse> toggleFavorite(
+            @PathVariable("messageId") Long messageId) {
+        //키링 관련 session 검증 필요
+
+        messageService.toggleFavorite(messageId);
+        return ResponseEntity.ok(new BooleanResponse(true));
+    }
+
+
     @GetMapping("/unread")
     public ResponseEntity<UnreadMessageResponse> getUnreadMessagebackoffice(HttpSession session)  {
 //        Long keyringId = (Long) session.getAttribute("keyringId");
@@ -195,6 +222,18 @@ public class MessageController {
 
         UnreadMessageResponse unreadMessageResponse = messageService.getLatestUnreadMessage(keyringId);
         return ResponseEntity.ok(unreadMessageResponse);
+    }
+
+    @Operation(summary = "보낸 사람 기준 키링 필터",
+            description = "세션의 userId(즉, ownerId)와 일치하는 keyring의 id와 nfcName을 반환합니다.")
+    @GetMapping("/filter")
+    public ResponseEntity<KeyringFilterListResponse> filterKeyringsByOwner(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(KeyringFilterListResponse.of(keyringService.getKeyringsByOwner(userId)));
     }
 
     /**
