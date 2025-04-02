@@ -13,6 +13,8 @@ import java.util.List;
 public interface AbstractMessageRepository extends JpaRepository<AbstractMessage, Long>, AbstractMessageRepositoryCustom {
     Page<AbstractMessage> findBySender_IdOrderByConditionTimeDesc(Long senderId, Pageable pageable);
 
+    Page<AbstractMessage> findByKeyring_IdOrderByConditionTimeDesc(Long keyringId,Pageable pageable);
+
     //조건1. conditionTime이 현재시간보다 <=가 되어야함. 조건2. 안읽음 - 즐겨찾기 - 최신순 정렬
     @Query("SELECT m FROM AbstractMessage m " +
             "WHERE m.keyring.id = :keyringId " +

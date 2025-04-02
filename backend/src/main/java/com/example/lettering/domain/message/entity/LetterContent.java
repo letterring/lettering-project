@@ -1,5 +1,7 @@
 package com.example.lettering.domain.message.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +21,7 @@ public class LetterContent {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "letter_id", nullable = false)
+    @JsonIgnore
     private Letter letter;
 
     // 글 내용 (단락별로 저장; 필요시 MySQL ALTER TABLE 로 VARCHAR 길이 증대)

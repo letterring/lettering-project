@@ -1,6 +1,8 @@
 package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.request.sender.CreateLetterRequest;
+import com.example.lettering.controller.response.dear.LetterToDearDetailResponse;
+import com.example.lettering.controller.response.sender.LetterBySenderDetailResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
 import com.example.lettering.domain.message.entity.Letter;
@@ -64,5 +66,21 @@ public class LetterServiceImpl implements LetterService {
         Letter letter = Letter.fromDto(createLetterRequest, sender, keyring, sealingWax, sender.getFont(), contents, images);
 
         return letterRepository.save(letter).getId();
+    }
+
+    @Override
+    public LetterBySenderDetailResponse getLetterBySenderDetail(Long messageId) {
+        Letter letter = letterRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        return LetterBySenderDetailResponse.fromEntity(letter);
+    }
+
+    @Override
+    public LetterToDearDetailResponse getLetterToDearDetail(Long messageId) {
+        Letter letter = letterRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        return LetterToDearDetailResponse.fromEntity(letter);
     }
 }

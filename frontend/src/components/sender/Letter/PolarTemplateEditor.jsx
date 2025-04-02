@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import PolarImg1 from '../../../assets/images/letter/polar1.png';
 import PolarImg2 from '../../../assets/images/letter/polar2.png';
 
-const PolarTemplate = ({ images, isActive }) => {
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    if (isActive && !loaded) {
-      setLoaded(true);
-    }
-  }, [isActive, loaded]);
+const PolarTemplateEditor = ({ images }) => {
+  const img1 = images[0];
+  const img2 = images[1];
 
   return (
     <StWrapper>
       <StPolarBack src={PolarImg1} alt="폴라로이드 배경" />
-      <StImageBack src={images[1]} alt="사진" $loaded={loaded} />
+      <StImageBack src={img2} alt="사진" />
       <StPolarFront src={PolarImg2} alt="폴라로이드 배경" />
-      <StImageFront src={images[0]} alt="사진" $loaded={loaded} />
+      <StImageFront src={img1} alt="사진" />
     </StWrapper>
   );
 };
 
-export default PolarTemplate;
+export default PolarTemplateEditor;
 
 const StWrapper = styled.div`
   width: 100%;
@@ -54,8 +49,6 @@ const StImageBack = styled.img`
   object-fit: cover;
   transform: rotate(-2.5deg);
   z-index: 2;
-  opacity: ${({ $loaded }) => ($loaded ? 1 : 0)};
-  transition: opacity 5s ease;
 `;
 
 const StPolarFront = styled.img`
@@ -77,6 +70,4 @@ const StImageFront = styled.img`
   object-fit: cover;
   transform: rotate(11.5deg);
   z-index: 4;
-  opacity: ${({ $loaded }) => ($loaded ? 1 : 0)};
-  transition: opacity 5s ease;
 `;
