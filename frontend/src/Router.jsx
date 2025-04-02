@@ -14,6 +14,7 @@ import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
 import CompleteLetterPage from './pages/sender/CompleteLetterPage';
+import CompleteOrderPage from './pages/sender/CompleteOrderPage';
 import CompletePage from './pages/sender/CompletePage';
 import CompletePostcardPage from './pages/sender/CompletePostcardPage';
 import DeliveryTypePage from './pages/sender/DeliveryTypePage';
@@ -51,6 +52,7 @@ const Router = () => {
               <Route path="/home" element={<HomePage />} />
 
               <Route path="/purchase" element={<DescribeKeyringPage />} />
+              <Route path="/purchase/complete" element={<CompleteOrderPage />} />
               <Route path="/mailbox" element={<MailBoxPage />} />
 
               <Route path="/theme" element={<SelectThemePage />} />
