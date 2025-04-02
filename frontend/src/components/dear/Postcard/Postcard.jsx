@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getHighImage } from '/src/apis/dear';
+import { getPostcardDetail } from '/src/apis/postcard';
 
-import DummyImg from '../../../assets/dummy/postcard.jpg';
 import EnvelopeBottomImg from '../../../assets/images/postcard/bottom_fold.png';
 import PostcardImg from '../../../assets/images/postcard/postcard_paper.png';
 import EnvelopeTopImg from '../../../assets/images/postcard/top_fold.png';
@@ -13,7 +12,10 @@ import EnvelopeTopImg from '../../../assets/images/postcard/top_fold.png';
 const Postcard = () => {
   const navigate = useNavigate();
   const { messageId } = useParams();
-  const [imageUrl, setImageUrl] = useState(DummyImg);
+  const location = useLocation();
+  const imageUrl = location.state?.imageUrl;
+
+  const [postcard, setPostcard] = useState(null);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 80;
@@ -21,19 +23,26 @@ const Postcard = () => {
   const y = -Math.sin(angle) * distance;
 
   useEffect(() => {
-    const fetchImage = async () => {
-      const data = await getHighImage(messageId);
-      if (data?.imageHighUrl) {
-        setImageUrl(data.imageHighUrl);
-      }
+    const fetchPostcard = async () => {
+      const data = await getPostcardDetail(messageId);
+      setPostcard(data);
     };
 
-    fetchImage();
+    fetchPostcard();
   }, [messageId]);
+
+  const handleNavigate = () => {
+    navigate(`/dear/postcard/detail/${messageId}`, {
+      state: {
+        postcard,
+        imageUrl,
+      },
+    });
+  };
 
   return (
     <StWrapper>
-      <StEnvelopeWrapper onClick={() => navigate(`/dear/postcard/detail/${messageId}`)}>
+      <StEnvelopeWrapper onClick={handleNavigate}>
         <StEnvelopeTop src={EnvelopeTopImg} alt="편지 봉투 윗부분" />
 
         <StPostcard
@@ -51,7 +60,7 @@ const Postcard = () => {
           transition={{ duration: 1.2 }}
           onAnimationComplete={() => {
             setTimeout(() => {
-              navigate(`/dear/postcard/detail/${messageId}`);
+              handleNavigate();
             }, 800);
           }}
         />

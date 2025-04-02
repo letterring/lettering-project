@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
@@ -15,22 +15,24 @@ import ReplyComponent from './ReplyComponent';
 const PostcardDetail = () => {
   const [flipped, setFlipped] = useState(false);
   const { messageId } = useParams();
+  const location = useLocation();
 
-  const [postcard, setPostcard] = useState(null);
-
-  useEffect(() => {
-    const fetchPostcard = async () => {
-      const data = await getPostcardDetail(messageId);
-      setPostcard(data);
-    };
-
-    fetchPostcard();
-  }, [messageId]);
+  const [postcard, setPostcard] = useState(location.state?.postcard || null);
 
   const handleMarkAsUnread = async () => {
     await markPostcardAsUnread(messageId);
     alert('안읽음 처리 완료!');
   };
+
+  useEffect(() => {
+    if (!postcard) {
+      const fetchPostcard = async () => {
+        const data = await getPostcardDetail(messageId);
+        setPostcard(data);
+      };
+      fetchPostcard();
+    }
+  }, [messageId, postcard]);
 
   // postcard가 아직 없으면 로딩 처리
   if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;

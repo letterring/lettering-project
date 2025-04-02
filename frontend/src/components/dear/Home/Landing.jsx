@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getUnreadMessage } from '/src/apis/dear';
+import { getHighImage } from '/src/apis/dear';
 
 import OBJViewer from './OBJViewer';
 
@@ -10,6 +11,7 @@ const Landing = () => {
   const navigate = useNavigate();
   const [newLetter, setNewLetter] = useState(false);
   const [messageInfo, setMessageInfo] = useState(null);
+  const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용용)
 
   useEffect(() => {
     const fetchUnreadMessage = async () => {
@@ -29,13 +31,27 @@ const Landing = () => {
     const { messageId, designType } = messageInfo;
 
     if (designType === 'POSTCARD') {
-      navigate(`/dear/postcard/${messageId}`);
+      navigate(`/dear/postcard/${messageId}`, {
+        state: { imageUrl },
+      });
     } else if (designType === 'LETTER') {
       navigate(`/dear/letter/${messageId}`);
     } else {
       navigate('/dear/home'); // fallback
     }
   };
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (!messageInfo?.messageId) return;
+      const data = await getHighImage(messageInfo.messageId);
+      if (data?.imageHighUrl) {
+        setImageUrl(data.imageHighUrl);
+      }
+    };
+
+    fetchImage();
+  }, [messageInfo]);
 
   const handleMissedClick = () => {
     navigate('/dear/home');
