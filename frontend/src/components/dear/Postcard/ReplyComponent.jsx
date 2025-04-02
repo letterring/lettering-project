@@ -70,8 +70,8 @@ const ReplyComponent = ({ messageId, replyText }) => {
 export default ReplyComponent;
 
 const StReplyWrapper = styled.div`
-  position: absolute;
-  bottom: 0;
+  /* position: absolute;
+  bottom: 0; */
 
   display: flex;
   flex-direction: column;

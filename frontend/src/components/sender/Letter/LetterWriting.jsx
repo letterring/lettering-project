@@ -52,7 +52,7 @@ const LetterWriting = () => {
     setImageList((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const isValid = ImageList.length >= 8;
+  const isValid = ImageList.length >= 10;
 
   const handleSubmit = async () => {
     setLetterImages(ImageList);
@@ -97,7 +97,7 @@ const LetterWriting = () => {
             $fontStyle={userFont}
           />
           <FooterWrapper>
-            {!isValid ? <WarnText>사진은 8장 이상 필요합니다.</WarnText> : <WarnText />}
+            {!isValid ? <WarnText>사진은 10장 필요합니다.</WarnText> : <WarnText />}
             <CharCount>{letterContent.length} / 600</CharCount>
             <SubmitButton disabled={!isValid} $isValid={isValid} onClick={handleSubmit}>
               입력완료
