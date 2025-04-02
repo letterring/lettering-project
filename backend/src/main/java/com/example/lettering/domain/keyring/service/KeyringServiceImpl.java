@@ -4,6 +4,7 @@ import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.user.OrderRequest;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
+import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
 import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
@@ -222,6 +223,12 @@ public class KeyringServiceImpl implements KeyringService{
         keyringRepository.delete(keyring);
     }
 
-
-
+    @Override
+    public List<KeyringFilterResponse> getKeyringsByOwner(Long ownerId) {
+        List<Keyring> keyrings = keyringRepository.findAllByOwnerId(ownerId);
+ 
+        return keyrings.stream()
+                .map(keyring -> new KeyringFilterResponse(keyring.getId(), keyring.getNfcName()))
+                .collect(Collectors.toList());
+    }
 }
