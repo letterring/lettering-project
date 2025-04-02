@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { getPostcard, submitPostcard } from '/src/apis/fastapi';
 import { getUserFont } from '/src/apis/user';
 import { getFontStyle } from '/src/util/getFont';
 
-import { LetterImageList, LetterText, UserFont } from '../../../recoil/atom';
+import { LetterImageList, LetterText, RedisMessageKey } from '../../../recoil/atom';
 import Header from '../../common/Header';
 
 const LetterWriting = () => {
@@ -15,8 +16,7 @@ const LetterWriting = () => {
   const [ImageList, setImageList] = useState([]);
   const [letterContent, setLetterContent] = useState('');
   const [userFont, setUserFont] = useState(undefined);
-
-  const fontStyle = getFontStyle(useRecoilValue(UserFont));
+  const redisKey = useRecoilValue(RedisMessageKey);
 
   const fileInputRef = useRef(null);
 
@@ -58,7 +58,17 @@ const LetterWriting = () => {
     setLetterImages(ImageList);
     setLetterText(letterContent);
 
-    navigate('/letter/preview');
+    const result = await submitPostcard(
+      ImageList.map((img) => img.file),
+      letterContent,
+    );
+
+    if (result?.key) {
+      setRedisMessageKey(result.key);
+      const postcard = await getPostcard(result.key);
+      console.log('엽서 내용:', postcard);
+      navigate('/letter/preview', { state: { postcard } });
+    }
   };
 
   return (
