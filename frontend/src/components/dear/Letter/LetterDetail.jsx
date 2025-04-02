@@ -100,6 +100,7 @@ const LetterDetail = () => {
             images={item.images}
             text={item.text}
             background={item.background}
+            font={letterFont}
             isActive={currentSlide === id}
           />
         ))}
