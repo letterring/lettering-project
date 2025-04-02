@@ -32,12 +32,12 @@ const FilmTemplate = ({ images }) => {
             <StImageSlider>
               <StSlide $animate={animate}>
                 {images.map((src, idx) => (
-                  <StPhoto key={`orig-${idx}`} src={src} alt={`film-${idx}`} />
+                  <StPhoto key={`orig-${idx}`} src={src.imageLowUrl} alt={`film-${idx}`} />
                 ))}
               </StSlide>
               <StSlide $animate={animate} $clone>
                 {images.map((src, idx) => (
-                  <StPhoto key={`clone-${idx}`} src={src} alt={`film-${idx}`} />
+                  <StPhoto key={`orig-${idx}`} src={src.imageLowUrl} alt={`film-${idx}`} />
                 ))}
               </StSlide>
             </StImageSlider>
