@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
@@ -22,6 +23,8 @@ import Header from '../../common/Header';
 import LetterContent from './LetterContent';
 
 const LetterDetail = () => {
+  const { messageId } = useParams();
+
   const imageDummy = [
     DummyImg1,
     DummyImg2,
