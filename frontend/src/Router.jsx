@@ -13,9 +13,11 @@ import DearNoTagPage from './pages/dear/NoTagPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
+import CheckoutPage from './pages/sender/CheckoutPage';
 import CompleteLetterPage from './pages/sender/CompleteLetterPage';
 import CompletePage from './pages/sender/CompletePage';
 import CompletePostcardPage from './pages/sender/CompletePostcardPage';
+import CustomizePage from './pages/sender/CustomizePage';
 import DeliveryTypePage from './pages/sender/DeliveryTypePage';
 import DescribeKeyringPage from './pages/sender/DescribeKeyringPage';
 import FontSettingPage from './pages/sender/FontSettingPage';
@@ -52,6 +54,8 @@ const Router = () => {
 
               <Route path="/purchase" element={<DescribeKeyringPage />} />
               <Route path="/mailbox" element={<MailBoxPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/checkout/customize" element={<CustomizePage />} />
 
               <Route path="/theme" element={<SelectThemePage />} />
 

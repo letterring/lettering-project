@@ -3,16 +3,14 @@ import styled from 'styled-components';
 
 import { IcMinus, IcPlus } from '../../../assets/icons';
 
-const QuantityInput = () => {
-  const [quantity, setQuantity] = useState(1);
-
+const QuantityInput = ({ quantity, handleCount }) => {
   const increment = () => {
-    setQuantity((prev) => prev + 1);
+    handleCount(1);
   };
 
   const decrement = () => {
     if (quantity > 1) {
-      setQuantity((prev) => prev - 1);
+      handleCount(-1);
     }
   };
 
