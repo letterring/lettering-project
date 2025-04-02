@@ -106,8 +106,8 @@ const StButtonsWrapper = styled.div`
 
 const MenuBtn = styled(IcMenu)`
   position: absolute;
-  top: 4rem;
-  right: 2rem;
+  top: 3rem;
+  right: 3rem;
 
   cursor: pointer;
 `;
