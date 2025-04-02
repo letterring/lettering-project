@@ -1,5 +1,6 @@
 package com.example.lettering.domain.keyring.service;
 
+import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
 import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.user.OrderRequest;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
@@ -28,4 +29,5 @@ public interface KeyringService {
     KeyringDesignResponse createKeyringDesign(KeyringDesignRequest request, MultipartFile image) throws IOException;
     void deleteKeyring(Long keyringId);
     List<KeyringFilterResponse> getKeyringsByOwner(Long userId);
+    void customizeKeyrings(Long userId, List<KeyringCustomizeRequest.KeyringInfo> keyrings);
 }
