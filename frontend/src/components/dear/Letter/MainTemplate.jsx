@@ -7,8 +7,6 @@ import LetteringImg from '../../../assets/images/letter/lettering.png';
 import StampImg from '../../../assets/images/letter/vintage_stamp.png';
 
 const MainTemplate = ({ images }) => {
-  const mainImg = images;
-
   const pathRef = useRef(null);
 
   useEffect(() => {
@@ -28,7 +26,7 @@ const MainTemplate = ({ images }) => {
 
   return (
     <StWrapper>
-      <StLetterImage src={mainImg} alt="편지 사진" />
+      <StLetterImage src={images?.imageLowUrl} alt="편지 사진" />
       <StStampImage src={StampImg} alt="스탬프" />
       {/* <StTextImage src={LetteringImg} alt="레터링" />
        */}

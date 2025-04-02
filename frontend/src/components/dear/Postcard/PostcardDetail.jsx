@@ -9,11 +9,12 @@ import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 import { getFontStyle } from '/src/util/getFont';
 
+import useToggle from '../../../hooks/common/useToggle';
 import Header from '../../common/Header';
 import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
-  const [flipped, setFlipped] = useState(false);
+  const { toggle, handleToggle } = useToggle(false);
   const { messageId } = useParams();
   const location = useLocation();
 
@@ -45,8 +46,8 @@ const PostcardDetail = () => {
       <Header headerName="Lettering" />
       <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
 
-      <StFlipContainer onClick={() => setFlipped((prev) => !prev)}>
-        <StFlipCard $flipped={flipped}>
+      <StFlipContainer onClick={handleToggle}>
+        <StFlipCard $flipped={toggle}>
           <StCardFace className="front">
             {/* <StPostcard src={PostcardImg} alt="엽서" /> */}
             <StPostcardWhite />
