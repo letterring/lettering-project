@@ -44,7 +44,7 @@ pipeline {
             fi
 
             echo "🛠️ Rollup 네이티브 모듈 수동 설치"
-            npm install @rollup/rollup-linux-x64-gnu --save-dev
+            npm install @rollup/rollup-linux-x64-gnu --no-save
 
             echo "🏗️ Vite 빌드 시작"
             npm run build || {
