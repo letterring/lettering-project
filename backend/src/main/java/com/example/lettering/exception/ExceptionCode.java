@@ -23,6 +23,7 @@ public enum ExceptionCode {
     INVALID_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "이미지 파일 포멧이 옳지 않습니다", 2009),
     MESSAGE_NO_IMAGE(HttpStatus.NOT_FOUND, "해당하는 이미지가 없습니다.", 2010),
     INVALID_MESSAGE_TYPE(HttpStatus.BAD_REQUEST, "메시지 타입이 옳지 않습니다", 2011),
+    INVALID_MESSAGE_COUNT(HttpStatus.BAD_REQUEST, "편지 타입에 맞는 이미지 개수와 맞지 않습니다.", 2012),
 
     // Repository에서 데이터베이스 조작시 발생할 수 있는 예외 작성
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 조작 과정에서 예외가 발생했습니다.", 3001),

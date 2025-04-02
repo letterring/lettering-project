@@ -83,4 +83,8 @@ public abstract class AbstractMessage {
         this.replyText = replyText;
         this.replySentTime = LocalDateTime.now();
     }
+
+    public void toggleFavorite() {
+        this.favorite = !this.favorite;
+    }
 }
