@@ -81,7 +81,7 @@ const Router = () => {
               <Route path="/dear/postcard/:messageId" element={<DearPostcardPage />} />
               <Route path="/dear/postcard/detail/:messageId" element={<DearPostDetailPage />} />
               <Route path="/dear/letter" element={<DearLetterPage />} />
-              <Route path="/dear/letter/detail" element={<DearLetterDetailPage />} />
+              <Route path="/dear/letter/detail/:messageId" element={<DearLetterDetailPage />} />
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
 
               {/* common */}
