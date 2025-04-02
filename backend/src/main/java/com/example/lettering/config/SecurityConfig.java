@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "login/oauth2/**", "/api/**", "/error").permitAll() // ❗️ `/login` 삭제
+                        .requestMatchers("/","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/login/oauth2/**", "/api/**", "/error").permitAll() // ❗️ `/login` 삭제
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

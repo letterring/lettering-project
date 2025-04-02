@@ -54,8 +54,7 @@ const OnBoading = () => {
   };
 
   const handleSkip = () => {
-    sliderRef.current.slickGoTo(pageInfo.length - 1);
-    setCurrentSlide(pageInfo.length - 1);
+    navigate(`/login`);
   };
 
   return (
@@ -111,6 +110,8 @@ const SkipButton = styled.button`
   color: ${({ theme }) => theme.colors.Gray2};
   ${({ theme }) => theme.fonts.Body3};
   text-decoration: underline;
+
+  z-index: 3;
 `;
 
 const StyledSlider = styled(Slider)`
