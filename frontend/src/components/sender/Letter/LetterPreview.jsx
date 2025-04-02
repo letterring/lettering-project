@@ -130,6 +130,7 @@ const LetterPreview = () => {
               textCount={item.textCount}
               textList={textList}
               onTextChange={handleTextChange}
+              font={userFont}
             />
           ))}
         </StyledSlider>
