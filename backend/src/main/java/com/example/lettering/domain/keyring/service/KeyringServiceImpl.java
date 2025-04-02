@@ -1,5 +1,6 @@
 package com.example.lettering.domain.keyring.service;
 
+import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
 import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.user.OrderRequest;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
@@ -234,5 +235,20 @@ public class KeyringServiceImpl implements KeyringService{
         return keyrings.stream()
                 .map(keyring -> new KeyringFilterResponse(keyring.getId(), keyring.getNfcName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void customizeKeyrings(Long userId, List<KeyringCustomizeRequest.KeyringInfo> keyrings) {
+        for (KeyringCustomizeRequest.KeyringInfo info : keyrings) {
+            Keyring keyring = keyringRepository.findById(info.getKeyringId())
+                    .orElseThrow(() -> new DbException(ExceptionCode.KEYRING_NOT_FOUND));
+
+            if (!keyring.getOwner().getId().equals(userId)) {
+                throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
+            }
+
+            keyring.updateNfcName(info.getNfcName());
+            keyring.setCustomMessage(info.getCustomMessage());
+        }
     }
 }

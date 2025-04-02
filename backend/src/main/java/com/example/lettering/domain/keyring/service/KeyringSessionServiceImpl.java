@@ -11,26 +11,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
-public class SessionServiceImpl implements SessionService{
+public class KeyringSessionServiceImpl implements KeyringSessionService {
+
     private final Map<String, SessionInfo> sessions = new ConcurrentHashMap<>();
 
     @Override
     public String issueSession(Long keyringId, String ip, String ua) {
         String sessionToken = UUID.randomUUID().toString();
-
-        // ⛔ expiresAt 제거!
         sessions.put(sessionToken, new SessionInfo(keyringId, ip, ua, null));
         return sessionToken;
     }
 
-    @Override
-    public boolean isValid(String sessionToken, Long keyringId, String ip, String ua) {
+    public Long getKeyringIdIfValid(String sessionToken, String ip, String ua) {
         SessionInfo info = sessions.get(sessionToken);
-        if (info == null) return false;
 
-        return info.keyringId.equals(keyringId) &&
+        if (info == null) return null;
+
+        boolean match = info.keyringId != null &&
                 info.ip.equals(ip) &&
                 info.userAgent.equals(ua);
+
+        return match ? info.keyringId : null;
     }
 }
 
