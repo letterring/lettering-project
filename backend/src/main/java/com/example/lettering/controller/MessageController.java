@@ -52,10 +52,10 @@ public class MessageController {
     public ResponseEntity<Map<String, String>> getHighQualityImage(   @RequestParam("messageId") Long messageId,
                                                                       @RequestParam(value = "index", defaultValue = "0") int index, HttpSession session)  {
 
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+//        Long userId = (Long) session.getAttribute("userId");
+//        if (userId == null) {
+//            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+//        }
 
         String imageUrl = messageService.getHighQualityImageUrl(messageId, index);
         return ResponseEntity.ok(Map.of("imageHighUrl", imageUrl));
