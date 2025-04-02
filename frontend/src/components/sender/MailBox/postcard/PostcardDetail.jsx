@@ -8,8 +8,8 @@ import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 import { getFontStyle } from '/src/util/getFont';
 
-import { getSentPostcardDetail } from '../../../apis/postcard';
-import Header from '../../common/Header';
+import { getSentPostcardDetail } from '../../../../apis/postcard';
+import Header from '../../../common/Header';
 
 const PostcardDetail = () => {
   const [flipped, setFlipped] = useState(false);
