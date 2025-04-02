@@ -9,3 +9,12 @@ export const getKeyringInfo = async (keyringId) => {
     console.error('키링 상세정보를 가져오지 못했습니다.', err);
   }
 };
+
+export const getLetterDetail = async (messageId) => {
+  try {
+    const { data } = await client.get(`/messages/letters/dear/${messageId}`);
+    return data;
+  } catch (err) {
+    console.error('편지 상세정보 조회에 실패했습니다.', err);
+  }
+};
