@@ -22,6 +22,7 @@ import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,10 +52,10 @@ public class MessageController {
     public ResponseEntity<Map<String, String>> getHighQualityImage(   @RequestParam("messageId") Long messageId,
                                                                       @RequestParam(value = "index", defaultValue = "0") int index, HttpSession session)  {
 
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+//        Long userId = (Long) session.getAttribute("userId");
+//        if (userId == null) {
+//            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+//        }
 
         String imageUrl = messageService.getHighQualityImageUrl(messageId, index);
         return ResponseEntity.ok(Map.of("imageHighUrl", imageUrl));
@@ -63,7 +64,7 @@ public class MessageController {
     @Operation(summary = "엽서 작성 API", description = "엽서를 작성하여 등록합니다.")
     @PostMapping(path = "/postcards",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createPostcard(
-            @RequestPart("postcard") CreatePostcardRequest createPostcardRequest,
+            @Valid @RequestPart("postcard") CreatePostcardRequest createPostcardRequest,
             @RequestPart("image") MultipartFile imageFile, HttpSession session) throws IOException {
 
         Long userId = (Long) session.getAttribute("userId");
@@ -81,7 +82,7 @@ public class MessageController {
     @Operation(summary = "편지 API", description = "편지를 작성하여 등록합니다.")
     @PostMapping(path = "/letters",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createLetter(
-            @RequestPart("letter") CreateLetterRequest createLetterRequest,
+            @Valid @RequestPart("letter") CreateLetterRequest createLetterRequest,
             @RequestPart("images") List<MultipartFile> imageFiles, HttpSession session) throws IOException {
 
         Long userId = (Long) session.getAttribute("userId");

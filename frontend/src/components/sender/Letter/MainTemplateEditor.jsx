@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import LetteringImg from '../../../assets/images/letter/lettering.svg';
+import LetteringImg from '../../../assets/images/letter/Lettering.svg';
 import StampImg from '../../../assets/images/letter/vintage_stamp.png';
 
 const MainTemplateEditor = ({ images }) => {
