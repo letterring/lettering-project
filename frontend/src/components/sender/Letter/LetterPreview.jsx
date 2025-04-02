@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
+import { getUserFont } from '/src/apis/user';
 import DummyImg1 from '/src/assets/dummy/letter.jpg';
 import DummyImg7 from '/src/assets/dummy/photo_blossom1.png';
 import DummyImg8 from '/src/assets/dummy/photo_blossom2.png';
@@ -16,6 +17,7 @@ import LetterImg1 from '/src/assets/images/letter/letter1.png';
 import LetterImg2 from '/src/assets/images/letter/letter2.png';
 import LetterImg3 from '/src/assets/images/letter/letter3.png';
 import LetterImg4 from '/src/assets/images/letter/letter4.png';
+import { getFontStyle } from '/src/util/getFont';
 
 import { IcArrowLeft, IcArrowRight2 } from '../../../assets/icons';
 import Header from '../../common/Header';
@@ -49,6 +51,16 @@ const LetterPreview = () => {
 
   const [textList, setTextList] = useState([...textDummy]);
   const [activeModal, setActiveModal] = useState(null);
+  const [userFont, setUserFont] = useState(undefined);
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      const { font } = await getUserFont();
+      setUserFont(getFontStyle(font));
+    };
+
+    fetchFont();
+  }, []);
 
   const handleTextChange = (index, value) => {
     const updated = [...textList];
@@ -130,8 +142,8 @@ const LetterPreview = () => {
       />
 
       {/* 모달 */}
-      {activeModal === 'add' && <AiEnhanceModal onClose={closeModal} />}
-      {activeModal === 'edit' && <AiRefineModal onClose={closeModal} />}
+      {activeModal === 'add' && <AiEnhanceModal onClose={closeModal} font={userFont} />}
+      {activeModal === 'edit' && <AiRefineModal onClose={closeModal} font={userFont} />}
     </StLetterPreview>
   );
 };
