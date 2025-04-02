@@ -64,7 +64,7 @@ public class Keyring {
                 false,         // isFavorite
                 null,          // design
                 tagCode,        // tagCode
-                null
+                "새로운 편지가 도착했어요!"
         );
     }
 
