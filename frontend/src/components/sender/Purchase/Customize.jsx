@@ -30,7 +30,7 @@ const Customize = () => {
 
   const handleCompleteOrder = () => {
     setCount(1);
-    navigator('/home');
+    navigator('/purchase/complete');
   };
 
   return (

@@ -56,8 +56,8 @@ const Router = () => {
               <Route path="/purchase" element={<DescribeKeyringPage />} />
               <Route path="/purchase/complete" element={<CompleteOrderPage />} />
               <Route path="/mailbox" element={<MailBoxPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/checkout/customize" element={<CustomizePage />} />
+              <Route path="/purchase/checkout" element={<CheckoutPage />} />
+              <Route path="/purchase/customize" element={<CustomizePage />} />
 
               <Route path="/theme" element={<SelectThemePage />} />
 

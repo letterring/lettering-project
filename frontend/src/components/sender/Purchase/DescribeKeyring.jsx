@@ -58,7 +58,7 @@ const DescribeKeyring = () => {
               <LongButton
                 btnName="구매하기"
                 onClick={() => {
-                  navigate(`/checkout`);
+                  navigate(`/purchase/checkout`);
                 }}
               />
             </StText>
