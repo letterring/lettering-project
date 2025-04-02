@@ -16,9 +16,9 @@ const PolarTemplate = ({ images, isActive }) => {
   return (
     <StWrapper>
       <StPolarBack src={PolarImg1} alt="폴라로이드 배경" />
-      <StImageBack src={images[1]} alt="사진" $loaded={loaded} />
+      <StImageBack src={images[1]?.imageLowUrl} alt="사진" $loaded={loaded} />
       <StPolarFront src={PolarImg2} alt="폴라로이드 배경" />
-      <StImageFront src={images[0]} alt="사진" $loaded={loaded} />
+      <StImageFront src={images[0]?.imageLowUrl} alt="사진" $loaded={loaded} />
     </StWrapper>
   );
 };

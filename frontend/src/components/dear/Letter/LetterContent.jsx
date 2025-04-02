@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { getFontStyle } from '../../../util/getFont';
 import EndTemplate from './EndTemplate';
 import FilmTemplate from './FilmTemplate';
 import GridTemplate from './GridTemplate';
@@ -8,38 +9,39 @@ import MainTemplate from './MainTemplate';
 import PolarTemplate from './PolarTemplate';
 import ReplyComponent from './ReplyComponent';
 
-const LetterContent = ({ template, images, text, background, isActive }) => {
+const LetterContent = ({ template, images, text, background, isActive, font }) => {
+  const fontStyle = getFontStyle(font);
   return (
     <StLetterWrapper $background={background}>
       <StContentWrapper>
         {template === 'main' && (
           <>
             <MainTemplate images={images} />
-            <StLetterText>{text[0]}</StLetterText>
+            <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
           </>
         )}
         {template === 'film' && (
           <>
-            <StLetterText>{text[0]}</StLetterText>
+            <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
             <FilmTemplate images={images} />
           </>
         )}
         {template === 'polar' && (
           <>
             <PolarTemplate images={images} isActive={isActive} />
-            <StLetterText>{text[0]}</StLetterText>
+            <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
           </>
         )}
         {template === 'card' && (
           <>
-            <StLetterText>{text[0]}</StLetterText>
+            <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
             <GridTemplate images={images} />
-            <StLetterText>{text[1]}</StLetterText>
+            <StLetterText $userFont={fontStyle}>{text[1]}</StLetterText>
           </>
         )}
         {template === 'answer' && (
           <>
-            <StLetterText>
+            <StLetterText $userFont={fontStyle}>
               {text[0]}
               <br /> {text[1]}
             </StLetterText>
@@ -86,7 +88,7 @@ const StLetterText = styled.div`
   padding: 1rem;
   min-height: 4rem;
 
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ $userFont, theme }) => theme.fonts[$userFont]};
   word-wrap: break-word;
   overflow: auto;
   white-space: normal;

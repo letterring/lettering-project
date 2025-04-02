@@ -93,7 +93,7 @@ const SlideComponent = () => {
     if (type === 'POSTCARD') {
       navigate(`/dear/postcard/detail/${messageId}`);
     } else {
-      navigate(`/dear/letter/detail`);
+      navigate(`/dear/letter/detail/${messageId}`);
     }
   };
 
