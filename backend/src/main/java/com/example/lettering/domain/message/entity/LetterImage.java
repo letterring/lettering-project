@@ -1,5 +1,6 @@
 package com.example.lettering.domain.message.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,7 @@ public class LetterImage {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "letter_id", nullable = false)
+    @JsonIgnore
     private Letter letter;
 
     public static LetterImage fromImageUrl(String imageHighUrl, String imageLowUrl, int orderIndex) {

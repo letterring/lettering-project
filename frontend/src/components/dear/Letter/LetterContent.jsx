@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 
 import EndTemplate from './EndTemplate';
@@ -9,7 +8,7 @@ import MainTemplate from './MainTemplate';
 import PolarTemplate from './PolarTemplate';
 import ReplyComponent from './ReplyComponent';
 
-const LetterContent = ({ template, images, text, background }) => {
+const LetterContent = ({ template, images, text, background, isActive }) => {
   return (
     <StLetterWrapper $background={background}>
       <StContentWrapper>
@@ -27,7 +26,7 @@ const LetterContent = ({ template, images, text, background }) => {
         )}
         {template === 'polar' && (
           <>
-            <PolarTemplate images={images} />
+            <PolarTemplate images={images} isActive={isActive} />
             <StLetterText>{text[0]}</StLetterText>
           </>
         )}
