@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class SealingWaxController {
     @SwaggerBody(content = @Content(encoding = @Encoding(name = "sealingwax", contentType = MediaType.APPLICATION_JSON_VALUE)))
     @PostMapping(value = "/backoffice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SealingWaxResponse> createSealingWax(
-            @RequestPart("sealingwax") CreateSealingWaxRequest createSealingWaxRequest,
+            @RequestPart("sealingwax") @Valid CreateSealingWaxRequest createSealingWaxRequest,
             @RequestPart("image") MultipartFile imageFile) throws IOException {
         return ResponseEntity.ok(sealingWaxService.createSealingWax(createSealingWaxRequest, imageFile));
     }

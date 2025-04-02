@@ -43,7 +43,7 @@ public class UserController {
 
     @Operation(summary = "로그인", description = "이메일을 통해 로그인합니다.")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequestDto, HttpSession session) {
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginRequestDto, HttpSession session) {
         LoginResponse responseDto = authService.loginUser(loginRequestDto);
 
         session.setAttribute("userId", responseDto.getUserId());
