@@ -241,14 +241,24 @@ public class KeyringServiceImpl implements KeyringService{
     public void customizeKeyrings(Long userId, List<KeyringCustomizeRequest.KeyringInfo> keyrings) {
         for (KeyringCustomizeRequest.KeyringInfo info : keyrings) {
             Keyring keyring = keyringRepository.findById(info.getKeyringId())
-                    .orElseThrow(() -> new DbException(ExceptionCode.KEYRING_NOT_FOUND));
+                    .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
 
             if (!keyring.getOwner().getId().equals(userId)) {
                 throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
             }
 
-            keyring.updateNfcName(info.getNfcName());
-            keyring.setCustomMessage(info.getCustomMessage());
+            // ✅ null 또는 빈 문자열("") 아닌 경우만 업데이트
+            if (info.getNfcName() != null && !info.getNfcName().isBlank()) {
+                keyring.updateNfcName(info.getNfcName());
+            }
+
+            if (info.getCustomMessage() != null && !info.getCustomMessage().isBlank()) {
+                keyring.setCustomMessage(info.getCustomMessage());
+            }
         }
     }
+
+
+
+
 }
