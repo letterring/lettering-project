@@ -4,31 +4,31 @@ import com.example.lettering.controller.request.sender.CreateLetterRequest;
 import com.example.lettering.controller.request.sender.CreatePostcardRequest;
 import com.example.lettering.controller.response.dear.*;
 import com.example.lettering.controller.response.keyring.KeyringFilterListResponse;
-import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
 import com.example.lettering.controller.response.sender.LetterBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.PostcardBySenderDetailResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryListResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
 import com.example.lettering.domain.keyring.service.KeyringService;
-import com.example.lettering.domain.keyring.service.SessionService;
-import com.example.lettering.domain.keyring.service.TokenService;
+import com.example.lettering.domain.keyring.service.KeyringSessionService;
 import com.example.lettering.domain.message.service.LetterService;
 import com.example.lettering.domain.message.service.MessageService;
 import com.example.lettering.domain.message.service.PostcardService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.exception.type.ValidationException;
+import com.example.lettering.util.SessionUtil;
 import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,18 +43,18 @@ public class MessageController {
     private final MessageService messageService;
     private final LetterService letterService;
     private final KeyringService keyringService;
-    private final TokenService tokenService;
-    private final SessionService sessionService;
+    private final KeyringSessionService sessionService;
+    private final SessionUtil sessionUtil;
 
     @Operation(summary = "고화질 이미지 API", description = "해당 메시지(우편 또는 엽서)의 고화질 이미지를 얻습니다.")
     @GetMapping("/highimage")
     public ResponseEntity<Map<String, String>> getHighQualityImage(   @RequestParam("messageId") Long messageId,
                                                                       @RequestParam(value = "index", defaultValue = "0") int index, HttpSession session)  {
 
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+//        Long userId = (Long) session.getAttribute("userId");
+//        if (userId == null) {
+//            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+//        }
 
         String imageUrl = messageService.getHighQualityImageUrl(messageId, index);
         return ResponseEntity.ok(Map.of("imageHighUrl", imageUrl));
@@ -63,7 +63,7 @@ public class MessageController {
     @Operation(summary = "엽서 작성 API", description = "엽서를 작성하여 등록합니다.")
     @PostMapping(path = "/postcards",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createPostcard(
-            @RequestPart("postcard") CreatePostcardRequest createPostcardRequest,
+            @Valid @RequestPart("postcard") CreatePostcardRequest createPostcardRequest,
             @RequestPart("image") MultipartFile imageFile, HttpSession session) throws IOException {
 
         Long userId = (Long) session.getAttribute("userId");
@@ -81,7 +81,7 @@ public class MessageController {
     @Operation(summary = "편지 API", description = "편지를 작성하여 등록합니다.")
     @PostMapping(path = "/letters",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createLetter(
-            @RequestPart("letter") CreateLetterRequest createLetterRequest,
+            @Valid @RequestPart("letter") CreateLetterRequest createLetterRequest,
             @RequestPart("images") List<MultipartFile> imageFiles, HttpSession session) throws IOException {
 
         Long userId = (Long) session.getAttribute("userId");
@@ -237,84 +237,24 @@ public class MessageController {
     }
 
     /**
-     * 🔐 메시지 수신자 기준 메시지 조회 API
+     * 💌 키링 세션 기반 메시지 조회 API
      *
-     * NFC 태깅 후 리디렉션된 페이지에서 token + mac 검증을 수행하고,
-     * 검증 통과 시 sessionToken을 발급하여 이후 인증 기반으로 사용된다.
+     * Authorization 헤더에 포함된 세션 토큰을 검증하고,
+     * 해당 키링 ID에 대한 메시지 목록을 반환합니다.
      *
-     * @param keyringId NFC 키링 고유 ID
-     * @param token 발급된 일회용 토큰
-     * @param mac token에 대한 HMAC 서명
-     * @param page 조회할 페이지 (기본값 0)
-     * @param request 클라이언트 요청 (IP / UA 확인용)
-     * @return 메시지 목록 + X-Session-Token 헤더 포함 응답
+     * @return DearMessageSummaryListResponse - 메시지 목록
      */
-//    @GetMapping("dear/{keyringId}")
+//    @GetMapping("/dear")
 //    public ResponseEntity<DearMessageSummaryListResponse> getDearMessages(
-//            @PathVariable("keyringId") Long keyringId,
-//            @RequestParam("token") String token,
-//            @RequestParam("mac") String mac,
-//            @RequestParam(name = "page", defaultValue = "0") int page,
-//            HttpServletRequest request) {
+//            @RequestHeader("Authorization") String authHeader,
+//            HttpServletRequest request
+//    ) {
+//        Long keyringId = sessionUtil.extractValidKeyringId(authHeader, request);
 //
-//        if (keyringId == null) {
-//            throw new BusinessException(ExceptionCode.VALIDATION_ERROR);
-//        }
+//        var messages = messageService.getMessagesToDear(keyringId, 0);
 //
-//        String ip = request.getRemoteAddr();
-//        String ua = request.getHeader("User-Agent");
-//
-//        // 🔐 token/mac 검증
-//        if (!tokenService.isValid(token, mac, keyringId, ip, ua)) {
-//            throw new BusinessException(ExceptionCode.UNAUTHORIZED_ACCESS); // 403
-//        }
-//
-//        // ✅ 세션토큰 발급
-//        String sessionToken = sessionService.issueSession(keyringId, ip, ua);
-//
-//        // 📩 메시지 조회
-//        DearMessageSummaryListResponse response = DearMessageSummaryListResponse.of(
-//                messageService.getMessagesToDear(keyringId, page) // 안읽은 → 즐겨찾기 → 최신순 정렬 적용
+//        return ResponseEntity.ok(
+//                DearMessageSummaryListResponse.of(messages)
 //        );
-//
-//        // 📨 sessionToken 헤더에 포함해서 응답
-//        return ResponseEntity.ok()
-//                .header("X-Session-Token", sessionToken)
-//                .body(response);
-//    }
-
-    /**
-     * 📄 엽서 상세 조회 API (받는 사람 전용)
-     *
-     * 발급받은 sessionToken을 Authorization 헤더로 전달하여 인증을 수행하며,
-     * token이 유효하지 않거나 만료되었으면 403을 반환한다.
-     *
-     * @param auth Authorization 헤더에 담긴 sessionToken ("Bearer {token}")
-     * @param keyringId 현재 접속한 키링의 keyringId
-     * @param request 클라이언트 IP / User-Agent 확인
-     * @return 엽서 상세 데이터
-     */
-//    @GetMapping("postcards/detail")
-//    public ResponseEntity<Map<String, Object>> getDetail(
-//            @RequestHeader("Authorization") String auth,
-//            @RequestParam("keyringId") Long keyringId,
-//            HttpServletRequest request) {
-//
-//        String token = auth.replace("Bearer ", "");
-//        String ip = request.getRemoteAddr();
-//        String ua = request.getHeader("User-Agent");
-//
-//        if (!sessionService.isValid(token, keyringId, ip, ua)) {
-//            throw new BusinessException(ExceptionCode.UNAUTHORIZED_ACCESS);
-//        }
-//
-//        // 💌 실제 내용 반환
-//        Map<String, Object> result = new HashMap<>();
-//        result.put("title", "🌸 너에게 보내는 편지");
-//        result.put("message", "오늘도 좋은 하루 보내길 바래!");
-//        result.put("keyringId", keyringId);
-//        result.put("timestamp", System.currentTimeMillis());
-//
-//        return ResponseEntity.ok(result);
 //    }
 }

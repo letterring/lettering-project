@@ -1,5 +1,6 @@
 package com.example.lettering.controller;
 
+import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
 import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.keyring.KeyringTagRequest;
 import com.example.lettering.controller.request.keyring.UpdateNfcNameRequest;
@@ -143,6 +144,21 @@ public class KeyringController {
         KeyringManageResponse response = keyringService.getKeyringById(keyringId, userId);
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/customize")
+    @Operation(summary = "키링 닉네임 및 메시지 설정", description = "키링 ID 리스트에 대해 닉네임과 메시지를 설정합니다.")
+    public ResponseEntity<BooleanResponse> customizeKeyrings(
+            @RequestBody KeyringCustomizeRequest request,
+            HttpSession session
+    ) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+
+        keyringService.customizeKeyrings(userId, request.getKeyrings());
+
+        return ResponseEntity.ok(BooleanResponse.success());
+    }
+
 
 
 }
