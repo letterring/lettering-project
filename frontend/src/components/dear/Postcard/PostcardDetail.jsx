@@ -14,11 +14,19 @@ import Header from '../../common/Header';
 import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
-  const { toggle, handleToggle } = useToggle(false);
   const { messageId } = useParams();
   const location = useLocation();
 
+  const [flipped, setFlipped] = useState(false);
+  const [isShow, setIsShow] = useState(true);
+  const { toggle, handleToggle } = useToggle(false);
+
   const [postcard, setPostcard] = useState(location.state?.postcard || null);
+
+  const handleInformMsg = () => {
+    setFlipped((prev) => !prev);
+    setIsShow(false);
+  };
 
   const handleMarkAsUnread = async () => {
     await markPostcardAsUnread(messageId);
@@ -44,31 +52,34 @@ const PostcardDetail = () => {
   return (
     <StPageWrapper>
       <Header headerName="Lettering" />
+      <StWrapper>
+        <StFlipContainer onClick={handleInformMsg}>
+          <StInform $isShow={isShow}>엽서를 눌러 편지 내용을 확인해보세요.</StInform>
+          <StFlipCard $flipped={flipped}>
+            <StCardFace className="front">
+              {/* <StPostcard src={PostcardImg} alt="엽서" /> */}
+              <StPostcardWhite />
+              <StPostcardImage>
+                <img src={imageUrl || DummyImg} alt="엽서사진" />
+              </StPostcardImage>
+            </StCardFace>
+            <StCardFace className="back">
+              <StPostcard src={PostcardImg} alt="엽서" />
+              <StPostcardContent>
+                <StPostcardStamp src={StampImg} alt="우표" />
+                <StPostcardTitle $font={getFontStyle(font)}>
+                  사랑하는 {nfcName || '너'}에게,
+                </StPostcardTitle>
+                <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
+              </StPostcardContent>
+            </StCardFace>
+          </StFlipCard>
+        </StFlipContainer>
+
       <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
 
-      <StFlipContainer onClick={handleToggle}>
-        <StFlipCard $flipped={toggle}>
-          <StCardFace className="front">
-            {/* <StPostcard src={PostcardImg} alt="엽서" /> */}
-            <StPostcardWhite />
-            <StPostcardImage>
-              <img src={imageUrl || DummyImg} alt="엽서사진" />
-            </StPostcardImage>
-          </StCardFace>
-          <StCardFace className="back">
-            <StPostcard src={PostcardImg} alt="엽서" />
-            <StPostcardContent>
-              <StPostcardStamp src={StampImg} alt="우표" />
-              <StPostcardTitle $font={getFontStyle(font)}>
-                사랑하는 {nfcName || '너'}에게,
-              </StPostcardTitle>
-              <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
-            </StPostcardContent>
-          </StCardFace>
-        </StFlipCard>
-      </StFlipContainer>
-
-      <ReplyComponent messageId={messageId} replyText={replyText} />
+        <ReplyComponent messageId={messageId} replyText={replyText} />
+      </StWrapper>
     </StPageWrapper>
   );
 };
@@ -92,14 +103,35 @@ const StPageWrapper = styled.div`
   height: 100%;
 `;
 
+const StWrapper = styled.div`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 100%;
+  padding-top: 10rem;
+`;
+
+const StInform = styled.div`
+  color: ${({ theme }) => theme.colors.Gray4};
+  ${({ theme }) => theme.fonts.EduBody2};
+  padding: 1rem;
+
+  opacity: ${({ $isShow }) => ($isShow ? '1' : '0')};
+`;
+
 const StFlipContainer = styled.div`
   perspective: 100rem;
   width: 30rem;
   height: 23rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 7rem;
+  /* margin-bottom: 7rem; */
 `;
 
 const StFlipCard = styled.div`
@@ -141,6 +173,7 @@ const StCardFace = styled.div`
 const StPostcard = styled.img`
   position: absolute;
   width: 29rem;
+  height: 100%;
   z-index: 2;
 `;
 
@@ -192,7 +225,7 @@ const StPostcardImage = styled(motion.div)`
   top: 0.9rem;
   left: 0.8rem;
   width: 28.3rem;
-  height: 21rem;
+  height: 17.5rem;
   z-index: 3;
 
   img {
