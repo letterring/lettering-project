@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { getUserFont } from '/src/apis/user';
+import { getFontStyle } from '/src/util/getFont';
+
 import { LetterImageList, LetterText, UserFont } from '../../../recoil/atom';
-import { getFontStyle } from '../../../util/getFont';
 import Header from '../../common/Header';
 
 const LetterWriting = () => {
@@ -12,6 +14,7 @@ const LetterWriting = () => {
 
   const [ImageList, setImageList] = useState([]);
   const [letterContent, setLetterContent] = useState('');
+  const [userFont, setUserFont] = useState(undefined);
 
   const fontStyle = getFontStyle(useRecoilValue(UserFont));
 
@@ -19,6 +22,15 @@ const LetterWriting = () => {
 
   const setLetterImages = useSetRecoilState(LetterImageList);
   const setLetterText = useSetRecoilState(LetterText);
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      const { font } = await getUserFont();
+      setUserFont(getFontStyle(font));
+    };
+
+    fetchFont();
+  }, []);
 
   const handleLetterChange = (e) => {
     setLetterContent(e.target.value);
@@ -82,7 +94,7 @@ const LetterWriting = () => {
             maxLength={600}
             value={letterContent}
             onChange={handleLetterChange}
-            $fontStyle={fontStyle}
+            $fontStyle={userFont}
           />
           <FooterWrapper>
             {!isValid ? <WarnText>사진은 8장 이상 필요합니다.</WarnText> : <WarnText />}
