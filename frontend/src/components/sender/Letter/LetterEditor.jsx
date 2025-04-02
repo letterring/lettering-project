@@ -150,5 +150,5 @@ const StEndText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ theme }) => theme.fonts.Gomsin1};
 `;

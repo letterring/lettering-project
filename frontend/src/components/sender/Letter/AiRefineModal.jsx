@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import AiImg from '/src/assets/images/ai_refine.png';
 
-const AiRefineModal = ({ onClose, font }) => {
+const AiRefineModal = ({ onClose, font, suggestions = [], onUse }) => {
   return (
     <Overlay onClick={onClose}>
       <Content onClick={(e) => e.stopPropagation()}>
@@ -16,13 +16,15 @@ const AiRefineModal = ({ onClose, font }) => {
           </GuideText>
         </Header>
 
-        <SuggestionBubble $font={font}>
-          오늘 아침 눈을 뜨자마자 달력을 보니 우리 기념일이라는 사실에 마음이 설렌다...
-        </SuggestionBubble>
+        {suggestions.map((text, index) => (
+          <SuggestionBubble key={index} $font={font}>
+            {text}
+          </SuggestionBubble>
+        ))}
 
         <Buttons>
           <OutlinedButton>다시 추천받기</OutlinedButton>
-          <FilledButton>사용하기</FilledButton>
+          <FilledButton onClick={() => onUse(suggestions)}>사용하기</FilledButton>
         </Buttons>
       </Content>
     </Overlay>
@@ -87,12 +89,12 @@ const CloseButton = styled.button`
 
 const SuggestionBubble = styled.div`
   background: #f9f9f9;
-  padding: 1.6rem;
-  border-radius: 1.6rem;
   ${({ theme, $font }) => theme.fonts[$font]};
   color: ${({ theme }) => theme.colors.Gray0};
+  padding: 1.6rem;
+  width: 85%;
+  border-radius: 1.6rem;
   box-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
 `;
 
 const Buttons = styled.div`
@@ -100,6 +102,7 @@ const Buttons = styled.div`
   gap: 1rem;
   width: 100%;
   justify-content: flex-end;
+  margin-top: 2rem;
 `;
 
 const OutlinedButton = styled.button`
