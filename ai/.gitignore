@@ -3,7 +3,7 @@
 
 # custom
 /openai/
-/uploads/
+/app/uploads/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
