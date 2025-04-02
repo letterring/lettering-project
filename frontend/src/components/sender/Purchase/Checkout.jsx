@@ -11,7 +11,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const price = useRecoilValue(TotalPrice);
   const handleCheckout = () => {
-    navigate('/checkout/customize');
+    navigate('/purchase/customize');
   };
   return (
     <StCheckoutWrapper>
