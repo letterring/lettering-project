@@ -97,6 +97,10 @@ public class KeyringServiceImpl implements KeyringService{
                 totalPrice
         );
 
+        order.addKeyringIds(
+                keyrings.stream().map(Keyring::getId).toList()
+        );
+
         return order;
     }
 
