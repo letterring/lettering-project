@@ -41,6 +41,7 @@ const PostcardDetail = () => {
   return (
     <StPageWrapper>
       <Header headerName="Lettering" />
+      <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
 
       <StFlipContainer onClick={() => setFlipped((prev) => !prev)}>
         <StFlipCard $flipped={flipped}>
@@ -64,14 +65,21 @@ const PostcardDetail = () => {
         </StFlipCard>
       </StFlipContainer>
 
-      <button onClick={handleMarkAsUnread}>안읽음 처리</button>
-
       <ReplyComponent messageId={messageId} replyText={replyText} />
     </StPageWrapper>
   );
 };
 
 export default PostcardDetail;
+
+export const SimpleButton = styled.button`
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: none;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+`;
 
 const StPageWrapper = styled.div`
   display: flex;
