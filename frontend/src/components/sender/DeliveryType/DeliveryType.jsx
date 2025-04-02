@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -12,6 +12,8 @@ import { PostcardImageFile, PostcardText, SelectedKeyringId } from '../../../rec
 import Header from '../../common/Header';
 import QuestionText from '../SelectDear/QuestionText';
 import DeliveryTypeCard from './DeliveryTypeCard';
+// ✅ 예약 편지 모달 컴포넌트 import
+import ScheduledOption from './ScheduledOption';
 
 const DeliveryType = () => {
   const navigate = useNavigate();
@@ -19,6 +21,9 @@ const DeliveryType = () => {
   const selectedKeyringId = useRecoilValue(SelectedKeyringId);
   const postcardImageFile = useRecoilValue(PostcardImageFile);
   const postcardText = useRecoilValue(PostcardText);
+
+  // ✅ 어떤 모달을 띄울지 상태로 관리
+  const [selectedModalType, setSelectedModalType] = useState(null);
 
   const deliveryTypes = [
     {
@@ -47,35 +52,41 @@ const DeliveryType = () => {
     },
   ];
 
-  const handleSelect = async (type) => {
-    console.log('선택된 전송 방식:', type);
-
+  // ✅ 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
+  const handleSend = async ({ conditionType, scheduledAt = null }) => {
     const sealingWaxId = localStorage.getItem('sealingWaxId');
     if (!sealingWaxId) {
       alert('실링왁스 ID가 없습니다.');
       return;
     }
 
+    const postcardData = {
+      keyringId: selectedKeyringId,
+      sealingWaxId: Number(sealingWaxId),
+      conditionType,
+      scheduledAt,
+      content: postcardText,
+    };
+
+    try {
+      await sendPostcard({
+        postcardData,
+        imageFile: postcardImageFile,
+      });
+
+      navigate('/complete/postcard');
+    } catch (error) {
+      console.error('엽서 전송 실패:', error);
+      alert('엽서 전송에 실패했어요.');
+    }
+  };
+
+  // ✅ 카드 클릭 시 처리
+  const handleSelect = (type) => {
     if (type === 'NORMAL') {
-      const postcardData = {
-        keyringId: selectedKeyringId,
-        sealingWaxId: Number(sealingWaxId),
-        conditionType: 'NONE',
-        content: postcardText,
-      };
-
-      try {
-        await sendPostcard({
-          postcardData,
-          imageFile: postcardImageFile,
-        });
-
-        // alert('엽서가 전송되었습니다!');
-        navigate('/complete/postcard');
-      } catch (error) {
-        console.error('엽서 전송 실패:', error);
-        alert('엽서 전송에 실패했어요.');
-      }
+      handleSend({ conditionType: 'NONE' });
+    } else if (type === 'SCHEDULED') {
+      setSelectedModalType('SCHEDULED'); // 예약 모달 오픈
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
     }
@@ -99,6 +110,19 @@ const DeliveryType = () => {
           />
         ))}
       </CardList>
+
+      {/* ✅ 예약 편지 모달 렌더링 */}
+      {selectedModalType === 'SCHEDULED' && (
+        <ScheduledOption
+          onClose={() => setSelectedModalType(null)}
+          onConfirm={(datetime) =>
+            handleSend({
+              conditionType: 'SCHEDULED',
+              scheduledAt: datetime,
+            })
+          }
+        />
+      )}
     </Wrapper>
   );
 };
@@ -120,6 +144,7 @@ const CardList = styled.div`
   flex-direction: column;
   gap: 1.2rem;
 `;
+
 const QuestionTextWrapper = styled.div`
   margin-top: 10rem;
   margin-bottom: 2rem;
