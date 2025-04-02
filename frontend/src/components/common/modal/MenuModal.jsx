@@ -38,8 +38,8 @@ const MenuModal = ({ isShowing, target }) => {
       '/selectdear',
       '/deliverytype',
       '/writing',
-      '/postcard/preview',
-      '/complete',
+      '/postcard',
+      '/letter',
     ];
     if (id === 'theme') {
       return writingPaths.some((path) => location.pathname.includes(path));

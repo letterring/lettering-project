@@ -14,3 +14,14 @@ const client = axios.create({
 });
 
 export default client;
+
+client.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    // 401 에러 발생 시 (sessionToken 만료)
+    if (error.response?.status === 401) {
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  },
+);
