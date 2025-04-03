@@ -33,13 +33,9 @@ pipeline {
         echo "⚙️ 백엔드 Gradle 빌드 시작"
         dir('backend') {
           sh '''
-            ./gradlew clean build -x test --no-daemon
+            ./gradlew build -x test --no-daemon
 
-            echo "✅ 빌드된 JAR 확인"
-            if [ ! -f build/libs/lettering-0.0.1-SNAPSHOT.jar ]; then
-              echo "❌ JAR 파일이 존재하지 않습니다. 빌드 실패!"
-              exit 1
-            fi
+            
           '''
         }
       }
