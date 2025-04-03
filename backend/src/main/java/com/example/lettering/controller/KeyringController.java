@@ -1,14 +1,12 @@
 package com.example.lettering.controller;
 
-import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
-import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
-import com.example.lettering.controller.request.keyring.KeyringTagRequest;
-import com.example.lettering.controller.request.keyring.UpdateNfcNameRequest;
+import com.example.lettering.controller.request.keyring.*;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
 import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.exception.ExceptionCode;
+import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.exception.type.ValidationException;
 import com.example.lettering.util.SwaggerBody;
 import com.example.lettering.util.dto.BooleanResponse;
@@ -19,12 +17,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,12 @@ import java.util.Map;
 public class KeyringController {
 
     private final KeyringService keyringService;
+
+    @Value("${app.redirect-success-url}")
+    private String successBaseUrl;
+
+    @Value("${app.redirect-fail-url}")
+    private String failBaseUrl;
 
     // ✅ 모든 키링 디자인 목록 조회 (구매 페  이지에서 사용)
     @Operation(summary = "키링 디자인 목록 조회", description = "모든 키링 디자인을 조회합니다.")
@@ -158,6 +165,28 @@ public class KeyringController {
 
         return ResponseEntity.ok(BooleanResponse.success());
     }
+
+    @PostMapping("/nfc-access")
+    @Operation(summary = "디바이스 등록 및 검증", description = "앱에서 진입 시 디바이스 검증 또는 등록 후 결과 제공")
+    public ResponseEntity<Void> handleNfcAccess(@RequestBody KeyringAccessRequest request) {
+        try {
+            Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
+
+            return ResponseEntity
+                    .ok()
+                    .header("X-Keyring-Id", keyringId.toString())
+                    .build();
+
+        } catch (BusinessException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create(failBaseUrl))
+                    .build();
+        }
+    }
+
+
+
 
 
 
