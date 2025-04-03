@@ -10,6 +10,7 @@ import DearLetterDetailPage from './pages/dear/LetterDetailPage';
 import DearLetterPage from './pages/dear/LetterPage';
 import DearMailBoxPage from './pages/dear/MailBoxPage';
 import DearNoTagPage from './pages/dear/NoTagPage';
+import OpenAppPage from './pages/dear/OpenAppPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
@@ -61,6 +62,7 @@ const Router = () => {
               <Route path="/postcard/writing" element={<PostcardWritingPage />} />
               <Route path="/postcard/preview" element={<PostcardPreviewPage />} />
               <Route path="/postcard/detail/:messageId" element={<PostcardDetailPage />} />
+              <Route path="/letter/detail/:messageId" element={<PostcardDetailPage />} />
 
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />
@@ -82,9 +84,10 @@ const Router = () => {
               <Route path="/dear/notag" element={<DearNoTagPage />} />
               <Route path="/dear/postcard/:messageId" element={<DearPostcardPage />} />
               <Route path="/dear/postcard/detail/:messageId" element={<DearPostDetailPage />} />
-              <Route path="/dear/letter/:messageId" element={<DearLetterPage />} />
-              <Route path="/dear/letter/detail/:messageId" element={<DearLetterDetailPage />} />
+              <Route path="/dear/letter" element={<DearLetterPage />} />
+              <Route path="/dear/letter/detail" element={<DearLetterDetailPage />} />
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
+              <Route path="/openapp" element={<OpenAppPage />} />
 
               {/* common */}
               <Route path="*" element={<ErrorPage />} />
