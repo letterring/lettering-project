@@ -75,6 +75,7 @@ const ViewerWrapper = ({
   envelopeMtlPath,
   newLetter,
   onMissedClick,
+  text,
 }) => {
   const navigate = useNavigate();
 

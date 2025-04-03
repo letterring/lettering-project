@@ -11,7 +11,7 @@ const Landing = () => {
   const navigate = useNavigate();
   const [newLetter, setNewLetter] = useState(false);
   const [messageInfo, setMessageInfo] = useState(null);
-  const [text, setText] = useState('');
+  // const [text, setText] = useState('');
   const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용용)
 
   useEffect(() => {
@@ -25,12 +25,6 @@ const Landing = () => {
 
     fetchUnreadMessage();
   }, []);
-
-  window.addEventListener('message', (event) => {
-    const text = event.data;
-    console.log('📥 앱에서 받은 메시지:', text);
-    setText(text);
-  });
 
   const handleNewLetterClick = () => {
     if (!messageInfo) return;
@@ -74,7 +68,7 @@ const Landing = () => {
           envelopeMtlPath="/models/envelope.mtl"
           newLetter={newLetter}
           onMissedClick={newLetter ? handleNewLetterClick : handleMissedClick}
-          text={text}
+          text="새로운 메세지가 도착했어요!"
         />
       </div>
     </StHomeWrapper>
