@@ -13,7 +13,9 @@ import Header from '../../common/Header';
 import QuestionText from '../SelectDear/QuestionText';
 import DeliveryTypeCard from './DeliveryTypeCard';
 import ScheduledOption from './ScheduledOption';
+import SecretOption from './SecretOption';
 import TimerOption from './TimerOption';
+
 const DeliveryType = () => {
   const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ const DeliveryType = () => {
       icon: IconLock,
       title: '비밀 편지',
       description: '내가 낸 퀴즈를 맞혀야 편지가 열려요!',
-      value: 'LOCKED',
+      value: 'SECRETTYPE',
     },
     {
       icon: IconCalendar,
@@ -83,7 +85,7 @@ const DeliveryType = () => {
   const handleSelect = (type) => {
     if (type === 'NORMAL') {
       handleSend({ conditionType: 'NONE' });
-    } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE') {
+    } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE' || type === 'SECRETTYPE') {
       setSelectedModalType(type);
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
@@ -130,6 +132,12 @@ const DeliveryType = () => {
               scheduledAt: datetime,
             });
           }}
+        />
+      )}
+      {selectedModalType === 'SECRETTYPE' && (
+        <SecretOption
+          onClose={() => setSelectedModalType(null)}
+          onConfirm={(secret) => handleSend({ conditionType: 'SECRETTYPE', secret })}
         />
       )}
     </Wrapper>
