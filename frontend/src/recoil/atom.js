@@ -64,6 +64,18 @@ const UserKeyringList = atom({
   default: [],
 });
 
+// 결제 금액
+const TotalPrice = atom({
+  key: 'totalPrice',
+  default: 0,
+});
+
+// 결제 키링 수
+const TotalQuantity = atom({
+  key: 'totalQuantity',
+  default: 1,
+});
+
 const RedisMessageKey = atom({
   key: 'RedisMessageKey',
   default: '',
@@ -77,6 +89,8 @@ export {
   PostcardText,
   RedisMessageKey,
   SelectedKeyringId,
+  TotalPrice,
+  TotalQuantity,
   UserFont,
   UserId,
   UserKeyringList,
