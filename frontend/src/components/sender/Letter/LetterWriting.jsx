@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { getPostcard, submitPostcard } from '/src/apis/fastapi';
@@ -16,7 +16,7 @@ const LetterWriting = () => {
   const [ImageList, setImageList] = useState([]);
   const [letterContent, setLetterContent] = useState('');
   const [userFont, setUserFont] = useState(undefined);
-  const redisKey = useRecoilValue(RedisMessageKey);
+  const [redisKey, setRedisMessageKey] = useRecoilState(RedisMessageKey);
 
   const fileInputRef = useRef(null);
 
@@ -65,7 +65,7 @@ const LetterWriting = () => {
 
     if (result?.key) {
       setRedisMessageKey(result.key);
-      console.log('엽서 키:', redisKey);
+      console.log('엽서 키:', result.key);
       const postcard = await getPostcard(result.key);
       console.log('엽서 내용:', postcard);
       navigate('/letter/preview', { state: { postcard } });
