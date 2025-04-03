@@ -1,6 +1,7 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.keyring.*;
+import com.example.lettering.controller.response.keyring.CustomMessageResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
 import com.example.lettering.controller.response.keyring.KeyringManageResponse;
@@ -187,9 +188,9 @@ public class KeyringController {
 
     @GetMapping("/{keyringId}/custom-message")
     @Operation(summary = "키링 커스텀 메시지 조회", description = "keyringId에 해당하는 커스텀 메시지를 반환합니다.")
-    public ResponseEntity<Map<String, String>> getCustomMessageByKeyringId(@PathVariable Long keyringId) {
+    public ResponseEntity<CustomMessageResponse> getCustomMessageByKeyringId(@PathVariable Long keyringId) {
         String message = keyringService.getCustomMessage(keyringId);
-        return ResponseEntity.ok(Map.of("customMessage", message));
+        return ResponseEntity.ok(new CustomMessageResponse(message));
     }
 
 }
