@@ -81,9 +81,21 @@ const RedisMessageKey = atom({
   default: '',
 });
 
+const OrderNumber = atom({
+  key: 'orderNumber',
+  default: 0,
+});
+
+const KeyringCustomList = atom({
+  key: 'KeyringCustomList',
+  default: [],
+});
+
 export {
+  KeyringCustomList,
   LetterImageList,
   LetterText,
+  OrderNumber,
   PostcardImage,
   PostcardImageFile,
   PostcardText,

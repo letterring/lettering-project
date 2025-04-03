@@ -22,15 +22,15 @@ const CustomCard = ({ index, nickname, message, onChange }) => {
       <InputField
         title="키링 닉네임"
         description="편지에 적혀질 상대의 애칭을 설정해주세요."
-        value={nickname}
-        onChange={(e) => onChange(index, 'nickname', e.target.value)}
+        value={nickname ?? '우체통이름'}
+        onChange={(e) => onChange(index, 'nfcName', e.target.value)}
         maxLength={5}
       />
       <InputField
         title="나만의 메세지"
         description="받는 사람이 처음으로 보게 될 메세지를 설정해주세요."
-        value={message}
-        onChange={(e) => onChange(index, 'message', e.target.value)}
+        value={message ?? '새로운 편지가 도착했어요!'}
+        onChange={(e) => onChange(index, 'customMessage', e.target.value)}
         maxLength={14}
       />
     </StCardWrapper>
