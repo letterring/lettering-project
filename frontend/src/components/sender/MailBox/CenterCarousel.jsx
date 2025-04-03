@@ -2,6 +2,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -25,7 +26,8 @@ const images = {
   Opened3,
 };
 
-const CenterCarousel = () => {
+const CenterCarousel = ({ selected }) => {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -36,7 +38,7 @@ const CenterCarousel = () => {
 
   const getSenderMailbox = async (currentPage) => {
     setLoading(true);
-    const response = await getSenderMessages(currentPage);
+    const response = await getSenderMessages(currentPage, selected);
     const { senderMessageSummaryList } = response || {};
 
     if (senderMessageSummaryList) {
@@ -74,16 +76,32 @@ const CenterCarousel = () => {
   };
 
   useEffect(() => {
-    if (!initialLoaded) {
-      getSenderMailbox(0);
-    }
-  }, [initialLoaded]);
+    const resetAndFetch = async () => {
+      setMessages([]);
+      setPage(0);
+      setHasMore(true);
+      setOpenedIndices([]);
+      setInitialLoaded(true);
+
+      await getSenderMailbox(0);
+    };
+
+    resetAndFetch();
+  }, [selected]);
 
   const getAlignType = (idx, activeIdx) => {
     const diff = idx - activeIdx;
     if (diff === 0) return 'flex-start';
     if (diff < 0) return 'flex-start';
     return 'flex-end';
+  };
+
+  const handleOpenMsg = (type, messageId) => {
+    if (type === 'POSTCARD') {
+      navigate(`/postcard/detail/${messageId}`);
+    } else {
+      navigate(`/letter/detail/${messageId}`);
+    }
   };
 
   return (
@@ -133,7 +151,7 @@ const CenterCarousel = () => {
                   <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
                   {isOpened && isCenter && (
                     <DetailButton>
-                      <IcDetail />
+                      <IcDetail onClick={() => handleOpenMsg(designType, id)} />
                     </DetailButton>
                   )}
                 </Details>

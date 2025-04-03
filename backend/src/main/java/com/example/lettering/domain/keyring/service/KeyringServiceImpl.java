@@ -1,9 +1,11 @@
 package com.example.lettering.domain.keyring.service;
 
+import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
 import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.user.OrderRequest;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
+import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
 import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
@@ -94,6 +96,10 @@ public class KeyringServiceImpl implements KeyringService{
                 request.getRealName(), request.getPhoneNumber(), request.getEmail(),
                 request.getZipcode(), request.getRoadAddress(), request.getDetailAddress(),
                 totalPrice
+        );
+
+        order.addKeyringIds(
+                keyrings.stream().map(Keyring::getId).toList()
         );
 
         return order;
@@ -221,6 +227,37 @@ public class KeyringServiceImpl implements KeyringService{
 
         keyringRepository.delete(keyring);
     }
+
+    @Override
+    public List<KeyringFilterResponse> getKeyringsByOwner(Long ownerId) {
+        List<Keyring> keyrings = keyringRepository.findAllByOwnerId(ownerId);
+ 
+        return keyrings.stream()
+                .map(keyring -> new KeyringFilterResponse(keyring.getId(), keyring.getNfcName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void customizeKeyrings(Long userId, List<KeyringCustomizeRequest.KeyringInfo> keyrings) {
+        for (KeyringCustomizeRequest.KeyringInfo info : keyrings) {
+            Keyring keyring = keyringRepository.findById(info.getKeyringId())
+                    .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
+
+            if (!keyring.getOwner().getId().equals(userId)) {
+                throw new ValidationException(ExceptionCode.UNAUTHORIZED_ACCESS);
+            }
+
+            // ✅ null 또는 빈 문자열("") 아닌 경우만 업데이트
+            if (info.getNfcName() != null && !info.getNfcName().isBlank()) {
+                keyring.updateNfcName(info.getNfcName());
+            }
+
+            if (info.getCustomMessage() != null && !info.getCustomMessage().isBlank()) {
+                keyring.setCustomMessage(info.getCustomMessage());
+            }
+        }
+    }
+
 
 
 

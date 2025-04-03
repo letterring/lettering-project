@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
@@ -9,28 +9,39 @@ import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 import { getFontStyle } from '/src/util/getFont';
 
+import useToggle from '../../../hooks/common/useToggle';
 import Header from '../../common/Header';
 import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
-  const [flipped, setFlipped] = useState(false);
   const { messageId } = useParams();
+  const location = useLocation();
 
-  const [postcard, setPostcard] = useState(null);
+  const [flipped, setFlipped] = useState(false);
+  const [isShow, setIsShow] = useState(true);
+  const { toggle, handleToggle } = useToggle(false);
 
-  useEffect(() => {
-    const fetchPostcard = async () => {
-      const data = await getPostcardDetail(messageId);
-      setPostcard(data);
-    };
+  const [postcard, setPostcard] = useState(location.state?.postcard || null);
 
-    fetchPostcard();
-  }, [messageId]);
+  const handleInformMsg = () => {
+    setFlipped((prev) => !prev);
+    setIsShow(false);
+  };
 
   const handleMarkAsUnread = async () => {
     await markPostcardAsUnread(messageId);
     alert('안읽음 처리 완료!');
   };
+
+  useEffect(() => {
+    if (!postcard) {
+      const fetchPostcard = async () => {
+        const data = await getPostcardDetail(messageId);
+        setPostcard(data);
+      };
+      fetchPostcard();
+    }
+  }, [messageId, postcard]);
 
   // postcard가 아직 없으면 로딩 처리
   if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
@@ -41,37 +52,48 @@ const PostcardDetail = () => {
   return (
     <StPageWrapper>
       <Header headerName="Lettering" />
+      <StWrapper>
+        <StFlipContainer onClick={handleInformMsg}>
+          <StInform $isShow={isShow}>엽서를 눌러 편지 내용을 확인해보세요.</StInform>
+          <StFlipCard $flipped={flipped}>
+            <StCardFace className="front">
+              {/* <StPostcard src={PostcardImg} alt="엽서" /> */}
+              <StPostcardWhite />
+              <StPostcardImage>
+                <img src={imageUrl || DummyImg} alt="엽서사진" />
+              </StPostcardImage>
+            </StCardFace>
+            <StCardFace className="back">
+              <StPostcard src={PostcardImg} alt="엽서" />
+              <StPostcardContent>
+                <StPostcardStamp src={StampImg} alt="우표" />
+                <StPostcardTitle $font={getFontStyle(font)}>
+                  사랑하는 {nfcName || '너'}에게,
+                </StPostcardTitle>
+                <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
+              </StPostcardContent>
+            </StCardFace>
+          </StFlipCard>
+        </StFlipContainer>
 
-      <StFlipContainer onClick={() => setFlipped((prev) => !prev)}>
-        <StFlipCard $flipped={flipped}>
-          <StCardFace className="front">
-            {/* <StPostcard src={PostcardImg} alt="엽서" /> */}
-            <StPostcardWhite />
-            <StPostcardImage>
-              <img src={imageUrl || DummyImg} alt="엽서사진" />
-            </StPostcardImage>
-          </StCardFace>
-          <StCardFace className="back">
-            <StPostcard src={PostcardImg} alt="엽서" />
-            <StPostcardContent>
-              <StPostcardStamp src={StampImg} alt="우표" />
-              <StPostcardTitle $font={getFontStyle(font)}>
-                사랑하는 {nfcName || '너'}에게,
-              </StPostcardTitle>
-              <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
-            </StPostcardContent>
-          </StCardFace>
-        </StFlipCard>
-      </StFlipContainer>
+      <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
 
-      <button onClick={handleMarkAsUnread}>안읽음 처리</button>
-
-      <ReplyComponent messageId={messageId} replyText={replyText} />
+        <ReplyComponent messageId={messageId} replyText={replyText} />
+      </StWrapper>
     </StPageWrapper>
   );
 };
 
 export default PostcardDetail;
+
+export const SimpleButton = styled.button`
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: none;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+`;
 
 const StPageWrapper = styled.div`
   display: flex;
@@ -81,14 +103,35 @@ const StPageWrapper = styled.div`
   height: 100%;
 `;
 
+const StWrapper = styled.div`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 100%;
+  padding-top: 10rem;
+`;
+
+const StInform = styled.div`
+  color: ${({ theme }) => theme.colors.Gray4};
+  ${({ theme }) => theme.fonts.EduBody2};
+  padding: 1rem;
+
+  opacity: ${({ $isShow }) => ($isShow ? '1' : '0')};
+`;
+
 const StFlipContainer = styled.div`
   perspective: 100rem;
   width: 30rem;
   height: 23rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 7rem;
+  /* margin-bottom: 7rem; */
 `;
 
 const StFlipCard = styled.div`
@@ -130,6 +173,7 @@ const StCardFace = styled.div`
 const StPostcard = styled.img`
   position: absolute;
   width: 29rem;
+  height: 100%;
   z-index: 2;
 `;
 
@@ -181,7 +225,7 @@ const StPostcardImage = styled(motion.div)`
   top: 0.9rem;
   left: 0.8rem;
   width: 28.3rem;
-  height: 21rem;
+  height: 17.5rem;
   z-index: 3;
 
   img {

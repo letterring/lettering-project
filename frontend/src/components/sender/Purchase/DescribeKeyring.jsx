@@ -1,31 +1,34 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { getKeyringData } from '../../../apis/keyring';
+import { TotalPrice, TotalQuantity } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import QuantityInput from './QuantitiyInput';
 
 const DescribeKeyring = () => {
   const navigate = useNavigate();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useRecoilState(TotalQuantity);
   const [details, setDetails] = useState(null);
+  const [total, setTotal] = useRecoilState(TotalPrice);
   const { designName, imageUrl, price, description } = details || {};
 
   const getKeyrings = async () => {
     const { designs } = await getKeyringData();
     setDetails(designs[0]);
+    setTotal(designs[0].price);
   };
 
   const handleCount = (num) => {
     setQuantity((prev) => prev + num);
-    setTotal((prev) => prev + product.price * num);
+    setTotal((prev) => prev + price * num);
   };
 
   useEffect(() => {
-    getKeyrings();
+    const res = getKeyrings();
   }, []);
 
   return (
@@ -38,8 +41,8 @@ const DescribeKeyring = () => {
             <StText>
               <h3>{designName}</h3>
               <QuantityWrapper>
-                <QuantityInput quantity={quantity} onClick={handleCount} />
-                <h3>{price}</h3>
+                <QuantityInput quantity={quantity} handleCount={handleCount} />
+                <h3>{total}</h3>
               </QuantityWrapper>
               <h4>설명</h4>
               {description}
@@ -55,7 +58,7 @@ const DescribeKeyring = () => {
               <LongButton
                 btnName="구매하기"
                 onClick={() => {
-                  navigate(`/mypage`);
+                  navigate(`/purchase/checkout`);
                 }}
               />
             </StText>

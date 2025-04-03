@@ -93,7 +93,7 @@ public class PaymentController {
 
         User user = userService.getUserById(userId);
         Order order = keyringService.processOrderAndReturnOrder(user, orderRequest);
-        order.setOrderNumber(Long.parseLong(orderNumberStr));
+        order.assignOrderNumber(Long.parseLong(orderNumberStr));
         order.setTid(tid); // ✅ 저장된 tid 다시 세팅
 
         KakaoPayApproveRequest approveRequest = KakaoPayApproveRequest.builder()
@@ -112,7 +112,8 @@ public class PaymentController {
 
         return ResponseEntity.ok(Map.of(
                 "message", "결제가 완료되었습니다.",
-                "amount", response.getAmount().getTotal()
+                "amount", response.getAmount().getTotal(),
+                "keyringIds", order.getKeyringIds()
         ));
     }
 

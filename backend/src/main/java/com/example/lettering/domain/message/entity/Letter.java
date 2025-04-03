@@ -7,6 +7,7 @@ import com.example.lettering.domain.sealingwax.entity.SealingWax;
 import com.example.lettering.domain.user.entity.QuizInfo;
 import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.enums.Font;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class Letter extends AbstractMessage {
 
     @OneToMany(mappedBy = "letter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<LetterContent> contents = new ArrayList<>();
 
     @OneToMany(mappedBy = "letter", cascade = CascadeType.ALL, orphanRemoval = true)
