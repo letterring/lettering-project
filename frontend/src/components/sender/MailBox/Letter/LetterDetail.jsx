@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
-import { getLetterDetail } from '/src/apis/letter';
+import { getSentLetterDetail } from '/src/apis/letter';
 import LetterImg1 from '/src/assets/images/letter/letter1.png';
 import LetterImg2 from '/src/assets/images/letter/letter2.png';
 import LetterImg3 from '/src/assets/images/letter/letter3.png';
@@ -24,16 +24,16 @@ const LetterDetail = () => {
   useEffect(() => {
     const fetchLetter = async () => {
       const { letterContents, letterImages, font, conditionTime, firstOpenedTime } =
-        await getLetterDetail(messageId);
+        await getSentLetterDetail(messageId);
 
       const sentAt = getLetterDate(conditionTime);
-      const readAt = getLetterDate(firstOpenedTime);
+      const readAt = firstOpenedTime ? getLetterDate(firstOpenedTime) : null;
 
       const newImageData = [...letterImages, letterImages[0]];
       const newLetterContents = [
         ...letterContents,
         `${sentAt}에 보낸 편지를`,
-        `${readAt}에 열었습니다.`,
+        readAt ? `${readAt}에 열었습니다.` : '아직 읽지 않았습니다.',
       ];
 
       setImageData(newImageData);
@@ -88,23 +88,25 @@ const LetterDetail = () => {
   };
 
   return (
-    <StPageWrapper>
-      <Header headerName="Lettering" />
+    <>
+      <StPageWrapper>
+        <Header headerName="Lettering" />
 
-      <StyledSlider ref={sliderRef} {...settings}>
-        {contents.map((item, id) => (
-          <LetterContent
-            key={id}
-            template={item.template}
-            images={item.images}
-            text={item.text}
-            background={item.background}
-            font={letterFont}
-            isActive={currentSlide === id}
-          />
-        ))}
-      </StyledSlider>
-    </StPageWrapper>
+        <StyledSlider ref={sliderRef} {...settings}>
+          {contents.map((item, id) => (
+            <LetterContent
+              key={id}
+              template={item.template}
+              images={item.images}
+              text={item.text}
+              background={item.background}
+              font={letterFont}
+              isActive={currentSlide === id}
+            />
+          ))}
+        </StyledSlider>
+      </StPageWrapper>
+    </>
   );
 };
 

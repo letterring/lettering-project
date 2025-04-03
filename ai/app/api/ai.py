@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 
@@ -35,13 +36,16 @@ async def refine_with_image(
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 @router.post("/segment")
-async def segment_text(text: str = Form(...)):
+async def segment_text(text: str = Form(...), count: int = Form(5)):
     """
-    긴 글을 문맥별로 5묶음으로 나누는 기능
+    긴 글을 문맥별로 N묶음으로 나누는 기능
     """
     try:
         agent = TextSegmenterAgent()
-        result = await agent.run(text=text)
-        return {"response": result}
+        result = await agent.run(text=text, count=count)
+        parsed_result = json.loads(result)
+        return {"response": parsed_result}
+    except json.JSONDecodeError as je:
+        return JSONResponse(status_code=500, content={"error": f"AI 응답을 JSON으로 파싱할 수 없습니다: {str(je)}"})
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})

@@ -2,11 +2,11 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import EnvelopeBottomImg from '../../../assets/images/letter/bottom_fold.png';
-import LetterImg from '../../../assets/images/letter/letter_paper.png';
-import LetteringImg from '../../../assets/images/letter/lettering.png';
-import EnvelopeTopImg from '../../../assets/images/letter/top_fold.png';
-import StampImg from '../../../assets/images/letter/vintage_stamp.png';
+import EnvelopeBottomImg from '/src/assets/images/letter/bottom_fold.png';
+import LetterImg from '/src/assets/images/letter/letter_paper.png';
+import LetteringImg from '/src/assets/images/letter/lettering.png';
+import EnvelopeTopImg from '/src/assets/images/letter/top_fold.png';
+import StampImg from '/src/assets/images/letter/vintage_stamp.png';
 
 const EndTemplate = ({ images }) => {
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
