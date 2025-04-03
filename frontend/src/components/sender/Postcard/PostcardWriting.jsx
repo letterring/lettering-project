@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { getUserFont } from '/src/apis/user';
 import { getFontStyle } from '/src/util/getFont';
 
-import { getUserFont } from '../../../apis/user';
 import { IcImageUpload, IcImageUploadTrue } from '../../../assets/icons';
 import PostcardImg from '../../../assets/images/postcard/postcard.png';
 import { PostcardImage, PostcardImageFile, PostcardText } from '../../../recoil/atom';

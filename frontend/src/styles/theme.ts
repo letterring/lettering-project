@@ -94,6 +94,13 @@ const fonts = {
     font-weight: 700;
     line-height: 130%;
   `,
+  Title6: css`
+    font-family: 'Pretendard';
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 130%;
+  `,
   Saeum0: css`
     font-family: 'GangwonEduSaeeum_OTFMediumA';
     font-size: 4.8rem;

@@ -76,12 +76,18 @@ const TotalQuantity = atom({
   default: 1,
 });
 
+const RedisMessageKey = atom({
+  key: 'RedisMessageKey',
+  default: '',
+});
+
 export {
   LetterImageList,
   LetterText,
   PostcardImage,
   PostcardImageFile,
   PostcardText,
+  RedisMessageKey,
   SelectedKeyringId,
   TotalPrice,
   TotalQuantity,
