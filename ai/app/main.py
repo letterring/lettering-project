@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRoute
 from app.core.settings import settings
 from app.api.submit import router as submit_router
 from app.api.chat import router as chat_router
@@ -23,4 +24,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def show_routes():
+    print("\n📌 Registered routes:")
+    for route in app.routes:
+        if isinstance(route, APIRoute):
+            print(f"{route.path} → {route.name}")
 

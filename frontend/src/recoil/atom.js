@@ -46,6 +46,11 @@ const LetterText = atom({
   default: '',
 });
 
+const LetterTextList = atom({
+  key: 'LetterTextList',
+  default: [],
+});
+
 // 유저 닉네임
 const UserNickname = atom({
   key: 'userNickname',
@@ -95,6 +100,7 @@ export {
   KeyringCustomList,
   LetterImageList,
   LetterText,
+  LetterTextList,
   OrderNumber,
   PostcardImage,
   PostcardImageFile,
