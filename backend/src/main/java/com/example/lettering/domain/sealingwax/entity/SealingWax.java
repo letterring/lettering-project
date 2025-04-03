@@ -17,7 +17,6 @@ public class SealingWax {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 실링왁스 이름 (예: Classic, Modern 등)
     @Column(name = "sealing_wax_name", nullable = false)
     private String sealingWaxName;
 
@@ -25,7 +24,11 @@ public class SealingWax {
     @Enumerated(EnumType.STRING)
     private DesignType designType;
 
-    // 이미지 개수 (추후 유효성 검사용)
+    // 텍스트 단락 개수
+    @Column(name = "content_count", nullable = false)
+    private Integer contentCount;
+
+    // 이미지 개수
     @Column(name = "image_count", nullable = false)
     private Integer imageCount;
 
@@ -36,6 +39,7 @@ public class SealingWax {
     public static SealingWax fromDto(CreateSealingWaxRequest createSealingWaxRequest, String imageUrl) {
         return SealingWax.builder()
                 .sealingWaxName(createSealingWaxRequest.getSealingWaxName())
+                .contentCount(createSealingWaxRequest.getContentCount())
                 .imageCount(createSealingWaxRequest.getImageCount())
                 .imageUrl(imageUrl)
                 .designType(createSealingWaxRequest.getDesignType())
