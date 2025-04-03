@@ -11,7 +11,16 @@ async def ask_gpt(prompt: str, model="gpt-4o-mini") -> str:
     )
     return response.choices[0].message.content
 
-async def ask_gpt_with_image(prompt: str, base64_image: str) -> str:
+async def ask_gpt_with_image(prompt: str, base64_images: list[str]) -> str:
+    image_contents = [
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/jpeg;base64,{img}"
+            }
+        }
+        for img in base64_images
+    ]
     response = await client.chat.completions.create(
         model="gpt-4o",
         messages=[
@@ -19,15 +28,10 @@ async def ask_gpt_with_image(prompt: str, base64_image: str) -> str:
                 "role": "user",
                 "content": [
                     {"type": "text", "text": prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{base64_image}"
-                        }
-                    }
+                    *image_contents
                 ]
             }
         ],
-        max_tokens=1024
+        max_tokens=1024,
     )
     return response.choices[0].message.content

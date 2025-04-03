@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import AiImg from '/src/assets/images/ai_refine.png';
 
-const AiRefineModal = ({ onClose, font, suggestions = [], onUse }) => {
+const AiRefineModal = ({ onClose, font, suggestions = [], onUse, isLoading }) => {
   return (
     <Overlay onClick={onClose}>
       <Content onClick={(e) => e.stopPropagation()}>
@@ -16,15 +16,21 @@ const AiRefineModal = ({ onClose, font, suggestions = [], onUse }) => {
           </GuideText>
         </Header>
 
-        {suggestions.map((text, index) => (
-          <SuggestionBubble key={index} $font={font}>
-            {text}
-          </SuggestionBubble>
-        ))}
+        {isLoading ? (
+          <SuggestionBubble $font={font}>⏳ AI가 문장을 다듬고 있어요...</SuggestionBubble>
+        ) : (
+          suggestions.map((text, index) => (
+            <SuggestionBubble key={index} $font={font}>
+              {text}
+            </SuggestionBubble>
+          ))
+        )}
 
         <Buttons>
-          <OutlinedButton>다시 추천받기</OutlinedButton>
-          <FilledButton onClick={() => onUse(suggestions)}>사용하기</FilledButton>
+          {/* <OutlinedButton>다시 추천받기</OutlinedButton> */}
+          <FilledButton onClick={() => onUse(suggestions)} disabled={isLoading}>
+            사용하기
+          </FilledButton>
         </Buttons>
       </Content>
     </Overlay>
@@ -118,7 +124,9 @@ const FilledButton = styled.button`
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 2rem;
-  background: ${({ theme }) => theme.colors.MainRed};
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.Gray3 : theme.colors.MainRed)};
   ${({ theme }) => theme.fonts.Body2};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   color: white;
 `;

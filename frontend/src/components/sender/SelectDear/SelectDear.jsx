@@ -119,7 +119,13 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import { getKeyringList } from '../../../apis/keyring';
-import { PostcardImageFile, PostcardText, SelectedKeyringId } from '../../../recoil/atom';
+import {
+  LetterImageList,
+  LetterTextList,
+  PostcardImageFile,
+  PostcardText,
+  SelectedKeyringId,
+} from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import QuestionText from './QuestionText';
@@ -131,6 +137,11 @@ const SelectDear = () => {
   const selectedKeyringId = useRecoilValue(SelectedKeyringId);
   const postcardImageFile = useRecoilValue(PostcardImageFile);
   const postcardText = useRecoilValue(PostcardText);
+  const letterImageList = useRecoilValue(LetterImageList);
+  const letterTextList = useRecoilValue(LetterTextList);
+
+  console.log(letterImageList);
+  console.log(letterTextList);
 
   // 키링 목록 API 호출
   useEffect(() => {
