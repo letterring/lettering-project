@@ -47,8 +47,12 @@ public class LetterServiceImpl implements LetterService {
         SealingWax sealingWax = sealingWaxRepository.findById(createLetterRequest.getSealingWaxId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.SEALINGWAX_NOT_FOUND));
 
+        if (createLetterRequest.getContents().size() != sealingWax.getContentCount()){
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_CONTENT_COUNT);
+        }
+
         if (imageFiles.size() != sealingWax.getImageCount()) {
-            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_COUNT, "이미지 개수가 일치하지 않습니다.");
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_IMAGE_COUNT);
         }
 
         List<LetterContent> contents = new ArrayList<>();
