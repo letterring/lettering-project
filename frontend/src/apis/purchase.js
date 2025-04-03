@@ -2,9 +2,14 @@ import client from './axios';
 
 export const getUserAdress = async () => {
   try {
-    const { data } = await client.get('/users/address');
-    console.log('주소 조회 : ', data);
-    return data;
+    const { data, status } = await client.get('/users/address', {
+      validateStatus: () => true,
+    });
+
+    return {
+      status,
+      data,
+    };
   } catch (err) {
     console.error('회원 주소 조회에 실패했습니다.', err);
   }
