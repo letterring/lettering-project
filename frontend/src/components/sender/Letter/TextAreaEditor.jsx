@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-
-import { UserFont } from '../../../recoil/atom';
-import { getFontStyle } from '../../../util/getFont';
 
 const MAX_LENGTH = 150;
 
-const TextAreaEditor = ({ value = '', onChange }) => {
+const TextAreaEditor = ({ value = '', onChange, font }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempText, setTempText] = useState(value);
-  const userFont = useRecoilValue(UserFont);
-  const fontStyle = getFontStyle(userFont);
 
   useEffect(() => {
     setTempText(value);
@@ -35,7 +29,7 @@ const TextAreaEditor = ({ value = '', onChange }) => {
         onChange={handleInput}
         readOnly={!isEditing}
         maxLength={MAX_LENGTH}
-        $fonStyle={fontStyle}
+        $fonStyle={font}
       />
       <CharCount>{`${value.length}/${MAX_LENGTH}`}</CharCount>
       <EditButton onClick={handleToggleEdit} $isEditing={isEditing}>

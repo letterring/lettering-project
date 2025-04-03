@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     DB_URL: str
     UPLOAD_DIR: str
     OPENAI_API_KEY: str
+    DOMAIN_URL: str
+    LOCAL_URL: str
 
     class Config:
         env_file = ".env"

@@ -1,10 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { LetterImageList, LetterText, UserFont } from '../../../recoil/atom';
-import { getFontStyle } from '../../../util/getFont';
+import { getPostcard, submitPostcard } from '/src/apis/fastapi';
+import { getUserFont } from '/src/apis/user';
+import { getFontStyle } from '/src/util/getFont';
+
+import { LetterImageList, LetterText, RedisMessageKey } from '../../../recoil/atom';
 import Header from '../../common/Header';
 
 const LetterWriting = () => {
@@ -12,13 +15,22 @@ const LetterWriting = () => {
 
   const [ImageList, setImageList] = useState([]);
   const [letterContent, setLetterContent] = useState('');
-
-  const fontStyle = getFontStyle(useRecoilValue(UserFont));
+  const [userFont, setUserFont] = useState(undefined);
+  const redisKey = useRecoilValue(RedisMessageKey);
 
   const fileInputRef = useRef(null);
 
   const setLetterImages = useSetRecoilState(LetterImageList);
   const setLetterText = useSetRecoilState(LetterText);
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      const { font } = await getUserFont();
+      setUserFont(getFontStyle(font));
+    };
+
+    fetchFont();
+  }, []);
 
   const handleLetterChange = (e) => {
     setLetterContent(e.target.value);
@@ -46,7 +58,18 @@ const LetterWriting = () => {
     setLetterImages(ImageList);
     setLetterText(letterContent);
 
-    navigate('/letter/preview');
+    const result = await submitPostcard(
+      ImageList.map((img) => img.file),
+      letterContent,
+    );
+
+    if (result?.key) {
+      setRedisMessageKey(result.key);
+      console.log('엽서 키:', redisKey);
+      const postcard = await getPostcard(result.key);
+      console.log('엽서 내용:', postcard);
+      navigate('/letter/preview', { state: { postcard } });
+    }
   };
 
   return (
@@ -82,7 +105,7 @@ const LetterWriting = () => {
             maxLength={600}
             value={letterContent}
             onChange={handleLetterChange}
-            $fontStyle={fontStyle}
+            $fontStyle={userFont}
           />
           <FooterWrapper>
             {!isValid ? <WarnText>사진은 10장 필요합니다.</WarnText> : <WarnText />}
