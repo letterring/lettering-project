@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { submitOrder } from '/src/apis/purchase.js';
+import { getUserAdress, submitOrder } from '/src/apis/purchase.js';
 
-import { TotalPrice, TotalQuantity } from '../../../recoil/atom';
+import { OrderNumber, TotalPrice, TotalQuantity } from '../../../recoil/atom';
 import Header from '../../common/Header';
 import AddressSearch from './AddressSearch';
 
 const Checkout = () => {
   const price = useRecoilValue(TotalPrice);
   const quantity = useRecoilValue(TotalQuantity);
-
-  const [orderNum, setOrderNum] = useState('');
+  const setOrderNum = useSetRecoilState(OrderNumber);
   const [formData, setFormData] = useState({
     realName: '',
     phoneNumber: '',
@@ -24,6 +22,25 @@ const Checkout = () => {
     keyringDesignId: 1,
     quantity,
   });
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      const { status, data } = await getUserAdress();
+      if (status === 200) {
+        setFormData((prev) => ({
+          ...prev,
+          realName: data.realName || '',
+          phoneNumber: data.phoneNumber || '',
+          email: data.email || '',
+          zipcode: data.zipcode || '',
+          roadAddress: data.roadAddress || '',
+          detailAddress: data.detailAddress || '',
+        }));
+      }
+    };
+
+    fetchAddress();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
