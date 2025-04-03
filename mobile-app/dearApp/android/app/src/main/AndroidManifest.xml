@@ -1,9 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.dearapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mobileapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
+    <!-- ✅ 2. 기기 기능 명시 (uses-feature) -->
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
       android:name=".MainApplication"
@@ -20,19 +22,32 @@
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"
         android:exported="true">
-         <!-- 앱 아이콘이 뜨게 하는 필터 -->
         <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-          <category android:name="android.intent.category.LAUNCHER" />
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-  
-        <!-- 딥링크로 앱을 여는 필터 -->
-        <intent-filter android:autoVerify="true">
-          <action android:name="android.intent.action.VIEW" />
-          <category android:name="android.intent.category.DEFAULT" />
-          <category android:name="android.intent.category.BROWSABLE" />
-           <data android:scheme="https" android:host="letterring.shop" />
+<!--        <intent-filter android:autoVerify="true">-->
+<!--          <action android:name="android.intent.action.VIEW" />-->
+<!--          <category android:name="android.intent.category.DEFAULT" />-->
+<!--          <category android:name="android.intent.category.BROWSABLE" />-->
+<!--          <data-->
+<!--            android:scheme="https"-->
+<!--            android:host="letterkeyring.shop"-->
+<!--            android:pathPrefix="/nfc" />-->
+<!--        </intent-filter>-->
+        <intent-filter>
+            <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data
+                android:scheme="yourapp"
+                android:host="nfc" />
         </intent-filter>
+
+          <!-- 어떤 태그 타입을 처리할 수 있는지 명시 -->
+          <meta-data
+              android:name="android.nfc.action.TECH_DISCOVERED"
+              android:resource="@xml/nfc_tech_filter" />
+
       </activity>
     </application>
 </manifest>
