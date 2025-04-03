@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import LongButton from '../../common/button/LongButton';
@@ -15,6 +16,7 @@ const LetterEditor = ({
   textList,
   textStartIndex = 0,
   onTextChange,
+  font,
 }) => {
   const renderTextArea = (index) => {
     const globalIndex = textStartIndex + index;
@@ -25,6 +27,7 @@ const LetterEditor = ({
         key={index}
         value={value}
         onChange={(newValue) => onTextChange(globalIndex, newValue)}
+        font={font}
       />
     );
   };
@@ -147,5 +150,5 @@ const StEndText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  ${({ theme }) => theme.fonts.Gomsin2};
+  ${({ theme }) => theme.fonts.Gomsin1};
 `;

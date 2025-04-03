@@ -64,12 +64,18 @@ const UserKeyringList = atom({
   default: [],
 });
 
+const RedisMessageKey = atom({
+  key: 'RedisMessageKey',
+  default: '',
+});
+
 export {
   LetterImageList,
   LetterText,
   PostcardImage,
   PostcardImageFile,
   PostcardText,
+  RedisMessageKey,
   SelectedKeyringId,
   UserFont,
   UserId,
