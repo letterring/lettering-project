@@ -20,10 +20,10 @@ const AiButton = ({ onOpenModal }) => {
 
       {isMenuOpen && (
         <MenuWrapper>
-          <MenuCard onClick={() => openModal('add')}>
+          {/* <MenuCard onClick={() => openModal('add')}>
             <MenuTitle>내용 추가하기</MenuTitle>
             <MenuDescription>작성한 글, 사진 기반 내용 추천</MenuDescription>
-          </MenuCard>
+          </MenuCard> */}
           <MenuCard onClick={() => openModal('edit')}>
             <MenuTitle>문장 고치기</MenuTitle>
             <MenuDescription>더 다채로운 문장으로 다듬기</MenuDescription>
@@ -42,14 +42,13 @@ const FloatingContainer = styled.div`
   right: 2rem;
   display: flex;
   flex-direction: row-reverse;
-  align-items: flex-end;
+  align-items: center;
   z-index: 20;
 `;
 
 const FloatingButton = styled.button`
   width: 6.5rem;
   height: 6.5rem;
-  margin-bottom: 3rem;
   border-radius: 50%;
   background-color: white;
   border: none;
