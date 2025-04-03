@@ -2,9 +2,9 @@ import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import DummyImg from '../../../assets/dummy/letter.jpg';
-import LetteringImg from '../../../assets/images/letter/lettering.png';
-import StampImg from '../../../assets/images/letter/vintage_stamp.png';
+import DummyImg from '/src/assets/dummy/letter.jpg';
+import LetteringImg from '/src/assets/images/letter/lettering.png';
+import StampImg from '/src/assets/images/letter/vintage_stamp.png';
 
 const MainTemplate = ({ images }) => {
   const pathRef = useRef(null);
