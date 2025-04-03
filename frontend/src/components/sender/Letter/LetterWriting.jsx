@@ -65,6 +65,7 @@ const LetterWriting = () => {
 
     if (result?.key) {
       setRedisMessageKey(result.key);
+      console.log('엽서 키:', redisKey);
       const postcard = await getPostcard(result.key);
       console.log('엽서 내용:', postcard);
       navigate('/letter/preview', { state: { postcard } });
