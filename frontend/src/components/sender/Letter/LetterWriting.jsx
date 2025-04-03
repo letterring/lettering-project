@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { getPostcard, submitPostcard } from '/src/apis/fastapi';
+import { getPostcard, segmentText, submitPostcard } from '/src/apis/fastapi';
 import { getUserFont } from '/src/apis/user';
 import { getFontStyle } from '/src/util/getFont';
 
@@ -16,8 +16,9 @@ const LetterWriting = () => {
   const [ImageList, setImageList] = useState([]);
   const [letterContent, setLetterContent] = useState('');
   const [userFont, setUserFont] = useState(undefined);
-  const redisKey = useRecoilValue(RedisMessageKey);
-
+  const [redisKey, setRedisMessageKey] = useRecoilState(RedisMessageKey);
+  const [isLoading, setIsLoading] = useState(false);
+  const textCount = 5;
   const fileInputRef = useRef(null);
 
   const setLetterImages = useSetRecoilState(LetterImageList);
@@ -55,20 +56,46 @@ const LetterWriting = () => {
   const isValid = ImageList.length >= 10;
 
   const handleSubmit = async () => {
-    setLetterImages(ImageList);
-    setLetterText(letterContent);
+    setIsLoading(true); // 🔥 로딩 시작
 
-    const result = await submitPostcard(
-      ImageList.map((img) => img.file),
-      letterContent,
-    );
+    try {
+      setLetterImages(ImageList);
+      setLetterText(letterContent);
 
-    if (result?.key) {
-      setRedisMessageKey(result.key);
-      console.log('엽서 키:', redisKey);
-      const postcard = await getPostcard(result.key);
-      console.log('엽서 내용:', postcard);
-      navigate('/letter/preview', { state: { postcard } });
+      let segmentedText;
+      try {
+        segmentedText = await segmentText(letterContent, textCount);
+
+        if (!Array.isArray(segmentedText) || segmentedText.length !== textCount) {
+          throw new Error('AI 응답이 예상 형식이 아님');
+        }
+      } catch (error) {
+        console.warn('AI 문장 나누기 실패, fallback으로 줄바꿈 처리함:', error);
+        segmentedText = letterContent
+          .split(/\n+/)
+          .map((t) => t.trim())
+          .filter((t) => t.length > 0)
+          .slice(0, textCount);
+      }
+
+      const result = await submitPostcard(
+        ImageList.map((img) => img.file),
+        letterContent,
+      );
+
+      if (result?.key) {
+        setRedisMessageKey(result.key);
+        const postcard = await getPostcard(result.key);
+
+        navigate('/letter/preview', {
+          state: {
+            postcard,
+            segmentedText,
+          },
+        });
+      }
+    } finally {
+      setIsLoading(false); // ✅ 무조건 로딩 종료
     }
   };
 
@@ -76,6 +103,12 @@ const LetterWriting = () => {
     <StLetterWritingWrapper>
       <Header headerName="편지쓰기" />
       <WritingContentWrapper>
+        {isLoading && (
+          <LoadingOverlay>
+            <Spinner />
+            <p>편지를 정리하고 있어요... 잠시만 기다려 주세요.</p>
+          </LoadingOverlay>
+        )}
         <ContentWrapper>
           <Text>이미지 업로드</Text>
           <ImagesWrapper>
@@ -248,4 +281,42 @@ const SubmitButton = styled.button`
   color: ${({ theme }) => theme.colors.White};
   ${({ theme }) => theme.fonts.Body3};
   cursor: ${({ $isValid }) => ($isValid ? 'pointer' : 'not-allowed')};
+`;
+
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    color: ${({ theme }) => theme.colors.Gray0};
+    ${({ theme }) => theme.fonts.Body1};
+    margin-top: 2rem;
+  }
+`;
+
+const Spinner = styled.div`
+  border: 0.4rem solid #eee;
+  border-top: 0.4rem solid ${({ theme }) => theme.colors.MainRed};
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
