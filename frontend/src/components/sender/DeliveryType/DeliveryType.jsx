@@ -12,9 +12,8 @@ import { PostcardImageFile, PostcardText, SelectedKeyringId } from '../../../rec
 import Header from '../../common/Header';
 import QuestionText from '../SelectDear/QuestionText';
 import DeliveryTypeCard from './DeliveryTypeCard';
-// ✅ 예약 편지 모달 컴포넌트 import
 import ScheduledOption from './ScheduledOption';
-
+import TimerOption from './TimerOption';
 const DeliveryType = () => {
   const navigate = useNavigate();
 
@@ -22,7 +21,6 @@ const DeliveryType = () => {
   const postcardImageFile = useRecoilValue(PostcardImageFile);
   const postcardText = useRecoilValue(PostcardText);
 
-  // ✅ 어떤 모달을 띄울지 상태로 관리
   const [selectedModalType, setSelectedModalType] = useState(null);
 
   const deliveryTypes = [
@@ -36,7 +34,7 @@ const DeliveryType = () => {
       icon: IconTimer,
       title: '오픈 타이머',
       description: '타이머가 종료되어야 열릴 수 있어요!',
-      value: 'TIMER',
+      value: 'TIMECAPSULE',
     },
     {
       icon: IconLock,
@@ -85,8 +83,8 @@ const DeliveryType = () => {
   const handleSelect = (type) => {
     if (type === 'NORMAL') {
       handleSend({ conditionType: 'NONE' });
-    } else if (type === 'SCHEDULED') {
-      setSelectedModalType('SCHEDULED'); // 예약 모달 오픈
+    } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE') {
+      setSelectedModalType(type);
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
     }
@@ -121,6 +119,17 @@ const DeliveryType = () => {
               scheduledAt: datetime,
             })
           }
+        />
+      )}
+      {selectedModalType === 'TIMECAPSULE' && (
+        <TimerOption
+          onClose={() => setSelectedModalType(null)}
+          onConfirm={(datetime) => {
+            handleSend({
+              conditionType: 'TIMECAPSULE',
+              scheduledAt: datetime,
+            });
+          }}
         />
       )}
     </Wrapper>

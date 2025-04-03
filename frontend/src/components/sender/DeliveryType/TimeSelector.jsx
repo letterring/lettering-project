@@ -1,82 +1,108 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const TimeSelector = ({
+const hours = Array.from({ length: 24 }, (_, i) => i); // 0~23
+const minutes = Array.from({ length: 60 }, (_, i) => i); // 0~59
+const ITEM_HEIGHT = 36;
+const SPACER_COUNT = 2;
+
+export default function TimeSelector({
   selectedHour,
   selectedMinute,
   onChangeHour,
   onChangeMinute,
-  onNext,
-  onBack,
-}) => {
-  const hours = Array.from({ length: 24 }, (_, i) => i);
-  const minutes = Array.from({ length: 60 }, (_, i) => i);
+}) {
+  const hourRef = useRef(null);
+  const minuteRef = useRef(null);
+
+  useEffect(() => {
+    const scrollToIndex = (ref, index) => {
+      if (ref.current) {
+        ref.current.scrollTop = index * ITEM_HEIGHT;
+      }
+    };
+    scrollToIndex(hourRef, hours.indexOf(selectedHour));
+    scrollToIndex(minuteRef, minutes.indexOf(selectedMinute));
+  }, [selectedHour, selectedMinute]);
+
+  const handleScroll = (e, type) => {
+    const scrollTop = e.target.scrollTop;
+    const index = Math.round(scrollTop / ITEM_HEIGHT);
+    if (type === 'hour') onChangeHour(hours[index]);
+    if (type === 'minute') onChangeMinute(minutes[index]);
+  };
+
+  const renderOptions = (list, selectedValue) =>
+    [...Array(SPACER_COUNT).fill(''), ...list, ...Array(SPACER_COUNT).fill('')].map(
+      (value, idx) => (
+        <Option key={idx} $isSelected={value === selectedValue}>
+          {value?.toString().padStart(2, '0')}
+        </Option>
+      ),
+    );
 
   return (
-    <Container>
-      <SelectGroup>
-        <Select value={selectedHour} onChange={(e) => onChangeHour(Number(e.target.value))}>
-          {hours.map((h) => (
-            <option key={h} value={h}>
-              {h}시
-            </option>
-          ))}
-        </Select>
-        <Select value={selectedMinute} onChange={(e) => onChangeMinute(Number(e.target.value))}>
-          {minutes.map((m) => (
-            <option key={m} value={m}>
-              {m}분
-            </option>
-          ))}
-        </Select>
-      </SelectGroup>
-      <ButtonGroup>
-        <SubButton onClick={onBack}>이전</SubButton>
-        <MainButton onClick={onNext}>다음</MainButton>
-      </ButtonGroup>
-    </Container>
+    <Wrapper>
+      <ScrollContainer>
+        <Column ref={hourRef} onScroll={(e) => handleScroll(e, 'hour')}>
+          {renderOptions(hours, selectedHour)}
+        </Column>
+        <Column ref={minuteRef} onScroll={(e) => handleScroll(e, 'minute')}>
+          {renderOptions(minutes, selectedMinute)}
+        </Column>
+        <Highlight />
+      </ScrollContainer>
+    </Wrapper>
   );
-};
+}
 
-export default TimeSelector;
+// ---------- Styled Components ----------
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.6rem;
+const Wrapper = styled.div`
+  /* padding: 2rem; */
+  text-align: center;
 `;
 
-const SelectGroup = styled.div`
+const ScrollContainer = styled.div`
+  position: relative;
   display: flex;
+  justify-content: center;
   gap: 1rem;
+  height: ${ITEM_HEIGHT * 5}px;
+  overflow: hidden;
 `;
 
-const Select = styled.select`
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 1.2rem;
+const Column = styled.div`
+  overflow-y: scroll;
+  height: ${ITEM_HEIGHT * 5}px;
+  width: 6rem;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 1rem;
+const Option = styled.div.attrs(({ $isSelected }) => ({
+  'data-selected': $isSelected,
+}))`
+  height: ${ITEM_HEIGHT}px;
+  line-height: ${ITEM_HEIGHT}px;
+  text-align: center;
+  scroll-snap-align: center;
+  font-size: 1.7rem;
+  font-weight: ${({ $isSelected }) => ($isSelected ? 'bold' : 'normal')};
+  color: ${({ $isSelected, theme }) => ($isSelected ? theme.colors.MainRed : theme.colors.Gray2)};
+  ${({ $isSelected, theme }) => $isSelected && theme.fonts.body1};
 `;
 
-const SubButton = styled.button`
-  background-color: #ccc;
-  color: black;
-  padding: 0.6rem 1.6rem;
-  border: none;
-  border-radius: 0.6rem;
-  font-size: 1rem;
-`;
-
-const MainButton = styled.button`
-  background-color: #d64545;
-  color: white;
-  padding: 0.6rem 1.6rem;
-  border: none;
-  border-radius: 0.6rem;
-  font-size: 1rem;
+const Highlight = styled.div`
+  position: absolute;
+  top: ${ITEM_HEIGHT * 2}px;
+  height: ${ITEM_HEIGHT}px;
+  width: 100%;
+  pointer-events: none;
+  border-top: 2px solid ${({ theme }) => theme.colors.MainRed}55;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.MainRed}55;
 `;

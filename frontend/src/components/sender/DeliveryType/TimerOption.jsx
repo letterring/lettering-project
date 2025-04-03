@@ -9,17 +9,18 @@ import DateSelector from './DateSelector';
 import TimeSelector from './TimeSelector';
 
 const stepTitles = {
-  1: '예약 날짜 설정',
-  2: '예약 시간 설정',
-  3: '예약 확인',
-};
-const stepDescriptions = {
-  1: '예약할 날짜를 선택해주세요.',
-  2: '예약할 시간을 선택해주세요.',
-  3: '예약 정보를 확인하고 완료 버튼을 눌러주세요.',
+  1: '오픈 날짜 설정',
+  2: '오픈 시간 설정',
+  3: '오픈 확인',
 };
 
-const ScheduledOption = ({ onClose, onConfirm }) => {
+const stepDescriptions = {
+  1: '편지를 열 수 있는 날짜를 설정해주세요.',
+  2: '편지를 열 수 있는 시간을 설정해주세요.',
+  3: '해당 시간 이후에만 편지를 열 수 있어요.',
+};
+
+export default function TimerOption({ onClose, onConfirm }) {
   const now = new Date();
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(now);
@@ -39,7 +40,6 @@ const ScheduledOption = ({ onClose, onConfirm }) => {
       alert('현재 이후의 시간을 선택해주세요.');
       return;
     }
-
     onConfirm(scheduled);
     onClose();
   };
@@ -55,27 +55,14 @@ const ScheduledOption = ({ onClose, onConfirm }) => {
         </div>
       }
     >
-      {step === 1 && (
-        <>
-          <DateSelector selectedDate={selectedDate} onChangeDate={setSelectedDate} />
-          <ModalButtons>
-            <ConfirmButton onClick={() => setStep(2)} btnName="다음" />
-          </ModalButtons>
-        </>
-      )}
+      {step === 1 && <DateSelector selectedDate={selectedDate} onChangeDate={setSelectedDate} />}
       {step === 2 && (
-        <>
-          <TimeSelector
-            selectedHour={selectedHour}
-            selectedMinute={selectedMinute}
-            onChangeHour={setSelectedHour}
-            onChangeMinute={setSelectedMinute}
-          />
-          <ModalButtons>
-            <CancelButton onClick={() => setStep(1)} btnName="이전" />
-            <ConfirmButton onClick={() => setStep(3)} btnName="다음" />
-          </ModalButtons>
-        </>
+        <TimeSelector
+          selectedHour={selectedHour}
+          selectedMinute={selectedMinute}
+          onChangeHour={setSelectedHour}
+          onChangeMinute={setSelectedMinute}
+        />
       )}
       {step === 3 && (
         <ConfirmSchedule
@@ -85,30 +72,29 @@ const ScheduledOption = ({ onClose, onConfirm }) => {
           onBack={() => setStep(2)}
           onConfirm={handleConfirm}
           onClose={onClose}
-          type="SCHEDULED"
+          type="TIMECAPSULE"
         />
       )}
+      <ModalButtons>
+        {step > 1 && <CancelButton onClick={() => setStep(step - 1)} btnName="이전" />}
+        {step < 3 && <ConfirmButton onClick={() => setStep(step + 1)} btnName="다음" />}
+      </ModalButtons>
     </ConfirmModal>
   );
-};
+}
 
-export default ScheduledOption;
-
-const FinalStep = styled.div`
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
-`;
-
+// styled-components
 const ModalTitle = styled.div`
   ${({ theme }) => theme.fonts.Title2};
   color: ${({ theme }) => theme.colors.MainRed};
   margin-bottom: 0.4rem;
+  text-align: center;
 `;
 
 const ModalDesc = styled.div`
   ${({ theme }) => theme.fonts.body2};
   color: ${({ theme }) => theme.colors.Gray2};
+  text-align: center;
 `;
 
 const ModalButtons = styled.div`
