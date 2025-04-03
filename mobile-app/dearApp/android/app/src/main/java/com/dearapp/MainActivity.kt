@@ -1,4 +1,4 @@
-package com.dearapp
+package com.mobileapp
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
