@@ -56,7 +56,7 @@ const LetterWriting = () => {
   const isValid = ImageList.length >= 10;
 
   const handleSubmit = async () => {
-    setIsLoading(true); // 🔥 로딩 시작
+    setIsLoading(true);
 
     try {
       setLetterImages(ImageList);
@@ -95,7 +95,7 @@ const LetterWriting = () => {
         });
       }
     } finally {
-      setIsLoading(false); // ✅ 무조건 로딩 종료
+      setIsLoading(false);
     }
   };
 
