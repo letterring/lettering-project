@@ -3,13 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getSentPostcardDetail } from '/src/apis/postcard';
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
+import Header from '/src/components/common/Header';
 import { getFontStyle } from '/src/util/getFont';
-
-import { getSentPostcardDetail } from '../../../../apis/postcard';
-import Header from '../../../common/Header';
 
 const PostcardDetail = () => {
   const [flipped, setFlipped] = useState(false);

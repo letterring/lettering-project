@@ -25,6 +25,7 @@ import DescribeKeyringPage from './pages/sender/DescribeKeyringPage';
 import FontSettingPage from './pages/sender/FontSettingPage';
 import HomePage from './pages/sender/Homepage';
 import KeyringSettingPage from './pages/sender/KeyringSettingPage';
+import LetterDetailPage from './pages/sender/LetterDetailPAge';
 import LetterPreviewPage from './pages/sender/LetterPreviewPage';
 import LetterWritingPage from './pages/sender/LetterWritingPage';
 import LoginPage from './pages/sender/LoginPage';
@@ -62,11 +63,12 @@ const Router = () => {
 
               <Route path="/theme" element={<SelectThemePage />} />
 
-              <Route path="/letter/writing" element={<LetterWritingPage />} />
               <Route path="/postcard/writing" element={<PostcardWritingPage />} />
               <Route path="/postcard/preview" element={<PostcardPreviewPage />} />
               <Route path="/postcard/detail/:messageId" element={<PostcardDetailPage />} />
-              <Route path="/letter/detail/:messageId" element={<PostcardDetailPage />} />
+              <Route path="/letter/writing" element={<LetterWritingPage />} />
+              <Route path="/letter/preview" element={<LetterPreviewPage />} />
+              <Route path="/letter/detail/:messageId" element={<LetterDetailPage />} />
 
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />
@@ -79,8 +81,6 @@ const Router = () => {
               <Route path="/mypage/font" element={<FontSettingPage />} />
               <Route path="/mypage/keyring" element={<KeyringSettingPage />} />
               <Route path="/keyring" element={<DescribeKeyringPage />} />
-              <Route path="/letter/writing" element={<LetterWritingPage />} />
-              <Route path="/letter/preview" element={<LetterPreviewPage />} />
 
               {/* dear */}
               <Route path="/dear" element={<DearLandingPage />} />
