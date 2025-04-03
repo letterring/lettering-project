@@ -18,13 +18,13 @@ public class SenderMessageSummaryResponse {
     private DesignType designType;
 
     public static SenderMessageSummaryResponse fromEntity(AbstractMessage abstractMessage) {
-        SenderMessageSummaryResponse senderMessageSummaryResponse = new SenderMessageSummaryResponse();
-        senderMessageSummaryResponse.setId(abstractMessage.getId());
-        senderMessageSummaryResponse.setRepliedName(abstractMessage.getKeyring().getNfcName());
-        senderMessageSummaryResponse.setConditionTime(abstractMessage.getConditionTime());
-        senderMessageSummaryResponse.setReplied(abstractMessage.getReplyText() != null);
-        senderMessageSummaryResponse.setSealingWaxId(abstractMessage.getSealingWax().getId());
-        senderMessageSummaryResponse.setDesignType(abstractMessage.getSealingWax().getDesignType());
-        return senderMessageSummaryResponse;
+        SenderMessageSummaryResponse response = new SenderMessageSummaryResponse();
+        response.setId(abstractMessage.getId());
+        response.setRepliedName(abstractMessage.getKeyring().getNfcName());
+        response.setConditionTime(abstractMessage.getConditionTime());
+        response.setReplied(abstractMessage.getReplyText() != null);
+        response.setSealingWaxId(abstractMessage.getSealingWax().getId());
+        response.setDesignType(abstractMessage.getSealingWax().getDesignType());
+        return response;
     }
 }

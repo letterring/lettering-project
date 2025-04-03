@@ -13,7 +13,7 @@ public class ImageProcessingUtils {
     public static byte[] compressImage(InputStream originalInputStream, String contentType) throws IOException {
         BufferedImage originalImage = ImageIO.read(originalInputStream);
         BufferedImage resizedImage = Thumbnails.of(originalImage)
-                .scale(0.2)
+                .scale(0.4)
                 .asBufferedImage();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

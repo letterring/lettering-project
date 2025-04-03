@@ -1,6 +1,8 @@
 package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.request.sender.CreateLetterRequest;
+import com.example.lettering.controller.response.dear.LetterToDearDetailResponse;
+import com.example.lettering.controller.response.sender.LetterBySenderDetailResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
 import com.example.lettering.domain.message.entity.Letter;
@@ -45,6 +47,14 @@ public class LetterServiceImpl implements LetterService {
         SealingWax sealingWax = sealingWaxRepository.findById(createLetterRequest.getSealingWaxId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.SEALINGWAX_NOT_FOUND));
 
+        if (createLetterRequest.getContents().size() != sealingWax.getContentCount()){
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_CONTENT_COUNT);
+        }
+
+        if (imageFiles.size() != sealingWax.getImageCount()) {
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_IMAGE_COUNT);
+        }
+
         List<LetterContent> contents = new ArrayList<>();
         if (createLetterRequest.getContents() != null) {
             for (String contentText : createLetterRequest.getContents()) {
@@ -57,12 +67,27 @@ public class LetterServiceImpl implements LetterService {
         for (MultipartFile imageFile : imageFiles) {
             String imageHighUrl = s3ImageUtil.uploadHighQualityImage(imageFile, "letter_images");
             String imageLowUrl = s3ImageUtil.uploadLowQualityImage(imageFile, "letter_images");
-            images.add(LetterImage.fromImageUrl(imageHighUrl, imageLowUrl, orderIndex));
-            orderIndex++;
+            images.add(LetterImage.fromImageUrl(imageHighUrl, imageLowUrl, orderIndex++));
         }
 
         Letter letter = Letter.fromDto(createLetterRequest, sender, keyring, sealingWax, sender.getFont(), contents, images);
 
         return letterRepository.save(letter).getId();
+    }
+
+    @Override
+    public LetterBySenderDetailResponse getLetterBySenderDetail(Long messageId) {
+        Letter letter = letterRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        return LetterBySenderDetailResponse.fromEntity(letter);
+    }
+
+    @Override
+    public LetterToDearDetailResponse getLetterToDearDetail(Long messageId) {
+        Letter letter = letterRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        return LetterToDearDetailResponse.fromEntity(letter);
     }
 }

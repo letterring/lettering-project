@@ -6,11 +6,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -57,6 +58,23 @@ public class Order {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatus status = OrderStatus.WAITING;
+
+    @ElementCollection
+    @CollectionTable(name = "order_keyring_ids", joinColumns = @JoinColumn(name = "order_id"))
+    @Column(name = "keyring_id")
+    @Builder.Default
+    private List<Long> keyringIds = new ArrayList<>();
+
+    public void addKeyringIds(List<Long> ids) {
+        if (ids != null) {
+            this.keyringIds.addAll(ids);
+        }
+    }
+
+    public void assignOrderNumber(Long orderNumber) {
+        if (this.orderNumber != null) throw new IllegalStateException("주문 번호는 이미 설정되었습니다.");
+        this.orderNumber = orderNumber;
+    }
 
     @PrePersist
     protected void onCreate() {

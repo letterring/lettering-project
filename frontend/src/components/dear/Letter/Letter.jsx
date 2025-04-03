@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import DummyImg from '../../../assets/dummy/letter.jpg';
@@ -12,6 +12,7 @@ import StampImg from '../../../assets/images/letter/vintage_stamp.png';
 
 const Letter = () => {
   const navigate = useNavigate();
+  const { messageId } = useParams();
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 200;
@@ -21,7 +22,7 @@ const Letter = () => {
 
   return (
     <StWrapper>
-      <StEnvelopeWrapper onClick={() => navigate('/dear/letter/detail')}>
+      <StEnvelopeWrapper onClick={() => navigate(`/dear/letter/detail/${messageId}`)}>
         <StEnvelopeTop src={EnvelopeTopImg} alt="편지 봉투 윗부분" />
 
         <StLetter
@@ -38,11 +39,11 @@ const Letter = () => {
           initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
           animate={{ x, y, opacity: 1, rotate: -3.7 }}
           transition={{ duration: 1.2 }}
-          // onAnimationComplete={() => {
-          //   setTimeout(() => {
-          //     navigate('/dear/letter/detail');
-          //   }, 800); // 1초 뒤 이동
-          // }}
+          onAnimationComplete={() => {
+            setTimeout(() => {
+              navigate(`/dear/letter/detail/${messageId}`);
+            }, 800);
+          }}
         />
 
         <StStampImage

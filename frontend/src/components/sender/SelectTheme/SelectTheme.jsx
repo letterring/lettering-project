@@ -37,7 +37,12 @@ const SelectTheme = () => {
   const handleConfirm = () => {
     if (selectedTheme) {
       localStorage.setItem('sealingWaxId', selectedTheme.id);
-      navigate('/postcard/writing');
+
+      if (selectedTheme.id === 1) {
+        navigate('/postcard/writing');
+      } else {
+        navigate('/letter/writing');
+      }
     } else {
       alert('테마를 선택해주세요!');
     }

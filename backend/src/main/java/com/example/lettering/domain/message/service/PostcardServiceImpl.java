@@ -1,7 +1,7 @@
 package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.request.sender.CreatePostcardRequest;
-import com.example.lettering.controller.response.sender.PostcardDetailResponse;
+import com.example.lettering.controller.response.sender.PostcardBySenderDetailResponse;
 import com.example.lettering.controller.response.dear.PostcardToDearDetailResponse;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.repository.KeyringRepository;
@@ -43,6 +43,14 @@ public class PostcardServiceImpl implements PostcardService {
         SealingWax sealingWax = sealingWaxRepository.findById(createPostcardRequest.getSealingWaxId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.SEALINGWAX_NOT_FOUND));
 
+        if (sealingWax.getContentCount() == 1){
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_CONTENT_COUNT);
+        }
+
+        if (sealingWax.getImageCount() == imageFile.getSize()) {
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_IMAGE_COUNT);
+        }
+
         String imageHighUrl = s3ImageUtil.uploadHighQualityImage(imageFile, "postcard_images");
 
         String imageLowUrl = s3ImageUtil.uploadLowQualityImage(imageFile, "postcard_images");
@@ -54,11 +62,11 @@ public class PostcardServiceImpl implements PostcardService {
 
     @Override
     @Transactional
-    public PostcardDetailResponse getPostcardDetail(Long messageId) {
+    public PostcardBySenderDetailResponse getPostcardDetail(Long messageId) {
         Postcard postcard = postcardRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
 
-        return PostcardDetailResponse.fromEntity(postcard);
+        return PostcardBySenderDetailResponse.fromEntity(postcard);
     }
 
     @Override
