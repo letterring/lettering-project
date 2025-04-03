@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import PolarImg1 from '../../../assets/images/letter/polar1.png';
-import PolarImg2 from '../../../assets/images/letter/polar2.png';
+import PolarImg1 from '/src/assets/images/letter/polar1.png';
+import PolarImg2 from '/src/assets/images/letter/polar2.png';
 
 const PolarTemplate = ({ images, isActive }) => {
   const [loaded, setLoaded] = useState(false);

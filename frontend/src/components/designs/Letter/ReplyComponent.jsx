@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { IcSend } from '../../../assets/icons';
+import { IcSend } from '/src/assets/icons';
 
 const ReplyComponent = () => {
   const [reply, setReply] = useState(''); // 입력값 상태
