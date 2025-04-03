@@ -22,6 +22,7 @@ import LetterEditor from './LetterEditor';
 const LetterPreview = () => {
   const location = useLocation();
   const postcard = location.state?.postcard;
+  const segmentedText = location.state?.segmentedText;
 
   const localImageList = useRecoilValue(LetterImageList);
 
@@ -31,22 +32,20 @@ const LetterPreview = () => {
   const IMAGE_BASE_URL = import.meta.env.VITE_FAST_API_BASE_URL + '/static/uploads/';
 
   useEffect(() => {
+    // ✅ 이미지: Recoil 무조건 사용
     if (localImageList && localImageList.length > 0) {
-      const images = localImageList.map((img) => img.url); // blob URL
+      const images = localImageList.map((img) => img.url);
       setImageList(images);
     } else if (postcard?.images?.length > 0) {
       const images = postcard.images.map((img) => `${IMAGE_BASE_URL}${img.filename}`);
       setImageList(images);
     }
 
-    if (postcard?.message) {
-      const textSplit = postcard.message
-        .split(/\n+/)
-        .map((t) => t.trim())
-        .filter((t) => t.length > 0);
-      setTextList(textSplit);
+    // ✅ 텍스트: segment 결과 우선 사용
+    if (segmentedText && segmentedText.length > 0) {
+      setTextList(segmentedText);
     }
-  }, [localImageList, postcard]);
+  }, [localImageList, postcard, segmentedText]);
 
   const aiDummy = {
     refine: ['안녕 AI가 생성한 문장으로 변경됫어', '안녕 AI가 생성한 문장으로 변경됫어222'],
