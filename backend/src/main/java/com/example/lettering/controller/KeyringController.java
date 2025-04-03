@@ -185,9 +185,11 @@ public class KeyringController {
         }
     }
 
-
-
-
-
+    @GetMapping("/{keyringId}/custom-message")
+    @Operation(summary = "키링 커스텀 메시지 조회", description = "keyringId에 해당하는 커스텀 메시지를 반환합니다.")
+    public ResponseEntity<Map<String, String>> getCustomMessageByKeyringId(@PathVariable Long keyringId) {
+        String message = keyringService.getCustomMessage(keyringId);
+        return ResponseEntity.ok(Map.of("customMessage", message));
+    }
 
 }
