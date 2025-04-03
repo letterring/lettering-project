@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
-import FilmImg from '../../../assets/images/letter/film.png';
+import FilmImg from '/src/assets/images/letter/film.png';
 
 const FilmTemplate = ({ images }) => {
   const [animate, setAnimate] = useState(true);

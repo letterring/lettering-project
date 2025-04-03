@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { getFontStyle } from '../../../util/getFont';
+import { getFontStyle } from '/src/util/getFont';
+
 import EndTemplate from './EndTemplate';
 import FilmTemplate from './FilmTemplate';
 import GridTemplate from './GridTemplate';
 import MainTemplate from './MainTemplate';
 import PolarTemplate from './PolarTemplate';
-import ReplyComponent from './ReplyComponent';
 
 const LetterContent = ({ template, images, text, background, isActive, font }) => {
   const fontStyle = getFontStyle(font);
@@ -46,7 +46,6 @@ const LetterContent = ({ template, images, text, background, isActive, font }) =
               <br /> {text[1]}
             </StLetterText>
             <EndTemplate images={images} />
-            <ReplyComponent />
           </>
         )}
       </StContentWrapper>
