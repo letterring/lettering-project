@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { TotalQuantity } from '../../../recoil/atom';
+import { submitKeyringCustomization } from '../../../apis/purchase';
+import { KeyringCustomList, TotalQuantity } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import BirdImage from './../../../assets/images/bird_question.svg';
@@ -11,25 +12,15 @@ import CustomCardList from './CustomCardList';
 
 const Customize = () => {
   const navigator = useNavigate();
-  const [count, setCount] = useRecoilState(TotalQuantity);
-
-  const [cardList, setCardList] = useState(
-    Array.from({ length: count }, () => ({
-      nickname: 'NaNa',
-      message: '새로운 편지가 도착했어요!',
-    })),
-  );
+  const [cardList, setCardList] = useRecoilState(KeyringCustomList);
 
   const handleChange = (index, field, value) => {
-    setCardList((prev) => {
-      const updated = [...prev];
-      updated[index][field] = value;
-      return updated;
-    });
+    const updated = cardList.map((item, i) => (i === index ? { ...item, [field]: value } : item));
+    setCardList(updated);
   };
 
-  const handleCompleteOrder = () => {
-    setCount(1);
+  const handleCompleteOrder = async () => {
+    const data = submitKeyringCustomization(cardList);
     navigator('/purchase/complete');
   };
 

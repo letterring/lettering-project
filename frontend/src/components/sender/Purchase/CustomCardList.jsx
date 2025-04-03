@@ -19,13 +19,13 @@ const CustomCardList = ({ cardList, onChange }) => {
 
   return (
     <StCardListWrapper>
-      <Slider {...settings} tabIndex={-1}>
+      <Slider {...settings} tabIndex={-1} lazyLoad="ondemand">
         {cardList.map((info, i) => (
           <div key={i}>
             <CustomCard
               index={i}
-              nickname={info.nickname}
-              message={info.message}
+              nickname={info.nfcName}
+              message={info.customMessage}
               onChange={onChange}
             />
           </div>
