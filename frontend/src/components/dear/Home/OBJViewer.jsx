@@ -183,7 +183,7 @@ const ViewerWrapper = ({
 
           {!isRising && newLetter && (
             <Html position={[0, positionY - 4, 0]} center>
-              <StFloatingText>새로운 편지가 도착했어요!</StFloatingText>
+              <StFloatingText>{text}</StFloatingText>
             </Html>
           )}
 
