@@ -31,3 +31,16 @@ export const getPostcard = async (key) => {
     return null;
   }
 };
+
+export const segmentText = async (text, count = 5) => {
+  const formData = new FormData();
+  formData.append('text', text);
+  formData.append('count', count.toString());
+
+  try {
+    const response = await client.post('/ai/segment', formData);
+    return response.data.response;
+  } catch (error) {
+    console.error(error);
+  }
+};
