@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { sendReply } from '/src/apis/reply';
 import { IcSend } from '/src/assets/icons';
-
-import { sendReply } from '../../../apis/reply';
 
 const ReplyComponent = ({ messageId, replyText, dearName, isSender }) => {
   const [reply, setReply] = useState(replyText || '');
@@ -63,7 +62,7 @@ const StReplyWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 25rem;
 `;
 
 const StReplyHeader = styled.div`
