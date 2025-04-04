@@ -20,7 +20,7 @@ export default GridTemplateEditor;
 
 const StWrapper = styled.div`
   width: 100%;
-  height: 20rem;
+  height: 18rem;
   position: relative;
   display: flex;
   justify-content: center;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-const MAX_LENGTH = 150;
+const MAX_LENGTH = 200;
 
 const TextAreaEditor = ({ value = '', onChange, font }) => {
   const [isEditing, setIsEditing] = useState(false);
