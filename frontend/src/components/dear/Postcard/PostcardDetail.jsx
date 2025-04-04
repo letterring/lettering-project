@@ -3,7 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
+import {
+  downloadPostcardImage,
+  getHighImageUrl,
+  getPostcardDetail,
+  markPostcardAsUnread,
+} from '/src/apis/postcard';
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
@@ -49,6 +54,30 @@ const PostcardDetail = () => {
   // 구조분해 할당
   const { imageUrl, content, nfcName, font, replyText } = postcard;
 
+  const handleImageDownload = async () => {
+    try {
+      const { imageHighUrl } = await getHighImageUrl(messageId);
+
+      const { data, headers } = await downloadPostcardImage(imageUrl);
+
+      const contentType = headers['content-type'] || 'application/octet-stream';
+      const blob = new Blob([data], { type: contentType });
+      const blobUrl = URL.createObjectURL(blob);
+      const extension = contentType.split('/')[1];
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `letterring_postcard_${messageId}.${extension}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      alert('이미지 다운로드 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <StPageWrapper>
       <Header headerName="Lettering" />
@@ -78,6 +107,8 @@ const PostcardDetail = () => {
 
         <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
 
+        <SimpleButton onClick={handleImageDownload}>고화질 이미지 다운로드</SimpleButton>
+
         <ReplyComponent
           messageId={messageId}
           replyText={replyText}
@@ -101,23 +132,23 @@ export const SimpleButton = styled.button`
 `;
 
 const StPageWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100%;
 `;
 
 const StWrapper = styled.div`
-  position: relative;
-
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 
-  height: 100%;
   padding-top: 10rem;
+  gap: 2rem;
 `;
 
 const StInform = styled.div`
