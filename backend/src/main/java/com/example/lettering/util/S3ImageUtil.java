@@ -109,7 +109,8 @@ public class S3ImageUtil {
     private boolean isAllowedExtension(String extension) {
         String ext = extension.toLowerCase();
         return ext.equals(".png") || ext.equals(".jpg") || ext.equals(".jpeg")
-                || ext.equals(".heic") || ext.equals(".heif");
+                || ext.equals(".heic") || ext.equals(".heif")
+                || ext.equals(".gif");
     }
 
     /**
