@@ -72,10 +72,12 @@ const LetterPreview = () => {
   useEffect(() => {
     if (localImageList && localImageList.length > 0) {
       const images = localImageList.map((img) => img.url);
-      setImageList(images);
+      const extendedImages = [...images, images[0]];
+      setImageList(extendedImages);
     } else if (postcard?.images?.length > 0) {
       const images = postcard.images.map((img) => `${IMAGE_BASE_URL}${img.filename}`);
-      setImageList(images);
+      const extendedImages = [...images, images[0]];
+      setImageList(extendedImages);
     }
 
     if (segmentedText && segmentedText.length > 0) {
@@ -96,6 +98,7 @@ const LetterPreview = () => {
     const updated = [...textList];
     updated[index] = value;
     setTextList(updated);
+    setLetterTextList(updated);
   };
 
   const contents = contentConfig.map(({ template, imageCount, textCount, background }) => {
