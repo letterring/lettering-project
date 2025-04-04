@@ -1,7 +1,7 @@
 from app.core.settings import settings
 import os
-from fastapi import UploadFile
-from PIL import Image, ExifTags
+from fastapi import HTTPException, UploadFile
+from PIL import Image, ExifTags, UnidentifiedImageError
 import base64
 import io
 from uuid import uuid4
@@ -10,7 +10,7 @@ UPLOAD_DIR = settings.UPLOAD_DIR
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def extract_exif_data(image: Image.Image) -> dict:
-    exif = image._getexif()
+    exif = image.getexif()
     if not exif:
         return {}
     exif_data = {}
@@ -23,21 +23,40 @@ def extract_exif_data(image: Image.Image) -> dict:
     return exif_data
 
 async def save_image(file: UploadFile) -> dict:
-    ext = file.filename.split(".")[-1]
+    ext = file.filename.split(".")[-1].lower()
+    
+    if ext not in {"jpg", "jpeg", "png", "gif"}:
+        raise HTTPException(status_code=400, detail="지원하지 않는 이미지 형식입니다. (jpg, png, gif만 가능)")
+
     filename = f"{uuid4()}.{ext}"
     file_path = os.path.join(UPLOAD_DIR, filename)
 
-    contents = await file.read()
-    with open(file_path, "wb") as f:
-        f.write(contents)
+    try:
+        contents = await file.read()
+        with open(file_path, "wb") as f:
+            f.write(contents)
 
-    image = Image.open(file_path)
+        # 이미지 열기
+        image = Image.open(file_path)
 
-    return {
-        "filename": filename,
-        "content_type": file.content_type,
-        "width": image.width,
-        "height": image.height,
-        "path": file_path.replace("\\", "/"),
-        "exif": extract_exif_data(image)
-    }
+        # GIF일 경우 첫 프레임만 사용 (애니메이션 프레임 여러 개면 오류 방지)
+        if image.format == "GIF":
+            image.seek(0)
+            image = image.convert("RGB")  # exif나 size 정보를 위해 RGB 변환 (필요 시)
+
+        return {
+            "filename": filename,
+            "content_type": file.content_type,
+            "width": image.width,
+            "height": image.height,
+            "path": file_path.replace("\\", "/"),
+            "exif": extract_exif_data(image)
+        }
+
+    except UnidentifiedImageError:
+        raise HTTPException(status_code=400, detail="이미지를 열 수 없습니다. 올바른 형식의 이미지를 업로드해주세요.")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"이미지 저장 중 오류 발생: {str(e)}")
+    
+
