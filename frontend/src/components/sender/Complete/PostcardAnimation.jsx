@@ -42,8 +42,10 @@ const PostcardAnimation = () => {
           onAnimationComplete={() => {
             setTimeout(() => {
               setIsClosed(true);
-              // navigate('/complete');
-            }, 800);
+              setTimeout(() => {
+                navigate('/complete');
+              }, 5000);
+            }, 500);
           }}
         />
         <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />
