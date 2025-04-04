@@ -20,7 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionValidationInterceptor)
-                .addPathPatterns("/api/messages/letters/sender/**");
+                .addPathPatterns("/api/messages/letters/sender/**", "/api/messages/postcards/**", "/api/messages/letters/**", "/api/messages/sender/**", "/api/messages/postcards/**", "/api/messages/filter/**")
+                .excludePathPatterns("/api/messages/postcards/dear/**", "/api/messages/letters/dear/**");
     }
 }
 
