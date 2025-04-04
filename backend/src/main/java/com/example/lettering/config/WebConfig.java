@@ -21,6 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionValidationInterceptor)
                 .addPathPatterns("/api/messages/**", "/api/users/**", "/api/payment/**", "/api/keyrings/**")
-                .excludePathPatterns("/api/messages/dear/**", "/api/messages/postcards/dear/**", "/api/messages/letters/dear/**", "/api/users/login", "/api/users/logout","/api/users/signup", "/api/keyrings/designs/**", "/api/keyrings/backoffice", "/api/keyrings/*/delete", "/api/keyrings/nfc-access");
+                .excludePathPatterns("/api/messages/dear/**", "/api/messages/postcards/dear/**", "/api/messages/letters/dear/**", "/api/users/login", "/api/users/logout","/api/users/signup", "/api/keyrings/designs/**", "/api/keyrings/backoffice", "/api/keyrings/*/delete", "/api/keyrings/nfc-access", "/api/keyrings/custom-message");
     }
 }
