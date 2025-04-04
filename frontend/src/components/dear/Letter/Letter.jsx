@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { getLetterDetail } from '/src/apis/letter';
+import { getLetterDate } from '/src/util/getFormatDate';
 
 import DummyImg from '../../../assets/dummy/letter.jpg';
 import EnvelopeBottomImg from '../../../assets/images/letter/bottom_fold.png';
@@ -13,12 +16,54 @@ import StampImg from '../../../assets/images/letter/vintage_stamp.png';
 const Letter = () => {
   const navigate = useNavigate();
   const { messageId } = useParams();
+  const location = useLocation();
+  const imageUrl = location.state?.imageUrl;
+
+  const [letterData, setLetterData] = useState(null);
+  const [ImageData, setImageData] = useState(null);
+  const [letterFont, setLetterFont] = useState(null);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 200;
 
   const x = Math.cos(angle) * distance;
   const y = -Math.sin(angle) * distance;
+
+  useEffect(() => {
+    if (!letterData || !ImageData) {
+      const fetchLetter = async () => {
+        const { letterContents, letterImages, font, conditionTime, firstOpenedTime } =
+          await getLetterDetail(messageId);
+
+        const sentAt = getLetterDate(conditionTime);
+        const readAt = getLetterDate(firstOpenedTime);
+
+        const newImageData = [...letterImages, letterImages[0]];
+        const newLetterContents = [
+          ...letterContents,
+          `${sentAt}에 보낸 편지를`,
+          `${readAt}에 열었습니다.`,
+        ];
+
+        setImageData(newImageData);
+        setLetterData(newLetterContents);
+        setLetterFont(font);
+      };
+
+      fetchLetter();
+    }
+  }, [messageId, letterData, ImageData]);
+
+  const handleNavigate = () => {
+    navigate(`/dear/letter/detail/${messageId}`, {
+      state: {
+        imageUrl,
+        letterData,
+        ImageData,
+        letterFont,
+      },
+    });
+  };
 
   return (
     <StWrapper>
@@ -34,14 +79,14 @@ const Letter = () => {
         />
 
         <StLetterImage
-          src={DummyImg}
+          src={imageUrl}
           alt="편지 사진"
           initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
           animate={{ x, y, opacity: 1, rotate: -3.7 }}
           transition={{ duration: 1.2 }}
           onAnimationComplete={() => {
             setTimeout(() => {
-              navigate(`/dear/letter/detail/${messageId}`);
+              handleNavigate();
             }, 800);
           }}
         />
