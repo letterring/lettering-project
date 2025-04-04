@@ -1,9 +1,11 @@
 package com.example.lettering.domain.keyring.service;
 
+import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
 import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.user.OrderRequest;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
+import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
 import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.user.entity.User;
@@ -26,4 +28,8 @@ public interface KeyringService {
     Long generateTempOrderNumber();
     KeyringDesignResponse createKeyringDesign(KeyringDesignRequest request, MultipartFile image) throws IOException;
     void deleteKeyring(Long keyringId);
+    List<KeyringFilterResponse> getKeyringsByOwner(Long userId);
+    void customizeKeyrings(Long userId, List<KeyringCustomizeRequest.KeyringInfo> keyrings);
+    Long validateOrRegisterDevice(Long keyringId, String deviceId);
+    String getCustomMessage(Long keyringId);
 }

@@ -42,6 +42,12 @@ public class Keyring {
     @Column(name = "tag_code", nullable = false, unique = true)
     private String tagCode;
 
+    @Column(name = "custom_message")
+    private String customMessage; // ✅ "나만의 메시지"
+
+    @Column(name = "device_unique_id", unique = true)
+    private String deviceUniqueId;
+
     public void purchase(User owner, KeyringDesign design) {
         this.isPurchase = true;
         this.owner = owner;
@@ -60,8 +66,18 @@ public class Keyring {
                 "우체통 이름",   // nfcName
                 false,         // isFavorite
                 null,          // design
-                tagCode        // tagCode
+                tagCode,        // tagCode
+                "새로운 편지가 도착했어요!",
+                null
         );
+    }
+
+    public void setCustomMessage(String customMessage) {
+        this.customMessage = customMessage;
+    }
+
+    public void addDeviceUniqueId(String deviceUniqueId) {
+        this.deviceUniqueId = deviceUniqueId;
     }
 
     public void updateNfcName(String newName) {

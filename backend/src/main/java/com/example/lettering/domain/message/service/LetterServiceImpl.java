@@ -47,6 +47,14 @@ public class LetterServiceImpl implements LetterService {
         SealingWax sealingWax = sealingWaxRepository.findById(createLetterRequest.getSealingWaxId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.SEALINGWAX_NOT_FOUND));
 
+        if (createLetterRequest.getContents().size() != sealingWax.getContentCount()){
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_CONTENT_COUNT);
+        }
+
+        if (imageFiles.size() != sealingWax.getImageCount()) {
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_IMAGE_COUNT);
+        }
+
         List<LetterContent> contents = new ArrayList<>();
         if (createLetterRequest.getContents() != null) {
             for (String contentText : createLetterRequest.getContents()) {
@@ -59,8 +67,7 @@ public class LetterServiceImpl implements LetterService {
         for (MultipartFile imageFile : imageFiles) {
             String imageHighUrl = s3ImageUtil.uploadHighQualityImage(imageFile, "letter_images");
             String imageLowUrl = s3ImageUtil.uploadLowQualityImage(imageFile, "letter_images");
-            images.add(LetterImage.fromImageUrl(imageHighUrl, imageLowUrl, orderIndex));
-            orderIndex++;
+            images.add(LetterImage.fromImageUrl(imageHighUrl, imageLowUrl, orderIndex++));
         }
 
         Letter letter = Letter.fromDto(createLetterRequest, sender, keyring, sealingWax, sender.getFont(), contents, images);

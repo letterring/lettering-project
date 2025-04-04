@@ -49,3 +49,23 @@ async def get_entry(key: str):
     if not value:
         return JSONResponse(status_code=404, content={"error": "해당 key를 찾을 수 없습니다."})
     return json.loads(value)
+
+@router.patch(
+    "/submit/{key}",
+    summary="엽서 메시지 업데이트",
+    description="Redis에 저장된 엽서의 메시지 내용을 수정합니다."
+)
+async def update_message(key: str, message: str = Form(...)):
+    """
+    Redis에 저장된 메시지를 수정합니다.
+    """
+    existing = await redis.get(key)
+    if not existing:
+        return JSONResponse(status_code=404, content={"error": "해당 key를 찾을 수 없습니다."})
+
+    data = json.loads(existing)
+    data["message"] = message
+
+    await redis.set(key, json.dumps(data))
+    return {"status": "updated"}
+

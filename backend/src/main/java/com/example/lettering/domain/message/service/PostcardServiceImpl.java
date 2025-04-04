@@ -43,6 +43,10 @@ public class PostcardServiceImpl implements PostcardService {
         SealingWax sealingWax = sealingWaxRepository.findById(createPostcardRequest.getSealingWaxId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.SEALINGWAX_NOT_FOUND));
 
+        if (sealingWax.getContentCount() != 1){
+            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_CONTENT_COUNT);
+        }
+
         String imageHighUrl = s3ImageUtil.uploadHighQualityImage(imageFile, "postcard_images");
 
         String imageLowUrl = s3ImageUtil.uploadLowQualityImage(imageFile, "postcard_images");

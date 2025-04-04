@@ -1,13 +1,12 @@
+from app.core.settings import settings
 import os
 from fastapi import UploadFile
 from PIL import Image, ExifTags
 import base64
 import io
 from uuid import uuid4
-from dotenv import load_dotenv
 
-load_dotenv()
-UPLOAD_DIR = os.getenv("UPLOAD_DIR", "uploads")
+UPLOAD_DIR = settings.UPLOAD_DIR
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def extract_exif_data(image: Image.Image) -> dict:

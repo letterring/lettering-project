@@ -28,19 +28,36 @@ pipeline {
       }
     }
 
+    stage('백엔드 JAR 빌드') {
+      steps {
+        echo "⚙️ 백엔드 Gradle 빌드 시작"
+        dir('backend') {
+          sh '''
+            ./gradlew build -x test --no-daemon
+
+            
+          '''
+        }
+      }
+    }
+
     stage('프론트엔드 빌드') {
       steps {
         echo "🛠️ 프론트엔드 빌드 시작"
         dir('frontend') {
           sh '''
             echo "🧹 이전 캐시 제거"
-            rm -rf node_modules dist
+            rm -rf dist
 
             echo "📦 의존성 설치 (npm ci)"
-            npm ci --no-optional
+            if [ ! -d node_modules ]; then
+              npm ci --no-optional
+            else
+              echo "✅ node_modules 캐시 존재 — npm ci 생략"
+            fi
 
             echo "🛠️ Rollup 네이티브 모듈 수동 설치"
-            npm install @rollup/rollup-linux-x64-gnu --save-dev
+            npm install @rollup/rollup-linux-x64-gnu --no-save
 
             echo "🏗️ Vite 빌드 시작"
             npm run build || {
@@ -63,7 +80,7 @@ pipeline {
       steps {
         echo "🚀 변경된 서비스만 빌드 및 재시작 (DB는 중단 없이 유지)"
         sh '''
-          docker compose -f infra/docker-compose.yml build --no-cache
+          docker compose -f infra/docker-compose.yml build
           docker compose -f infra/docker-compose.yml up -d
         '''
       }
