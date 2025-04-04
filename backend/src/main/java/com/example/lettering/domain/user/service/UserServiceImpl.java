@@ -86,6 +86,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isValidUser(Long userId) {
+        return userRepository.existsById(userId);
+    }
+
+    @Override
     // ✅ 이메일이 이미 존재하고, `LOCAL` 계정인지 확인하는 메서드
     public boolean isLocalUser(String email) {
         Optional<User> existingUser = userRepository.findByEmail(email);
