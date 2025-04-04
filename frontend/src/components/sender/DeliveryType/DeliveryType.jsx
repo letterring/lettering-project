@@ -3,12 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
+import { sendLetter } from '../../../apis/letter';
 import { sendPostcard } from '../../../apis/postcard';
 import IconLetter from '../../../assets/images/sender/NormalOption.png';
 import IconTimer from '../../../assets/images/sender/OpenTimerOption.png';
 import IconCalendar from '../../../assets/images/sender/ScheduledOption.png';
 import IconLock from '../../../assets/images/sender/SecretOption.png';
-import { PostcardImageFile, PostcardText, SelectedKeyringId } from '../../../recoil/atom';
+import {
+  LetterImageList,
+  LetterTextList,
+  PostcardImageFile,
+  PostcardText,
+  SelectedKeyringId,
+} from '../../../recoil/atom';
 import Header from '../../common/Header';
 import QuestionText from '../SelectDear/QuestionText';
 import DeliveryTypeCard from './DeliveryTypeCard';
@@ -19,6 +26,8 @@ const DeliveryType = () => {
   const selectedKeyringId = useRecoilValue(SelectedKeyringId);
   const postcardImageFile = useRecoilValue(PostcardImageFile);
   const postcardText = useRecoilValue(PostcardText);
+  const letterTextList = useRecoilValue(LetterTextList);
+  const letterImageList = useRecoilValue(LetterImageList);
 
   const deliveryTypes = [
     {
@@ -47,6 +56,13 @@ const DeliveryType = () => {
     },
   ];
 
+  const postLetter = async (letterData) => {
+    const res = await sendLetter(letterData, letterImageList);
+    if (res.success) {
+      navigate(`/complete/letter`);
+    }
+  };
+
   const handleSelect = async (type) => {
     console.log('선택된 전송 방식:', type);
 
@@ -57,24 +73,37 @@ const DeliveryType = () => {
     }
 
     if (type === 'NORMAL') {
-      const postcardData = {
-        keyringId: selectedKeyringId,
-        sealingWaxId: Number(sealingWaxId),
-        conditionType: 'NONE',
-        content: postcardText,
-      };
+      if (sealingWaxId == 1) {
+        //엽서
+        const postcardData = {
+          keyringId: selectedKeyringId,
+          sealingWaxId: Number(sealingWaxId),
+          conditionType: 'NONE',
+          content: postcardText,
+        };
 
-      try {
-        await sendPostcard({
-          postcardData,
-          imageFile: postcardImageFile,
-        });
+        try {
+          await sendPostcard({
+            postcardData,
+            imageFile: postcardImageFile,
+          });
 
-        // alert('엽서가 전송되었습니다!');
-        navigate('/complete/postcard');
-      } catch (error) {
-        console.error('엽서 전송 실패:', error);
-        alert('엽서 전송에 실패했어요.');
+          // alert('엽서가 전송되었습니다!');
+          navigate('/complete/postcard');
+        } catch (error) {
+          console.error('엽서 전송 실패:', error);
+          alert('엽서 전송에 실패했어요.');
+        }
+      } else {
+        //편지지
+        const letterData = {
+          keyringId: selectedKeyringId,
+          sealingWaxId: Number(sealingWaxId),
+          conditionType: 'NONE',
+          contents: letterTextList,
+        };
+
+        postLetter(letterData);
       }
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
