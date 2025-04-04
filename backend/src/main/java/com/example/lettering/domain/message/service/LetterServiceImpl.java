@@ -88,6 +88,8 @@ public class LetterServiceImpl implements LetterService {
         Letter letter = letterRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
 
+        letter.markAsOpened();
+
         return LetterToDearDetailResponse.fromEntity(letter);
     }
 }
