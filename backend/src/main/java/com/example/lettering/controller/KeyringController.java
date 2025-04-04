@@ -165,16 +165,13 @@ public class KeyringController {
     public ResponseEntity<Void> handleNfcAccess(@RequestBody KeyringAccessRequest request, HttpSession session) {
         try {
             Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
-
             session.setAttribute("keyringId", keyringId);
-
             return ResponseEntity.ok().build();
 
         } catch (BusinessException e) {
             return ResponseEntity
-                    .status(HttpStatus.FOUND)
-                    .location(URI.create(failBaseUrl))
-                    .build();
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(null);
         }
     }
 
