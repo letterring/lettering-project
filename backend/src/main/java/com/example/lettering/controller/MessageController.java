@@ -72,7 +72,7 @@ public class MessageController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(summary = "편지 API", description = "편지를 작성하여 등록합니다.")
+    @Operation(summary = "편지 작성 API", description = "편지를 작성하여 등록합니다.")
     @PostMapping(path = "/letters",consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createLetter(
             @Valid @RequestPart("letter") CreateLetterRequest createLetterRequest,
@@ -109,8 +109,7 @@ public class MessageController {
     @Operation(summary = "보낸 사람 기준 엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다. (favorite 제외)")
     @GetMapping("/postcards/sender/{messageId}")
     public ResponseEntity<PostcardBySenderDetailResponse> getPostcardBySenderDetail(
-            @PathVariable("messageId") Long messageId,
-            HttpSession session) {
+            @PathVariable("messageId") Long messageId) {
 
         PostcardBySenderDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
         return ResponseEntity.ok(postcardDetailResponse);
