@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import PaperBackground from '/src/assets/background2.png';
 import CompleteImage from '/src/assets/images/sender/TransmissionComplete.png';
 
+import { deletePostcard } from '../../../apis/fastapi';
+import { RedisMessageKey } from '../../../recoil/atom';
 import Header from '../../common/Header';
 
 const Complete = () => {
+  const key = useRecoilValue(RedisMessageKey);
+
+  useEffect(() => {
+    const autoDelete = async () => {
+      try {
+        const result = await deletePostcard(key);
+        console.log(`🗑️ 삭제 성공: ${result.key}`);
+      } catch (error) {
+        console.warn(`삭제 실패: ${error.error || error}`);
+      }
+    };
+
+    if (key) {
+      autoDelete();
+    }
+  }, [key]);
+
   return (
     <CompleteWrapper $Background={PaperBackground}>
       <Header headerName="편지 전송" />
