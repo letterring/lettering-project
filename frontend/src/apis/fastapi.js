@@ -38,6 +38,16 @@ export const updateRedisMessage = async (key, newMessage) => {
   }
 };
 
+export const deletePostcard = async (key) => {
+  try {
+    const response = await AiClient.delete(`/submit/${key}`);
+    return response.data;
+  } catch (error) {
+    console.error('Redis 메시지 삭제 실패:', error);
+    throw null;
+  }
+};
+
 export const segmentText = async (text, count = 5) => {
   const formData = new FormData();
   formData.append('text', text);
