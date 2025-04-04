@@ -6,7 +6,7 @@ from app.core.redis_conf import redis, REDIS_PREFIX
 from app.utils.utils import save_image
 import json
 
-router = APIRouter()
+router = APIRouter(prefix="/ai", tags=["Redis"])
 
 @router.post(
     "/submit",
