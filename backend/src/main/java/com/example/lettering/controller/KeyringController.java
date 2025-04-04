@@ -170,7 +170,7 @@ public class KeyringController {
 
         } catch (BusinessException e) {
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.FORBIDDEN)
                     .body(null);
         }
     }
