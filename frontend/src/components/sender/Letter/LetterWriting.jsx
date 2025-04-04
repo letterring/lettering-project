@@ -62,6 +62,8 @@ const LetterWriting = () => {
       setLetterImages(ImageList);
       setLetterText(letterContent);
 
+      // navigate(`/letter/preview`);
+
       let segmentedText;
       try {
         segmentedText = await segmentText(letterContent, textCount);

@@ -140,9 +140,6 @@ const SelectDear = () => {
   const letterImageList = useRecoilValue(LetterImageList);
   const letterTextList = useRecoilValue(LetterTextList);
 
-  console.log(letterImageList);
-  console.log(letterTextList);
-
   // 키링 목록 API 호출
   useEffect(() => {
     const fetchKeyrings = async () => {
