@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Slider from 'react-slick';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -38,7 +39,9 @@ const LetterPreview = () => {
   const redisKey = useRecoilValue(RedisMessageKey);
 
   const setLetterTextList = useSetRecoilState(LetterTextList);
+
   const IMAGE_BASE_URL = import.meta.env.VITE_FAST_API_BASE_URL + '/static/uploads/';
+  const DEBOUNCE_DELAY = 500;
 
   const contentConfig = [
     { template: 'main', imageCount: 1, textCount: 1, background: LetterImg1 },
@@ -68,6 +71,21 @@ const LetterPreview = () => {
       setCurrentSlide(newIndex);
     },
   };
+
+  const updateRedisDebounced = useCallback(
+    debounce((key, content) => {
+      updateRedisMessage(key, content);
+      console.log('updated:', key, content);
+    }, DEBOUNCE_DELAY),
+    [],
+  );
+
+  useEffect(() => {
+    if (redisKey) {
+      const joinedMessage = textList.join('\n\n');
+      updateRedisDebounced(redisKey, joinedMessage);
+    }
+  }, [textList, redisKey, updateRedisDebounced]);
 
   useEffect(() => {
     if (localImageList && localImageList.length > 0) {
@@ -117,7 +135,7 @@ const LetterPreview = () => {
     };
   });
 
-  // AI
+  // 여기부터 AI
   const handleUseRefineText = async (suggestionList) => {
     const updated = [...textList];
     const { textStartIndex, textCount } = contents[currentSlide];
@@ -127,15 +145,9 @@ const LetterPreview = () => {
       updated[textStartIndex + i] = slicedSuggestions[i] || '';
     }
 
-    console.log('[🔁 업데이트될 텍스트 리스트]', updated);
     setTextList(updated);
     setLetterTextList(updated);
     setActiveModal(null);
-
-    // if (redisKey) {
-    //   const joinedMessage = updated.join('\n\n');
-    //   await updateRedisMessage(redisKey, joinedMessage);
-    // }
   };
 
   const closeModal = () => {

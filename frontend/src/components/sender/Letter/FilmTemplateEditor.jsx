@@ -48,7 +48,7 @@ const StMaskWrapper = styled.div`
 
 const StRotateWrapper = styled.div`
   position: relative;
-  width: 28rem;
+  width: 30rem;
   height: 250px;
   display: flex;
   align-items: center;
@@ -59,6 +59,7 @@ const StSliderContainer = styled.div`
   position: relative;
   height: 182px;
   width: 100%;
+  left: -1.5rem;
   transform: rotate(-7deg);
   overflow-x: auto;
   overflow-y: hidden;
