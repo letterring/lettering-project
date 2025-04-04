@@ -62,9 +62,12 @@ const LetterWriting = () => {
       setLetterImages(ImageList);
       setLetterText(letterContent);
 
+      // navigate(`/letter/preview`);
+
       let segmentedText;
       try {
         segmentedText = await segmentText(letterContent, textCount);
+        console.log('AI가 생성한 글조각:', segmentedText);
 
         if (!Array.isArray(segmentedText) || segmentedText.length !== textCount) {
           throw new Error('AI 응답이 예상 형식이 아님');
