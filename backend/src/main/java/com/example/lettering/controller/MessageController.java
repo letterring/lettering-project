@@ -1,5 +1,6 @@
 package com.example.lettering.controller;
 
+import com.example.lettering.controller.request.dear.ImageDownloadRequest;
 import com.example.lettering.controller.request.sender.CreateLetterRequest;
 import com.example.lettering.controller.request.sender.CreatePostcardRequest;
 import com.example.lettering.controller.response.dear.*;
@@ -16,17 +17,21 @@ import com.example.lettering.domain.message.service.PostcardService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.exception.type.ValidationException;
+import com.example.lettering.util.FileMetaUtil;
 import com.example.lettering.util.SessionUtil;
 import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -155,6 +160,25 @@ public class MessageController {
 
         LetterToDearDetailResponse letterToDearDetailResponse = letterService.getLetterToDearDetail(messageId);
         return ResponseEntity.ok(letterToDearDetailResponse);
+    }
+
+    @Operation(summary = "받은 사람 기준 엽서 이미지 다운로드", description = "엽서 이미지를 다운받을 수 있습니다.")
+    @PostMapping("/postcards/dear/image")
+    public ResponseEntity<byte[]> downloadPostcardImage(@RequestBody ImageDownloadRequest imageDownloadRequest) {
+        String imageUrl = imageDownloadRequest.getImageUrl();
+
+        byte[] imageBytes = postcardService.downloadImageFromS3(imageUrl);
+
+        MediaType contentType = FileMetaUtil.resolveContentType(imageUrl);
+        String fileName = FileMetaUtil.generateFileName("postcard", imageUrl);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(contentType);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename(fileName)
+                .build());
+
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 
     @Operation(summary = "엽서 읽지 않음 상태로 재설정",
