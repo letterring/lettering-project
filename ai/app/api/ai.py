@@ -70,6 +70,7 @@ async def segment_text(text: str = Form(...), count: int = Form(5)):
         agent = TextSegmenterAgent()
         result = await agent.run(text=text, count=count)
         parsed_result = json.loads(result)
+        print("💌 생성된 글조각:", parsed_result)
         return {"response": parsed_result}
     except json.JSONDecodeError as je:
         return JSONResponse(status_code=500, content={"error": f"AI 응답을 JSON으로 파싱할 수 없습니다: {str(je)}"})

@@ -48,7 +48,7 @@ export const segmentText = async (text, count = 5) => {
   formData.append('count', count.toString());
 
   try {
-    const response = await AiClient.post('/ai/segment', formData);
+    const response = await AiClient.post('/segment', formData);
     return response.data.response;
   } catch (error) {
     console.error(error);
@@ -61,7 +61,7 @@ export const refineWithImage = async ({ slideTexts, filenames }) => {
   filenames.forEach((name) => formData.append('filenames', name));
 
   try {
-    const response = await AiClient.post('/ai/refine', formData);
+    const response = await AiClient.post('/refine', formData);
     return response.data.response;
   } catch (error) {
     console.error('AI 문장 수정 실패:', error);
@@ -75,7 +75,7 @@ export const enhanceWithImage = async ({ text, filename }) => {
   formData.append('filename', filename);
 
   try {
-    const response = await AiClient.post('/ai/enhance', formData);
+    const response = await AiClient.post('/enhance', formData);
     return response.data.response;
   } catch (error) {
     console.error('AI 감성 팁 요청 실패:', error);
