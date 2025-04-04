@@ -6,6 +6,7 @@ import { getKeyringList } from '../../../apis/keyring';
 import { logout } from '../../../apis/user';
 import CoinBirdImg from '../../../assets/images/bird_coin.png';
 import useModal from '../../../hooks/common/useModal';
+import { useUser } from '../../../UserContext';
 import ConfirmButton from '../button/ConfirmButton';
 import AlertModal from './AlertModal';
 
@@ -13,6 +14,7 @@ const MenuModal = ({ isShowing, target }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const alarm = useModal();
+  const { setUser } = useUser();
 
   //status: 현재 선택된 메뉴명
   const senderMenus = [
@@ -49,6 +51,7 @@ const MenuModal = ({ isShowing, target }) => {
 
   const handleClickMenu = (name) => {
     if (name === 'logout') {
+      setUser(null);
       logout();
       navigate('/');
     } else if (name === 'theme') {

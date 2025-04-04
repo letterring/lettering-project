@@ -58,47 +58,47 @@ const LetterWriting = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
 
-    try {
-      setLetterImages(ImageList);
-      setLetterText(letterContent);
+    // try {
+    setLetterImages(ImageList);
+    setLetterText(letterContent);
 
-      // navigate(`/letter/preview`);
+    navigate(`/letter/preview`);
 
-      let segmentedText;
-      try {
-        segmentedText = await segmentText(letterContent, textCount);
+    //   let segmentedText;
+    //   try {
+    //     segmentedText = await segmentText(letterContent, textCount);
 
-        if (!Array.isArray(segmentedText) || segmentedText.length !== textCount) {
-          throw new Error('AI 응답이 예상 형식이 아님');
-        }
-      } catch (error) {
-        console.warn('AI 문장 나누기 실패, fallback으로 줄바꿈 처리함:', error);
-        segmentedText = letterContent
-          .split(/\n+/)
-          .map((t) => t.trim())
-          .filter((t) => t.length > 0)
-          .slice(0, textCount);
-      }
+    //     if (!Array.isArray(segmentedText) || segmentedText.length !== textCount) {
+    //       throw new Error('AI 응답이 예상 형식이 아님');
+    //     }
+    //   } catch (error) {
+    //     console.warn('AI 문장 나누기 실패, fallback으로 줄바꿈 처리함:', error);
+    //     segmentedText = letterContent
+    //       .split(/\n+/)
+    //       .map((t) => t.trim())
+    //       .filter((t) => t.length > 0)
+    //       .slice(0, textCount);
+    //   }
 
-      const result = await submitPostcard(
-        ImageList.map((img) => img.file),
-        letterContent,
-      );
+    //   const result = await submitPostcard(
+    //     ImageList.map((img) => img.file),
+    //     letterContent,
+    //   );
 
-      if (result?.key) {
-        setRedisMessageKey(result.key);
-        const postcard = await getPostcard(result.key);
+    //   if (result?.key) {
+    //     setRedisMessageKey(result.key);
+    //     const postcard = await getPostcard(result.key);
 
-        navigate('/letter/preview', {
-          state: {
-            postcard,
-            segmentedText,
-          },
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    //     navigate('/letter/preview', {
+    //       state: {
+    //         postcard,
+    //         segmentedText,
+    //       },
+    //     });
+    //   }
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (

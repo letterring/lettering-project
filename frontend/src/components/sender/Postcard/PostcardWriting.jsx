@@ -49,9 +49,9 @@ const PostcardWriting = () => {
 
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      //5MB
-      alert('5MB가 넘습니다!');
+    if (file.size > 4 * 1024 * 1024) {
+      //4MB
+      alert('4MB가 넘습니다!');
       event.target.type = '';
       event.target.type = 'file';
       return;
