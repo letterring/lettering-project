@@ -69,16 +69,26 @@ const LetterWriting = () => {
         segmentedText = await segmentText(letterContent, textCount);
         console.log('AI가 생성한 글조각:', segmentedText);
 
-        if (!Array.isArray(segmentedText) || segmentedText.length !== textCount) {
-          throw new Error('AI 응답이 예상 형식이 아님');
+        if (!Array.isArray(segmentedText)) {
+          throw new Error('AI 응답이 배열이 아님');
+        }
+
+        // ✅ 길이 부족하면 빈 항목으로 채움
+        if (segmentedText.length < textCount) {
+          const missingCount = textCount - segmentedText.length;
+          segmentedText = [...segmentedText, ...Array(missingCount).fill('')];
+          console.warn(`AI 분할 수 부족. ${missingCount}개의 빈 항목으로 채움.`);
+        } else if (segmentedText.length > textCount) {
+          segmentedText = segmentedText.slice(0, textCount); // 혹시 넘쳤을 경우
         }
       } catch (error) {
         console.warn('AI 문장 나누기 실패, fallback으로 줄바꿈 처리함:', error);
-        segmentedText = letterContent
-          .split(/\n+/)
-          .map((t) => t.trim())
-          .filter((t) => t.length > 0)
-          .slice(0, textCount);
+        segmentedText = splitByNewlineAndMergeToCount(letterContent, textCount);
+
+        if (segmentedText.length < textCount) {
+          const missingCount = textCount - segmentedText.length;
+          segmentedText = [...segmentedText, ...Array(missingCount).fill('')];
+        }
       }
 
       const result = await submitPostcard(
@@ -100,6 +110,21 @@ const LetterWriting = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const splitByNewlineAndMergeToCount = (text, count) => {
+    const chunks = text
+      .split(/\n+/)
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+
+    const result = Array.from({ length: count }, () => []);
+
+    chunks.forEach((chunk, i) => {
+      result[i % count].push(chunk);
+    });
+
+    return result.map((group) => group.join('\n'));
   };
 
   return (
