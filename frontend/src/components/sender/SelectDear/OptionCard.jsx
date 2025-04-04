@@ -92,7 +92,7 @@ const OptionCard = ({ keyring }) => {
     <>
       <CardWrapper key={keyring.keyringId} isFavorite={keyring.favorite}>
         <CardHeader>
-          <FavoriteMark isFavorite={keyring.favorite}>
+          <FavoriteMark $isFavorite={keyring.favorite}>
             <StarIcon />
           </FavoriteMark>
         </CardHeader>
@@ -139,7 +139,7 @@ const FavoriteMark = styled.div`
   width: 3rem;
   height: 3rem;
   margin-top: 3rem;
-  color: ${({ isFavorite, theme }) => (isFavorite ? theme.colors.KakaoBG : theme.colors.Gray5)};
+  color: ${({ $isFavorite, theme }) => ($isFavorite ? theme.colors.KakaoBG : theme.colors.Gray5)};
 
   svg {
     width: 100%;

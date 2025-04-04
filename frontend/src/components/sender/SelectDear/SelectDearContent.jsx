@@ -311,8 +311,8 @@ const SelectDearContent = ({ keyringArr }) => {
   return (
     <StKeyringListWrapper>
       <StyledSlider {...settings}>
-        {keyringArr.map((keyring) => (
-          <OptionCard keyring={keyring} />
+        {keyringArr.map((keyring, idx) => (
+          <OptionCard key={idx} keyring={keyring} />
         ))}
       </StyledSlider>
     </StKeyringListWrapper>
