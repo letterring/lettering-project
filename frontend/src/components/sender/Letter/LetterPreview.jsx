@@ -75,7 +75,7 @@ const LetterPreview = () => {
   const updateRedisDebounced = useCallback(
     debounce((key, content) => {
       updateRedisMessage(key, content);
-      console.log('updated:', key, content);
+      // console.log('updated:', key, content);
     }, DEBOUNCE_DELAY),
     [],
   );
@@ -100,6 +100,7 @@ const LetterPreview = () => {
 
     if (segmentedText && segmentedText.length > 0) {
       setTextList(segmentedText);
+      setLetterTextList(segmentedText);
     }
   }, [localImageList, postcard, segmentedText]);
 
