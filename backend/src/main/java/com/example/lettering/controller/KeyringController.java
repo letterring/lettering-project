@@ -119,7 +119,7 @@ public class KeyringController {
     }
 
     @DeleteMapping("/{keyringId}")
-    @Operation(summary = "키링 소유 해제", description = "해당 키링을 내 리스트에서 삭제합니다.")
+    @Operation(summary = "키링 소유 해제(보내는 사람)", description = "해당 키링을 내 리스트에서 삭제합니다.")
     public ResponseEntity<Map<String, Object>> removeKeyring(@PathVariable Long keyringId, HttpSession session) {
         Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
@@ -127,9 +127,10 @@ public class KeyringController {
         return ResponseEntity.ok(Map.of("message", "키링이 내 목록에서 제거되었습니다."));
     }
 
-    @DeleteMapping("/{keyringId}/delete")
-    @Operation(summary = "키링 삭제", description = "키링 ID를 통해 키링을 완전히 삭제합니다.")
-    public ResponseEntity<BooleanResponse> deleteKeyring(@PathVariable Long keyringId) {
+    @DeleteMapping("/delete")
+    @Operation(summary = "키링 삭제(받는사람)", description = "세션에서 키링 ID를 가져와 키링을 완전히 삭제합니다.")
+    public ResponseEntity<BooleanResponse> deleteKeyring(HttpSession session) {
+        Long keyringId = (Long) session.getAttribute("keyringId");
         keyringService.deleteKeyring(keyringId);
         return ResponseEntity.ok(BooleanResponse.success());
     }
