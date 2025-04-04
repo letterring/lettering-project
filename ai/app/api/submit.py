@@ -74,3 +74,16 @@ async def update_message(key: str, update: MessageUpdate):
     await redis.set(key, json.dumps(data))
     return {"status": "updated"}
 
+@router.delete(
+    "/submit/{key}",
+    summary="Redis에 저장된 엽서 삭제",
+    description="지정한 Redis key의 엽서를 삭제합니다."
+)
+async def delete_entry(key: str):
+    """
+    Redis에 저장된 엽서 데이터를 삭제합니다.
+    """
+    deleted = await redis.delete(key)
+    if deleted == 1:
+        return {"status": "deleted", "key": key}
+    return JSONResponse(status_code=404, content={"error": f"'{key}'를 찾을 수 없습니다."})
