@@ -85,8 +85,10 @@ const DeliveryType = () => {
   const handleSelect = (type) => {
     if (type === 'NORMAL') {
       handleSend({ conditionType: 'NONE' });
-    } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE' || type === 'SECRETTYPE') {
+    } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE') {
       setSelectedModalType(type);
+    } else if (type === 'SECRETTYPE') {
+      alert('해당 전송 방식은 준비 중입니다.');
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
     }
