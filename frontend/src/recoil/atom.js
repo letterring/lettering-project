@@ -46,6 +46,11 @@ const LetterText = atom({
   default: '',
 });
 
+const LetterTextList = atom({
+  key: 'LetterTextList',
+  default: [],
+});
+
 // 유저 닉네임
 const UserNickname = atom({
   key: 'userNickname',
@@ -64,13 +69,46 @@ const UserKeyringList = atom({
   default: [],
 });
 
+// 결제 금액
+const TotalPrice = atom({
+  key: 'totalPrice',
+  default: 0,
+});
+
+// 결제 키링 수
+const TotalQuantity = atom({
+  key: 'totalQuantity',
+  default: 1,
+});
+
+const RedisMessageKey = atom({
+  key: 'RedisMessageKey',
+  default: '',
+});
+
+const OrderNumber = atom({
+  key: 'orderNumber',
+  default: 0,
+});
+
+const KeyringCustomList = atom({
+  key: 'KeyringCustomList',
+  default: [],
+});
+
 export {
+  KeyringCustomList,
   LetterImageList,
   LetterText,
+  LetterTextList,
+  OrderNumber,
   PostcardImage,
   PostcardImageFile,
   PostcardText,
+  RedisMessageKey,
   SelectedKeyringId,
+  TotalPrice,
+  TotalQuantity,
   UserFont,
   UserId,
   UserKeyringList,

@@ -1,24 +1,37 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { getKeyringInfo } from '../../../apis/letter';
-import { LetterImageList, LetterText, SelectedKeyringId, UserFont } from '../../../recoil/atom';
-import { getFontStyle } from '../../../util/getFont';
+import { getPostcard, segmentText, submitPostcard } from '/src/apis/fastapi';
+import { getUserFont } from '/src/apis/user';
+import { getFontStyle } from '/src/util/getFont';
+
+import { LetterImageList, LetterText, RedisMessageKey } from '../../../recoil/atom';
 import Header from '../../common/Header';
 
 const LetterWriting = () => {
-  const [letterContent, setLetterContent] = useState('');
-  const [ImageList, setImageList] = useState([]);
-
   const navigate = useNavigate();
-  // const { nfcName } = getKeyringInfo(useRecoilValue(SelectedKeyringId));
+
+  const [ImageList, setImageList] = useState([]);
+  const [letterContent, setLetterContent] = useState('');
+  const [userFont, setUserFont] = useState(undefined);
+  const [redisKey, setRedisMessageKey] = useRecoilState(RedisMessageKey);
+  const [isLoading, setIsLoading] = useState(false);
+  const textCount = 5;
   const fileInputRef = useRef(null);
-  const fontStyle = getFontStyle(useRecoilValue(UserFont));
 
   const setLetterImages = useSetRecoilState(LetterImageList);
   const setLetterText = useSetRecoilState(LetterText);
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      const { font } = await getUserFont();
+      setUserFont(getFontStyle(font));
+    };
+
+    fetchFont();
+  }, []);
 
   const handleLetterChange = (e) => {
     setLetterContent(e.target.value);
@@ -40,18 +53,62 @@ const LetterWriting = () => {
     setImageList((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const isValid = ImageList.length >= 8;
+  const isValid = ImageList.length >= 10;
 
-  const handleSubmit = () => {
-    setLetterImages(ImageList);
-    setLetterText(letterContent);
-    navigate('/letter/preview');
+  const handleSubmit = async () => {
+    setIsLoading(true);
+
+    try {
+      setLetterImages(ImageList);
+      setLetterText(letterContent);
+
+      let segmentedText;
+      try {
+        segmentedText = await segmentText(letterContent, textCount);
+
+        if (!Array.isArray(segmentedText) || segmentedText.length !== textCount) {
+          throw new Error('AI 응답이 예상 형식이 아님');
+        }
+      } catch (error) {
+        console.warn('AI 문장 나누기 실패, fallback으로 줄바꿈 처리함:', error);
+        segmentedText = letterContent
+          .split(/\n+/)
+          .map((t) => t.trim())
+          .filter((t) => t.length > 0)
+          .slice(0, textCount);
+      }
+
+      const result = await submitPostcard(
+        ImageList.map((img) => img.file),
+        letterContent,
+      );
+
+      if (result?.key) {
+        setRedisMessageKey(result.key);
+        const postcard = await getPostcard(result.key);
+
+        navigate('/letter/preview', {
+          state: {
+            postcard,
+            segmentedText,
+          },
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <StLetterWritingWrapper>
-      <Header headerName="Lettering" />
+      <Header headerName="편지쓰기" />
       <WritingContentWrapper>
+        {isLoading && (
+          <LoadingOverlay>
+            <Spinner />
+            <p>편지를 정리하고 있어요... 잠시만 기다려 주세요.</p>
+          </LoadingOverlay>
+        )}
         <ContentWrapper>
           <Text>이미지 업로드</Text>
           <ImagesWrapper>
@@ -76,15 +133,15 @@ const LetterWriting = () => {
           </ImagesWrapper>
         </ContentWrapper>
         <ContentWrapper>
-          <Text>사랑하는 너 에게</Text>
+          <Text>사랑하는 너에게</Text>
           <InputTextBox
             maxLength={600}
             value={letterContent}
             onChange={handleLetterChange}
-            $fontStyle={fontStyle}
+            $fontStyle={userFont}
           />
           <FooterWrapper>
-            {!isValid ? <WarnText>사진은 8장 이상 필요합니다.</WarnText> : <WarnText />}
+            {!isValid ? <WarnText>사진은 10장 필요합니다.</WarnText> : <WarnText />}
             <CharCount>{letterContent.length} / 600</CharCount>
             <SubmitButton disabled={!isValid} $isValid={isValid} onClick={handleSubmit}>
               입력완료
@@ -213,7 +270,7 @@ const WarnText = styled.p`
 const CharCount = styled.p`
   width: 5rem;
   color: ${({ theme }) => theme.colors.MainRed};
-  ${({ theme }) => theme.fonts.Body4};
+  ${({ theme }) => theme.fonts.Body3};
 `;
 
 const SubmitButton = styled.button`
@@ -224,4 +281,42 @@ const SubmitButton = styled.button`
   color: ${({ theme }) => theme.colors.White};
   ${({ theme }) => theme.fonts.Body3};
   cursor: ${({ $isValid }) => ($isValid ? 'pointer' : 'not-allowed')};
+`;
+
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    color: ${({ theme }) => theme.colors.Gray0};
+    ${({ theme }) => theme.fonts.Body1};
+    margin-top: 2rem;
+  }
+`;
+
+const Spinner = styled.div`
+  border: 0.4rem solid #eee;
+  border-top: 0.4rem solid ${({ theme }) => theme.colors.MainRed};
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
