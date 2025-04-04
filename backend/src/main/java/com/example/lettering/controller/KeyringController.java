@@ -1,6 +1,7 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.keyring.*;
+import com.example.lettering.controller.response.keyring.CustomMessageResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
 import com.example.lettering.controller.response.keyring.KeyringManageResponse;
@@ -168,14 +169,13 @@ public class KeyringController {
 
     @PostMapping("/nfc-access")
     @Operation(summary = "디바이스 등록 및 검증", description = "앱에서 진입 시 디바이스 검증 또는 등록 후 결과 제공")
-    public ResponseEntity<Void> handleNfcAccess(@RequestBody KeyringAccessRequest request) {
+    public ResponseEntity<Void> handleNfcAccess(@RequestBody KeyringAccessRequest request, HttpSession session) {
         try {
             Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
 
-            return ResponseEntity
-                    .ok()
-                    .header("X-Keyring-Id", keyringId.toString())
-                    .build();
+            session.setAttribute("keyringId", keyringId);
+
+            return ResponseEntity.ok().build();
 
         } catch (BusinessException e) {
             return ResponseEntity
@@ -186,8 +186,16 @@ public class KeyringController {
     }
 
 
+    @GetMapping("/custom-message")
+    @Operation(summary = "키링 커스텀 메시지 조회", description = "세션에 저장된 keyringId에 해당하는 커스텀 메시지를 반환합니다.")
+    public ResponseEntity<CustomMessageResponse> getCustomMessageByKeyringId(HttpSession session) {
+        Long keyringId = (Long) session.getAttribute("keyringId");
+        if (keyringId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
 
-
-
+        String message = keyringService.getCustomMessage(keyringId);
+        return ResponseEntity.ok(new CustomMessageResponse(message));
+    }
 
 }
