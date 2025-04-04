@@ -9,11 +9,7 @@ export const submitPostcard = async (images, message) => {
       formData.append('images', image);
     });
 
-    const response = await AiClient.post('/submit', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await AiClient.post('/submit', formData);
     return response.data;
   } catch (error) {
     console.error('엽서 저장 에러:', error);
