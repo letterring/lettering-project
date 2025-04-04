@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -39,8 +40,7 @@ public class PaymentController {
     @PostMapping("/order")
     @Operation(summary = "결제 준비", description = "주문 생성 없이 결제 준비 후 결제창 URL 반환")
     public ResponseEntity<PaymentReadyResponse> placeOrder(HttpSession session, @RequestBody OrderRequest request) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         User user = userService.getUserById(userId);
         Long tempOrderNumber = keyringService.generateTempOrderNumber();
@@ -79,8 +79,7 @@ public class PaymentController {
             @RequestParam("orderNumber") String orderNumberStr,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         Map<String, Object> pendingOrder = (Map<String, Object>) session.getAttribute("pendingOrder");
         if (pendingOrder == null || !pendingOrder.get("orderNumber").toString().equals(orderNumberStr)) {
