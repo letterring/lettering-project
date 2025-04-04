@@ -8,6 +8,7 @@ import com.example.lettering.domain.user.enums.Font;
 public interface UserService {
     void addUser(SignUpRequest signUpRequestDto);
     void validateDuplicateUserInfo(SignUpRequest signUpRequestDto);
+    boolean isValidUser(Long userId);
     boolean isLocalUser(String email);
     User getUserById(Long id);
     UserMypageResponse getMypageInfo(Long userId);
