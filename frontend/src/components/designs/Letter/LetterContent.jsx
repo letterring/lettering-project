@@ -8,8 +8,21 @@ import FilmTemplate from './FilmTemplate';
 import GridTemplate from './GridTemplate';
 import MainTemplate from './MainTemplate';
 import PolarTemplate from './PolarTemplate';
+import ReplyComponent from './ReplyComponent';
 
-const LetterContent = ({ template, images, text, background, isActive, font }) => {
+const LetterContent = ({
+  template,
+  images,
+  text,
+  background,
+  isActive,
+  font,
+  senderName,
+  dearName,
+  messageId,
+  replyText,
+  isSender,
+}) => {
   const fontStyle = getFontStyle(font);
   return (
     <StLetterWrapper $background={background}>
@@ -17,6 +30,7 @@ const LetterContent = ({ template, images, text, background, isActive, font }) =
         {template === 'main' && (
           <>
             <MainTemplate images={images} />
+            <StDearText $userFont={fontStyle}>{dearName} 에게</StDearText>
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
           </>
         )}
@@ -37,6 +51,7 @@ const LetterContent = ({ template, images, text, background, isActive, font }) =
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
             <GridTemplate images={images} />
             <StLetterText $userFont={fontStyle}>{text[1]}</StLetterText>
+            <StSenderText $userFont={fontStyle}>{senderName} 로부터</StSenderText>
           </>
         )}
         {template === 'answer' && (
@@ -46,6 +61,12 @@ const LetterContent = ({ template, images, text, background, isActive, font }) =
               <br /> {text[1]}
             </StLetterText>
             <EndTemplate images={images} />
+            <ReplyComponent
+              messageId={messageId}
+              replyText={replyText}
+              dearName={dearName}
+              isSender={isSender}
+            />
           </>
         )}
       </StContentWrapper>
@@ -79,15 +100,45 @@ const StContentWrapper = styled.div`
   height: 100%;
 `;
 
+const StDearText = styled.div`
+  ${({ $userFont, theme }) => theme.fonts[$userFont]};
+  color: ${({ theme }) => theme.colors.Gray1};
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: auto;
+  text-align: left;
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0.5rem 1rem;
+`;
+
+const StSenderText = styled.div`
+  ${({ $userFont, theme }) => theme.fonts[$userFont]};
+  color: ${({ theme }) => theme.colors.Gray1};
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: auto;
+  text-align: right;
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0.5rem 1rem;
+`;
+
 const StLetterText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 1rem;
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0rem 1rem;
   min-height: 4rem;
 
   ${({ $userFont, theme }) => theme.fonts[$userFont]};
+  color: ${({ theme }) => theme.colors.Gray2};
   word-wrap: break-word;
   overflow: auto;
   white-space: normal;
