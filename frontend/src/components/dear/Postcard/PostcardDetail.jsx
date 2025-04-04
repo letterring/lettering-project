@@ -76,7 +76,7 @@ const PostcardDetail = () => {
           </StFlipCard>
         </StFlipContainer>
 
-      <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
+        <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
 
         <ReplyComponent messageId={messageId} replyText={replyText} />
       </StWrapper>
@@ -126,7 +126,7 @@ const StInform = styled.div`
 const StFlipContainer = styled.div`
   perspective: 100rem;
   width: 30rem;
-  height: 23rem;
+  height: 24rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -222,10 +222,10 @@ const StPostcardWhite = styled.img`
 `;
 const StPostcardImage = styled(motion.div)`
   position: absolute;
-  top: 0.9rem;
-  left: 0.8rem;
+  top: 0.65rem;
+  left: 0.85rem;
   width: 28.3rem;
-  height: 17.5rem;
+  height: 19rem;
   z-index: 3;
 
   img {
