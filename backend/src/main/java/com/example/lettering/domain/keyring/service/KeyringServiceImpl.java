@@ -276,8 +276,12 @@ public class KeyringServiceImpl implements KeyringService{
         return keyring.getId();
     }
 
-
-
+    @Override
+    public String getCustomMessage(Long keyringId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
+        return keyring.getCustomMessage();
+    }
 
 
 }
