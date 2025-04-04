@@ -17,6 +17,7 @@ import { IcArrowLeft, IcArrowRight2 } from '../../../assets/icons';
 import { LetterImageList, LetterTextList, RedisMessageKey } from '../../../recoil/atom';
 import Header from '../../common/Header';
 import AiButton from './AiButton';
+import EmptyWarningModal from './AiEmptyWarningModal';
 import AiEnhanceModal from './AiEnhanceModal';
 import AiRefineModal from './AiRefineModal';
 import LetterEditor from './LetterEditor';
@@ -162,6 +163,18 @@ const LetterPreview = () => {
       const { textStartIndex, textCount } = contents[currentSlide];
       const slideTexts = textList.slice(textStartIndex, textStartIndex + textCount);
 
+      if (slideTexts.length < textCount) {
+        console.warn('[❌ 텍스트 부족] 예상보다 텍스트 수가 적음');
+        setActiveModal('emptyWarning');
+        return;
+      }
+
+      const isEmpty = slideTexts.some((text) => !text || text.trim() === '');
+      if (isEmpty) {
+        setActiveModal('emptyWarning');
+        return;
+      }
+
       const filenames = getFilenamesFromPostcard(currentSlide);
 
       console.log('[🖼️ AI 요청용 이미지 파일명]', filenames);
@@ -191,7 +204,7 @@ const LetterPreview = () => {
 
   const getFilenamesFromPostcard = (slideIndex) => {
     const imageIndexes = computeImageIndexesPerSlide()[slideIndex];
-    return imageIndexes.map((idx) => postcard?.images?.[idx]?.filename).filter(Boolean); // undefined 제거
+    return imageIndexes.map((idx) => postcard?.images?.[idx]?.filename).filter(Boolean);
   };
 
   const computeImageIndexesPerSlide = () => {
@@ -250,6 +263,7 @@ const LetterPreview = () => {
           isLoading={isRefining}
         />
       )}
+      {activeModal === 'emptyWarning' && <EmptyWarningModal onClose={closeModal} />}
     </StLetterPreview>
   );
 };
@@ -329,3 +343,31 @@ const ArrowLeft = styled(ArrowBase)`
 const ArrowRight = styled(ArrowBase)`
   right: -2rem;
 `;
+
+const Modal = ({ children, onClose }) => (
+  <div
+    style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        background: 'white',
+        padding: '2rem',
+        borderRadius: '1rem',
+        textAlign: 'center',
+      }}
+    >
+      {children}
+    </div>
+  </div>
+);
