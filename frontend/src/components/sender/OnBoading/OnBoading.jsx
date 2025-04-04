@@ -2,7 +2,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import React from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
@@ -11,6 +11,8 @@ import KeyringImg from '/src/assets/images/keyring.png';
 import OnBoadingImg1 from '/src/assets/images/onBoading1.png';
 import OnBoadingImg2 from '/src/assets/images/onBoading2.png';
 
+import { getUserData } from '../../../apis/user';
+import { useUser } from '../../../UserContext';
 import LongButton from '../../common/button/LongButton';
 import OnBoadingWrapper from './OnBoadingContent';
 
@@ -35,8 +37,11 @@ const OnBoading = () => {
 
   const [buttonText, setButtonText] = useState('옆으로 넘겨주세요');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
   const sliderRef = useRef(null);
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const settings = {
     dots: true,
@@ -56,6 +61,24 @@ const OnBoading = () => {
   const handleSkip = () => {
     navigate(`/login`);
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await getUserData();
+
+        if (data) {
+          navigate('/home');
+        }
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (isLoading) return null;
 
   return (
     <>

@@ -29,11 +29,10 @@ export const login = async (userInfo) => {
 
 export const getUserData = async () => {
   try {
-    const { data } = await client.get(`/users/me`);
-    return data;
-  } catch (err) {
-    console.error('세션 조회 실패', err);
-    throw err;
+    const response = await client.get(`/users/me`);
+    return response;
+  } catch (error) {
+    console.error('세션 조회 실패', error);
   }
 };
 

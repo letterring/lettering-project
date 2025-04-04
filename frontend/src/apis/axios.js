@@ -18,10 +18,18 @@ export default client;
 client.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // 401 에러 발생 시 (sessionToken 만료)
-    if (error.response?.status === 401) {
+    const status = error.response?.status;
+    const currentPath = window.location.pathname;
+
+    if (
+      status === 401 &&
+      currentPath !== '/login' &&
+      currentPath !== '/signup' &&
+      currentPath !== '/'
+    ) {
       window.location.href = '/login';
     }
+
     return Promise.reject(error);
   },
 );
