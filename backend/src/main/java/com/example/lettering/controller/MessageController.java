@@ -134,13 +134,8 @@ public class MessageController {
     @Operation(summary = "보낸 사람 기준 편지 상세 조회", description = "path variable로 전달된 messageId에 해당하는 편지 상세 정보를 반환합니다.")
     @GetMapping("letters/sender/{messageId}")
     public ResponseEntity<LetterBySenderDetailResponse> getLetterBySenderDetail(
-            @PathVariable("messageId") Long messageId,
-            HttpSession session) {
+            @PathVariable("messageId") Long messageId) {
 
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
         LetterBySenderDetailResponse letterBySenderDetailResponse = letterService.getLetterBySenderDetail(messageId);
         return ResponseEntity.ok(letterBySenderDetailResponse);
     }
