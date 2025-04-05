@@ -20,11 +20,22 @@ const LetterDetail = () => {
   const [ImageData, setImageData] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [letterFont, setLetterFont] = useState(null);
+  const [nickName, setNickName] = useState(null);
+  const [nfcName, setNfcName] = useState(null);
+  const [replyText, setReplyText] = useState(null);
 
   useEffect(() => {
     const fetchLetter = async () => {
-      const { letterContents, letterImages, font, conditionTime, firstOpenedTime } =
-        await getSentLetterDetail(messageId);
+      const {
+        letterContents,
+        letterImages,
+        font,
+        conditionTime,
+        firstOpenedTime,
+        nfcName,
+        nickName,
+        replyText,
+      } = await getSentLetterDetail(messageId);
 
       const sentAt = getLetterDate(conditionTime);
       const readAt = firstOpenedTime ? getLetterDate(firstOpenedTime) : null;
@@ -36,9 +47,12 @@ const LetterDetail = () => {
         readAt ? `${readAt}에 열었습니다.` : '아직 읽지 않았습니다.',
       ];
 
+      setNfcName(nfcName);
+      setNickName(nickName);
       setImageData(newImageData);
       setLetterData(newLetterContents);
       setLetterFont(font);
+      setReplyText(replyText);
     };
 
     fetchLetter();
@@ -102,6 +116,11 @@ const LetterDetail = () => {
               background={item.background}
               font={letterFont}
               isActive={currentSlide === id}
+              senderName={nickName}
+              dearName={nfcName}
+              messageId={messageId}
+              replyText={replyText}
+              isSender={true}
             />
           ))}
         </StyledSlider>

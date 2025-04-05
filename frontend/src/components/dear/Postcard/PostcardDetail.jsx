@@ -7,11 +7,11 @@ import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
+import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
 import useToggle from '../../../hooks/common/useToggle';
 import Header from '../../common/Header';
-import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
   const { messageId } = useParams();
@@ -76,9 +76,14 @@ const PostcardDetail = () => {
           </StFlipCard>
         </StFlipContainer>
 
-      <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
+        <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
 
-        <ReplyComponent messageId={messageId} replyText={replyText} />
+        <ReplyComponent
+          messageId={messageId}
+          replyText={replyText}
+          dearName={nfcName}
+          isSender={false}
+        />
       </StWrapper>
     </StPageWrapper>
   );
