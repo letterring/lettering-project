@@ -40,7 +40,8 @@ public enum ExceptionCode {
     EXTERNAL_API_ERROR(HttpStatus.BAD_GATEWAY, "외부 API를 호출하는 과정에서 예외가 발생했습니다.", 4001),
     S3_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 업로드 중 오류가 발생했습니다.", 4002),
     S3_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 삭제 중 오류가 발생했습니다.", 4003),
-    S3_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 S3 URL 오류가 발생했습니다.", 4004);
+    S3_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 S3 URL 오류가 발생했습니다.", 4004),
+    S3_DOWNLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 다운로드중 오류가 발생했습니다.", 4005);
 
     private final String message;
     private final int code;

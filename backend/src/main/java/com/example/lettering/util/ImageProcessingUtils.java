@@ -11,6 +11,12 @@ import java.io.InputStream;
 public class ImageProcessingUtils {
 
     public static byte[] compressImage(InputStream originalInputStream, String contentType) throws IOException {
+        String lowerContentType = contentType.toLowerCase();
+
+        if (lowerContentType.contains("gif")) { //gif는 압축 불가능
+            return originalInputStream.readAllBytes();
+        }
+
         BufferedImage originalImage = ImageIO.read(originalInputStream);
         BufferedImage resizedImage = Thumbnails.of(originalImage)
                 .scale(0.4)
@@ -18,7 +24,6 @@ public class ImageProcessingUtils {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        String lowerContentType = contentType.toLowerCase();
         String formatName;
         if (lowerContentType.contains("heic") || lowerContentType.contains("heif")) {
             formatName = "jpg"; // HEIC/HEIF는 JPEG로 변환
