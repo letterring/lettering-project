@@ -15,4 +15,6 @@ public interface PostcardService {
     PostcardToDearDetailResponse getPostcardToDearDetail(Long messageId);
 
     void resetMessageAsUnread(Long messageId);
+
+    byte[] downloadImageFromS3(String imageUrl);
 }

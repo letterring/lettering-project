@@ -43,12 +43,8 @@ public class PostcardServiceImpl implements PostcardService {
         SealingWax sealingWax = sealingWaxRepository.findById(createPostcardRequest.getSealingWaxId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.SEALINGWAX_NOT_FOUND));
 
-        if (sealingWax.getContentCount() == 1){
+        if (sealingWax.getContentCount() != 1){
             throw new BusinessException(ExceptionCode.INVALID_MESSAGE_CONTENT_COUNT);
-        }
-
-        if (sealingWax.getImageCount() == imageFile.getSize()) {
-            throw new BusinessException(ExceptionCode.INVALID_MESSAGE_IMAGE_COUNT);
         }
 
         String imageHighUrl = s3ImageUtil.uploadHighQualityImage(imageFile, "postcard_images");
@@ -77,6 +73,11 @@ public class PostcardServiceImpl implements PostcardService {
         postcard.markAsOpened();
 
         return PostcardToDearDetailResponse.fromEntity(postcard);
+    }
+
+    @Override
+    public byte[] downloadImageFromS3(String imageUrl) {
+        return s3ImageUtil.downloadImageBytes(imageUrl);
     }
 
     @Override

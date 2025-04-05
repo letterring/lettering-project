@@ -27,3 +27,31 @@ export const getSentLetterDetail = async (messageId) => {
     console.error('편지 상세정보 조회에 실패했습니다.', err);
   }
 };
+
+//편지쓰기
+export const sendLetter = async (textList, imageFileList) => {
+  console.log(textList, imageFileList);
+  const formData = new FormData();
+
+  const textBlob = new Blob([JSON.stringify(textList)], {
+    type: 'application/json',
+  });
+  formData.append('letter', textBlob);
+
+  // 이미지 파일 리스트를 하나씩 추가
+  imageFileList.forEach((imageFile, index) => {
+    formData.append('images', imageFile.file);
+  });
+
+  try {
+    const response = await client.post('/messages/letters', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error('편지 전송 실패');
+  }
+};

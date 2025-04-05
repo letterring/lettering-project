@@ -46,6 +46,11 @@ const LetterText = atom({
   default: '',
 });
 
+const LetterTextList = atom({
+  key: 'LetterTextList',
+  default: [],
+});
+
 // 유저 닉네임
 const UserNickname = atom({
   key: 'userNickname',
@@ -81,9 +86,22 @@ const RedisMessageKey = atom({
   default: '',
 });
 
+const OrderNumber = atom({
+  key: 'orderNumber',
+  default: 0,
+});
+
+const KeyringCustomList = atom({
+  key: 'KeyringCustomList',
+  default: [],
+});
+
 export {
+  KeyringCustomList,
   LetterImageList,
   LetterText,
+  LetterTextList,
+  OrderNumber,
   PostcardImage,
   PostcardImageFile,
   PostcardText,

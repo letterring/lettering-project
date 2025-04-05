@@ -11,7 +11,8 @@ const Landing = () => {
   const navigate = useNavigate();
   const [newLetter, setNewLetter] = useState(false);
   const [messageInfo, setMessageInfo] = useState(null);
-  const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용용)
+  // const [text, setText] = useState('');
+  const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용)
 
   useEffect(() => {
     const fetchUnreadMessage = async () => {
@@ -35,7 +36,9 @@ const Landing = () => {
         state: { imageUrl },
       });
     } else if (designType === 'LETTER') {
-      navigate(`/dear/letter/${messageId}`);
+      navigate(`/dear/letter/${messageId}`, {
+        state: { imageUrl },
+      });
     } else {
       navigate('/dear/home'); // fallback
     }
@@ -67,6 +70,7 @@ const Landing = () => {
           envelopeMtlPath="/models/envelope.mtl"
           newLetter={newLetter}
           onMissedClick={newLetter ? handleNewLetterClick : handleMissedClick}
+          text="새로운 메세지가 도착했어요!"
         />
       </div>
     </StHomeWrapper>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LongButton from '../../common/button/LongButton';
@@ -18,6 +19,7 @@ const LetterEditor = ({
   onTextChange,
   font,
 }) => {
+  const navigate = useNavigate();
   const renderTextArea = (index) => {
     const globalIndex = textStartIndex + index;
     const value = textList?.[globalIndex] || '';
@@ -65,7 +67,7 @@ const LetterEditor = ({
             <StEndText>편지 작성을 다 완료하셨나요?</StEndText>
             <StEndText>한번 보낸 편지는 수정할 수 없어요</StEndText>
             <EndTemplateEditor images={images} />
-            <LongButton btnName="편지 전송하기" />
+            <LongButton onClick={() => navigate('/selectdear')} btnName="편지 전송하기" />
           </>
         )}
       </StContentWrapper>
