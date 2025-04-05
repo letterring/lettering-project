@@ -3,7 +3,7 @@ from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from app.services.openai_service import chat_with_gpt_and_image
 
-router = APIRouter()
+router = APIRouter(prefix="/ai", tags=["test"])
 
 @router.post(
     "/chat",

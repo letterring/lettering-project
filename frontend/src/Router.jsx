@@ -14,6 +14,7 @@ import OpenAppPage from './pages/dear/OpenAppPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
 import ErrorPage from './pages/ErrorPage';
+import ApprovePaymentPage from './pages/sender/ApprovePaymentPage';
 import CheckoutPage from './pages/sender/CheckoutPage';
 import CompleteLetterPage from './pages/sender/CompleteLetterPage';
 import CompleteOrderPage from './pages/sender/CompleteOrderPage';
@@ -60,6 +61,7 @@ const Router = () => {
               <Route path="/mailbox" element={<MailBoxPage />} />
               <Route path="/purchase/checkout" element={<CheckoutPage />} />
               <Route path="/purchase/customize" element={<CustomizePage />} />
+              <Route path="/payment/approve" element={<ApprovePaymentPage />} />
 
               <Route path="/theme" element={<SelectThemePage />} />
 

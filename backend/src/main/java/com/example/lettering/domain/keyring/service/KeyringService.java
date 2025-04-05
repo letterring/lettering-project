@@ -30,4 +30,6 @@ public interface KeyringService {
     void deleteKeyring(Long keyringId);
     List<KeyringFilterResponse> getKeyringsByOwner(Long userId);
     void customizeKeyrings(Long userId, List<KeyringCustomizeRequest.KeyringInfo> keyrings);
+    Long validateOrRegisterDevice(Long keyringId, String deviceId);
+    String getCustomMessage(Long keyringId);
 }

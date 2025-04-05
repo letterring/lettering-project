@@ -258,7 +258,30 @@ public class KeyringServiceImpl implements KeyringService{
         }
     }
 
+    @Override
+    public Long validateOrRegisterDevice(Long keyringId, String deviceId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
 
+        if (keyring.getDeviceUniqueId() == null) {
+            keyring.addDeviceUniqueId(deviceId);
+            keyringRepository.save(keyring);
+            return keyring.getId();
+        }
+
+        if (!deviceId.equals(keyring.getDeviceUniqueId())) {
+            throw new BusinessException(ExceptionCode.UNAUTHORIZED_ACCESS);
+        }
+
+        return keyring.getId();
+    }
+
+    @Override
+    public String getCustomMessage(Long keyringId) {
+        Keyring keyring = keyringRepository.findById(keyringId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.KEYRING_NOT_FOUND));
+        return keyring.getCustomMessage();
+    }
 
 
 }

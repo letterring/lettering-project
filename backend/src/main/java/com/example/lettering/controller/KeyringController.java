@@ -1,14 +1,13 @@
 package com.example.lettering.controller;
 
-import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
-import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
-import com.example.lettering.controller.request.keyring.KeyringTagRequest;
-import com.example.lettering.controller.request.keyring.UpdateNfcNameRequest;
+import com.example.lettering.controller.request.keyring.*;
+import com.example.lettering.controller.response.keyring.CustomMessageResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
 import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
 import com.example.lettering.controller.response.keyring.KeyringManageResponse;
 import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.exception.ExceptionCode;
+import com.example.lettering.exception.type.BusinessException;
 import com.example.lettering.exception.type.ValidationException;
 import com.example.lettering.util.SwaggerBody;
 import com.example.lettering.util.dto.BooleanResponse;
@@ -19,14 +18,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/keyrings")
@@ -35,6 +38,12 @@ import java.util.Map;
 public class KeyringController {
 
     private final KeyringService keyringService;
+
+    @Value("${app.redirect-success-url}")
+    private String successBaseUrl;
+
+    @Value("${app.redirect-fail-url}")
+    private String failBaseUrl;
 
     // ✅ 모든 키링 디자인 목록 조회 (구매 페  이지에서 사용)
     @Operation(summary = "키링 디자인 목록 조회", description = "모든 키링 디자인을 조회합니다.")
@@ -57,10 +66,7 @@ public class KeyringController {
             @PathVariable Long keyringId,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         keyringService.toggleFavorite(keyringId, userId);
         return ResponseEntity.ok(BooleanResponse.success());
@@ -93,8 +99,7 @@ public class KeyringController {
     @GetMapping("/manage")
     @Operation(summary = "내 키링 목록 조회", description = "관리 화면에서 내 키링을 정렬된 형태로 조회합니다.")
     public ResponseEntity<List<KeyringManageResponse>> getKeyringManageList(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         return ResponseEntity.ok(keyringService.getManageList(userId));
     }
@@ -106,8 +111,7 @@ public class KeyringController {
             @RequestBody @Valid UpdateNfcNameRequest request,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         keyringService.updateNfcName(keyringId, userId, request.getNfcName());
 
@@ -115,18 +119,18 @@ public class KeyringController {
     }
 
     @DeleteMapping("/{keyringId}")
-    @Operation(summary = "키링 소유 해제", description = "해당 키링을 내 리스트에서 삭제합니다.")
+    @Operation(summary = "키링 소유 해제(보내는 사람)", description = "해당 키링을 내 리스트에서 삭제합니다.")
     public ResponseEntity<Map<String, Object>> removeKeyring(@PathVariable Long keyringId, HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         keyringService.removeKeyringFromUser(keyringId, userId);
         return ResponseEntity.ok(Map.of("message", "키링이 내 목록에서 제거되었습니다."));
     }
 
-    @DeleteMapping("/{keyringId}/delete")
-    @Operation(summary = "키링 삭제", description = "키링 ID를 통해 키링을 완전히 삭제합니다.")
-    public ResponseEntity<BooleanResponse> deleteKeyring(@PathVariable Long keyringId) {
+    @DeleteMapping("/delete")
+    @Operation(summary = "키링 삭제(받는사람)", description = "세션에서 키링 ID를 가져와 키링을 완전히 삭제합니다.")
+    public ResponseEntity<BooleanResponse> deleteKeyring(HttpSession session) {
+        Long keyringId = (Long) session.getAttribute("keyringId");
         keyringService.deleteKeyring(keyringId);
         return ResponseEntity.ok(BooleanResponse.success());
     }
@@ -138,8 +142,7 @@ public class KeyringController {
             @PathVariable Long keyringId,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         KeyringManageResponse response = keyringService.getKeyringById(keyringId, userId);
         return ResponseEntity.ok(response);
@@ -151,14 +154,39 @@ public class KeyringController {
             @RequestBody KeyringCustomizeRequest request,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         keyringService.customizeKeyrings(userId, request.getKeyrings());
 
         return ResponseEntity.ok(BooleanResponse.success());
     }
 
+    @PostMapping("/nfc-access")
+    @Operation(summary = "디바이스 등록 및 검증", description = "앱에서 진입 시 디바이스 검증 또는 등록 후 결과 제공")
+    public ResponseEntity<Void> handleNfcAccess(@RequestBody KeyringAccessRequest request, HttpSession session) {
+        try {
+            Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
+            session.setAttribute("keyringId", keyringId);
+            return ResponseEntity.ok().build();
 
+        } catch (BusinessException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }
+    }
+
+
+    @GetMapping("/custom-message")
+    @Operation(summary = "키링 커스텀 메시지 조회", description = "세션에 저장된 keyringId에 해당하는 커스텀 메시지를 반환합니다.")
+    public ResponseEntity<CustomMessageResponse> getCustomMessageByKeyringId(HttpSession session) {
+        Long keyringId = (Long) session.getAttribute("keyringId");
+        if (keyringId == null) {
+            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
+        }
+
+        String message = keyringService.getCustomMessage(keyringId);
+        return ResponseEntity.ok(new CustomMessageResponse(message));
+    }
 
 }

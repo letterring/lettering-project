@@ -1,54 +1,108 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { TotalPrice } from '../../../recoil/atom';
-import LongButton from '../../common/button/LongButton';
+import { getUserAdress, submitOrder } from '/src/apis/purchase.js';
+
+import { OrderNumber, TotalPrice, TotalQuantity } from '../../../recoil/atom';
 import Header from '../../common/Header';
+import AddressSearch from './AddressSearch';
 
 const Checkout = () => {
-  const navigate = useNavigate();
   const price = useRecoilValue(TotalPrice);
-  const handleCheckout = () => {
-    navigate('/purchase/customize');
+  const quantity = useRecoilValue(TotalQuantity);
+  const setOrderNum = useSetRecoilState(OrderNumber);
+  const [formData, setFormData] = useState({
+    realName: '',
+    phoneNumber: '',
+    email: '',
+    zipcode: '',
+    roadAddress: '',
+    detailAddress: '',
+    keyringDesignId: 1,
+    quantity,
+  });
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      const { status, data } = await getUserAdress();
+      if (status === 200) {
+        setFormData((prev) => ({
+          ...prev,
+          realName: data.realName || '',
+          phoneNumber: data.phoneNumber || '',
+          email: data.email || '',
+          zipcode: data.zipcode || '',
+          roadAddress: data.roadAddress || '',
+          detailAddress: data.detailAddress || '',
+        }));
+      }
+    };
+
+    fetchAddress();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { orderNumber, paymentUrl } = await submitOrder(formData);
+
+    setOrderNum(orderNumber);
+
+    window.location.assign(paymentUrl);
+  };
+
   return (
     <StCheckoutWrapper>
       <Header headerName="주문/결제" />
-      <StBodyWrapper>
-        <TitleText>주문자 정보</TitleText>
-        <BodyText>이름</BodyText>
-        <ContentWrapper>
-          <InputField />
-        </ContentWrapper>
-        <BodyText>번호</BodyText>
-        <ContentWrapper>
-          <InputField />
-        </ContentWrapper>
-        <TitleText>배송지 정보</TitleText>
-        <BodyText>우편번호</BodyText>
-        <ContentWrapper>
-          <InputField />
-          <ZipCodeButton>우편번호검색</ZipCodeButton>
-        </ContentWrapper>
-        <BodyText>기본주소</BodyText>
-        <ContentWrapper>
-          <InputField />
-        </ContentWrapper>
-        <BodyText>상세주소</BodyText>
-        <ContentWrapper>
-          <InputField />
-        </ContentWrapper>
-        <TitleText>결제수단</TitleText>
-        <KaKaopayButton>카카오페이</KaKaopayButton>
-        <TitleText>결제정보</TitleText>
-        <BodyText>결제금액</BodyText>
-        <ContentWrapper>
-          <PriceText>{price}</PriceText>
-        </ContentWrapper>
-        <LongButton btnName="결제하기" onClick={handleCheckout} />
-      </StBodyWrapper>
+      <form onSubmit={handleSubmit}>
+        <StBodyWrapper>
+          <TitleText>주문자 정보</TitleText>
+          <BodyText>이름</BodyText>
+          <ContentWrapper>
+            <InputField name="realName" value={formData.realName} onChange={handleChange} />
+          </ContentWrapper>
+          <BodyText>번호</BodyText>
+          <ContentWrapper>
+            <InputField name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
+          </ContentWrapper>
+
+          <TitleText>배송지 정보</TitleText>
+          <BodyText>우편번호</BodyText>
+          <ContentWrapper>
+            <InputField name="zipcode" value={formData.zipcode} readOnly />
+            <AddressSearch
+              setZipcode={(zipcode) => setFormData((prev) => ({ ...prev, zipcode }))}
+              setAddress={(roadAddress) => setFormData((prev) => ({ ...prev, roadAddress }))}
+            />
+          </ContentWrapper>
+          <BodyText>기본주소</BodyText>
+          <ContentWrapper>
+            <InputField name="roadAddress" value={formData.roadAddress} readOnly />
+          </ContentWrapper>
+          <BodyText>상세주소</BodyText>
+          <ContentWrapper>
+            <InputField
+              name="detailAddress"
+              value={formData.detailAddress}
+              onChange={handleChange}
+            />
+          </ContentWrapper>
+
+          <TitleText>결제정보</TitleText>
+          <BodyText>결제금액</BodyText>
+          <ContentWrapper>
+            <PriceText>{price}</PriceText>
+          </ContentWrapper>
+
+          <KaKaopayButton type="submit">카카오페이</KaKaopayButton>
+        </StBodyWrapper>
+      </form>
     </StCheckoutWrapper>
   );
 };
@@ -92,19 +146,6 @@ const InputField = styled.input`
   border-radius: 0.625rem;
 `;
 
-const ZipCodeButton = styled.button`
-  position: absolute;
-  right: 0;
-
-  width: 10rem;
-  height: 3rem;
-  border-radius: 0.625rem;
-
-  background-color: ${({ theme }) => theme.colors.Red2};
-  ${({ theme }) => theme.fonts.Title5}
-  color: ${({ theme }) => theme.colors.White}
-`;
-
 const KaKaopayButton = styled.button`
   width: 28rem;
   height: 4rem;
@@ -122,7 +163,7 @@ const KaKaopayButton = styled.button`
 `;
 
 const TitleText = styled.div`
-  ${({ theme }) => theme.fonts.Title1}
+  ${({ theme }) => theme.fonts.Title2}
   color: ${({ theme }) => theme.colors.Gray0}
 `;
 

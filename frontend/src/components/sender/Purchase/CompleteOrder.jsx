@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import { getKeyringData } from '../../../apis/keyring';
 import PresentImg from '../../../assets/images/present.png';
+import { OrderNumber } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 
 const CompleteOrder = () => {
   const navigate = useNavigate();
+  const orderNumber = useRecoilValue(OrderNumber);
 
   return (
     <>
@@ -18,7 +18,7 @@ const CompleteOrder = () => {
         <StContent>
           <StText>
             <h3>주문이 완료되었어요</h3>
-            <p>주문번호: 1234567</p>
+            <p>`주문번호: {orderNumber}`</p>
           </StText>
           <ImageWrapper>
             <img src={PresentImg} alt="키링 이미지" />
