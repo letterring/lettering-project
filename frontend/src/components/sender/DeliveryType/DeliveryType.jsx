@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -19,6 +19,9 @@ import {
 import Header from '../../common/Header';
 import QuestionText from '../SelectDear/QuestionText';
 import DeliveryTypeCard from './DeliveryTypeCard';
+import ScheduledOption from './ScheduledOption';
+import SecretOption from './SecretOption';
+import TimerOption from './TimerOption';
 
 const DeliveryType = () => {
   const navigate = useNavigate();
@@ -28,6 +31,8 @@ const DeliveryType = () => {
   const postcardText = useRecoilValue(PostcardText);
   const letterTextList = useRecoilValue(LetterTextList);
   const letterImageList = useRecoilValue(LetterImageList);
+
+  const [selectedModalType, setSelectedModalType] = useState(null);
 
   const deliveryTypes = [
     {
@@ -40,13 +45,13 @@ const DeliveryType = () => {
       icon: IconTimer,
       title: '오픈 타이머',
       description: '타이머가 종료되어야 열릴 수 있어요!',
-      value: 'TIMER',
+      value: 'TIMECAPSULE',
     },
     {
       icon: IconLock,
       title: '비밀 편지',
       description: '내가 낸 퀴즈를 맞혀야 편지가 열려요!',
-      value: 'LOCKED',
+      value: 'SECRETTYPE',
     },
     {
       icon: IconCalendar,
@@ -63,22 +68,21 @@ const DeliveryType = () => {
     }
   };
 
-  const handleSelect = async (type) => {
-    console.log('선택된 전송 방식:', type);
-
+  // ✅ 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
+  const handleSend = async ({ conditionType, scheduledAt = null }) => {
     const sealingWaxId = localStorage.getItem('sealingWaxId');
     if (!sealingWaxId) {
       alert('실링왁스 ID가 없습니다.');
       return;
     }
 
-    if (type === 'NORMAL') {
-      if (sealingWaxId == 1) {
+    if (sealingWaxId == 1) {
         //엽서
         const postcardData = {
           keyringId: selectedKeyringId,
           sealingWaxId: Number(sealingWaxId),
-          conditionType: 'NONE',
+          conditionType,
+          scheduledAt,
           content: postcardText,
         };
 
@@ -88,7 +92,6 @@ const DeliveryType = () => {
             imageFile: postcardImageFile,
           });
 
-          // alert('엽서가 전송되었습니다!');
           navigate('/complete/postcard');
         } catch (error) {
           console.error('엽서 전송 실패:', error);
@@ -99,12 +102,22 @@ const DeliveryType = () => {
         const letterData = {
           keyringId: selectedKeyringId,
           sealingWaxId: Number(sealingWaxId),
-          conditionType: 'NONE',
+          conditionType,
           contents: letterTextList,
         };
 
         postLetter(letterData);
       }
+  };
+
+  // ✅ 카드 클릭 시 처리
+  const handleSelect = (type) => {
+    if (type === 'NORMAL') {
+      handleSend({ conditionType: 'NONE' });
+    } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE') {
+      setSelectedModalType(type);
+    } else if (type === 'SECRETTYPE') {
+      alert('해당 전송 방식은 준비 중입니다.');      
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
     }
@@ -128,6 +141,36 @@ const DeliveryType = () => {
           />
         ))}
       </CardList>
+
+      {/* ✅ 예약 편지 모달 렌더링 */}
+      {selectedModalType === 'SCHEDULED' && (
+        <ScheduledOption
+          onClose={() => setSelectedModalType(null)}
+          onConfirm={(datetime) =>
+            handleSend({
+              conditionType: 'SCHEDULED',
+              scheduledAt: datetime,
+            })
+          }
+        />
+      )}
+      {selectedModalType === 'TIMECAPSULE' && (
+        <TimerOption
+          onClose={() => setSelectedModalType(null)}
+          onConfirm={(datetime) => {
+            handleSend({
+              conditionType: 'TIMECAPSULE',
+              scheduledAt: datetime,
+            });
+          }}
+        />
+      )}
+      {selectedModalType === 'SECRETTYPE' && (
+        <SecretOption
+          onClose={() => setSelectedModalType(null)}
+          onConfirm={(secret) => handleSend({ conditionType: 'SECRETTYPE', secret })}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -149,6 +192,7 @@ const CardList = styled.div`
   flex-direction: column;
   gap: 1.2rem;
 `;
+
 const QuestionTextWrapper = styled.div`
   margin-top: 10rem;
   margin-bottom: 2rem;
