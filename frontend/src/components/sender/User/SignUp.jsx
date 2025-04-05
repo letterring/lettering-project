@@ -1,9 +1,10 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { signup } from '../../../apis/user';
+import { getUserData } from '../../../apis/user';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
@@ -21,6 +22,7 @@ const SignUp = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -59,6 +61,24 @@ const SignUp = () => {
     alert('회원가입이 완료되었습니다!');
     navigate('/login');
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await getUserData();
+
+        if (data) {
+          navigate('/home');
+        }
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (isLoading) return null;
 
   return (
     <StSignUpWrapper>
