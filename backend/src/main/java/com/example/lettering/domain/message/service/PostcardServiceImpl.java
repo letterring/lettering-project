@@ -76,6 +76,11 @@ public class PostcardServiceImpl implements PostcardService {
     }
 
     @Override
+    public byte[] downloadImageFromS3(String imageUrl) {
+        return s3ImageUtil.downloadImageBytes(imageUrl);
+    }
+
+    @Override
     public void resetMessageAsUnread(Long messageId) {
         Postcard postcard = postcardRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.DATABASE_ERROR));

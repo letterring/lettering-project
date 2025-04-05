@@ -62,7 +62,7 @@ async def get_entry(key: str):
 class MessageUpdate(BaseModel):
     message: str
 
-@router.patch("/submit/{key}")
+@router.post("/submit/{key}/update")
 async def update_message(key: str, update: MessageUpdate):
     existing = await redis.get(key)
     if not existing:
@@ -73,6 +73,7 @@ async def update_message(key: str, update: MessageUpdate):
 
     await redis.set(key, json.dumps(data))
     return {"status": "updated"}
+
 
 @router.delete(
     "/submit/{key}",
