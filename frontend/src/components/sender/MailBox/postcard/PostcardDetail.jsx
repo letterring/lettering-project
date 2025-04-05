@@ -8,6 +8,7 @@ import DummyImg from '/src/assets/dummy/postcard.jpg';
 import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 import Header from '/src/components/common/Header';
+import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
 const PostcardDetail = () => {
@@ -27,7 +28,7 @@ const PostcardDetail = () => {
 
   if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
 
-  const { imageUrl, content, nfcName, font } = postcard;
+  const { imageUrl, content, nfcName, font, replyText } = postcard;
 
   return (
     <StPageWrapper>
@@ -53,6 +54,13 @@ const PostcardDetail = () => {
           </StCardFace>
         </StFlipCard>
       </StFlipContainer>
+
+      <ReplyComponent
+        messageId={messageId}
+        replyText={replyText}
+        dearName={nfcName}
+        isSender={true}
+      />
     </StPageWrapper>
   );
 };

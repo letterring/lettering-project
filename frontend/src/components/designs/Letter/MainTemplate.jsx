@@ -6,7 +6,7 @@ import DummyImg from '/src/assets/dummy/letter.jpg';
 import LetteringImg from '/src/assets/images/letter/lettering.png';
 import StampImg from '/src/assets/images/letter/vintage_stamp.png';
 
-const MainTemplate = ({ images }) => {
+const MainTemplate = ({ images, dearName }) => {
   const pathRef = useRef(null);
 
   useEffect(() => {
