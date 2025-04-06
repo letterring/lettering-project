@@ -8,13 +8,13 @@ import SecretConfirm from './SecretConfirm';
 
 const stepTitles = {
   1: '질문 작성',
-  2: '힌트 작성',
+  2: '힌트 및 정답 작성',
   3: '확인하기',
 };
 
 const stepDescriptions = {
-  1: '질문을 작성해주세요.\n정답을 맞혀야 편지를 열 수 있어요.',
-  2: '힌트를 작성해주세요.\n정답이 맞으면 편지를 열 수 있어요.',
+  1: '질문을 작성해주세요.',
+  2: '힌트와 정답을 작성해주세요.',
   3: '입력한 내용이 올바른지 확인해주세요!',
 };
 
@@ -48,7 +48,7 @@ export default function SecretOption({ onClose, onConfirm }) {
       {step === 1 && (
         <InputBox>
           <Input
-            placeholder="내가 지금 제일 먹고 싶은 간식은?"
+            placeholder="ex. 제일 좋아하는 간식은?"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
@@ -56,6 +56,12 @@ export default function SecretOption({ onClose, onConfirm }) {
       )}
 
       {step === 2 && (
+        <>
+         <QuestionPreview>
+          <Label>Q.</Label>
+          <QuestionBox>{question}</QuestionBox>
+        </QuestionPreview>
+
         <InputBox>
           <Input
             placeholder="힌트를 입력해주세요 (선택)"
@@ -68,6 +74,7 @@ export default function SecretOption({ onClose, onConfirm }) {
             onChange={(e) => setAnswer(e.target.value)}
           />
         </InputBox>
+        </>
       )}
 
       {step === 3 && (
@@ -114,13 +121,15 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  margin-top: 2rem;
+  // margin-top: 2rem;
 `;
 
 const Input = styled.input`
   padding: 1.2rem;
+  padding-right: 2rem;
+  padding-left: 2rem;
   border-radius: 2rem;
-  background-color: ${({ theme }) => theme.colors.Gray5};
+  background-color: ${({ theme }) => theme.colors.Gray7};
   border: none;
   ${({ theme }) => theme.fonts.body2};
   color: ${({ theme }) => theme.colors.Gray2};
@@ -131,4 +140,21 @@ const ModalButtons = styled.div`
   justify-content: center;
   gap: 1.6rem;
   margin-top: 2.4rem;
+`;
+const QuestionPreview = styled.div`
+  // margin-top: 2rem;
+`;
+
+const QuestionBox = styled.div`
+  padding: 1.2rem;
+  border-radius: 1.2rem;
+  ${({ theme }) => theme.fonts.Saeum3};
+  color: ${({ theme }) => theme.colors.MainRed};
+  margin-bottom: 2rem;
+`;
+
+const Label = styled.div`
+  font-size: 3 rem;
+  ${({ theme }) => theme.fonts.Saeum3};
+  color: ${({ theme }) => theme.colors.Gray5};
 `;

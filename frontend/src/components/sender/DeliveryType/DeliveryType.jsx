@@ -117,10 +117,8 @@ const DeliveryType = () => {
   const handleSelect = (type) => {
     if (type === 'NONE') {
       handleSend({ conditionType: 'NONE' });
-    } else if (type === 'RESERVATION' || type === 'TIMECAPSULE') {
+    } else if (type === 'RESERVATION' || type === 'TIMECAPSULE' || type === 'SECRETTYPE') {
       setSelectedModalType(type);
-    } else if (type === 'SECRETTYPE') {
-      alert('해당 전송 방식은 준비 중입니다.');      
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
     }

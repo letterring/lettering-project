@@ -54,7 +54,7 @@ const ModalDesc = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  margin-top: 2rem;
+  // margin-top: 2rem;
 `;
 
 const Label = styled.div`
@@ -64,12 +64,13 @@ const Label = styled.div`
 `;
 
 const GrayBox = styled.div`
-  background-color: ${({ theme }) => theme.colors.Gray4};
+  background-color: ${({ theme }) => theme.colors.Gray7};
   padding: 1.2rem;
+  padding-left: 1rem;
   border-radius: 999px;
   text-align: center;
   margin-bottom: 1.6rem;
-  ${({ theme }) => theme.fonts.body2};
+  ${({ theme }) => theme.fonts.Saeum3};
 `;
 
 const ButtonWrapper = styled.div`
