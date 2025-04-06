@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { login } from '../../../apis/user';
+import LongButton from '../../common/button/LongButton';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
-import SubmitButton from './SubmitButton';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -33,7 +33,7 @@ const Login = () => {
 
   return (
     <StLoginWrapper>
-      Lettering
+      <LogoText>Lettering</LogoText>
       <ContentWrapper>
         <KakaoLoginButton />
         <Divider text="또는" />
@@ -54,7 +54,7 @@ const Login = () => {
             onIconClick={togglePasswordVisibility}
             required
           />
-          <SubmitButton btnName="로그인" type="submit" />
+          <LongButton btnName="로그인" type="submit" />
         </Form>
         <SignupText>
           아직 회원이 아니신가요?{' '}
@@ -70,33 +70,29 @@ export default Login;
 const StLoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  box-sizing: border-box;
-  padding: 6rem 2rem;
+  padding: 5rem 2rem;
+`;
 
-  color: ${({ theme }) => theme.colors.MainRed};
+const LogoText = styled.h1`
   ${({ theme }) => theme.fonts.TitleLogo};
+  color: ${({ theme }) => theme.colors.MainRed};
+  margin-bottom: 4rem;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-
-  padding-top: 6rem;
-  box-sizing: border-box;
-
+  gap: 2.5rem;
   width: 100%;
-  height: 100%;
-  gap: 3rem;
+  max-width: 28rem;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   gap: 1rem;
 `;
