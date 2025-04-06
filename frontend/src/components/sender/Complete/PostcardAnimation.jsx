@@ -40,12 +40,10 @@ const PostcardAnimation = () => {
           animate={{ x, y, opacity: 1, rotate: -3.7 }}
           transition={{ duration: 2 }}
           onAnimationComplete={() => {
+            setIsClosed(true);
             setTimeout(() => {
-              setIsClosed(true);
-              setTimeout(() => {
-                navigate('/complete');
-              }, 5000);
-            }, 500);
+              navigate('/complete');
+            }, 4500);
           }}
         />
         <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />
