@@ -9,11 +9,7 @@ export const submitPostcard = async (images, message) => {
       formData.append('images', image);
     });
 
-    const response = await AiClient.post('/submit', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await AiClient.post('/submit', formData);
     return response.data;
   } catch (error) {
     console.error('엽서 저장 에러:', error);
@@ -34,11 +30,21 @@ export const getPostcard = async (key) => {
 
 export const updateRedisMessage = async (key, newMessage) => {
   try {
-    const response = await AiClient.patch(`/submit/${key}`, { message: newMessage });
+    const response = await AiClient.post(`/submit/${key}/update`, { message: newMessage });
     return response.data;
   } catch (error) {
     console.error('Redis 메시지 업데이트 실패:', error);
     return null;
+  }
+};
+
+export const deletePostcard = async (key) => {
+  try {
+    const response = await AiClient.delete(`/submit/${key}`);
+    return response.data;
+  } catch (error) {
+    console.error('Redis 메시지 삭제 실패:', error);
+    throw null;
   }
 };
 
@@ -48,7 +54,7 @@ export const segmentText = async (text, count = 5) => {
   formData.append('count', count.toString());
 
   try {
-    const response = await AiClient.post('/ai/segment', formData);
+    const response = await AiClient.post('/segment', formData);
     return response.data.response;
   } catch (error) {
     console.error(error);
@@ -61,7 +67,7 @@ export const refineWithImage = async ({ slideTexts, filenames }) => {
   filenames.forEach((name) => formData.append('filenames', name));
 
   try {
-    const response = await AiClient.post('/ai/refine', formData);
+    const response = await AiClient.post('/refine', formData);
     return response.data.response;
   } catch (error) {
     console.error('AI 문장 수정 실패:', error);
@@ -75,7 +81,7 @@ export const enhanceWithImage = async ({ text, filename }) => {
   formData.append('filename', filename);
 
   try {
-    const response = await AiClient.post('/ai/enhance', formData);
+    const response = await AiClient.post('/enhance', formData);
     return response.data.response;
   } catch (error) {
     console.error('AI 감성 팁 요청 실패:', error);

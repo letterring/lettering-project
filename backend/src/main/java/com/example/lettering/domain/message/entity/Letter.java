@@ -78,4 +78,11 @@ public class Letter extends AbstractMessage {
         }
         return letter;
     }
+
+    public void markAsOpened() {
+        if (!this.opened) {
+            this.opened = true;
+            this.firstOpenedTime = LocalDateTime.now();
+        }
+    }
 }

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { sendReply } from '/src/apis/reply';
 import { IcSend } from '/src/assets/icons';
 
-const ReplyComponent = () => {
-  const [reply, setReply] = useState(''); // 입력값 상태
-  const [isSent, setIsSent] = useState(false); // 전송 여부 상태
+const ReplyComponent = ({ messageId, replyText, dearName, isSender }) => {
+  const [reply, setReply] = useState(replyText || '');
+  const [isSent, setIsSent] = useState(!!replyText);
+  const isEditable = !isSender || isSent;
 
   const handleReplyChange = (e) => {
     const value = e.target.value;
@@ -14,15 +16,17 @@ const ReplyComponent = () => {
     }
   };
 
-  const handleSendClick = () => {
+  const handleSendClick = async () => {
+    await sendReply(messageId, reply);
+
     setIsSent(true);
   };
 
   return (
     <StReplyWrapper>
       <StReplyHeader>
-        <StReplyTitle>내가 보낸 답장</StReplyTitle>
-        {!isSent && (
+        <StReplyTitle>{dearName} 의 답장</StReplyTitle>
+        {isEditable && !isSent && (
           <StButton onClick={handleSendClick} disabled={reply.length === 0}>
             <IcSend width={22} height={21} />
           </StButton>
@@ -36,6 +40,7 @@ const ReplyComponent = () => {
               onChange={handleReplyChange}
               maxLength={50}
               placeholder="아직 답장하지 않았습니다"
+              readOnly={!isEditable}
             />
             <StCharacterCount>{reply.length} / 50</StCharacterCount>
           </>
@@ -61,7 +66,10 @@ const StReplyWrapper = styled.div`
 `;
 
 const StReplyHeader = styled.div`
-  width: 100%;
+  width: 25rem;
+  box-sizing: border-box;
+  margin: 0rem;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -81,6 +89,8 @@ const StReplyBox = styled.div`
 `;
 
 const StReplyTitle = styled.div`
+  width: 100%;
+
   ${({ theme }) => theme.fonts.EduTitle1};
   color: ${({ theme }) => theme.colors.MainRed};
 `;
@@ -104,7 +114,7 @@ const StTextArea = styled.textarea`
   }
 
   &:focus::placeholder {
-    opacity: 0;
+    opacity: ${({ readOnly }) => (readOnly ? 1 : 0)};
   }
 `;
 
@@ -122,7 +132,6 @@ const StButton = styled.button`
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
   }
 `;
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
@@ -15,34 +15,51 @@ import { getLetterDate } from '/src/util/getFormatDate';
 const LetterDetail = () => {
   const sliderRef = useRef(null);
   const { messageId } = useParams();
+  const location = useLocation();
 
-  const [letterData, setLetterData] = useState(null);
-  const [ImageData, setImageData] = useState(null);
+  const [letterData, setLetterData] = useState(location.state?.letterData || null);
+  const [ImageData, setImageData] = useState(location.state?.ImageData || null);
+  const [letterFont, setLetterFont] = useState(location.state?.letterFont || null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [letterFont, setLetterFont] = useState(null);
+  const [nickName, setNickName] = useState(null);
+  const [nfcName, setNfcName] = useState(null);
+  const [replyText, setReplyText] = useState(null);
 
   useEffect(() => {
-    const fetchLetter = async () => {
-      const { letterContents, letterImages, font, conditionTime, firstOpenedTime } =
-        await getLetterDetail(messageId);
+    if (!letterData || !ImageData) {
+      const fetchLetter = async () => {
+        const {
+          letterContents,
+          letterImages,
+          font,
+          conditionTime,
+          firstOpenedTime,
+          nfcName,
+          nickName,
+          replyText,
+        } = await getLetterDetail(messageId);
 
-      const sentAt = getLetterDate(conditionTime);
-      const readAt = getLetterDate(firstOpenedTime);
+        const sentAt = getLetterDate(conditionTime);
+        const readAt = getLetterDate(firstOpenedTime);
 
-      const newImageData = [...letterImages, letterImages[0]];
-      const newLetterContents = [
-        ...letterContents,
-        `${sentAt}에 보낸 편지를`,
-        `${readAt}에 열었습니다.`,
-      ];
+        const newImageData = [...letterImages, letterImages[0]];
+        const newLetterContents = [
+          ...letterContents,
+          `${sentAt}에 보낸 편지를`,
+          `${readAt}에 열었습니다.`,
+        ];
 
-      setImageData(newImageData);
-      setLetterData(newLetterContents);
-      setLetterFont(font);
-    };
+        setNfcName(nfcName);
+        setNickName(nickName);
+        setImageData(newImageData);
+        setLetterData(newLetterContents);
+        setLetterFont(font);
+        setReplyText(replyText);
+      };
 
-    fetchLetter();
-  }, [messageId]);
+      fetchLetter();
+    }
+  }, [messageId, letterData, ImageData]);
 
   if (!letterData || !ImageData) {
     return <div>편지 정보를 가져오는 중입니다.</div>;
@@ -101,6 +118,11 @@ const LetterDetail = () => {
             background={item.background}
             font={letterFont}
             isActive={currentSlide === id}
+            senderName={nickName}
+            dearName={nfcName}
+            messageId={messageId}
+            replyText={replyText}
+            isSender={false}
           />
         ))}
       </StyledSlider>
