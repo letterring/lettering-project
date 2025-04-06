@@ -1,12 +1,14 @@
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from typing import List
 from uuid import uuid4
 from app.core.redis_conf import redis, REDIS_PREFIX
 from app.utils.utils import save_image
 import json
+from pydantic import BaseModel
+import logging
 
-router = APIRouter()
+router = APIRouter(prefix="/ai", tags=["Redis"])
 
 @router.post(
     "/submit",
@@ -20,10 +22,17 @@ async def submit_entry(
     """
     이미지 파일과 메시지를 Redis에 임시로 저장합니다.
     """
+    logging.info(f"[요청 들어옴] 이미지 개수: {len(images)}, 메시지 길이: {len(message)}")
+    
     if len(images) < 1:
         return JSONResponse(status_code=400, content={"error": "이미지를 한 장 이상 업로드 해주세요."})
 
-    image_meta = [await save_image(img) for img in images]
+    try:
+        image_meta = [await save_image(img) for img in images]
+        logging.info(f"[저장 완료] 이미지 메타: {image_meta}")
+    except Exception as e:
+        logging.exception(f"[이미지 저장 실패] {e}")
+        raise HTTPException(status_code=500, detail="이미지 저장 중 서버 오류 발생")
 
     key = f"{REDIS_PREFIX}:{uuid4()}"
     value = {
@@ -50,22 +59,32 @@ async def get_entry(key: str):
         return JSONResponse(status_code=404, content={"error": "해당 key를 찾을 수 없습니다."})
     return json.loads(value)
 
-@router.patch(
-    "/submit/{key}",
-    summary="엽서 메시지 업데이트",
-    description="Redis에 저장된 엽서의 메시지 내용을 수정합니다."
-)
-async def update_message(key: str, message: str = Form(...)):
-    """
-    Redis에 저장된 메시지를 수정합니다.
-    """
+class MessageUpdate(BaseModel):
+    message: str
+
+@router.post("/submit/{key}/update")
+async def update_message(key: str, update: MessageUpdate):
     existing = await redis.get(key)
     if not existing:
         return JSONResponse(status_code=404, content={"error": "해당 key를 찾을 수 없습니다."})
 
     data = json.loads(existing)
-    data["message"] = message
+    data["message"] = update.message
 
     await redis.set(key, json.dumps(data))
     return {"status": "updated"}
 
+
+@router.delete(
+    "/submit/{key}",
+    summary="Redis에 저장된 엽서 삭제",
+    description="지정한 Redis key의 엽서를 삭제합니다."
+)
+async def delete_entry(key: str):
+    """
+    Redis에 저장된 엽서 데이터를 삭제합니다.
+    """
+    deleted = await redis.delete(key)
+    if deleted == 1:
+        return {"status": "deleted", "key": key}
+    return JSONResponse(status_code=404, content={"error": f"'{key}'를 찾을 수 없습니다."})

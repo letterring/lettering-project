@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Slider from 'react-slick';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -16,6 +17,7 @@ import { IcArrowLeft, IcArrowRight2 } from '../../../assets/icons';
 import { LetterImageList, LetterTextList, RedisMessageKey } from '../../../recoil/atom';
 import Header from '../../common/Header';
 import AiButton from './AiButton';
+import EmptyWarningModal from './AiEmptyWarningModal';
 import AiEnhanceModal from './AiEnhanceModal';
 import AiRefineModal from './AiRefineModal';
 import LetterEditor from './LetterEditor';
@@ -38,7 +40,9 @@ const LetterPreview = () => {
   const redisKey = useRecoilValue(RedisMessageKey);
 
   const setLetterTextList = useSetRecoilState(LetterTextList);
+
   const IMAGE_BASE_URL = import.meta.env.VITE_FAST_API_BASE_URL + '/static/uploads/';
+  const DEBOUNCE_DELAY = 500;
 
   const contentConfig = [
     { template: 'main', imageCount: 1, textCount: 1, background: LetterImg1 },
@@ -69,6 +73,21 @@ const LetterPreview = () => {
     },
   };
 
+  const updateRedisDebounced = useCallback(
+    debounce((key, content) => {
+      updateRedisMessage(key, content);
+      // console.log('updated:', key, content);
+    }, DEBOUNCE_DELAY),
+    [],
+  );
+
+  useEffect(() => {
+    if (redisKey) {
+      const joinedMessage = textList.join('\n\n');
+      updateRedisDebounced(redisKey, joinedMessage);
+    }
+  }, [textList, redisKey, updateRedisDebounced]);
+
   useEffect(() => {
     if (localImageList && localImageList.length > 0) {
       const images = localImageList.map((img) => img.url);
@@ -82,6 +101,7 @@ const LetterPreview = () => {
 
     if (segmentedText && segmentedText.length > 0) {
       setTextList(segmentedText);
+      setLetterTextList(segmentedText);
     }
   }, [localImageList, postcard, segmentedText]);
 
@@ -117,7 +137,7 @@ const LetterPreview = () => {
     };
   });
 
-  // AI
+  // 여기부터 AI
   const handleUseRefineText = async (suggestionList) => {
     const updated = [...textList];
     const { textStartIndex, textCount } = contents[currentSlide];
@@ -127,15 +147,9 @@ const LetterPreview = () => {
       updated[textStartIndex + i] = slicedSuggestions[i] || '';
     }
 
-    console.log('[🔁 업데이트될 텍스트 리스트]', updated);
     setTextList(updated);
     setLetterTextList(updated);
     setActiveModal(null);
-
-    // if (redisKey) {
-    //   const joinedMessage = updated.join('\n\n');
-    //   await updateRedisMessage(redisKey, joinedMessage);
-    // }
   };
 
   const closeModal = () => {
@@ -148,6 +162,18 @@ const LetterPreview = () => {
 
       const { textStartIndex, textCount } = contents[currentSlide];
       const slideTexts = textList.slice(textStartIndex, textStartIndex + textCount);
+
+      if (slideTexts.length < textCount) {
+        console.warn('[❌ 텍스트 부족] 예상보다 텍스트 수가 적음');
+        setActiveModal('emptyWarning');
+        return;
+      }
+
+      const isEmpty = slideTexts.some((text) => !text || text.trim() === '');
+      if (isEmpty) {
+        setActiveModal('emptyWarning');
+        return;
+      }
 
       const filenames = getFilenamesFromPostcard(currentSlide);
 
@@ -178,7 +204,7 @@ const LetterPreview = () => {
 
   const getFilenamesFromPostcard = (slideIndex) => {
     const imageIndexes = computeImageIndexesPerSlide()[slideIndex];
-    return imageIndexes.map((idx) => postcard?.images?.[idx]?.filename).filter(Boolean); // undefined 제거
+    return imageIndexes.map((idx) => postcard?.images?.[idx]?.filename).filter(Boolean);
   };
 
   const computeImageIndexesPerSlide = () => {
@@ -237,6 +263,7 @@ const LetterPreview = () => {
           isLoading={isRefining}
         />
       )}
+      {activeModal === 'emptyWarning' && <EmptyWarningModal onClose={closeModal} />}
     </StLetterPreview>
   );
 };
@@ -316,3 +343,31 @@ const ArrowLeft = styled(ArrowBase)`
 const ArrowRight = styled(ArrowBase)`
   right: -2rem;
 `;
+
+const Modal = ({ children, onClose }) => (
+  <div
+    style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        background: 'white',
+        padding: '2rem',
+        borderRadius: '1rem',
+        textAlign: 'center',
+      }}
+    >
+      {children}
+    </div>
+  </div>
+);

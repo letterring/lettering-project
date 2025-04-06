@@ -2,6 +2,8 @@ package com.example.lettering.util;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.example.lettering.config.S3Config;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.ExternalApiException;
@@ -105,11 +107,24 @@ public class S3ImageUtil {
         return s3Config.amazonS3Client().getUrl(bucket, s3Key).toString();
     }
 
+    public byte[] downloadImageBytes(String imageUrl) {
+        try {
+            String key = extracts3ImageKeyFromUrl(imageUrl);
+            S3Object s3Object = s3Config.amazonS3Client().getObject(bucket, key);
+            try (S3ObjectInputStream inputStream = s3Object.getObjectContent()) {
+                return inputStream.readAllBytes();
+            }
+        } catch (Exception e) {
+            throw new ExternalApiException(ExceptionCode.S3_DOWNLOAD_ERROR);
+        }
+    }
+
     // 파일 확장자 검증 메서드 (예: .png, .jpg, .jpeg, .heic, .heif 허용)
     private boolean isAllowedExtension(String extension) {
         String ext = extension.toLowerCase();
         return ext.equals(".png") || ext.equals(".jpg") || ext.equals(".jpeg")
-                || ext.equals(".heic") || ext.equals(".heif");
+                || ext.equals(".heic") || ext.equals(".heif")
+                || ext.equals(".gif");
     }
 
     /**

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/users")
@@ -36,7 +37,7 @@ public class UserController {
     @Operation(summary = "회원가입 기능", description = "회원가입을 수행합니다.")
     @PostMapping("/signup")
     public ResponseEntity<Map<String, String>> signupUser(@Valid @RequestBody SignUpRequest signUpRequestDto) {
-        userService.addUser(signUpRequestDto); // 예외는 내부에서 처리됨
+        userService.addUser(signUpRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap("message", "회원가입이 완료되었습니다."));
     }
@@ -55,12 +56,7 @@ public class UserController {
     @Operation(summary = "현재 로그인 회원정보 조회 기능", description = "세션을 활용하여 로그인한 회원 정보를 조회합니다.")
     @GetMapping("/me")
     public ResponseEntity<LoginResponse> getUserProfile(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        String userNickname = (String) session.getAttribute("userNickname");
-
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         User user = userService.getUserById(userId);
 
@@ -82,35 +78,17 @@ public class UserController {
     @Operation(summary = "회원 주소 조회", description = "로그인된 사용자의 주소 정보를 불러옵니다.")
     @GetMapping("/address")
     public ResponseEntity<UserAddressResponse> getUserAddress(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         User user = userService.getUserById(userId);
 
-        // DTO 생성해서 반환
-        UserAddressResponse dto = new UserAddressResponse(
-                user.getRealName(),
-                user.getPhoneNumber(),
-                user.getEmail(),
-                user.getZipcode(),
-                user.getRoadAddress(),
-                user.getDetailAddress()
-        );
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(UserAddressResponse.fromEntity(user));
     }
 
     @Operation(summary = "마이페이지 조회", description = "사용자 정보 및 키링 정보 조회")
     @GetMapping("/mypage")
     public ResponseEntity<UserMypageResponse> getMypage(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         return ResponseEntity.ok(userService.getMypageInfo(userId));
     }
@@ -121,10 +99,7 @@ public class UserController {
             @RequestBody @Valid UpdateNicknameRequest request,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         userService.updateNickname(userId, request.getNewNickname());
         return ResponseEntity.ok(Map.of("message", "닉네임이 성공적으로 변경되었습니다."));
@@ -136,10 +111,7 @@ public class UserController {
             @RequestBody @Valid UpdateFontRequest request,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         userService.updateFont(userId, request.getFont());
 
@@ -149,11 +121,7 @@ public class UserController {
     @Operation(summary = "현재 로그인 유저 폰트 조회", description = "세션을 통해 로그인된 사용자의 폰트를 조회합니다.")
     @GetMapping("/font")
     public ResponseEntity<Map<String, String>> getUserFont(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         User user = userService.getUserById(userId);
 

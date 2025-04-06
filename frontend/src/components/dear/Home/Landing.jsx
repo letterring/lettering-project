@@ -12,7 +12,7 @@ const Landing = () => {
   const [newLetter, setNewLetter] = useState(false);
   const [messageInfo, setMessageInfo] = useState(null);
   // const [text, setText] = useState('');
-  const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용용)
+  const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용)
 
   useEffect(() => {
     const fetchUnreadMessage = async () => {
@@ -36,7 +36,9 @@ const Landing = () => {
         state: { imageUrl },
       });
     } else if (designType === 'LETTER') {
-      navigate(`/dear/letter/${messageId}`);
+      navigate(`/dear/letter/${messageId}`, {
+        state: { imageUrl },
+      });
     } else {
       navigate('/dear/home'); // fallback
     }
