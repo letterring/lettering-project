@@ -2,9 +2,9 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import DummyImg from '../../../assets/dummy/letter.jpg';
 import EnvelopeBottomImg from '../../../assets/images/letter/bottom_fold.png';
 import EnvelopeBodyImg from '../../../assets/images/letter/envelope_body.png';
 import EnvelopeTopPartImg from '../../../assets/images/letter/envelope_top_part.png';
@@ -12,9 +12,10 @@ import LetterImg from '../../../assets/images/letter/letter_paper_crop.png';
 import LetteringImg from '../../../assets/images/letter/lettering.png';
 import SealingWaxImg from '../../../assets/images/letter/sealing_wax.png';
 import StampImg from '../../../assets/images/letter/vintage_stamp.png';
-
 const LetterAnimation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const firstImageURL = location.state?.firstImageURL;
   const [isClosed, setIsClosed] = useState(false);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
@@ -36,7 +37,7 @@ const LetterAnimation = () => {
             transition={{ duration: 2 }}
           />
           <StLetterImage
-            src={DummyImg}
+            src={firstImageURL}
             initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
             animate={{ x, y, opacity: 1, rotate: -3.7 }}
             transition={{ duration: 2 }}
