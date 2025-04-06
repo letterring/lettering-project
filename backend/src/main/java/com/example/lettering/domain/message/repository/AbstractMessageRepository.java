@@ -18,7 +18,7 @@ public interface AbstractMessageRepository extends JpaRepository<AbstractMessage
     //조건1. conditionTime이 현재시간보다 <=가 되어야함. 조건2. 안읽음 - 즐겨찾기 - 최신순 정렬
     @Query("SELECT m FROM AbstractMessage m " +
             "WHERE m.keyring.id = :keyringId " +
-            "  AND (m.conditionType <> 'TIMECAPSULE' OR m.conditionTime <= :now) " +
+            "  AND (m.conditionType <> 'RESERVATION' OR m.conditionTime <= :now) " +
             "ORDER BY m.opened ASC, m.favorite DESC, m.conditionTime DESC")
     Page<AbstractMessage> findByKeyringIdWithCondition(
             @Param("keyringId") Long keyringId,
@@ -27,4 +27,11 @@ public interface AbstractMessageRepository extends JpaRepository<AbstractMessage
 
     //조건1. conditionTime이 미래면 안됨 
     List<AbstractMessage> findByKeyringIdAndOpenedFalseAndConditionTimeLessThanEqualOrderByConditionTimeDesc(Long keyringId, LocalDateTime now);
+
+    @Query("select m from AbstractMessage m " +
+            "where m.keyring.id = :keyringId " +
+            "and ((m.conditionType = 'RESERVATION' and m.conditionTime <= :now) " +
+            "or (m.conditionType <> 'RESERVATION'))")
+    List<AbstractMessage> findByKeyringIdAndCondition(@Param("keyringId") Long keyringId,
+                                                      @Param("now") LocalDateTime now);
 }
