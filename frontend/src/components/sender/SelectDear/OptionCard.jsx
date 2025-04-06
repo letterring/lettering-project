@@ -90,7 +90,7 @@ import { ReactComponent as StarIcon } from '../../../assets/icons/ic_star.svg';
 const OptionCard = ({ keyring }) => {
   return (
     <>
-      <CardWrapper key={keyring.keyringId} isFavorite={keyring.favorite}>
+      <CardWrapper key={keyring.keyringId} $isFavorite={keyring.favorite}>
         <CardHeader>
           <FavoriteMark $isFavorite={keyring.favorite}>
             <StarIcon />
