@@ -57,10 +57,37 @@ const DeliveryType = () => {
   ];
 
   const postLetter = async (letterData) => {
-    const res = await sendLetter(letterData, letterImageList);
-    if (res.success) {
-      navigate(`/complete/letter`);
-    }
+    sendLetter(letterData, letterImageList)
+      .then(() => {
+        // 성공 처리
+      })
+      .catch((error) => {
+        console.error('편지 전송 실패:', error);
+        alert('편지 전송을 실패했어요.');
+      });
+
+    const firstImageURL =
+      letterImageList.length > 0 ? URL.createObjectURL(letterImageList[0].file) : null;
+
+    navigate(`/complete/letter`, { state: { firstImageURL } });
+  };
+
+  const postPostcard = async (postcardData) => {
+    sendPostcard({
+      postcardData,
+      imageFile: postcardImageFile,
+    })
+      .then(() => {
+        // 성공 처리
+      })
+      .catch((error) => {
+        console.error('엽서 전송 실패:', error);
+        alert('엽서 전송을 실패했어요.');
+      });
+
+    const firstImageURL = postcardImageFile ? URL.createObjectURL(postcardImageFile) : null;
+
+    navigate(`/complete/postcard`, { state: { firstImageURL } });
   };
 
   const handleSelect = async (type) => {
@@ -82,20 +109,9 @@ const DeliveryType = () => {
           content: postcardText,
         };
 
-        try {
-          await sendPostcard({
-            postcardData,
-            imageFile: postcardImageFile,
-          });
-
-          // alert('엽서가 전송되었습니다!');
-          navigate('/complete/postcard');
-        } catch (error) {
-          console.error('엽서 전송 실패:', error);
-          alert('엽서 전송에 실패했어요.');
-        }
+        postPostcard(postcardData);
       } else {
-        //편지지
+        //편지
         const letterData = {
           keyringId: selectedKeyringId,
           sealingWaxId: Number(sealingWaxId),
