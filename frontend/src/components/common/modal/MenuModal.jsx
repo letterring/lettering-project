@@ -27,7 +27,7 @@ const MenuModal = ({ isShowing, target }) => {
   const dearMenus = [
     { id: 'home', name: '시작 화면' },
     { id: 'mailbox', name: '받은 편지함' },
-    { id: 'logout', name: '키링 연결끊기' },
+    { id: 'terminate', name: '키링 연결끊기' },
   ];
 
   const menus = target === 'sender' ? senderMenus : dearMenus;
@@ -51,6 +51,8 @@ const MenuModal = ({ isShowing, target }) => {
     if (name === 'logout') {
       logout();
       navigate('/');
+    } else if (name === 'terminate') {
+      navigate('/dear/terminate');
     } else if (name === 'theme') {
       handleAuth();
     } else {

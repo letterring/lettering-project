@@ -21,3 +21,11 @@ export const getHighImage = async (messageId) => {
     return null;
   }
 };
+
+export const terminateKeyring = async () => {
+  try {
+    const { data } = await client.delete('/keyrings/delete');
+  } catch (error) {
+    console.error('키링 영구 삭제 실패', error);
+  }
+};
