@@ -72,10 +72,10 @@ pipeline {
         dir('frontend') {
           sh '''
             echo "🧹 dist, node_modules 정리"
-            rm -rf dist node_modules
+            rm -rf dist node_modules package-lock.json
 
             echo "📦 의존성 설치"
-            npm ci --no-optional || exit 1
+            npm install --legacy-peer-deps || exit 1
 
             echo "🏗️ Vite 빌드"
             npm run build || {
