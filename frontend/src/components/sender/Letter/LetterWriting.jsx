@@ -98,6 +98,7 @@ const LetterWriting = () => {
 
       if (result?.key) {
         setRedisMessageKey(result.key);
+        // console.log(result.key);
         const postcard = await getPostcard(result.key);
 
         navigate('/letter/preview', {
