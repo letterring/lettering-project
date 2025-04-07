@@ -66,8 +66,8 @@ pipeline {
         echo "🛠️ 프론트엔드 빌드 시작"
         dir('frontend') {
           sh '''
-            echo "🧹 dist 정리"
-            rm -rf dist
+            echo "🧹 dist, node_modules정리"
+            rm -rf dist node_modules
 
             echo "📦 의존성 설치"
             npm ci --no-optional || exit 1
