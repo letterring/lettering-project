@@ -7,6 +7,8 @@ import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 
 import { downloadPostcardImage } from '../../../apis/postcard';
+import CancelButton from '../button/CancelButton';
+import ConfirmButton from '../button/ConfirmButton';
 
 const PostcardPreviewModal = ({
   isShowing,
@@ -24,19 +26,13 @@ const PostcardPreviewModal = ({
 
   useEffect(() => {
     const loadImageBlob = async () => {
-      try {
-        setIsLoading(true);
-        const { data, headers } = await downloadPostcardImage(imageHighUrl);
-        const contentType = headers['content-type'] || 'image/jpeg';
-        const blob = new Blob([data], { type: contentType });
-        const url = URL.createObjectURL(blob);
-        setBlobUrl(url);
-      } catch (error) {
-        alert('고화질 이미지를 불러오지 못했습니다.');
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
+      setIsLoading(true);
+      const { data, headers } = await downloadPostcardImage(imageHighUrl);
+      const contentType = headers['content-type'] || 'image/jpeg';
+      const blob = new Blob([data], { type: contentType });
+      const url = URL.createObjectURL(blob);
+      setBlobUrl(url);
+      setIsLoading(false);
     };
 
     if (isShowing) {
@@ -101,8 +97,8 @@ const PostcardPreviewModal = ({
         </PreviewWrapper>
 
         <ButtonGroup>
-          <button onClick={handleSave}>이미지 저장</button>
-          <button onClick={onClose}>닫기</button>
+          <ConfirmButton btnName="다운로드" onClick={handleSave} />
+          <CancelButton btnName="닫기" onClick={onClose} />
         </ButtonGroup>
       </ModalContainer>
     </Backdrop>
@@ -114,7 +110,7 @@ export default PostcardPreviewModal;
 const Backdrop = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: ${({ theme }) => theme.colors.Gray4};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -122,11 +118,11 @@ const Backdrop = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.colors.White};
   padding: 2rem;
   border-radius: 12px;
   width: 90%;
-  max-width: 32rem;
+  max-width: 30rem;
 `;
 
 const PreviewWrapper = styled.div`
@@ -138,11 +134,9 @@ const PreviewWrapper = styled.div`
 `;
 
 const PostcardBox = styled.div`
-  width: 30rem;
-  height: 20rem;
-  border: 1px solid #ddd;
+  width: rem;
+  height: 23rem;
   position: relative;
-  background: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -150,22 +144,19 @@ const PostcardBox = styled.div`
 
 const LoadingMessage = styled.div`
   font-size: 1rem;
-  color: gray;
+  color: ${({ theme }) => theme.colors.Gray4};
 `;
 
 const PostcardImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 30rem;
+  height: 23rem;
   object-fit: cover;
 `;
 const StContentCard = styled.div`
   position: relative;
   width: 30rem;
   height: 23rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
   overflow: hidden;
-  background-color: white;
 `;
 
 const StPostcardBackground = styled.img`
@@ -180,43 +171,46 @@ const StPostcardBackground = styled.img`
 
 const StPostcardContent = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 3rem;
+  box-sizing: border-box;
   z-index: 2;
-  padding: 2rem;
 `;
 
 const StStamp = styled.img`
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  width: 8rem;
   z-index: 3;
+  position: absolute;
+  width: 10rem;
+  top: 1rem;
+  right: 2rem;
+  border-radius: 50%;
 `;
 
 const StPostcardTitle = styled.div`
   margin-bottom: 1rem;
-  #{({ theme, $font }) => theme.fonts[$font]};
+  ${({ theme, $font }) => theme.fonts[$font]};
+  color: ${({ theme }) => theme.colors.Gray2};
+  word-wrap: break-word;
+  max-height: 13rem;
+  overflow: auto;
+  white-space: normal;
 `;
 
 const StPostcardText = styled.div`
-  #{({ theme, $font }) => theme.fonts[$font]};
+  ${({ theme, $font }) => theme.fonts[$font]};
+  color: ${({ theme }) => theme.colors.Gray3};
+  word-wrap: break-word;
+  max-height: 13rem;
+  overflow: auto;
+  white-space: normal;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1.5rem;
-
-  button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    background-color: #6c63ff;
-    color: white;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #574fdd;
-    }
-  }
+  margin-top: 3rem;
 `;
