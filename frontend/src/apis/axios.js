@@ -25,8 +25,10 @@ client.interceptors.response.use(
       status === 401 &&
       currentPath !== '/login' &&
       currentPath !== '/signup' &&
-      currentPath !== '/'
+      currentPath !== '/' &&
+      currentPath !== '/dear'
     ) {
+      console.log('인증');
       window.location.href = '/login';
     }
 
