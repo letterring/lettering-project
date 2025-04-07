@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import KakaoLoginButtonImg from '../../../assets/images/kakao_login_button.png';
+import { IcKakaoLogo } from '../../../assets/icons';
+import LongButton from '../../common/button/LongButton';
 
 const KakaoLoginButton = () => {
   const handleKakaoLogin = () => {
@@ -12,23 +12,16 @@ const KakaoLoginButton = () => {
   };
 
   return (
-    <StBtnWrapper onClick={handleKakaoLogin}>
-      <img src={KakaoLoginButtonImg} alt="카카오 로그인 버튼" />
-    </StBtnWrapper>
+    <LongButton
+      btnName={
+        <>
+          <IcKakaoLogo style={{ marginRight: '1rem' }} /> 카카오 로그인
+        </>
+      }
+      onClick={handleKakaoLogin}
+      variant="kakao"
+    />
   );
 };
 
 export default KakaoLoginButton;
-
-const StBtnWrapper = styled.button`
-  width: 28rem;
-  height: 4rem;
-
-  border: none;
-  border-radius: 1rem;
-  box-sizing: border-box;
-
-  background-color: #fee500;
-  color: black;
-  font-weight: bold;
-`;

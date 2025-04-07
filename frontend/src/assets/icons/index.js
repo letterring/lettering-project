@@ -9,6 +9,7 @@ export { ReactComponent as IcBack } from './ic_back.svg';
 export { ReactComponent as IcDetail } from './ic_detail.svg';
 export { ReactComponent as IcImageUpload } from './ic_image_upload.svg';
 export { ReactComponent as IcImageUploadTrue } from './ic_image_upload_true.svg';
+export { ReactComponent as IcKakaoLogo } from './ic_kakaoLogo.svg';
 export { ReactComponent as IcLikesFalse } from './ic_likes_false.svg';
 export { ReactComponent as IcLikesTrue } from './ic_likes_true.svg';
 export { ReactComponent as IcLock2 } from './ic_lock.svg';

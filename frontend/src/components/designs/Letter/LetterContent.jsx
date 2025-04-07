@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import useToggle from '/src/hooks/common/useToggle';
 import { getFontStyle } from '/src/util/getFont';
 
+import { getHighImage } from '../../../apis/letter';
+import ImageModal from '../../common/modal/ImageModal';
 import ReplyComponent from '../ReplyComponent';
 import EndTemplate from './EndTemplate';
 import FilmTemplate from './FilmTemplate';
@@ -24,12 +27,31 @@ const LetterContent = ({
   isSender,
 }) => {
   const fontStyle = getFontStyle(font);
+  const [highImageUrls, setHighImageUrls] = useState([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const { toggle: isModalOpen, setToggle: setIsModalOpen } = useToggle(false);
+
+  const handleImageClick = async (index) => {
+    setSelectedImageIndex(index);
+
+    if (!highImageUrls[index]) {
+      const { imageHighUrl } = await getHighImage(messageId, index);
+
+      setHighImageUrls((prev) => {
+        const newUrls = [...prev];
+        newUrls[index] = imageHighUrl;
+        return newUrls;
+      });
+    }
+    setIsModalOpen(true);
+  };
+
   return (
     <StLetterWrapper $background={background}>
       <StContentWrapper>
         {template === 'main' && (
           <>
-            <MainTemplate images={images} />
+            <MainTemplate images={images} onImageClick={handleImageClick} />
             <StDearText $userFont={fontStyle}>{dearName} 에게</StDearText>
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
           </>
@@ -37,19 +59,19 @@ const LetterContent = ({
         {template === 'film' && (
           <>
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
-            <FilmTemplate images={images} />
+            <FilmTemplate images={images} onImageClick={handleImageClick} />
           </>
         )}
         {template === 'polar' && (
           <>
-            <PolarTemplate images={images} isActive={isActive} />
+            <PolarTemplate images={images} isActive={isActive} onImageClick={handleImageClick} />
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
           </>
         )}
         {template === 'card' && (
           <>
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
-            <GridTemplate images={images} />
+            <GridTemplate images={images} onImageClick={handleImageClick} />
             <StLetterText $userFont={fontStyle}>{text[1]}</StLetterText>
             <StSenderText $userFont={fontStyle}>{senderName} 로부터</StSenderText>
           </>
@@ -60,7 +82,7 @@ const LetterContent = ({
               {text[0]}
               <br /> {text[1]}
             </StLetterText>
-            <EndTemplate images={images} />
+            <EndTemplate images={images} onImageClick={handleImageClick} />
             <ReplyComponent
               messageId={messageId}
               replyText={replyText}
@@ -70,6 +92,14 @@ const LetterContent = ({
           </>
         )}
       </StContentWrapper>
+
+      {isModalOpen && selectedImageIndex !== null && highImageUrls[selectedImageIndex] && (
+        <ImageModal
+          isShowing={isModalOpen}
+          imageUrl={highImageUrls[selectedImageIndex]}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </StLetterWrapper>
   );
 };
