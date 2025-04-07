@@ -52,11 +52,13 @@ public class S3ImageUtil {
 
     // 고화질 이미지 업로드 (원본 그대로)
     public String uploadHighQualityImage(MultipartFile file, String folderName) throws IOException {
+        folderName = "test_images";
         return uploadImageWithImageQuality(file, folderName+"/high", ImageQuality.HIGH);
     }
 
     // 저화질 이미지 업로드 (압축/리사이징 적용)
     public String uploadLowQualityImage(MultipartFile file, String folderName) throws IOException {
+        folderName = "test_images";
         return uploadImageWithImageQuality(file, folderName+"/low", ImageQuality.LOW);
     }
 
