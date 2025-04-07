@@ -37,8 +37,8 @@ public class SecurityConfig {
                         .loginPage("/oauth2/authorization/kakao") // 🔹 `/login` 대신 명확하게 설정
                         .successHandler((request, response, authentication) -> {
                             log.info("✅ OAuth2 로그인 성공, 사용자: {}", authentication.getName());
-                            log.info("🔁 리디렉션 경로: {}", domainName + "home");
-                            response.sendRedirect(domainName + "home"); // React로 이동
+                            log.info("🔁 리디렉션 경로: {}", domainName + "/home");
+                            response.sendRedirect(domainName + "/home"); // React로 이동
                         })
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                 )
