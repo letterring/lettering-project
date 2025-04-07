@@ -9,6 +9,7 @@ import { getFontStyle } from '/src/util/getFont';
 import { IcImageUpload, IcImageUploadTrue } from '../../../assets/icons';
 import PostcardImg from '../../../assets/images/postcard/postcard.png';
 import { PostcardImage, PostcardImageFile, PostcardText } from '../../../recoil/atom';
+import { convertHeicToJpeg } from '../../../util/convertHeicToJpeg';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 
@@ -49,15 +50,15 @@ const PostcardWriting = () => {
 
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      //5MB
-      alert('5MB가 넘습니다!');
+    if (file.size > 4 * 1024 * 1024) {
+      //4MB
+      alert('4MB가 넘습니다!');
       event.target.type = '';
       event.target.type = 'file';
       return;
     }
 
-    if (file.name.endsWith('.heic') || file.name.endsWith('.heif')) {
+    if (file.name.endsWith('.heic') || file.name.endsWith('.HEIC')) {
       //heic 이미지 처리
       const newFile = await convertHeicToJpeg(file);
       if (newFile) {

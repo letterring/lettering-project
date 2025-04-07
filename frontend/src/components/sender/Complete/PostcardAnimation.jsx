@@ -1,17 +1,18 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import DummyImg from '../../../assets/dummy/postcard.jpg';
 import EnvelopeBottomImg from '../../../assets/images/postcard/bottom_fold.png';
 import EnvelopeBodyImg from '../../../assets/images/postcard/envelope_body.png';
 import SealingWaxImg from '../../../assets/images/postcard/envelope_wax.png';
 import PostcardImg from '../../../assets/images/postcard/postcard_paper.png';
 import EnvelopeTopPartImg from '../../../assets/images/postcard/top_fold_part.png';
-
 const PostcardAnimation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const firstImageURL = location.state?.firstImageURL;
   const [isClosed, setIsClosed] = useState(false);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
@@ -34,18 +35,16 @@ const PostcardAnimation = () => {
           transition={{ duration: 2 }}
         />
         <StPostcardImage
-          src={DummyImg}
+          src={firstImageURL}
           alt="엽서사진"
           initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
           animate={{ x, y, opacity: 1, rotate: -3.7 }}
           transition={{ duration: 2 }}
           onAnimationComplete={() => {
+            setIsClosed(true);
             setTimeout(() => {
-              setIsClosed(true);
-              setTimeout(() => {
-                navigate('/complete');
-              }, 5000);
-            }, 500);
+              navigate('/complete');
+            }, 4400);
           }}
         />
         <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />

@@ -6,7 +6,7 @@ import DummyImg from '/src/assets/dummy/letter.jpg';
 import LetteringImg from '/src/assets/images/letter/lettering.png';
 import StampImg from '/src/assets/images/letter/vintage_stamp.png';
 
-const MainTemplate = ({ images, dearName }) => {
+const MainTemplate = ({ images, onImageClick }) => {
   const pathRef = useRef(null);
 
   useEffect(() => {
@@ -26,7 +26,11 @@ const MainTemplate = ({ images, dearName }) => {
 
   return (
     <StWrapper>
-      <StLetterImage src={images?.imageLowUrl} alt="편지 사진" />
+      <StLetterImage
+        src={images?.imageLowUrl}
+        alt="편지 사진"
+        onClick={() => onImageClick(images?.index)}
+      />
       <StStampImage src={StampImg} alt="스탬프" />
       {/* <StTextImage src={LetteringImg} alt="레터링" />
        */}

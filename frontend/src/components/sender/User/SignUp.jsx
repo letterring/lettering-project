@@ -1,13 +1,13 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { signup } from '../../../apis/user';
+import LongButton from '../../common/button/LongButton';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
-import SubmitButton from './SubmitButton';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ const SignUp = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -60,9 +61,27 @@ const SignUp = () => {
     navigate('/login');
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await getUserData();
+
+        if (data) {
+          navigate('/home');
+        }
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (isLoading) return null;
+
   return (
     <StSignUpWrapper>
-      Lettering
+      <LogoText>Lettering</LogoText>
       <ContentWrapper>
         <KakaoLoginButton />
         <Divider text="또는" />
@@ -105,7 +124,7 @@ const SignUp = () => {
             required
           />
 
-          <SubmitButton btnName="회원가입" type="submit" />
+          <LongButton btnName="회원가입" type="submit" />
         </Form>
       </ContentWrapper>
     </StSignUpWrapper>
@@ -118,38 +137,27 @@ const StSignUpWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
-  padding: 6rem 2rem;
+  padding: 5rem 2rem;
+`;
 
-  color: ${({ theme }) => theme.colors.MainRed};
+const LogoText = styled.h1`
   ${({ theme }) => theme.fonts.TitleLogo};
+  color: ${({ theme }) => theme.colors.MainRed};
+  margin-bottom: 4rem;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-
-  padding-top: 6rem;
-  box-sizing: border-box;
-
+  gap: 2.5rem;
   width: 100%;
-  height: 100%;
-  gap: 3rem;
+  max-width: 28rem;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 1.2rem;
   width: 100%;
-  gap: 1rem;
-`;
-
-const ErrorText = styled.p`
-  color: ${({ theme }) => theme.colors.Red1};
-  ${({ theme }) => theme.fonts.Body2};
-  margin-top: -1rem;
-  text-align: center;
 `;

@@ -52,6 +52,8 @@ const StHeaderWrapper = styled.button`
 
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.MenuLogo};
+
+  z-index: 10;
 `;
 
 const StMenuModalWrapper = styled.div`

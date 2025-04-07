@@ -25,6 +25,7 @@ const AuthInput = ({
           required={required}
           disabled={disabled}
           {...props}
+          $hasIcon={!!icon}
         />
         {icon && (
           <Icon onClick={onIconClick}>
@@ -40,31 +41,36 @@ const AuthInput = ({
 export default AuthInput;
 
 const StInputWrapper = styled.div`
-  width: 28rem;
+  width: 100%;
 `;
 
 const InputBox = styled.div`
+  position: relative;
   display: flex;
-  justify-content: space-around;
   align-items: center;
-
-  width: 100%;
-  height: 4rem;
   box-sizing: border-box;
-
+  width: 100%;
+  height: 5rem;
   border-radius: 1rem;
+  border: 1px solid ${({ theme }) => theme.colors.Gray5};
   background-color: ${({ theme }) => theme.colors.White};
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
-  height: 90%;
-  padding: 1rem 2rem;
+  flex: 1;
+  display: absolute;
   border: none;
   outline: none;
   background-color: transparent;
 
-  ${({ theme }) => theme.fonts.Body1}
+  ${({ theme }) => theme.fonts.Body1};
+
+  padding-left: 1.6rem;
+  padding-right: ${({ $hasIcon }) => ($hasIcon ? '3.6rem' : '1.6rem')};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.Gray4};
+  }
 
   &:disabled {
     cursor: not-allowed;
@@ -72,15 +78,17 @@ const StyledInput = styled.input`
 `;
 
 const ErrorText = styled.span`
-  color: ${({ theme }) => theme.colors.Red2};
-  ${({ theme }) => theme.fonts.Body1}
-  font-size: 1.4rem;
+  display: block;
   margin-top: 0.5rem;
+  color: ${({ theme }) => theme.colors.Red2};
+  ${({ theme }) => theme.fonts.Body2};
 `;
 
 const Icon = styled.div`
   cursor: pointer;
-  padding: 1rem 2rem;
-  font-size: 1.5rem;
+  position: absolute;
+  right: 1.6rem;
+  font-size: 1.6rem;
   color: ${({ theme }) => theme.colors.Gray2};
+  flex-shrink: 0;
 `;

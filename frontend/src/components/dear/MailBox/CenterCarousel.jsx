@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { getDearMessages } from '../../../apis/mailbox';
+import { getDearMessages, setFavorites } from '../../../apis/mailbox';
 import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/icons';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
 import Closed1 from '../../../assets/images/mailbox/closed3.png';
@@ -104,6 +104,18 @@ const SlideComponent = () => {
     return 'flex-end';
   };
 
+  const handleToggleFavorite = async (event, idx, id) => {
+    event.stopPropagation();
+
+    setMessages((prevMessages) =>
+      prevMessages.map((msg, messageIndex) =>
+        idx === messageIndex ? { ...msg, favorite: !msg.favorite } : msg,
+      ),
+    );
+
+    await setFavorites(id);
+  };
+
   useEffect(() => {
     if (!initialLoaded) {
       getDearMailbox(0);
@@ -144,10 +156,13 @@ const SlideComponent = () => {
         }
 
         return (
-          <StyledSlide key={idx} $hidden={!isVisible} onClick={() => handleClick(idx)}>
+          <StyledSlide key={idx} $hidden={!isVisible}>
             <SlideContent $align={getAlignType(idx, activeIndex)}>
               <ImageWrapper>
                 <img
+                  onClick={() => {
+                    handleClick(idx);
+                  }}
                   // className={!isPast && isCenter ? 'blurred' : ''}
                   src={
                     isCenter && isOpened && isPast
@@ -171,7 +186,19 @@ const SlideComponent = () => {
               <Details>
                 <StyledIcon>
                   <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
-                  {isPast ? favorite ? <IcLikesTrue /> : <IcLikesFalse /> : <IcLock2 />}
+                  {isPast ? (
+                    favorite ? (
+                      <button onClick={(event) => handleToggleFavorite(event, idx, id)}>
+                        <IcLikesTrue />
+                      </button>
+                    ) : (
+                      <button onClick={(event) => handleToggleFavorite(event, idx, id)}>
+                        <IcLikesFalse />
+                      </button>
+                    )
+                  ) : (
+                    <IcLock2 />
+                  )}
                 </StyledIcon>
                 {isPast && isOpened && isCenter && (
                   <DetailButton>
@@ -312,6 +339,10 @@ const StyledIcon = styled.div`
 
   svg {
     width: 2rem;
+  }
+
+  button {
+    z-index: 10;
   }
 `;
 

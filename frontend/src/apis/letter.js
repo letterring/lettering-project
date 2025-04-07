@@ -55,3 +55,17 @@ export const sendLetter = async (textList, imageFileList) => {
     throw new Error('편지 전송 실패');
   }
 };
+
+export const getHighImage = async (messageId, index) => {
+  try {
+    const { data } = await client.get(`/messages/highimage`, {
+      params: {
+        messageId,
+        index,
+      },
+    });
+    return data;
+  } catch (err) {
+    console.error('고화질 이미지 조회에 실패했습니다.', err);
+  }
+};
