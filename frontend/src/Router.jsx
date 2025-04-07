@@ -4,6 +4,8 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
 import ScrollToTop from './components/common/ScrollToTop';
+import DearCongratsLetterDetailPage from './pages/dear/CongratsLetterDetailPage';
+import DearCongratsLetterPage from './pages/dear/CongratsLetterPage';
 import DearHomePage from './pages/dear/Homepage';
 import DearLandingPage from './pages/dear/LandingPage';
 import DearLetterDetailPage from './pages/dear/LetterDetailPage';
@@ -20,6 +22,8 @@ import CompleteLetterPage from './pages/sender/CompleteLetterPage';
 import CompleteOrderPage from './pages/sender/CompleteOrderPage';
 import CompletePage from './pages/sender/CompletePage';
 import CompletePostcardPage from './pages/sender/CompletePostcardPage';
+import CongratsLetterDetailPage from './pages/sender/CongratsLetterDetailPage';
+import CongratsLetterPreviewPage from './pages/sender/CongratsLetterPreviewPage';
 import CustomizePage from './pages/sender/CustomizePage';
 import DeliveryTypePage from './pages/sender/DeliveryTypePage';
 import DescribeKeyringPage from './pages/sender/DescribeKeyringPage';
@@ -72,6 +76,12 @@ const Router = () => {
               <Route path="/letter/preview" element={<LetterPreviewPage />} />
               <Route path="/letter/detail/:messageId" element={<LetterDetailPage />} />
 
+              <Route path="/letter/preview/congrats" element={<CongratsLetterPreviewPage />} />
+              <Route
+                path="/letter/detail/congrats/:messageId"
+                element={<CongratsLetterDetailPage />}
+              />
+
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />
 
@@ -92,6 +102,11 @@ const Router = () => {
               <Route path="/dear/postcard/detail/:messageId" element={<DearPostDetailPage />} />
               <Route path="/dear/letter/:messageId" element={<DearLetterPage />} />
               <Route path="/dear/letter/detail/:messageId" element={<DearLetterDetailPage />} />
+              <Route path="/dear/letter/congrats/:messageId" element={<DearCongratsLetterPage />} />
+              <Route
+                path="/dear/letter/congrats/detail/:messageId"
+                element={<DearCongratsLetterDetailPage />}
+              />
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
               <Route path="/openapp" element={<OpenAppPage />} />
 
