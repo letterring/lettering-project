@@ -10,6 +10,7 @@ import com.example.lettering.exception.type.ExternalApiException;
 import com.example.lettering.util.enums.ImageQuality;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Component
@@ -52,14 +54,24 @@ public class S3ImageUtil {
 
     // 고화질 이미지 업로드 (원본 그대로)
     public String uploadHighQualityImage(MultipartFile file, String folderName) throws IOException {
-        folderName = "test_images";
         return uploadImageWithImageQuality(file, folderName+"/high", ImageQuality.HIGH);
     }
 
     // 저화질 이미지 업로드 (압축/리사이징 적용)
     public String uploadLowQualityImage(MultipartFile file, String folderName) throws IOException {
-        folderName = "test_images";
         return uploadImageWithImageQuality(file, folderName+"/low", ImageQuality.LOW);
+    }
+
+    // 고화질 이미지 비동기 처리
+    @Async
+    public CompletableFuture<String> uploadHighQualityImageAsync(MultipartFile file, String folderName) throws IOException {
+        return CompletableFuture.completedFuture(uploadHighQualityImage(file, folderName));
+    }
+
+    // 저화질 이미지 비동기 처리
+    @Async
+    public CompletableFuture<String> uploadLowQualityImageAsync(MultipartFile file, String folderName) throws IOException {
+        return CompletableFuture.completedFuture(uploadLowQualityImage(file, folderName));
     }
 
     private String uploadImageWithImageQuality(MultipartFile file, String folderName, ImageQuality imageQuality) throws IOException {
