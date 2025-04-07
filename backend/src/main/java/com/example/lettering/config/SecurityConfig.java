@@ -5,6 +5,7 @@ import com.example.lettering.domain.user.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -34,6 +36,8 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/kakao") // 🔹 `/login` 대신 명확하게 설정
                         .successHandler((request, response, authentication) -> {
+                            log.info("✅ OAuth2 로그인 성공, 사용자: {}", authentication.getName());
+                            log.info("🔁 리디렉션 경로: {}", domainName + "home");
                             response.sendRedirect(domainName + "home"); // React로 이동
                         })
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
