@@ -36,3 +36,13 @@ export const getDearMessages = async (page, keyringId) => {
     console.error('받은 편지함 목록 조회 실패:', error);
   }
 };
+
+//받은 편지함에서 즐겨찾기 조회
+export const setFavorites = async (messageId) => {
+  try {
+    const { data } = await client.patch(`/messages/favorite/${messageId}`);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
