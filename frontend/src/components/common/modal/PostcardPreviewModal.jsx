@@ -7,6 +7,10 @@ import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 
 import { downloadPostcardImage } from '../../../apis/postcard';
+import FrontEnvelop from '../../../assets/images/postcard/bottom_fold.png'; // 편지 봉투 앞부분
+import LeftPaper from '../../../assets/images/postcard/postcard_paper.png'; // 왼쪽 편지지
+import RightPaper from '../../../assets/images/postcard/postcard_paper2.png'; // 오른쪽 편지지
+import BackEnvelop from '../../../assets/images/postcard/top_fold.png'; // 편지 봉투 뒷부분
 import CancelButton from '../button/CancelButton';
 import ConfirmButton from '../button/ConfirmButton';
 
@@ -76,22 +80,21 @@ const PostcardPreviewModal = ({
     <Backdrop>
       <ModalContainer ref={modalRef}>
         <PreviewWrapper ref={captureRef}>
-          <StImageBox>
-            {isLoading ? (
-              <LoadingMessage>이미지를 불러오는 중입니다...</LoadingMessage>
-            ) : (
-              <PostcardImage src={blobUrl} alt="엽서 이미지" />
-            )}
-          </StImageBox>
+          <LeftSection>
+            <LeftPaperImg src={LeftPaper} alt="left paper" />
+            <BackImg src={BackEnvelop} alt="back" />
+            <FrontImg src={FrontEnvelop} alt="front" />
+          </LeftSection>
 
-          <StContentCard>
-            <StPostcardBackground src={PostcardImg} alt="엽서 배경" />
-            <StStamp src={StampImg} alt="우표" />
-            <StPostcardContent>
-              <StPostcardTitle $font={font}>사랑하는 {nfcName || '너'}에게,</StPostcardTitle>
-              <StPostcardText $font={font}>{content}</StPostcardText>
-            </StPostcardContent>
-          </StContentCard>
+          <RightSection>
+            <LeftPaperWrapper>
+              <RightPaperImg src={RightPaper} alt="right paper" />
+              <TextWrapper>
+                <h3>사랑하는 {nfcName || '너'}에게,</h3>
+                <p>{content}</p>
+              </TextWrapper>
+            </LeftPaperWrapper>
+          </RightSection>
         </PreviewWrapper>
 
         <ButtonGroup>
@@ -126,102 +129,75 @@ const ModalContainer = styled.div`
 // 캡쳐
 const PreviewWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: auto;
-`;
-
-// 이미지 박스(테두리)
-const StImageBox = styled.div`
-  width: 30rem;
-  height: 23rem;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: solid ${({ theme }) => theme.colors.Gray5};
-`;
-
-// 이미지 로딩중
-const LoadingMessage = styled.div`
-  width: 30rem;
-  height: 20rem;
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.Gray4};
-`;
-
-// 사진
-const PostcardImage = styled.img`
-  width: 30rem;
-  object-fit: cover;
-`;
-
-// 엽서 박스
-const StContentCard = styled.div`
+  gap: 2rem;
+  padding: 2rem;
   position: relative;
-  width: 30.8rem;
-  height: 23rem;
-  overflow: hidden;
-  box-sizing: border-box;
-  margin: 0;
 `;
 
-// 엽서 배경(테두리)
-const StPostcardBackground = styled.img`
+const LeftSection = styled.div`
+  position: relative;
+  width: 30rem;
+  height: 10rem;
+  border: solid black;
+`;
+
+const BackImg = styled.img`
   position: absolute;
-  bottom: 0;
-  left: 0;
+  width: 100%;
+  z-index: 1;
+`;
+
+const RightPaperImg = styled.img`
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+`;
+
+const FrontImg = styled.img`
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+`;
+
+const RightSection = styled.div`
+  position: relative;
+  width: 30rem;
+  height: 10rem;
+  border: solid black;
+`;
+
+const LeftPaperWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+const LeftPaperImg = styled.img`
+  position: absolute;
   width: 100%;
   height: 100%;
   z-index: 1;
   object-fit: cover;
 `;
 
-// 엽서 내용
-const StPostcardContent = styled.div`
+const TextWrapper = styled.div`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 3rem;
-  box-sizing: border-box;
-  z-index: 3;
-  width: 28rem;
-  height: 21rem;
-`;
+  padding: 2rem;
+  z-index: 2;
 
-// 스템프
-const StStamp = styled.img`
-  position: absolute;
-  width: 10rem;
-  top: 1rem;
-  right: 2rem;
-  border-radius: 50%;
-  z-index: 3;
-`;
+  h3 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
 
-// 사랑하는 너에게
-const StPostcardTitle = styled.div`
-  margin-bottom: 1rem;
-  ${({ theme, $font }) => theme.fonts[$font]};
-  color: ${({ theme }) => theme.colors.Gray2};
-  word-wrap: break-word;
-  max-height: 13rem;
-  overflow: auto;
-  white-space: normal;
-`;
-
-// 엽서 내용
-const StPostcardText = styled.div`
-  ${({ theme, $font }) => theme.fonts[$font]};
-  color: ${({ theme }) => theme.colors.Gray3};
-  word-wrap: break-word;
-  max-height: 13rem;
-  overflow: auto;
-  white-space: normal;
+  p {
+    font-size: 1rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+  }
 `;
 
 const ButtonGroup = styled.div`
