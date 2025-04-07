@@ -30,7 +30,7 @@ export const getPostcard = async (key) => {
 
 export const updateRedisMessage = async (key, newMessage) => {
   try {
-    const response = await AiClient.post(`/submit/${key}/update`, { message: newMessage });
+    const response = await AiClient.post(`/submit/update?key=${key}`, { message: newMessage });
     return response.data;
   } catch (error) {
     console.error('Redis 메시지 업데이트 실패:', error);

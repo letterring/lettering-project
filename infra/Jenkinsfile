@@ -75,6 +75,7 @@ pipeline {
             rm -rf dist node_modules package-lock.json
 
             echo "📦 의존성 설치"
+            export PATH=/usr/local/lib/nodejs/node-v22.13.1/bin:$PATH
             npm install --legacy-peer-deps || exit 1
 
             echo "🏗️ Vite 빌드"
