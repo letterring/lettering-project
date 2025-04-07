@@ -6,18 +6,19 @@ import styled from 'styled-components';
 
 import { getUserInfo, updateNickname } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
+import BirdImg from '../../../assets/images/bird_coin.png';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/atom';
 import { getFontName, getFontStyle } from '../../../util/getFont';
+import LongButtom from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import KeyringList from './Keyring/KeyringList';
 import NickNameSetting from './NickNameSetting';
 
 const MyProfile = () => {
+  const navigate = useNavigate();
   const [nickname, setNickname] = useRecoilState(UserNickname);
   const [font, setFont] = useRecoilState(UserFont);
   const [keyringList, setKeyringList] = useRecoilState(UserKeyringList);
-
-  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
   const fontStyle = getFontStyle(font);
@@ -48,6 +49,20 @@ const MyProfile = () => {
     navigate('keyring');
   };
 
+  const BuyKeyringCard = () => {
+    return (
+      <StBuyCard>
+        <h2>아직 키링이 없어요! </h2>
+        <StImageWrapper src={BirdImg} />
+        <LongButtom btnName="키링 사러가기" onClick={handleGoBuyKeyring} />
+      </StBuyCard>
+    );
+  };
+
+  const handleGoBuyKeyring = () => {
+    navigate('/purchase');
+  };
+
   return (
     <>
       <StWrapper>
@@ -65,14 +80,36 @@ const MyProfile = () => {
           <Title>폰트</Title>
           <FontPreviewBox $fontKey={fontStyle}>
             {fontName}
-            <IcArrowRight style={{ cursor: 'pointer' }} onClick={handleChangeFont} />
+            <IcArrowRight
+              style={{
+                position: 'absolute',
+                right: '2rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+              }}
+              onClick={handleChangeFont}
+            />
           </FontPreviewBox>
           <br />
           <Title>
             키링
-            <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
+            <IcSetting
+              style={{
+                position: 'absolute',
+                right: '2rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+              }}
+              onClick={handleKeyringSetting}
+            />
           </Title>
-          <KeyringList keyringList={keyringList} />
+          {keyringList && keyringList.length > 0 ? (
+            <KeyringList keyringList={keyringList} />
+          ) : (
+            <BuyKeyringCard />
+          )}
         </StMyWrapper>
       </StWrapper>
     </>
@@ -97,6 +134,7 @@ const StMyWrapper = styled.div`
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.Title2};
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,6 +149,7 @@ const FontPreviewBox = styled.div`
   color: ${({ theme }) => theme.colors.Gray3};
   ${({ theme, $fontKey }) => theme.fonts[$fontKey]};
   background-color: ${({ theme }) => theme.colors.White};
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -120,4 +159,30 @@ const FontPreviewBox = styled.div`
   padding: 1rem 3rem 0.75rem 3rem;
   border-radius: 1rem;
   box-sizing: border-box;
+`;
+
+const StBuyCard = styled.div`
+  width: 90%;
+  height: 40rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  h2 {
+    color: ${({ theme }) => theme.colors.MainRed};
+    ${({ theme }) => theme.fonts.Title2};
+  }
+
+  p {
+    color: ${({ theme }) => theme.colors.Gray2};
+    ${({ theme }) => theme.fonts.Title5};
+  }
+`;
+
+const StImageWrapper = styled.img`
+  width: 20rem;
+  padding: 2rem;
 `;
