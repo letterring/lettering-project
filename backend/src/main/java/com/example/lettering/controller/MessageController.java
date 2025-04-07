@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,6 +141,17 @@ public class MessageController {
             throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
         }
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
+    }
+
+    @Operation(summary = "받은 편지 읽음/안읽음 개수 조회",
+            description = "요청 파라미터 keyringId에 해당하는 메시지 중, ConditionType이 RESERVATION이고 conditionTime이 현재 이후인 예약된 편지를 제외한 후, opened 상태에 따라 읽은 편지와 안읽은 편지의 개수를 반환합니다.")
+    @GetMapping("/dear/readcount")
+    public ResponseEntity<MessageReadCountResponse> getMessageReadCount(@RequestParam("keyringId") Long keyringId) {
+        if(keyringId == null) {
+            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(MessageReadCountResponse.of(messageService.getMessageReadCount(keyringId, LocalDateTime.now())));
     }
 
     @Operation(summary = "받은 사람 기준 엽서 상세 조회", description = "path variable로 전달된 messageId에 해당하는 엽서 상세 정보를 반환합니다.")

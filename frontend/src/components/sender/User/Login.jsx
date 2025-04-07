@@ -1,5 +1,5 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,6 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -28,8 +29,26 @@ const Login = () => {
     if (!data) return;
 
     alert(`로그인 성공! 환영합니다, ${data.userNickname}님!`);
-    navigate('/Home');
+    navigate('/home');
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await getUserData();
+
+        if (data) {
+          navigate('/home');
+        }
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (isLoading) return null;
 
   return (
     <StLoginWrapper>
