@@ -55,9 +55,6 @@ const ReplyComponent = ({ messageId, replyText, dearName, isSender }) => {
 export default ReplyComponent;
 
 const StReplyWrapper = styled.div`
-  position: relative;
-  bottom: 0;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,7 +62,8 @@ const StReplyWrapper = styled.div`
 `;
 
 const StReplyHeader = styled.div`
-  width: 100%;
+  width: 25rem;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: row;
