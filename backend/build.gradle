@@ -60,6 +60,8 @@ dependencies {
 
     // image modify
     implementation 'net.coobird:thumbnailator:0.4.8'
+    implementation 'com.drewnoakes:metadata-extractor:2.18.0'
+    implementation 'org.imgscalr:imgscalr-lib:4.2'
 }
 
 tasks.named('test') {
