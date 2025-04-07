@@ -62,14 +62,43 @@ const DeliveryType = () => {
   ];
 
   const postLetter = async (letterData) => {
-    const res = await sendLetter(letterData, letterImageList);
-    if (res.success) {
-      navigate(`/complete/letter`);
-    }
+    sendLetter(letterData, letterImageList)
+      .then(() => {
+        // 성공 처리
+      })
+      .catch((error) => {
+        console.error('편지 전송 실패:', error);
+        alert('편지 전송을 실패했어요.');
+      });
+
+    const firstImageURL =
+      letterImageList.length > 0 ? URL.createObjectURL(letterImageList[0].file) : null;
+
+    navigate(`/complete/letter`, { state: { firstImageURL } });
+  };
+
+  const postPostcard = async (postcardData) => {
+    sendPostcard({
+      postcardData,
+      imageFile: postcardImageFile,
+    })
+      .then(() => {
+        // 성공 처리
+      })
+      .catch((error) => {
+        console.error('엽서 전송 실패:', error);
+        alert('엽서 전송을 실패했어요.');
+      });
+
+    const firstImageURL = postcardImageFile ? URL.createObjectURL(postcardImageFile) : null;
+
+    navigate(`/complete/postcard`, { state: { firstImageURL } });
   };
 
   // ✅ 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
   const handleSend = async ({ conditionType, scheduledAt = null }) => {
+    console.log('선택된 전송 방식:', type);
+
     const sealingWaxId = localStorage.getItem('sealingWaxId');
     if (!sealingWaxId) {
       alert('실링왁스 ID가 없습니다.');
@@ -77,37 +106,27 @@ const DeliveryType = () => {
     }
 
     if (sealingWaxId == 1) {
-        //엽서
-        const postcardData = {
-          keyringId: selectedKeyringId,
-          sealingWaxId: Number(sealingWaxId),
-          conditionType,
-          scheduledAt,
-          content: postcardText,
-        };
+      //엽서
+      const postcardData = {
+        keyringId: selectedKeyringId,
+        sealingWaxId: Number(sealingWaxId),
+        conditionType,
+        scheduledAt,
+        content: postcardText,
+      };
 
-        try {
-          await sendPostcard({
-            postcardData,
-            imageFile: postcardImageFile,
-          });
+      postPostcard(postcardData);
+    } else {
+      //편지
+      const letterData = {
+        keyringId: selectedKeyringId,
+        sealingWaxId: Number(sealingWaxId),
+        conditionType,
+        contents: letterTextList,
+      };
 
-          navigate('/complete/postcard');
-        } catch (error) {
-          console.error('엽서 전송 실패:', error);
-          alert('엽서 전송에 실패했어요.');
-        }
-      } else {
-        //편지지
-        const letterData = {
-          keyringId: selectedKeyringId,
-          sealingWaxId: Number(sealingWaxId),
-          conditionType,
-          contents: letterTextList,
-        };
-
-        postLetter(letterData);
-      }
+      postLetter(letterData);
+    }
   };
 
   // ✅ 카드 클릭 시 처리
@@ -117,7 +136,7 @@ const DeliveryType = () => {
     } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE') {
       setSelectedModalType(type);
     } else if (type === 'SECRETTYPE') {
-      alert('해당 전송 방식은 준비 중입니다.');      
+      alert('해당 전송 방식은 준비 중입니다.');
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
     }

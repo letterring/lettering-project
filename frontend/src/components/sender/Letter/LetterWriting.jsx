@@ -8,6 +8,7 @@ import { getUserFont } from '/src/apis/user';
 import { getFontStyle } from '/src/util/getFont';
 
 import { LetterImageList, LetterText, RedisMessageKey } from '../../../recoil/atom';
+import { convertHeicToJpeg } from '../../../util/convertHeicToJpeg';
 import Header from '../../common/Header';
 
 const LetterWriting = () => {
@@ -37,15 +38,38 @@ const LetterWriting = () => {
     setLetterContent(e.target.value);
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
 
-    const newImages = files.map((file) => ({
-      file,
-      url: URL.createObjectURL(file),
-    }));
+    const imagesProcessed = await Promise.all(
+      files.map(async (file) => {
+        // 이미지 크기 검사
+        if (file.size > 4 * 1024 * 1024) {
+          // 4MB 제한
+          alert('4MB를 초과하는 파일입니다: ' + file.name);
+          return null;
+        }
 
-    const totalImages = [...ImageList, ...newImages].slice(0, 10);
+        // HEIC 형식 변환
+        if (file.name.endsWith('.heic') || file.name.endsWith('.HEIC')) {
+          const convertedFile = await convertHeicToJpeg(file);
+          return {
+            file: convertedFile,
+            url: URL.createObjectURL(convertedFile),
+          };
+        }
+        return {
+          file,
+          url: URL.createObjectURL(file),
+        };
+      }),
+    );
+
+    // null 값을 제거하고 유효한 이미지만 상태에 저장
+    const validImages = imagesProcessed.filter((image) => image !== null);
+
+    // 최대 10개의 이미지만 저장
+    const totalImages = [...ImageList, ...validImages].slice(0, 10);
     setImageList(totalImages);
   };
 
@@ -151,7 +175,7 @@ const LetterWriting = () => {
                 +
                 <ImageInput
                   type="file"
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/heic"
                   multiple
                   ref={fileInputRef}
                   onChange={handleImageUpload}
