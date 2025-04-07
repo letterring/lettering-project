@@ -9,25 +9,25 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { getDearMessages, setFavorites } from '../../../apis/mailbox';
 import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/icons';
+import Closed3 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
 import Closed1 from '../../../assets/images/mailbox/closed3.png';
-import Closed3 from '../../../assets/images/mailbox/closed3.png';
+import Opened3 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
-import Opened3 from '../../../assets/images/mailbox/opened3.png';
 import { getRelativeFormat } from '../../../util/getRelativeDate';
 import RealTimer from './RealTimer';
 
 const closedImages = {
-  1: Closed3,
+  1: Closed1,
   2: Closed2,
-  3: Closed1,
+  3: Closed3,
 };
 
 const openedImages = {
-  1: Opened3,
+  1: Opened1,
   2: Opened2,
-  3: Opened1,
+  3: Opened3,
 };
 
 const SlideComponent = () => {
@@ -89,11 +89,13 @@ const SlideComponent = () => {
     setActiveIndex(newIndex);
   };
 
-  const handleOpenMsg = (type, messageId) => {
-    if (type === 'POSTCARD') {
+  const handleOpenMsg = (sealingWaxId, messageId) => {
+    if (sealingWaxId === 1) {
       navigate(`/dear/postcard/detail/${messageId}`);
-    } else {
+    } else if (sealingWaxId === 2) {
       navigate(`/dear/letter/detail/${messageId}`);
+    } else if (sealingWaxId === 3) {
+      navigate(`/dear/letter/congrats/detail/${messageId}`);
     }
   };
 
@@ -202,7 +204,7 @@ const SlideComponent = () => {
                 </StyledIcon>
                 {isPast && isOpened && isCenter && (
                   <DetailButton>
-                    <IcDetail onClick={() => handleOpenMsg(designType, id)} />
+                    <IcDetail onClick={() => handleOpenMsg(sealingWaxId, id)} />
                   </DetailButton>
                 )}
               </Details>

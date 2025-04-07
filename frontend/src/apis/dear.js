@@ -29,3 +29,13 @@ export const terminateKeyring = async () => {
     console.error('키링 영구 삭제 실패', error);
   }
 };
+
+//키링 커스텀 메세지 조회
+export const getCustomMessage = async () => {
+  try {
+    const { data } = await client.get('/keyrings/custom-message');
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
