@@ -12,7 +12,6 @@ import { getFontStyle } from '/src/util/getFont';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
-import ReplyComponent from './ReplyComponent';
 
 const PostcardDetail = () => {
   const { messageId } = useParams();
@@ -88,7 +87,6 @@ const PostcardDetail = () => {
           content={content}
           font={userFont}
         />
-        <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
 
         <ReplyComponent
           messageId={messageId}
@@ -96,6 +94,7 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
+        <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
       </StWrapper>
     </StPageWrapper>
   );

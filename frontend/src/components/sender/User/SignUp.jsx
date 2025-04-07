@@ -5,13 +5,24 @@ import styled from 'styled-components';
 
 import { signup } from '../../../apis/user';
 import LongButton from '../../common/button/LongButton';
+import SuccessBirdImg from '../../../assets/images/bird_hi.png';
+import FailBirdImg from '../../../assets/images/bird_sorry.svg';
+import AlertModal from '../../common/modal/AlertModal';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
 
 const SignUp = () => {
   const navigate = useNavigate();
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [alertState, setAlertState] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    image: null,
+    onClose: null,
+  });
   const [user, setUser] = useState({
     email: '',
     userNickname: '',
@@ -19,9 +30,15 @@ const SignUp = () => {
     confirmPassword: '',
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const showAlert = ({ title, message, onClose, image }) => {
+    setAlertState({
+      isOpen: true,
+      title,
+      message,
+      image,
+      onClose: onClose || (() => setAlertState((prev) => ({ ...prev, isOpen: false }))),
+    });
+  };
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -39,45 +56,40 @@ const SignUp = () => {
     e.preventDefault();
 
     if (user.password !== user.confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
+      showAlert({
+        title: '비밀번호 불일치',
+        message: '비밀번호가 일치하지 않습니다.',
+        image: FailBirdImg,
+      });
       return;
     }
 
-    const data = await signup({
-      email: user.email,
-      userNickname: user.userNickname,
-      password: user.password,
-    });
+    try {
+      const data = await signup({
+        email: user.email,
+        userNickname: user.userNickname,
+        password: user.password,
+      });
 
-    if (!data) return;
+      setUser({ email: '', userNickname: '', password: '', confirmPassword: '' });
 
-    setUser({
-      email: '',
-      userNickname: '',
-      password: '',
-      confirmPassword: '',
-    });
-    alert('회원가입이 완료되었습니다!');
-    navigate('/login');
+      showAlert({
+        title: '회원가입 완료',
+        message: '로그인 진행해주세요',
+        image: SuccessBirdImg,
+        onClose: () => {
+          setAlertState((prev) => ({ ...prev, isOpen: false }));
+          navigate('/login');
+        },
+      });
+    } catch (err) {
+      showAlert({
+        title: '회원가입 실패',
+        message: err.message,
+        image: FailBirdImg,
+      });
+    }
   };
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await getUserData();
-
-        if (data) {
-          navigate('/home');
-        }
-      } catch (error) {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  if (isLoading) return null;
 
   return (
     <StSignUpWrapper>
@@ -127,6 +139,17 @@ const SignUp = () => {
           <LongButton btnName="회원가입" type="submit" />
         </Form>
       </ContentWrapper>
+      <LoginText>
+        이미 회원이신가요? <LoginLink onClick={() => navigate('/login')}>로그인</LoginLink>
+      </LoginText>
+      <AlertModal
+        isOpen={alertState.isOpen}
+        onClose={alertState.onClose}
+        title={alertState.title}
+        imgSrc={alertState.image}
+      >
+        {alertState.message}
+      </AlertModal>
     </StSignUpWrapper>
   );
 };
@@ -160,4 +183,20 @@ const Form = styled.form`
   flex-direction: column;
   gap: 1.2rem;
   width: 100%;
+  gap: 1rem;
+`;
+
+const LoginText = styled.p`
+  text-align: center;
+  margin-top: 16px;
+  color: ${({ theme }) => theme.colors.Gray2};
+  ${({ theme }) => theme.fonts.Body2}
+`;
+
+const LoginLink = styled.span`
+  color: ${({ theme }) => theme.colors.Red1};
+  ${({ theme }) => theme.fonts.Body1}
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
 `;
