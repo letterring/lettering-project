@@ -67,6 +67,8 @@ const OnBoading = () => {
 
         if (data) {
           navigate('/home');
+        } else {
+          setIsLoading(false);
         }
       } catch (error) {
         setIsLoading(false);
