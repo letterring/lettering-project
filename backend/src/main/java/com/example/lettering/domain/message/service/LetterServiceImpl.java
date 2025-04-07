@@ -24,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ import java.util.List;
 public class LetterServiceImpl implements LetterService {
 
     private final LetterRepository letterRepository;
-    private final UserRepository userRepository; // sender 조회시 사용
+    private final UserRepository userRepository;
     private final S3ImageUtil s3ImageUtil;
     private final KeyringRepository keyringRepository;
     private final SealingWaxRepository sealingWaxRepository;
@@ -63,11 +65,29 @@ public class LetterServiceImpl implements LetterService {
         }
 
         List<LetterImage> images = new ArrayList<>();
-        int orderIndex = 0;
+        List<CompletableFuture<String>> highFutures = new ArrayList<>();
+        List<CompletableFuture<String>> lowFutures = new ArrayList<>();
+
         for (MultipartFile imageFile : imageFiles) {
-            String imageHighUrl = s3ImageUtil.uploadHighQualityImage(imageFile, "letter_images");
-            String imageLowUrl = s3ImageUtil.uploadLowQualityImage(imageFile, "letter_images");
-            images.add(LetterImage.fromImageUrl(imageHighUrl, imageLowUrl, orderIndex++));
+            highFutures.add(s3ImageUtil.uploadHighQualityImageAsync(imageFile, "letter_images"));
+            lowFutures.add(s3ImageUtil.uploadLowQualityImageAsync(imageFile, "letter_images"));
+        }
+
+        CompletableFuture.allOf(highFutures.toArray(new CompletableFuture[0])).join();
+        CompletableFuture.allOf(lowFutures.toArray(new CompletableFuture[0])).join();
+
+        for (int i = 0; i < imageFiles.size(); i++) {
+            try {
+                String highUrl = highFutures.get(i).get();
+                String lowUrl = lowFutures.get(i).get();
+                images.add(LetterImage.fromImageUrl(highUrl, lowUrl, i));
+
+            } catch (ExecutionException e) {
+                throw new BusinessException(ExceptionCode.S3_UPLOAD_ERROR);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new BusinessException(ExceptionCode.S3_UPLOAD_ERROR);
+            }
         }
 
         Letter letter = Letter.fromDto(createLetterRequest, sender, keyring, sealingWax, sender.getFont(), contents, images);
