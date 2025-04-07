@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -39,7 +40,7 @@ const DeliveryType = () => {
       icon: IconLetter,
       title: '일반 편지',
       description: '바로 전송됩니다!',
-      value: 'NORMAL',
+      value: 'NONE',
     },
     {
       icon: IconTimer,
@@ -57,7 +58,7 @@ const DeliveryType = () => {
       icon: IconCalendar,
       title: '예약 편지',
       description: '예약된 날짜 및 시간에 발송합니다!',
-      value: 'SCHEDULED',
+      value: 'RESERVATION',
     },
   ];
 
@@ -95,9 +96,8 @@ const DeliveryType = () => {
     navigate(`/complete/postcard`, { state: { firstImageURL } });
   };
 
-  // ✅ 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
-  const handleSend = async ({ conditionType, scheduledAt = null }) => {
-    console.log('선택된 전송 방식:', type);
+  // 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
+  const handleSend = async ({ conditionType, scheduledAt = null, secret = {} }) => {
 
     const sealingWaxId = localStorage.getItem('sealingWaxId');
     if (!sealingWaxId) {
@@ -111,8 +111,11 @@ const DeliveryType = () => {
         keyringId: selectedKeyringId,
         sealingWaxId: Number(sealingWaxId),
         conditionType,
-        scheduledAt,
+        conditionTime: scheduledAt ? format(scheduledAt, "yyyy-MM-dd'T'HH:mm:ss") : null,
         content: postcardText,
+        quizQuestion: secret.question,
+        quizHint: secret.hint,
+        quizAnswer: secret.answer,
       };
 
       postPostcard(postcardData);
@@ -129,14 +132,12 @@ const DeliveryType = () => {
     }
   };
 
-  // ✅ 카드 클릭 시 처리
+  // 카드 클릭 시 처리
   const handleSelect = (type) => {
-    if (type === 'NORMAL') {
+    if (type === 'NONE') {
       handleSend({ conditionType: 'NONE' });
-    } else if (type === 'SCHEDULED' || type === 'TIMECAPSULE') {
+    } else if (type === 'RESERVATION' || type === 'TIMECAPSULE' || type === 'SECRETTYPE') {
       setSelectedModalType(type);
-    } else if (type === 'SECRETTYPE') {
-      alert('해당 전송 방식은 준비 중입니다.');
     } else {
       alert('해당 전송 방식은 준비 중입니다.');
     }
@@ -162,12 +163,12 @@ const DeliveryType = () => {
       </CardList>
 
       {/* ✅ 예약 편지 모달 렌더링 */}
-      {selectedModalType === 'SCHEDULED' && (
+      {selectedModalType === 'RESERVATION' && (
         <ScheduledOption
           onClose={() => setSelectedModalType(null)}
           onConfirm={(datetime) =>
             handleSend({
-              conditionType: 'SCHEDULED',
+              conditionType: 'RESERVATION',
               scheduledAt: datetime,
             })
           }

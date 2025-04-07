@@ -31,7 +31,7 @@ export default function SecretConfirm({ question, hint, answer, onBack, onConfir
 
       <ButtonWrapper>
         <CancelButton btnName="이전" onClick={onBack} />
-        <ConfirmButton btnName="완료" onClick={onConfirm} />
+        <ConfirmButton btnName="전송하기" onClick={onConfirm} />
       </ButtonWrapper>
     </ConfirmModal>
   );
@@ -54,27 +54,29 @@ const ModalDesc = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  margin-top: 2rem;
+  // margin-top: 2rem;
 `;
 
 const Label = styled.div`
-  ${({ theme }) => theme.fonts.SubHead2};
-  color: ${({ theme }) => theme.colors.MainRed};
+  font-size: 3 rem;
+  ${({ theme }) => theme.fonts.Saeum3};
+  color: ${({ theme }) => theme.colors.Gray2};
   margin-bottom: 0.4rem;
 `;
 
 const GrayBox = styled.div`
-  background-color: ${({ theme }) => theme.colors.Gray4};
+  background-color: ${({ theme }) => theme.colors.Gray7};
   padding: 1.2rem;
+  padding-left: 1rem;
   border-radius: 999px;
   text-align: center;
   margin-bottom: 1.6rem;
-  ${({ theme }) => theme.fonts.body2};
+  ${({ theme }) => theme.fonts.Saeum3};
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
-  gap: 1.6rem;
-  margin-top: 2.4rem;
+  gap: 3rem;
+  margin-top: 2rem;
 `;

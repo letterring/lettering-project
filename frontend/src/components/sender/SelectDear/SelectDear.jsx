@@ -69,8 +69,8 @@ const SelectDear = () => {
 
       {/* 버튼 영역 */}
       <FixedButtonWrapper>
-        <LongButton btnName="전송 옵션 선택" onClick={handleSelectOption} opacity={false} />
-        <LongButton btnName="즉시 전송" onClick={handleImmediateSend} opacity={false} />
+        <LongButton btnName="다음" onClick={handleSelectOption} opacity={false} />
+        {/* <LongButton btnName="즉시 전송" onClick={handleImmediateSend} opacity={false} /> */}
       </FixedButtonWrapper>
     </Wrapper>
   );
