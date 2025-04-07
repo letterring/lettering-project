@@ -109,6 +109,9 @@ const ModalTitle = styled.div`
 const ModalDesc = styled.div`
   ${({ theme }) => theme.fonts.body2};
   color: ${({ theme }) => theme.colors.Gray2};
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
 `;
 
 const ModalButtons = styled.div`
@@ -116,4 +119,5 @@ const ModalButtons = styled.div`
   justify-content: center;
   gap: 1.6rem;
   margin-top: 2rem;
+  margin-bottom: 1rem;
 `;
