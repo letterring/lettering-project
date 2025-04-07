@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query
 from fastapi.responses import JSONResponse
 from typing import List
 from uuid import uuid4
@@ -73,6 +73,22 @@ async def update_message(key: str, update: MessageUpdate):
 
     await redis.set(key, json.dumps(data))
     return {"status": "updated"}
+
+@router.post("/submit/update")
+async def update_message(
+    update: MessageUpdate,  # ✅ 바디 먼저
+    key: str = Query(..., description="Redis에 저장된 엽서의 고유 key")  # ✅ 쿼리 뒤에
+):
+    existing = await redis.get(key)
+    if not existing:
+        return JSONResponse(status_code=404, content={"error": "해당 key를 찾을 수 없습니다."})
+
+    data = json.loads(existing)
+    data["message"] = update.message
+
+    await redis.set(key, json.dumps(data))
+    return {"status": "updated"}
+
 
 
 @router.delete(
