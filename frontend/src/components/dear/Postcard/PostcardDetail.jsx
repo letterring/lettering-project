@@ -9,6 +9,7 @@ import StampImg from '/src/assets/images/postcard/stamp.png';
 import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
+import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 import ReplyComponent from './ReplyComponent';
@@ -20,7 +21,6 @@ const PostcardDetail = () => {
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
   const [postcard, setPostcard] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [highImageUrl, setHighImageUrl] = useState('');
   const [userFont, setUserFont] = useState('GOMSIN1');
@@ -37,21 +37,15 @@ const PostcardDetail = () => {
 
   useEffect(() => {
     const fetchPostcard = async () => {
-      try {
-        const data = await getPostcardDetail(messageId);
-        setPostcard(data);
-        setUserFont(getFontStyle(data.font));
-      } catch (error) {
-        console.error('엽서 데이터 가져오기 실패', error);
-      } finally {
-        setIsLoading(false);
-      }
+      const data = await getPostcardDetail(messageId);
+      setPostcard(data);
+      setUserFont(getFontStyle(data.font));
     };
 
     fetchPostcard();
   }, [messageId]);
 
-  if (isLoading || !postcard) return <div>엽서를 불러오는 중입니다...</div>;
+  if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
 
   const { imageUrl, content, nfcName, replyText } = postcard;
 
@@ -65,36 +59,26 @@ const PostcardDetail = () => {
     <StPageWrapper>
       <Header headerName="Lettering" />
       <StWrapper>
-        {isLoading ? (
-          <div>엽서를 불러오는 중입니다...</div>
-        ) : (
-          <StFlipContainer onClick={handleInformMsg}>
-            <StInform $isShow={isShow}>엽서를 눌러 편지 내용을 확인해보세요.</StInform>
-            <StFlipCard $flipped={flipped}>
-              <StCardFace className="front">
-                <StPostcardWhite />
-                <StPostcardImage>
-                  <img src={imageUrl} alt="엽서사진" />
-                </StPostcardImage>
-              </StCardFace>
-              <StCardFace className="back">
-                <StPostcard src={PostcardImg} alt="엽서" />
-                <StPostcardContent>
-                  <StPostcardStamp src={StampImg} alt="우표" />
-                  <StPostcardTitle $font={userFont}>
-                    사랑하는 {nfcName || '너'}에게,
-                  </StPostcardTitle>
-                  <StPostcardText $font={userFont}>{content}</StPostcardText>
-                </StPostcardContent>
-              </StCardFace>
-            </StFlipCard>
-          </StFlipContainer>
-        )}
-
+        <StFlipContainer onClick={handleInformMsg}>
+          <StInform $isShow={isShow}>엽서를 눌러 편지 내용을 확인해보세요.</StInform>
+          <StFlipCard $flipped={flipped}>
+            <StCardFace className="front">
+              <StPostcardWhite />
+              <StPostcardImage>
+                <img src={imageUrl} alt="엽서사진" />
+              </StPostcardImage>
+            </StCardFace>
+            <StCardFace className="back">
+              <StPostcard src={PostcardImg} alt="엽서" />
+              <StPostcardContent>
+                <StPostcardStamp src={StampImg} alt="우표" />
+                <StPostcardTitle $font={userFont}>사랑하는 {nfcName || '너'}에게,</StPostcardTitle>
+                <StPostcardText $font={userFont}>{content}</StPostcardText>
+              </StPostcardContent>
+            </StCardFace>
+          </StFlipCard>
+        </StFlipContainer>
         <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
-
-        <SimpleButton onClick={handleOpenPreviewModal}>고화질 이미지 다운로드</SimpleButton>
-
         <PostcardPreviewModal
           isShowing={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
@@ -104,6 +88,7 @@ const PostcardDetail = () => {
           content={content}
           font={userFont}
         />
+        <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
 
         <ReplyComponent
           messageId={messageId}
