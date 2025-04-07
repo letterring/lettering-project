@@ -25,7 +25,7 @@ const ReplyComponent = ({ messageId, replyText, dearName, isSender }) => {
   return (
     <StReplyWrapper>
       <StReplyHeader>
-        <StReplyTitle>{dearName} 의 답장</StReplyTitle>
+        <StReplyTitle>{isSender ? `${dearName} 의 답장` : '나의 답장'}</StReplyTitle>
         {isEditable && !isSent && (
           <StButton onClick={handleSendClick} disabled={reply.length === 0}>
             <IcSend width={22} height={21} />
@@ -45,7 +45,7 @@ const ReplyComponent = ({ messageId, replyText, dearName, isSender }) => {
             <StCharacterCount>{reply.length} / 50</StCharacterCount>
           </>
         ) : (
-          <StSentReply>{reply}</StSentReply>
+          <StReplyText>{reply}</StReplyText>
         )}
       </StReplyBox>
     </StReplyWrapper>
@@ -60,15 +60,12 @@ const StReplyWrapper = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 25rem;
 `;
 
 const StReplyHeader = styled.div`
-  width: 25rem;
-  box-sizing: border-box;
-  margin: 0rem;
+  width: 100%;
 
   display: flex;
   flex-direction: row;
@@ -88,9 +85,14 @@ const StReplyBox = styled.div`
   align-items: center;
 `;
 
-const StReplyTitle = styled.div`
+const StReplyText = styled.p`
+  ${({ theme }) => theme.fonts.Saeum6};
+  text-align: center;
   width: 100%;
+  padding: 1rem;
+`;
 
+const StReplyTitle = styled.div`
   ${({ theme }) => theme.fonts.EduTitle1};
   color: ${({ theme }) => theme.colors.MainRed};
 `;
@@ -133,14 +135,6 @@ const StButton = styled.button`
   &:disabled {
     cursor: not-allowed;
   }
-`;
-
-const StSentReply = styled.p`
-  ${({ theme }) => theme.fonts.Saeum6};
-  text-align: center;
-
-  width: 100%;
-  padding: 1rem;
 `;
 
 const StCharacterCount = styled.div`

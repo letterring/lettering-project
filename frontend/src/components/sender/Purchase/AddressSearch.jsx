@@ -35,7 +35,7 @@ const AddressSearch = ({ setZipcode, setAddress }) => {
 
   return (
     <ZipCodeButton onClick={openPostcode} type="button">
-      우편번호검색
+      주소검색
     </ZipCodeButton>
   );
 };
@@ -43,10 +43,10 @@ const AddressSearch = ({ setZipcode, setAddress }) => {
 export default AddressSearch;
 
 const ZipCodeButton = styled.button`
-  position: absolute;
-  right: 0;
+  /* position: absolute;
+  right: 0; */
 
-  width: 10rem;
+  width: 8rem;
   height: 3.5rem;
   border-radius: 0.625rem;
 

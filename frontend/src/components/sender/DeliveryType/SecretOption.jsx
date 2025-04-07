@@ -5,16 +5,15 @@ import CancelButton from '../../common/button/CancelButton';
 import ConfirmButton from '../../common/button/ConfirmButton';
 import ConfirmModal from '../../common/modal/ConfirmModal';
 import SecretConfirm from './SecretConfirm';
-
 const stepTitles = {
   1: '질문 작성',
-  2: '힌트 작성',
+  2: '힌트 및 정답 작성',
   3: '확인하기',
 };
 
 const stepDescriptions = {
-  1: '질문을 작성해주세요.\n정답을 맞혀야 편지를 열 수 있어요.',
-  2: '힌트를 작성해주세요.\n정답이 맞으면 편지를 열 수 있어요.',
+  1: '질문을 작성해주세요.',
+  2: '힌트와 정답을 작성해주세요.',
   3: '입력한 내용이 올바른지 확인해주세요!',
 };
 
@@ -23,6 +22,12 @@ export default function SecretOption({ onClose, onConfirm }) {
   const [question, setQuestion] = useState('');
   const [hint, setHint] = useState('');
   const [answer, setAnswer] = useState('');
+  const [toastMsg, setToastMsg] = useState('');
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(''), 2000);
+  };
 
   const handleConfirm = () => {
     if (!question || !answer) {
@@ -48,7 +53,7 @@ export default function SecretOption({ onClose, onConfirm }) {
       {step === 1 && (
         <InputBox>
           <Input
-            placeholder="내가 지금 제일 먹고 싶은 간식은?"
+            placeholder="ex. 제일 좋아하는 간식은?"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
@@ -56,18 +61,25 @@ export default function SecretOption({ onClose, onConfirm }) {
       )}
 
       {step === 2 && (
-        <InputBox>
-          <Input
-            placeholder="힌트를 입력해주세요 (선택)"
-            value={hint}
-            onChange={(e) => setHint(e.target.value)}
-          />
-          <Input
-            placeholder="정답을 입력해주세요"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-        </InputBox>
+        <>
+          <QuestionPreview>
+            <Label>Q.</Label>
+            <QuestionBox>{question}</QuestionBox>
+          </QuestionPreview>
+
+          <InputBox>
+            <Input
+              placeholder="힌트를 입력해주세요 (선택)"
+              value={hint}
+              onChange={(e) => setHint(e.target.value)}
+            />
+            <Input
+              placeholder="정답을 입력해주세요"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+            />
+          </InputBox>
+        </>
       )}
 
       {step === 3 && (
@@ -84,7 +96,21 @@ export default function SecretOption({ onClose, onConfirm }) {
       {step < 3 && (
         <ModalButtons>
           {step > 1 && <CancelButton onClick={() => setStep(step - 1)} btnName="이전" />}
-          <ConfirmButton onClick={() => setStep(step + 1)} btnName="다음" />
+          <ConfirmButton
+            onClick={() => {
+              if (step === 1 && !question.trim()) {
+                showToast('질문을 입력해주세요!');
+                return;
+              }
+              if (step === 2 && !answer.trim()) {
+                showToast('정답을 입력해주세요!');
+                return;
+              }
+              setStep(step + 1);
+            }}
+            btnName="다음"
+          />
+          {toastMsg && <Toast>{toastMsg}</Toast>}
         </ModalButtons>
       )}
     </ConfirmModal>
@@ -93,7 +119,7 @@ export default function SecretOption({ onClose, onConfirm }) {
 
 // styled-components
 const HeaderBox = styled.div`
-  padding: 0 2rem;
+  /* padding: 0 2rem; */
 `;
 
 const ModalTitle = styled.div`
@@ -114,13 +140,15 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  margin-top: 2rem;
+  // margin-top: 2rem;
 `;
 
 const Input = styled.input`
   padding: 1.2rem;
+  padding-right: 2rem;
+  padding-left: 2rem;
   border-radius: 2rem;
-  background-color: ${({ theme }) => theme.colors.Gray5};
+  background-color: ${({ theme }) => theme.colors.Gray7};
   border: none;
   ${({ theme }) => theme.fonts.body2};
   color: ${({ theme }) => theme.colors.Gray2};
@@ -129,6 +157,38 @@ const Input = styled.input`
 const ModalButtons = styled.div`
   display: flex;
   justify-content: center;
-  gap: 1.6rem;
-  margin-top: 2.4rem;
+  gap: 2rem;
+  margin-top: 2rem;
+`;
+const QuestionPreview = styled.div`
+  // margin-top: 2rem;
+`;
+
+const QuestionBox = styled.div`
+  padding: 1.2rem;
+  border-radius: 1.2rem;
+  ${({ theme }) => theme.fonts.Saeum3};
+  color: ${({ theme }) => theme.colors.MainRed};
+  margin-bottom: 1rem;
+`;
+
+const Label = styled.div`
+  font-size: 3rem;
+  ${({ theme }) => theme.fonts.Saeum3};
+  color: ${({ theme }) => theme.colors.Gray5};
+`;
+
+const Toast = styled.div`
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${({ theme }) => theme.colors.MainRed};
+  font-size: 1rem;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 1.2rem;
+  ${({ theme }) => theme.fonts.body2};
+  z-index: 1000;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
 `;

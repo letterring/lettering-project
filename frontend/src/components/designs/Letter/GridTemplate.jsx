@@ -2,13 +2,17 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const GridTemplate = ({ images }) => {
+const GridTemplate = ({ images, onImageClick }) => {
   return (
     <StWrapper>
       <StGrid>
-        {images.map((src, idx) => (
+        {images.map((img, idx) => (
           <StPhotoWrapper key={idx}>
-            <StPhoto src={src?.imageLowUrl} alt={`photo-${idx}`} />
+            <StPhoto
+              src={img?.imageLowUrl}
+              alt={`photo-${idx}`}
+              onClick={() => onImageClick(img.index)}
+            />
           </StPhotoWrapper>
         ))}
       </StGrid>

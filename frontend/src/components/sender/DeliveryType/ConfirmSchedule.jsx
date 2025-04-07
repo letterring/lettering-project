@@ -31,20 +31,6 @@ const ConfirmSchedule = ({
   const formattedTime = `${String(selectedHour).padStart(2, '0')}시 ${String(selectedMinute).padStart(2, '0')}분`;
 
   return (
-    // <ConfirmModal isOpen={true} onClose={onClose}>
-    //   <Wrapper>
-    //     <Title>예약 확인</Title>
-    //     <Description>예약 일정을 확인하고 완료 버튼을 눌러주세요.</Description>
-    //     <HighlightText>
-    //       {formattedDate} {formattedTime}
-    //     </HighlightText>
-
-    //     <ButtonGroup>
-    //       <CancelButton btnName="이전" onClick={onBack} />
-    //       <ConfirmButton btnName="완료" onClick={onConfirm} />
-    //     </ButtonGroup>
-    //   </Wrapper>
-    // </ConfirmModal>
     <ConfirmModal
       isOpen={true}
       onClose={onClose}

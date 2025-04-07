@@ -1,6 +1,7 @@
 package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.response.dear.DearMessageSummaryResponse;
+import com.example.lettering.controller.response.dear.MessageReadCountResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
 import com.example.lettering.controller.response.dear.UnreadMessageResponse;
 import com.example.lettering.domain.message.entity.AbstractMessage;
@@ -57,6 +58,16 @@ public class MessageServiceImpl implements MessageService {
         return messagePage.stream()
                 .map(DearMessageSummaryResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public MessageReadCountResponse getMessageReadCount(Long keyringId, LocalDateTime now) {
+        List<AbstractMessage> messages = abstractMessageRepository.findByKeyringIdAndCondition(keyringId, now);
+
+        long readCount = messages.stream().filter(AbstractMessage::getOpened).count();
+        long unreadCount = messages.size() - readCount;
+
+        return new MessageReadCountResponse(readCount, unreadCount);
     }
 
     @Override

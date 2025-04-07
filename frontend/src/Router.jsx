@@ -15,6 +15,7 @@ import DearNoTagPage from './pages/dear/NoTagPage';
 import OpenAppPage from './pages/dear/OpenAppPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
+import TerminatePage from './pages/dear/TerminatePage';
 import ErrorPage from './pages/ErrorPage';
 import ApprovePaymentPage from './pages/sender/ApprovePaymentPage';
 import CheckoutPage from './pages/sender/CheckoutPage';
@@ -109,6 +110,7 @@ const Router = () => {
               />
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
               <Route path="/openapp" element={<OpenAppPage />} />
+              <Route path="/dear/terminate" element={<TerminatePage />} />
 
               {/* common */}
               <Route path="*" element={<ErrorPage />} />
