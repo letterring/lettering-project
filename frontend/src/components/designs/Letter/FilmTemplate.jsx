@@ -3,7 +3,7 @@ import styled, { css, keyframes } from 'styled-components';
 
 import FilmImg from '/src/assets/images/letter/film.png';
 
-const FilmTemplate = ({ images }) => {
+const FilmTemplate = ({ images, onImageClick }) => {
   const [animate, setAnimate] = useState(true);
   const sliderRef = useRef(null);
 
@@ -32,12 +32,23 @@ const FilmTemplate = ({ images }) => {
             <StImageSlider>
               <StSlide $animate={animate}>
                 {images.map((src, idx) => (
-                  <StPhoto key={`orig-${idx}`} src={src.imageLowUrl} alt={`film-${idx}`} />
+                  <StPhoto
+                    key={`orig-${idx}`}
+                    src={src.imageLowUrl}
+                    alt={`film-${idx}`}
+                    onClick={() => onImageClick(src.index)}
+                  />
                 ))}
               </StSlide>
+
               <StSlide $animate={animate} $clone>
                 {images.map((src, idx) => (
-                  <StPhoto key={`orig-${idx}`} src={src.imageLowUrl} alt={`film-${idx}`} />
+                  <StPhoto
+                    key={`clone-${idx}`}
+                    src={src.imageLowUrl}
+                    alt={`film-${idx}`}
+                    onClick={() => onImageClick(src.index)}
+                  />
                 ))}
               </StSlide>
             </StImageSlider>
