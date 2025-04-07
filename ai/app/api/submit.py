@@ -62,18 +62,6 @@ async def get_entry(key: str):
 class MessageUpdate(BaseModel):
     message: str
 
-@router.post("/submit/{key}/update")
-async def update_message(key: str, update: MessageUpdate):
-    existing = await redis.get(key)
-    if not existing:
-        return JSONResponse(status_code=404, content={"error": "해당 key를 찾을 수 없습니다."})
-
-    data = json.loads(existing)
-    data["message"] = update.message
-
-    await redis.set(key, json.dumps(data))
-    return {"status": "updated"}
-
 @router.post("/submit/update")
 async def update_message(
     update: MessageUpdate,  # ✅ 바디 먼저
