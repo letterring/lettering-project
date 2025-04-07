@@ -9,12 +9,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { getSenderMessages } from '../../../apis/mailbox';
 import { IcDetail } from '../../../assets/icons';
+import Closed3 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
 import Closed1 from '../../../assets/images/mailbox/closed3.png';
-import Closed3 from '../../../assets/images/mailbox/closed3.png';
+import Opened3 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
-import Opened3 from '../../../assets/images/mailbox/opened3.png';
 import { getRelativeFormat } from '../../../util/getRelativeDate';
 
 const images = {
@@ -96,11 +96,13 @@ const CenterCarousel = ({ selected }) => {
     return 'flex-end';
   };
 
-  const handleOpenMsg = (type, messageId) => {
-    if (type === 'POSTCARD') {
+  const handleOpenMsg = (sealingWaxId, messageId) => {
+    if (sealingWaxId === 1) {
       navigate(`/postcard/detail/${messageId}`);
-    } else {
+    } else if (sealingWaxId === 2) {
       navigate(`/letter/detail/${messageId}`);
+    } else if (sealingWaxId === 3) {
+      navigate(`/letter/detail/congrats/${messageId}`);
     }
   };
 
@@ -151,7 +153,7 @@ const CenterCarousel = ({ selected }) => {
                   <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
                   {isOpened && isCenter && (
                     <DetailButton>
-                      <IcDetail onClick={() => handleOpenMsg(designType, id)} />
+                      <IcDetail onClick={() => handleOpenMsg(sealingWaxId, id)} />
                     </DetailButton>
                   )}
                 </Details>

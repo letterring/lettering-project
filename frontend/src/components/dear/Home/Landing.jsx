@@ -5,13 +5,15 @@ import styled from 'styled-components';
 import { getUnreadMessage } from '/src/apis/dear';
 import { getHighImage } from '/src/apis/dear';
 
+import { getCustomMessage } from '../../../apis/dear';
 import OBJViewer from './OBJViewer';
 
 const Landing = () => {
   const navigate = useNavigate();
   const [newLetter, setNewLetter] = useState(false);
   const [messageInfo, setMessageInfo] = useState(null);
-  // const [text, setText] = useState('');
+  const [text, setText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용)
 
   useEffect(() => {
@@ -23,8 +25,15 @@ const Landing = () => {
       }
     };
 
+    fetchCustomMessage();
     fetchUnreadMessage();
   }, []);
+
+  const fetchCustomMessage = async () => {
+    const data = await getCustomMessage();
+    setText(data.customMessage ?? '새로운 메세지가 도착했어요!');
+    isLoading(false);
+  };
 
   const handleNewLetterClick = () => {
     if (!messageInfo) return;
@@ -60,6 +69,8 @@ const Landing = () => {
     navigate('/dear/home');
   };
 
+  if (isLoading) return null;
+
   return (
     <StHomeWrapper>
       <div>
@@ -70,7 +81,7 @@ const Landing = () => {
           envelopeMtlPath="/models/envelope.mtl"
           newLetter={newLetter}
           onMissedClick={newLetter ? handleNewLetterClick : handleMissedClick}
-          text="새로운 메세지가 도착했어요!"
+          text={text}
         />
       </div>
     </StHomeWrapper>
