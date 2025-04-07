@@ -7,7 +7,7 @@ import { submitKeyringCustomization } from '../../../apis/purchase';
 import { KeyringCustomList, TotalQuantity } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
-import BirdImage from './../../../assets/images/bird_question.svg';
+import BirdImage from './../../../assets/images/bird_question.png';
 import CustomCardList from './CustomCardList';
 
 const Customize = () => {
@@ -26,7 +26,7 @@ const Customize = () => {
 
   return (
     <StCustomizeWrapper>
-      <Header headerName="키링커스텀설정" />
+      <Header headerName="키링 커스텀 설정" />
       <StContentWrapper>
         <TitleText>주문이 거의 완료되었어요</TitleText>
         <SubTitle>상대에게 전해줄 키링 정보를 설정해주세요</SubTitle>
@@ -51,9 +51,13 @@ const StContentWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   box-sizing: border-box;
-  margin: 7rem 3rem;
-  padding-top: 3rem;
+  margin: 0rem 3rem;
+  padding-top: 10rem;
   gap: 1rem;
+
+  img {
+    width: 60%;
+  }
 `;
 
 const TitleText = styled.div`

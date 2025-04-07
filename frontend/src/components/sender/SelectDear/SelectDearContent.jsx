@@ -3,16 +3,14 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import React, { useEffect } from 'react';
 import Slider from 'react-slick';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { PostcardImageFile, PostcardText, SelectedKeyringId } from '../../../recoil/atom';
+import { SelectedKeyringId } from '../../../recoil/atom';
 import OptionCard from './OptionCard';
 
 const SelectDearContent = ({ keyringArr }) => {
   const setSelectedKeyringId = useSetRecoilState(SelectedKeyringId);
-  const postcardImageFile = useRecoilValue(PostcardImageFile);
-  const postcardText = useRecoilValue(PostcardText);
 
   useEffect(() => {
     if (keyringArr.length > 0) {
