@@ -5,7 +5,6 @@ import CancelButton from '../../common/button/CancelButton';
 import ConfirmButton from '../../common/button/ConfirmButton';
 import ConfirmModal from '../../common/modal/ConfirmModal';
 import SecretConfirm from './SecretConfirm';
-
 const stepTitles = {
   1: '질문 작성',
   2: '힌트 및 정답 작성',
@@ -23,6 +22,12 @@ export default function SecretOption({ onClose, onConfirm }) {
   const [question, setQuestion] = useState('');
   const [hint, setHint] = useState('');
   const [answer, setAnswer] = useState('');
+  const [toastMsg, setToastMsg] = useState('');
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(''), 2000);
+  };
 
   const handleConfirm = () => {
     if (!question || !answer) {
@@ -57,23 +62,23 @@ export default function SecretOption({ onClose, onConfirm }) {
 
       {step === 2 && (
         <>
-         <QuestionPreview>
-          <Label>Q.</Label>
-          <QuestionBox>{question}</QuestionBox>
-        </QuestionPreview>
+          <QuestionPreview>
+            <Label>Q.</Label>
+            <QuestionBox>{question}</QuestionBox>
+          </QuestionPreview>
 
-        <InputBox>
-          <Input
-            placeholder="힌트를 입력해주세요 (선택)"
-            value={hint}
-            onChange={(e) => setHint(e.target.value)}
-          />
-          <Input
-            placeholder="정답을 입력해주세요"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-        </InputBox>
+          <InputBox>
+            <Input
+              placeholder="힌트를 입력해주세요 (선택)"
+              value={hint}
+              onChange={(e) => setHint(e.target.value)}
+            />
+            <Input
+              placeholder="정답을 입력해주세요"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+            />
+          </InputBox>
         </>
       )}
 
@@ -91,7 +96,21 @@ export default function SecretOption({ onClose, onConfirm }) {
       {step < 3 && (
         <ModalButtons>
           {step > 1 && <CancelButton onClick={() => setStep(step - 1)} btnName="이전" />}
-          <ConfirmButton onClick={() => setStep(step + 1)} btnName="다음" />
+          <ConfirmButton
+            onClick={() => {
+              if (step === 1 && !question.trim()) {
+                showToast('질문을 입력해주세요!');
+                return;
+              }
+              if (step === 2 && !answer.trim()) {
+                showToast('정답을 입력해주세요!');
+                return;
+              }
+              setStep(step + 1);
+            }}
+            btnName="다음"
+          />
+          {toastMsg && <Toast>{toastMsg}</Toast>}
         </ModalButtons>
       )}
     </ConfirmModal>
@@ -100,7 +119,7 @@ export default function SecretOption({ onClose, onConfirm }) {
 
 // styled-components
 const HeaderBox = styled.div`
-  padding: 0 2rem;
+  /* padding: 0 2rem; */
 `;
 
 const ModalTitle = styled.div`
@@ -138,8 +157,8 @@ const Input = styled.input`
 const ModalButtons = styled.div`
   display: flex;
   justify-content: center;
-  gap: 1.6rem;
-  margin-top: 2.4rem;
+  gap: 2rem;
+  margin-top: 2rem;
 `;
 const QuestionPreview = styled.div`
   // margin-top: 2rem;
@@ -150,11 +169,26 @@ const QuestionBox = styled.div`
   border-radius: 1.2rem;
   ${({ theme }) => theme.fonts.Saeum3};
   color: ${({ theme }) => theme.colors.MainRed};
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const Label = styled.div`
-  font-size: 3 rem;
+  font-size: 3rem;
   ${({ theme }) => theme.fonts.Saeum3};
   color: ${({ theme }) => theme.colors.Gray5};
+`;
+
+const Toast = styled.div`
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${({ theme }) => theme.colors.MainRed};
+  font-size: 1rem;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 1.2rem;
+  ${({ theme }) => theme.fonts.body2};
+  z-index: 1000;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
 `;

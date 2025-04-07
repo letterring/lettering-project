@@ -77,6 +77,6 @@ const GrayBox = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
-  gap: 1.6rem;
-  margin-top: 2.4rem;
+  gap: 3rem;
+  margin-top: 2rem;
 `;

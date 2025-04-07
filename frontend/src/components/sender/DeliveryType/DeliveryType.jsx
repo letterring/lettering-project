@@ -1,9 +1,8 @@
+import { format } from 'date-fns';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { format } from 'date-fns';
-
 
 import { sendLetter } from '../../../apis/letter';
 import { sendPostcard } from '../../../apis/postcard';
@@ -71,7 +70,7 @@ const DeliveryType = () => {
   };
 
   // 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
-  const handleSend = async ({ conditionType, scheduledAt = null }) => {
+  const handleSend = async ({ conditionType, scheduledAt = null, secret = {} }) => {
     const sealingWaxId = localStorage.getItem('sealingWaxId');
     if (!sealingWaxId) {
       alert('실링왁스 ID가 없습니다.');
@@ -79,38 +78,41 @@ const DeliveryType = () => {
     }
 
     if (sealingWaxId == 1) {
-        //엽서
-        const postcardData = {
-          keyringId: selectedKeyringId,
-          sealingWaxId: Number(sealingWaxId),
-          conditionType: conditionType,
-          conditionTime: scheduledAt ? format(scheduledAt, "yyyy-MM-dd'T'HH:mm:ss") : null,
-          content: postcardText,
-        };
+      //엽서
+      const postcardData = {
+        keyringId: selectedKeyringId,
+        sealingWaxId: Number(sealingWaxId),
+        conditionType,
+        conditionTime: scheduledAt ? format(scheduledAt, "yyyy-MM-dd'T'HH:mm:ss") : null,
+        content: postcardText,
+        quizQuestion: secret.question,
+        quizHint: secret.hint,
+        quizAnswer: secret.answer,
+      };
 
-        try {
-          console.log('엽서 전송 데이터:', postcardData); 
-          await sendPostcard({
-            postcardData,
-            imageFile: postcardImageFile,
-          });
+      try {
+        console.log('엽서 전송 데이터:', postcardData);
+        await sendPostcard({
+          postcardData,
+          imageFile: postcardImageFile,
+        });
 
-          navigate('/complete/postcard');
-        } catch (error) {
-          console.error('엽서 전송 실패:', error);
-          alert('엽서 전송에 실패했어요.');
-        }
-      } else {
-        //편지지
-        const letterData = {
-          keyringId: selectedKeyringId,
-          sealingWaxId: Number(sealingWaxId),
-          conditionType,
-          contents: letterTextList,
-        };
-
-        postLetter(letterData);
+        navigate('/complete/postcard');
+      } catch (error) {
+        console.error('엽서 전송 실패:', error);
+        alert('엽서 전송에 실패했어요.');
       }
+    } else {
+      //편지지
+      const letterData = {
+        keyringId: selectedKeyringId,
+        sealingWaxId: Number(sealingWaxId),
+        conditionType,
+        contents: letterTextList,
+      };
+
+      postLetter(letterData);
+    }
   };
 
   // 카드 클릭 시 처리
