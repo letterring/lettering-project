@@ -108,7 +108,7 @@ const DeliveryType = () => {
       return;
     }
 
-    if (sealingWaxId == 1) {
+    if (sealingWaxId == 1 || sealingWaxId == 4) {
       //엽서
       const postcardData = {
         keyringId: selectedKeyringId,
