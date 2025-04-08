@@ -163,7 +163,7 @@ public class KeyringController {
 
     @PostMapping("/nfc-access")
     @Operation(summary = "디바이스 등록 및 검증", description = "앱에서 진입 시 디바이스 검증 또는 등록 후 결과 제공")
-    public ResponseEntity<Void> handleNfcAccess(@RequestBody KeyringAccessRequest request, HttpSession session) {
+    public ResponseEntity<Void> handleNfcAccess(@Valid @RequestBody KeyringAccessRequest request, HttpSession session) {
         try {
             Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
             session.setAttribute("keyringId", keyringId);
