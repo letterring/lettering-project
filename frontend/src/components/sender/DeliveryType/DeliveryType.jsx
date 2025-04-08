@@ -75,7 +75,11 @@ const DeliveryType = () => {
     const firstImageURL =
       letterImageList.length > 0 ? URL.createObjectURL(letterImageList[0].file) : null;
 
-    navigate(`/complete/letter`, { state: { firstImageURL } });
+    if (letterData.sealingWaxId === 2) {
+      navigate(`/complete/letter`, { state: { firstImageURL } });
+    } else {
+      navigate(`/complete/letter/congrats`, { state: { firstImageURL } });
+    }
   };
 
   const postPostcard = async (postcardData) => {
@@ -98,7 +102,6 @@ const DeliveryType = () => {
 
   // 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
   const handleSend = async ({ conditionType, scheduledAt = null, secret = {} }) => {
-
     const sealingWaxId = localStorage.getItem('sealingWaxId');
     if (!sealingWaxId) {
       alert('실링왁스 ID가 없습니다.');

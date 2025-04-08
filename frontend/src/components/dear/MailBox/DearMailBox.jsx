@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { getReadStates } from '../../../apis/mailbox';
 import { IcOpened, IcUnOpened } from '../../../assets/icons';
 import Header from '../../common/Header';
 import CenterCarousel from './CenterCarousel';
 
 const DearMailBox = () => {
+  const [readData, setReadData] = useState({});
+  const keyringId = 19;
+
+  useEffect(() => {
+    const fetchReadStatus = async (keyringId) => {
+      const data = await getReadStates(keyringId);
+      setReadData(data);
+    };
+
+    fetchReadStatus(keyringId);
+  }, []);
+
   return (
     <>
       <StListWrapper>
@@ -14,11 +27,11 @@ const DearMailBox = () => {
           <StatusWrapper>
             <ShowStatus className="unopened">
               <IcUnOpened />
-              <p>1</p>
+              <p>{readData.unreadCount}</p>
             </ShowStatus>
             <ShowStatus className="opened">
               <IcOpened />
-              <p>15</p>
+              <p>{readData.readCount}</p>
             </ShowStatus>
           </StatusWrapper>
 
