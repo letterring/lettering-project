@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class PostcardToDearDetailResponse {
-
-    private static AESUtil aesUtil;
-
     private Long id;
     private String nfcName;           // 받는 사람 이름
     private String nickName;        // 보낸 사람의 별명
@@ -38,7 +35,6 @@ public class PostcardToDearDetailResponse {
         response.setId(postcard.getId());
         response.setNfcName(postcard.getKeyring().getNfcName());
         response.setNickName(postcard.getSender().getUserNickname());
-        response.setContent(aesUtil.decrypt(postcard.getContent()));
         response.setImageUrl(postcard.getImageHighUrl());
         response.setConditionType(postcard.getConditionType().toString());
         response.setConditionTime(postcard.getConditionTime());

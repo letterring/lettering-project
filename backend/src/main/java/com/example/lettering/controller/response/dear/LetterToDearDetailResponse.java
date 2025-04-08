@@ -18,9 +18,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class LetterToDearDetailResponse {
-
-    private static AESUtil aesUtil;
-
     private Long id;
     private String nfcName;
     private String nickName;
@@ -44,13 +41,6 @@ public class LetterToDearDetailResponse {
         response.setId(letter.getId());
         response.setNfcName(letter.getKeyring().getNfcName());
         response.setNickName(letter.getSender().getUserNickname());
-
-        response.setLetterContents(
-                letter.getContents().stream()
-                        .sorted(Comparator.comparing(LetterContent::getId))
-                        .map(content -> aesUtil.decrypt(content.getText()))
-                        .collect(Collectors.toList())
-        );
 
         response.setLetterImages(
                 letter.getImages().stream()
