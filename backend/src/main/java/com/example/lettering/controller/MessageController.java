@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.protocol.HTTP;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -131,25 +132,22 @@ public class MessageController {
     }
 
     @Operation(summary = "받는 사람 기준 메시지 목록 조회", description = "안읽은순, 즐겨찾기순, 최신순으로 정렬합니다.")
-    @GetMapping("/dear/{keyringId}")
+    @GetMapping("/dear")
     public ResponseEntity<DearMessageSummaryListResponse> getMessagesToDear(
-            @PathVariable("keyringId") Long keyringId,
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            HttpSession session) {
+        Long keyringId = 19L;
+//        Long keyringId = Objects.requireNonNull((Long) session.getAttribute("keyringId"));
 
-        //추후 태그 가져오는 방식 고민
-        if (keyringId == null) {
-            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
-        }
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
     }
 
     @Operation(summary = "받은 편지 읽음/안읽음 개수 조회",
             description = "요청 파라미터 keyringId에 해당하는 메시지 중, ConditionType이 RESERVATION이고 conditionTime이 현재 이후인 예약된 편지를 제외한 후, opened 상태에 따라 읽은 편지와 안읽은 편지의 개수를 반환합니다.")
     @GetMapping("/dear/readcount")
-    public ResponseEntity<MessageReadCountResponse> getMessageReadCount(@RequestParam("keyringId") Long keyringId) {
-        if(keyringId == null) {
-            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
-        }
+    public ResponseEntity<MessageReadCountResponse> getMessageReadCount(HttpSession session) {
+        Long keyringId = 19L;
+//        Long keyringId = Objects.requireNonNull((Long) session.getAttribute("keyringId"));
 
         return ResponseEntity.ok(MessageReadCountResponse.of(messageService.getMessageReadCount(keyringId, LocalDateTime.now())));
     }
@@ -158,7 +156,6 @@ public class MessageController {
     @GetMapping("/postcards/dear/{messageId}")
     public ResponseEntity<PostcardToDearDetailResponse> getPostcardToDearDetail(
             @PathVariable("messageId") Long messageId) {
-        //키링 관련 session 검증 필요
 
         PostcardToDearDetailResponse postcardToDearDetailResponse = postcardService.getPostcardToDearDetail(messageId);
         return ResponseEntity.ok(postcardToDearDetailResponse);
@@ -168,7 +165,6 @@ public class MessageController {
     @GetMapping("/letters/dear/{messageId}")
     public ResponseEntity<LetterToDearDetailResponse> getLetterToDearDetail(
             @PathVariable("messageId") Long messageId) {
-        //키링 관련 session 검증 필요
 
         LetterToDearDetailResponse letterToDearDetailResponse = letterService.getLetterToDearDetail(messageId);
         return ResponseEntity.ok(letterToDearDetailResponse);
@@ -176,7 +172,7 @@ public class MessageController {
 
     @Operation(summary = "받은 사람 기준 엽서 이미지 다운로드", description = "엽서 이미지를 다운받을 수 있습니다.")
     @PostMapping("/postcards/dear/image")
-    public ResponseEntity<byte[]> downloadPostcardImage(@RequestBody ImageDownloadRequest imageDownloadRequest) {
+    public ResponseEntity<byte[]> downloadPostcardImage(@RequestBody ImageDownloadRequest imageDownloadRequest, HttpSession session) {
         String imageUrl = imageDownloadRequest.getImageUrl();
 
         byte[] imageBytes = postcardService.downloadImageFromS3(imageUrl);
@@ -198,7 +194,6 @@ public class MessageController {
     @PatchMapping("/unread/backoffice/{messageId}")
     public ResponseEntity<BooleanResponse> resetMessageAsUnread(
             @PathVariable("messageId") Long messageId) {
-
         postcardService.resetMessageAsUnread(messageId);
 
         return ResponseEntity.ok(new BooleanResponse(true));
@@ -209,7 +204,6 @@ public class MessageController {
     public ResponseEntity<BooleanResponse> createReply(
             @PathVariable("messageId") Long messageId,
             @RequestBody CreateReplyRequest createReplyRequest) {
-        //키링 관련 session 검증 필요
 
         messageService.createReply(messageId, createReplyRequest.getReplyText());
         return ResponseEntity.ok(new BooleanResponse(true));
@@ -220,7 +214,6 @@ public class MessageController {
     @PatchMapping("/favorite/{messageId}")
     public ResponseEntity<BooleanResponse> toggleFavorite(
             @PathVariable("messageId") Long messageId) {
-        //키링 관련 session 검증 필요
 
         messageService.toggleFavorite(messageId);
         return ResponseEntity.ok(new BooleanResponse(true));
@@ -229,11 +222,8 @@ public class MessageController {
 
     @GetMapping("/unread")
     public ResponseEntity<UnreadMessageResponse> getUnreadMessageBackoffice(HttpSession session)  {
-//        Long keyringId = (Long) session.getAttribute("keyringId");
-        Long keyringId = 2L;
-        if (keyringId == null) {
-            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
-        }
+        Long keyringId = 19L;
+//        Long keyringId = Objects.requireNonNull((Long) session.getAttribute("keyringId"));
 
         UnreadMessageResponse unreadMessageResponse = messageService.getLatestUnreadMessage(keyringId);
         return ResponseEntity.ok(unreadMessageResponse);
@@ -243,10 +233,7 @@ public class MessageController {
             description = "세션의 userId(즉, ownerId)와 일치하는 keyring의 id와 nfcName을 반환합니다.")
     @GetMapping("/filter")
     public ResponseEntity<KeyringFilterListResponse> filterKeyringsByOwner(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         return ResponseEntity.ok(KeyringFilterListResponse.of(keyringService.getKeyringsByOwner(userId)));
     }
