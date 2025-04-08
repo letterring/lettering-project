@@ -4,8 +4,8 @@ import Slider from 'react-slick';
 import styled from 'styled-components';
 
 import { getSentLetterDetail } from '/src/apis/letter';
-import LetterImg2 from '/src/assets/images/congratsLetter/pink_background.png';
-import LetterImg1 from '/src/assets/images/congratsLetter/white_background.png';
+import LetterImg2 from '/src/assets/images/congratsletter/pink_background.png';
+import LetterImg1 from '/src/assets/images/congratsletter/white_background.png';
 import Header from '/src/components/common/Header';
 import { getLetterDate } from '/src/util/getFormatDate';
 
