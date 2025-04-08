@@ -40,8 +40,10 @@ const SelectTheme = () => {
 
       if (selectedTheme.id === 1) {
         navigate('/postcard/writing');
-      } else {
+      } else if (selectedTheme.id === 2) {
         navigate('/letter/writing');
+      } else {
+        navigate('/letter/preview/congrats');
       }
     } else {
       alert('테마를 선택해주세요!');

@@ -33,7 +33,7 @@ const Home = () => {
 
         <StButtonWrapper>
           <LongButton
-            onClick={() => window.open('http://letterring.shop/', '_blank')}
+            onClick={() => window.open('https://letterring.shop/', '_blank')}
             btnName="서비스 보러가기"
           />
         </StButtonWrapper>

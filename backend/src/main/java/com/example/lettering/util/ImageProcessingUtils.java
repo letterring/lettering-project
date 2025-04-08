@@ -1,12 +1,15 @@
 package com.example.lettering.util;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import net.coobird.thumbnailator.Thumbnails;
+import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class ImageProcessingUtils {
 
@@ -17,8 +20,19 @@ public class ImageProcessingUtils {
             return originalInputStream.readAllBytes();
         }
 
-        BufferedImage originalImage = ImageIO.read(originalInputStream);
-        BufferedImage resizedImage = Thumbnails.of(originalImage)
+        // 🔁 InputStream 복제 (EXIF + 이미지 읽기용)
+        ByteArrayOutputStream baosForExif = new ByteArrayOutputStream();
+        originalInputStream.transferTo(baosForExif);
+        byte[] imageBytes = baosForExif.toByteArray();
+
+        InputStream exifStream = new ByteArrayInputStream(imageBytes);
+        InputStream imageStream = new ByteArrayInputStream(imageBytes);
+
+        // 🔍 원본 이미지 + 회전 보정
+        BufferedImage originalImage = ImageIO.read(imageStream);
+        BufferedImage rotatedImage = rotateImageIfNeeded(originalImage, exifStream);
+
+        BufferedImage resizedImage = Thumbnails.of(rotatedImage)
                 .scale(0.4)
                 .asBufferedImage();
 
@@ -35,5 +49,32 @@ public class ImageProcessingUtils {
 
         ImageIO.write(resizedImage, formatName, baos);
         return baos.toByteArray();
+    }
+
+    public static BufferedImage rotateImageIfNeeded(BufferedImage image, InputStream exifInputStream) {
+        try {
+            File tempFile = File.createTempFile("rotate_", ".tmp");
+            try (OutputStream os = new FileOutputStream(tempFile)) {
+                exifInputStream.transferTo(os);
+            }
+
+            Metadata metadata = ImageMetadataReader.readMetadata(tempFile);
+            tempFile.delete();
+
+            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            int orientation = 1;
+            if (directory != null && directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            }
+
+            return switch (orientation) {
+                case 3 -> Scalr.rotate(image, Scalr.Rotation.CW_180);
+                case 6 -> Scalr.rotate(image, Scalr.Rotation.CW_90);
+                case 8 -> Scalr.rotate(image, Scalr.Rotation.CW_270);
+                default -> image;
+            };
+        } catch (Exception e) {
+            return image;
+        }
     }
 }
