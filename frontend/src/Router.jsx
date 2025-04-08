@@ -15,6 +15,8 @@ import DearNoTagPage from './pages/dear/NoTagPage';
 import OpenAppPage from './pages/dear/OpenAppPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
+import DearSsafyPostDetailPage from './pages/dear/SsafyPostcardDetailPage';
+import DearSsafyPostcardPage from './pages/dear/SsafyPostcardPage';
 import TerminatePage from './pages/dear/TerminatePage';
 import ErrorPage from './pages/ErrorPage';
 import ApprovePaymentPage from './pages/sender/ApprovePaymentPage';
@@ -44,6 +46,9 @@ import PostcardWritingPage from './pages/sender/PostcardWritingPage';
 import SelectDearPage from './pages/sender/SelectDearPage';
 import SelectThemePage from './pages/sender/SelectThemePage';
 import SignUpPage from './pages/sender/SignUpPage';
+import SsafyPostcardDetailPage from './pages/sender/SsafyPostcardDetailPage';
+import SsafyPostcardPreviewPage from './pages/sender/SsafyPostcardPreviewPage';
+import SsafyPostcardWritingPage from './pages/sender/SsafyPostcardWritingPage';
 
 const Router = () => {
   const location = useLocation();
@@ -83,6 +88,13 @@ const Router = () => {
                 element={<CongratsLetterDetailPage />}
               />
 
+              <Route path="/postcard/writing/ssafy" element={<SsafyPostcardWritingPage />} />
+              <Route path="/postcard/preview/ssafy" element={<SsafyPostcardPreviewPage />} />
+              <Route
+                path="/postcard/detail/ssafy/:messageId"
+                element={<SsafyPostcardDetailPage />}
+              />
+
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />
 
@@ -107,6 +119,11 @@ const Router = () => {
               <Route
                 path="/dear/letter/congrats/detail/:messageId"
                 element={<DearCongratsLetterDetailPage />}
+              />
+              <Route path="/dear/postcard/ssafy/:messageId" element={<DearSsafyPostcardPage />} />
+              <Route
+                path="/dear/postcard/ssafy/detail/:messageId"
+                element={<DearSsafyPostDetailPage />}
               />
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
               <Route path="/openapp" element={<OpenAppPage />} />
