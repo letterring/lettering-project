@@ -15,6 +15,7 @@ import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
+import com.example.lettering.util.AESUtil;
 import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class LetterServiceImpl implements LetterService {
     private final S3ImageUtil s3ImageUtil;
     private final KeyringRepository keyringRepository;
     private final SealingWaxRepository sealingWaxRepository;
+    private final AESUtil aesUtil;
 
     @Override
     public Long createLetter(CreateLetterRequest createLetterRequest, List<MultipartFile> imageFiles, Long senderId) throws IOException {
@@ -60,7 +64,8 @@ public class LetterServiceImpl implements LetterService {
         List<LetterContent> contents = new ArrayList<>();
         if (createLetterRequest.getContents() != null) {
             for (String contentText : createLetterRequest.getContents()) {
-                contents.add(LetterContent.fromText(contentText));
+                String encryptedText = aesUtil.encrypt(contentText);
+                contents.add(LetterContent.fromText(encryptedText));
             }
         }
 
@@ -100,7 +105,15 @@ public class LetterServiceImpl implements LetterService {
         Letter letter = letterRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
 
-        return LetterBySenderDetailResponse.fromEntity(letter);
+        List<String> decryptedContents = letter.getContents().stream()
+                .sorted(Comparator.comparing(LetterContent::getId))
+                .map(c -> aesUtil.decrypt(c.getText()))
+                .collect(Collectors.toList());
+
+        LetterBySenderDetailResponse response = LetterBySenderDetailResponse.fromEntity(letter);
+        response.setLetterContents(decryptedContents);
+
+        return response;
     }
 
     @Override
@@ -110,6 +123,14 @@ public class LetterServiceImpl implements LetterService {
 
         letter.markAsOpened();
 
-        return LetterToDearDetailResponse.fromEntity(letter);
+        List<String> decryptedContents = letter.getContents().stream()
+                .sorted(Comparator.comparing(LetterContent::getId))
+                .map(c -> aesUtil.decrypt(c.getText()))
+                .collect(Collectors.toList());
+
+        LetterToDearDetailResponse response = LetterToDearDetailResponse.fromEntity(letter);
+        response.setLetterContents(decryptedContents);
+
+        return response;
     }
 }

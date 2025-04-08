@@ -29,7 +29,7 @@ public class Postcard extends AbstractMessage {
     @Column(name = "image_low_url", nullable = false)
     private String imageLowUrl;
 
-    public static Postcard fromDto(CreatePostcardRequest createPostcardRequest, User sender, Keyring keyring, SealingWax sealingWax, String imageHighUrl, String imageLowUrl, Font font) {
+    public static Postcard fromDto(CreatePostcardRequest createPostcardRequest, User sender, Keyring keyring, SealingWax sealingWax, String imageHighUrl, String imageLowUrl, Font font, String encryptedContent) {
         Postcard postcard = new Postcard();
         postcard.sender = sender;
         postcard.keyring = keyring;
@@ -58,7 +58,7 @@ public class Postcard extends AbstractMessage {
             postcard.quizInfo = quizInfo;
         }
 
-        postcard.content = createPostcardRequest.getContent();
+        postcard.content = encryptedContent;
         postcard.imageHighUrl = imageHighUrl;
         postcard.imageLowUrl = imageLowUrl;
         return postcard;

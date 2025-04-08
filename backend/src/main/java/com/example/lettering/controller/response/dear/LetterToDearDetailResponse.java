@@ -6,6 +6,7 @@ import com.example.lettering.domain.message.entity.LetterContent;
 import com.example.lettering.domain.message.entity.LetterImage;
 import com.example.lettering.domain.sealingwax.enums.DesignType;
 import com.example.lettering.domain.user.enums.Font;
+import com.example.lettering.util.AESUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,13 +41,6 @@ public class LetterToDearDetailResponse {
         response.setId(letter.getId());
         response.setNfcName(letter.getKeyring().getNfcName());
         response.setNickName(letter.getSender().getUserNickname());
-
-        response.setLetterContents(
-                letter.getContents().stream()
-                        .sorted(Comparator.comparing(LetterContent::getId))
-                        .map(LetterContent::getText)
-                        .collect(Collectors.toList())
-        );
 
         response.setLetterImages(
                 letter.getImages().stream()
