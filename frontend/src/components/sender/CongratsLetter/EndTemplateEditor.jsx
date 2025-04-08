@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import EnvelopeBottomImg from '../../../assets/images/congratsletter/bottom_fold.png';
-import LetterImg from '../../../assets/images/congratsletter/letter_paper.png';
-import EnvelopeTopImg from '../../../assets/images/congratsletter/top_fold.png';
+import EnvelopeBottomImg from '../../../assets/images/congratsLetter/bottom_fold.png';
+import LetterImg from '../../../assets/images/congratsLetter/letter_paper.png';
+import EnvelopeTopImg from '../../../assets/images/congratsLetter/top_fold.png';
 import { LetterImageList } from '../../../recoil/atom';
 
 const EndTemplateEditor = () => {
