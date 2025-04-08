@@ -6,6 +6,7 @@ import com.example.lettering.domain.message.entity.LetterContent;
 import com.example.lettering.domain.message.entity.LetterImage;
 import com.example.lettering.domain.sealingwax.enums.DesignType;
 import com.example.lettering.domain.user.enums.Font;
+import com.example.lettering.util.AESUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,9 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class LetterToDearDetailResponse {
+
+    private static AESUtil aesUtil;
+
     private Long id;
     private String nfcName;
     private String nickName;
@@ -44,7 +48,7 @@ public class LetterToDearDetailResponse {
         response.setLetterContents(
                 letter.getContents().stream()
                         .sorted(Comparator.comparing(LetterContent::getId))
-                        .map(LetterContent::getText)
+                        .map(content -> aesUtil.decrypt(content.getText()))
                         .collect(Collectors.toList())
         );
 
