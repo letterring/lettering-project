@@ -20,6 +20,7 @@ const MyProfile = () => {
   const [font, setFont] = useRecoilState(UserFont);
   const [keyringList, setKeyringList] = useRecoilState(UserKeyringList);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fontStyle = getFontStyle(font);
   const fontName = getFontName(font);
@@ -30,6 +31,7 @@ const MyProfile = () => {
       setNickname(data.nickname);
       setFont(data.font);
       setKeyringList(data.keyrings);
+      setIsLoading(false);
     };
 
     fetchUserInfo();
@@ -105,7 +107,7 @@ const MyProfile = () => {
               onClick={handleKeyringSetting}
             />
           </Title>
-          {keyringList && keyringList.length > 0 ? (
+          {isLoading ? null : keyringList && keyringList.length > 0 ? (
             <KeyringList keyringList={keyringList} />
           ) : (
             <BuyKeyringCard />

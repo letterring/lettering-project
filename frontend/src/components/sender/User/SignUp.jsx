@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { signup } from '../../../apis/user';
-import LongButton from '../../common/button/LongButton';
 import SuccessBirdImg from '../../../assets/images/bird_hi.png';
 import FailBirdImg from '../../../assets/images/bird_sorry.svg';
+import LongButton from '../../common/button/LongButton';
 import AlertModal from '../../common/modal/AlertModal';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
