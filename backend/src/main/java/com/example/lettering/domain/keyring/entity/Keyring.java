@@ -45,7 +45,7 @@ public class Keyring {
     @Column(name = "custom_message")
     private String customMessage; // ✅ "나만의 메시지"
 
-    @Column(name = "device_unique_id", unique = true)
+    @Column(name = "device_unique_id")
     private String deviceUniqueId;
 
     public void purchase(User owner, KeyringDesign design) {
