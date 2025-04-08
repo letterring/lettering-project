@@ -114,7 +114,6 @@ const App = () => {
         {
           id: Number(info?.keyringId),
           deviceId: info?.device.uniqueId,
-          // deviceId: '22eb13c76a1d38d1',
         },
         {
           withCredentials: true,
