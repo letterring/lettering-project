@@ -15,6 +15,7 @@ import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
+import com.example.lettering.util.AESUtil;
 import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class LetterServiceImpl implements LetterService {
     private final S3ImageUtil s3ImageUtil;
     private final KeyringRepository keyringRepository;
     private final SealingWaxRepository sealingWaxRepository;
+    private final AESUtil aesUtil;
 
     @Override
     public Long createLetter(CreateLetterRequest createLetterRequest, List<MultipartFile> imageFiles, Long senderId) throws IOException {
@@ -60,7 +62,8 @@ public class LetterServiceImpl implements LetterService {
         List<LetterContent> contents = new ArrayList<>();
         if (createLetterRequest.getContents() != null) {
             for (String contentText : createLetterRequest.getContents()) {
-                contents.add(LetterContent.fromText(contentText));
+                String encryptedText = aesUtil.encrypt(contentText);
+                contents.add(LetterContent.fromText(encryptedText));
             }
         }
 
