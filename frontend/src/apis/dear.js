@@ -29,3 +29,16 @@ export const terminateKeyring = async () => {
     console.error('키링 영구 삭제 실패', error);
   }
 };
+
+//키링 세션 설정
+export const postDeviceInfo = async () => {
+  try {
+    const res = await client.post('/keyrings/nfc-access', {
+      id: 19,
+      deviceId: '22eb13c76a1d38d1',
+    });
+    return res;
+  } catch (error) {
+    console.error('키링 영구 삭제 실패', error);
+  }
+};

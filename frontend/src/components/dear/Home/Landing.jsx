@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { getUnreadMessage } from '/src/apis/dear';
 import { getHighImage } from '/src/apis/dear';
 
-import { getCustomMessage } from '../../../apis/dear';
+import { getCustomMessage, postDeviceInfo } from '../../../apis/dear';
 import OBJViewer from './OBJViewer';
 
 const Landing = () => {
@@ -18,6 +18,7 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
