@@ -5,21 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import EnvelopeBottomImg from '../../../assets/images/letter/bottom_fold.png';
-import EnvelopeBodyImg from '../../../assets/images/letter/envelope_body.png';
-import EnvelopeTopPartImg from '../../../assets/images/letter/envelope_top_part.png';
-import LetterImg from '../../../assets/images/letter/letter_paper_crop.png';
-import LetteringImg from '../../../assets/images/letter/lettering.png';
-import SealingWaxImg from '../../../assets/images/letter/sealing_wax.png';
-import StampImg from '../../../assets/images/letter/vintage_stamp.png';
-const LetterAnimation = () => {
+import EnvelopeBottomImg from '../../../assets/images/congratsLetter/bottom_fold.png';
+import EnvelopeBodyImg from '../../../assets/images/congratsLetter/envelope_body.png';
+import EnvelopeTopPartImg from '../../../assets/images/congratsLetter/envelope_top_part.png';
+import LetterImg from '../../../assets/images/congratsLetter/letter_paper_crop.png';
+import SealingWaxImg from '../../../assets/images/congratsLetter/sealing_wax.png';
+
+const CongratsLetterAnimation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const firstImageURL = location.state?.firstImageURL;
   const [isClosed, setIsClosed] = useState(false);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
-  const distance = 140;
+  const distance = 130;
 
   const x = -Math.cos(angle) * distance;
   const y = Math.sin(angle) * distance;
@@ -48,18 +47,6 @@ const LetterAnimation = () => {
               }, 4500);
             }}
           />
-          <StStampImage
-            src={StampImg}
-            initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
-            animate={{ x, y, opacity: 1, rotate: -3.7 }}
-            transition={{ duration: 2 }}
-          />
-          <StTextImage
-            src={LetteringImg}
-            initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
-            animate={{ x, y, opacity: 1, rotate: -3.7 }}
-            transition={{ duration: 2 }}
-          />
         </StLetterClipArea>
 
         <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />
@@ -69,7 +56,7 @@ const LetterAnimation = () => {
   );
 };
 
-export default LetterAnimation;
+export default CongratsLetterAnimation;
 
 const StWrapper = styled.div`
   width: 100%;
@@ -101,9 +88,9 @@ const StEnvelopeTop = styled.img`
 
 const StEnvelopeBody = styled.img`
   position: absolute;
-  width: 29rem;
-  top: 1.5rem;
-  left: 0.5rem;
+  width: 33.7rem;
+  top: -0.5rem;
+  left: -2.2rem;
   z-index: 1;
 `;
 
@@ -128,22 +115,6 @@ const StLetter = styled(motion.img)`
   object-fit: cover;
 `;
 
-const StStampImage = styled(motion.img)`
-  position: absolute;
-  top: -9rem;
-  right: 7.5rem;
-  width: 5rem;
-  z-index: 4;
-`;
-
-const StTextImage = styled(motion.img)`
-  position: absolute;
-  top: 1rem;
-  left: 2rem;
-  width: 23rem;
-  z-index: 4;
-`;
-
 const StLetterImage = styled(motion.img)`
   position: absolute;
   top: -6.5rem;
@@ -163,9 +134,9 @@ const StEnvelope = styled.img`
 
 const StSealingWax = styled.img`
   position: absolute;
-  width: 7.5rem;
-  top: 8rem;
-  left: 11.5rem;
+  width: 9.2rem;
+  top: 7.7rem;
+  left: 10.7rem;
   z-index: 100;
   /* display: ${({ $isClosed }) => ($isClosed ? 'block' : 'none')}; */
 `;

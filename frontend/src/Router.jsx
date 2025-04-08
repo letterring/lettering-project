@@ -19,6 +19,7 @@ import TerminatePage from './pages/dear/TerminatePage';
 import ErrorPage from './pages/ErrorPage';
 import ApprovePaymentPage from './pages/sender/ApprovePaymentPage';
 import CheckoutPage from './pages/sender/CheckoutPage';
+import CompleteCongratsLetterPage from './pages/sender/CompleteCongratsLetterPage';
 import CompleteLetterPage from './pages/sender/CompleteLetterPage';
 import CompleteOrderPage from './pages/sender/CompleteOrderPage';
 import CompletePage from './pages/sender/CompletePage';
@@ -79,7 +80,7 @@ const Router = () => {
 
               <Route path="/letter/preview/congrats" element={<CongratsLetterPreviewPage />} />
               <Route
-                path="/letter/detail/congrats/:messageId"
+                path="/letter/congrats/detail/:messageId"
                 element={<CongratsLetterDetailPage />}
               />
 
@@ -89,6 +90,7 @@ const Router = () => {
               <Route path="/complete" element={<CompletePage />} />
               <Route path="/complete/postcard" element={<CompletePostcardPage />} />
               <Route path="/complete/letter" element={<CompleteLetterPage />} />
+              <Route path="/complete/letter/congrats" element={<CompleteCongratsLetterPage />} />
 
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/mypage/font" element={<FontSettingPage />} />

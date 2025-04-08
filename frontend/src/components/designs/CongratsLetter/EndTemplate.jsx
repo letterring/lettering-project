@@ -49,6 +49,7 @@ const StEnvelopeWrapper = styled.div`
 
 const StEnvelopeTop = styled.img`
   position: absolute;
+  left: 0.7rem;
   width: 22rem;
   z-index: 1;
 `;

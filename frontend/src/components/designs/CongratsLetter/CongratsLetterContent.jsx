@@ -63,13 +63,14 @@ const CongratsLetterContent = ({
 export default CongratsLetterContent;
 
 const StLetterWrapper = styled.div`
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  width: 33rem;
-  height: 55rem;
+  width: 31rem;
+  height: 54rem;
 
   background-image: url(${(props) => props.$background});
   background-size: 100% 100%;
