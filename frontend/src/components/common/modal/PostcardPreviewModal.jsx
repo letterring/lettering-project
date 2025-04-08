@@ -3,14 +3,12 @@ import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import PostcardImg from '/src/assets/images/postcard/postcard.png';
-import StampImg from '/src/assets/images/postcard/stamp.png';
-
 import { downloadPostcardImage } from '../../../apis/postcard';
-import FrontEnvelop from '../../../assets/images/postcard/bottom_fold.png'; // 편지 봉투 앞부분
-import LeftPaper from '../../../assets/images/postcard/postcard_paper.png'; // 왼쪽 편지지
-import RightPaper from '../../../assets/images/postcard/postcard_paper2.png'; // 오른쪽 편지지
-import BackEnvelop from '../../../assets/images/postcard/top_fold.png'; // 편지 봉투 뒷부분
+import PostcardBack from '../../../assets/images/postcard/defalt_back.png';
+import PostcardBottom from '../../../assets/images/postcard/defalt_bottom.png';
+import PostcardPaper from '../../../assets/images/postcard/defalt_paper.png';
+import PostcardTop from '../../../assets/images/postcard/defalt_top.png';
+import PostcardStamp from '../../../assets/images/postcard/stamp.png';
 import CancelButton from '../button/CancelButton';
 import ConfirmButton from '../button/ConfirmButton';
 
@@ -80,25 +78,25 @@ const PostcardPreviewModal = ({
     <Backdrop>
       <ModalContainer ref={modalRef}>
         <PreviewWrapper ref={captureRef}>
-          <LeftSection>
-            <LeftPaperImg src={LeftPaper} alt="left paper" />
-            <BackImg src={BackEnvelop} alt="back" />
-            <FrontImg src={FrontEnvelop} alt="front" />
-          </LeftSection>
+          <PostcardTopImg src={PostcardTop} alt="봉투 윗부분" />
+          <PostcardBackImg src={PostcardBack} alt="봉투 뒷부분" />
+          {isLoading ? (
+            <LoadingMessage>이미지 불러오는 중...</LoadingMessage>
+          ) : (
+            <PostcardImage src={blobUrl} alt="엽서 사진" />
+          )}
+          <PostcardBottomImg src={PostcardBottom} alt="봉투 아랫부분" />
 
-          <RightSection>
-            <LeftPaperWrapper>
-              <RightPaperImg src={RightPaper} alt="right paper" />
-              <TextWrapper>
-                <h3>사랑하는 {nfcName || '너'}에게,</h3>
-                <p>{content}</p>
-              </TextWrapper>
-            </LeftPaperWrapper>
-          </RightSection>
+          <BigpaperImg src={PostcardPaper} alt="엽서 내용" />
+          <StampImg src={PostcardStamp} alt="우표" />
+          <ContentBox $font={font}>
+            <h1>사랑하는 {nfcName} 에게</h1>
+            <p>{content}</p>
+          </ContentBox>
         </PreviewWrapper>
 
         <ButtonGroup>
-          <ConfirmButton btnName="다운로드" onClick={handleSave} />
+          <ConfirmButton btnName="다운로드" onClick={handleSave} disabled={isLoading} />
           <CancelButton btnName="닫기" onClick={onClose} />
         </ButtonGroup>
       </ModalContainer>
@@ -122,8 +120,12 @@ const Backdrop = styled.div`
 const ModalContainer = styled.div`
   background: ${({ theme }) => theme.colors.White};
   border-radius: 12px;
-  width: 30rem;
-  padding: 1rem;
+  width: 100%;
+  height: 50rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 // 캡쳐
@@ -131,78 +133,106 @@ const PreviewWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  padding: 2rem;
-  position: relative;
-`;
-
-const LeftSection = styled.div`
-  position: relative;
-  width: 30rem;
-  height: 10rem;
-  border: solid black;
-`;
-
-const BackImg = styled.img`
-  position: absolute;
   width: 100%;
+  height: 40rem;
+  position: relative;
+`;
+const PostcardTopImg = styled.img`
+  position: absolute;
+  left: 0rem;
+  top: 13rem;
+  width: 20rem;
+  transform: rotate(-3.71deg);
   z-index: 1;
 `;
 
-const RightPaperImg = styled.img`
+const PostcardBackImg = styled.img`
   position: absolute;
-  width: 100%;
-  z-index: 2;
+  left: 2rem;
+  top: 20rem;
+  width: 15rem;
+  transform: rotate(-3.71deg);
+  z-index: 1;
 `;
 
-const FrontImg = styled.img`
+const PostcardImage = styled.img`
   position: absolute;
-  width: 100%;
+  top: 10rem;
+  left: 2.3rem;
+  width: 15.3rem;
+  min-height: 10rem;
+  max-height: 20rem;
   z-index: 3;
+  box-sizing: border-box;
+  transform: rotate(-3.71deg);
+  border: solid ${({ theme }) => theme.colors.Gray6};
 `;
 
-const RightSection = styled.div`
-  position: relative;
-  width: 30rem;
-  height: 10rem;
-  border: solid black;
-`;
-
-const LeftPaperWrapper = styled.div`
-  position: relative;
+const LoadingMessage = styled.div`
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.Gray2};
 `;
 
-const LeftPaperImg = styled.img`
+const PostcardBottomImg = styled.img`
   position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  object-fit: cover;
+  left: 1.5rem;
+  top: 20rem;
+  width: 18rem;
+  transform: rotate(-3.71deg);
+  z-index: 4;
 `;
 
-const TextWrapper = styled.div`
-  position: relative;
-  padding: 2rem;
-  z-index: 2;
+const BigpaperImg = styled.img`
+  position: absolute;
+  right: 1rem;
+  top: 18rem;
+  width: 20rem;
+  transform: rotate(5deg);
+  z-index: 5;
+`;
 
-  h3 {
+const ContentBox = styled.div`
+  position: absolute;
+  top: 20rem;
+  right: 1.9rem;
+  width: 18rem;
+  height: 12rem;
+  transform: rotate(5deg);
+  z-index: 6;
+  white-space: normal;
+
+  h1 {
+    ${({ theme, $font }) => theme.fonts[$font]};
+    color: ${({ theme }) => theme.colors.Gray1};
+    font-size: 1.3rem;
     margin-bottom: 1rem;
-    font-size: 1.1rem;
-    font-weight: bold;
   }
 
   p {
-    font-size: 1rem;
-    line-height: 1.4;
-    white-space: pre-wrap;
+    ${({ theme, $font }) => theme.fonts[$font]};
+    color: ${({ theme }) => theme.colors.Gray3};
+    font-size: 1.2rem;
   }
+`;
+
+const StampImg = styled.img`
+  position: absolute;
+  top: 19rem;
+  right: 1.1rem;
+  transform: rotate(5deg);
+  z-index: 7;
+
+  width: 8rem;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 3rem;
+  padding: 2rem;
 `;
