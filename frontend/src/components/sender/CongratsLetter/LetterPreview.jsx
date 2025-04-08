@@ -5,8 +5,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import { getUserFont } from '/src/apis/user';
-import LetterImg2 from '/src/assets/images/congratsletter/pink_background.png';
-import LetterImg1 from '/src/assets/images/congratsletter/white_background.png';
+import LetterImg2 from '/src/assets/images/congratsLetter/pink_background.png';
+import LetterImg1 from '/src/assets/images/congratsLetter/white_background.png';
 import { getFontStyle } from '/src/util/getFont';
 
 import { IcArrowLeft } from '../../../assets/icons';
