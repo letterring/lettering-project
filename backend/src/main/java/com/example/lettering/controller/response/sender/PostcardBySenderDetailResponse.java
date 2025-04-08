@@ -3,6 +3,7 @@ package com.example.lettering.controller.response.sender;
 import com.example.lettering.domain.message.entity.Postcard;
 import com.example.lettering.domain.sealingwax.enums.DesignType;
 import com.example.lettering.domain.user.enums.Font;
+import com.example.lettering.util.AESUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,7 +38,6 @@ public class PostcardBySenderDetailResponse {
         response.setId(postcard.getId());
         response.setNfcName(postcard.getKeyring().getNfcName());
         response.setNickName(postcard.getSender().getUserNickname());
-        response.setContent(postcard.getContent());
         response.setImageUrl(postcard.getImageHighUrl());
         response.setConditionType(postcard.getConditionType().toString());
         response.setConditionTime(postcard.getConditionTime());

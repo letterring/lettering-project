@@ -1,4 +1,4 @@
-package com.example.lettering.config;
+package com.example.lettering.config.interceptor;
 
 import com.example.lettering.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,8 +22,8 @@ public class SessionValidationInterceptor implements HandlerInterceptor {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
             return false;
         }
+
         Long userId = (Long) session.getAttribute("userId");
-        // userId가 실제 유효한 사용자인지 추가 검증
         if (!userService.isValidUser(userId)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "등록되지 않은 사용자입니다.");
             return false;
