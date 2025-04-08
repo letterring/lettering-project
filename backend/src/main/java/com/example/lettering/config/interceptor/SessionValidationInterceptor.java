@@ -1,4 +1,4 @@
-package com.example.lettering.config;
+package com.example.lettering.config.interceptor;
 
 import com.example.lettering.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
