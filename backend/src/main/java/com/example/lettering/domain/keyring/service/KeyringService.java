@@ -32,4 +32,5 @@ public interface KeyringService {
     void customizeKeyrings(Long userId, List<KeyringCustomizeRequest.KeyringInfo> keyrings);
     Long validateOrRegisterDevice(Long keyringId, String deviceId);
     String getCustomMessage(Long keyringId);
+    boolean isValidKeyring(Long keyringId);
 }

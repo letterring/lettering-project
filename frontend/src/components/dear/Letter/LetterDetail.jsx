@@ -4,13 +4,14 @@ import Slider from 'react-slick';
 import styled from 'styled-components';
 
 import { getLetterDetail } from '/src/apis/letter';
-import LetterImg1 from '/src/assets/images/letter/letter1.png';
-import LetterImg2 from '/src/assets/images/letter/letter2.png';
 import LetterImg3 from '/src/assets/images/letter/letter3.png';
 import LetterImg4 from '/src/assets/images/letter/letter4.png';
 import Header from '/src/components/common/Header';
 import LetterContent from '/src/components/designs/Letter/LetterContent';
 import { getLetterDate } from '/src/util/getFormatDate';
+
+import LetterImg1 from '../../../assets/images/letter/letter1.png';
+import LetterImg2 from '../../../assets/images/letter/letter2.png';
 
 const LetterDetail = () => {
   const sliderRef = useRef(null);
