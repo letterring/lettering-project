@@ -42,7 +42,7 @@ const SlideComponent = () => {
 
   const getDearMailbox = async (currentPage) => {
     setLoading(true);
-    const response = await getDearMessages(currentPage, 2);
+    const response = await getDearMessages(currentPage, 19);
     const { dearMessagesSummaryList } = response || {};
 
     if (dearMessagesSummaryList) {
