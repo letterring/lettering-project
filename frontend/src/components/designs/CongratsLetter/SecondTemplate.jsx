@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import BullonImg from '../../../assets/images/congratsletter/bullons.png';
-import ConfettiImg from '../../../assets/images/congratsletter/confetti2.png';
+import BullonImg from '../../../assets/images/congratsLetter/bullons.png';
+import ConfettiImg from '../../../assets/images/congratsLetter/confetti2.png';
 
 const SecondTemplate = ({ images }) => {
   const mainImg = images?.imageLowUrl;

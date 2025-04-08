@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { getUserFont } from '../../../apis/user';
 import { IcImageUpload, IcImageUploadTrue } from '../../../assets/icons';
-import confettiImg from '../../../assets/images/congratsletter/confetti.png';
-import RibbonImg from '../../../assets/images/congratsletter/ribbon.png';
+import confettiImg from '../../../assets/images/congratsLetter/confetti.png';
+import RibbonImg from '../../../assets/images/congratsLetter/ribbon.png';
 import { LetterImageList } from '../../../recoil/atom';
 import { getFontStyle } from '../../../util/getFont';
 

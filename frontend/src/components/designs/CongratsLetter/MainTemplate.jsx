@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import confettiImg from '../../../assets/images/congratsletter/confetti.png';
-import RibbonImg from '../../../assets/images/congratsletter/ribbon.png';
+import confettiImg from '../../../assets/images/congratsLetter/confetti.png';
+import RibbonImg from '../../../assets/images/congratsLetter/ribbon.png';
 
 const MainTemplate = ({ images }) => {
   const mainImg = images?.imageLowUrl;
