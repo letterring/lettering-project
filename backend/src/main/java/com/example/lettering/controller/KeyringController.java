@@ -176,7 +176,6 @@ public class KeyringController {
         }
     }
 
-
     @GetMapping("/custom-message")
     @Operation(summary = "키링 커스텀 메시지 조회", description = "세션에 저장된 keyringId에 해당하는 커스텀 메시지를 반환합니다.")
     public ResponseEntity<CustomMessageResponse> getCustomMessageByKeyringId(HttpSession session) {
