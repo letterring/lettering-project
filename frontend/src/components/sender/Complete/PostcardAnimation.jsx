@@ -23,7 +23,7 @@ const PostcardAnimation = () => {
 
   return (
     <StWrapper>
-      <StEnvelopeWrapper onClick={() => navigate('/dear/postcard/detail')}>
+      <StEnvelopeWrapper>
         <StEnvelopeTop $isClosed={isClosed} src={EnvelopeTopPartImg} alt="편지 봉투 윗부분" />
         <StEnvelopeBody $isClosed={isClosed} src={EnvelopeBodyImg} alt="편지 봉투 바닥" />
 
