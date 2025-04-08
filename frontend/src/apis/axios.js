@@ -21,7 +21,9 @@ client.interceptors.response.use(
     const status = error.response?.status;
     const currentPath = window.location.pathname;
 
-    if (
+    if (status === 401 && currentPath == '/dear') {
+      window.location.href = '/dear/notag';
+    } else if (
       status === 401 &&
       currentPath !== '/login' &&
       currentPath !== '/signup' &&

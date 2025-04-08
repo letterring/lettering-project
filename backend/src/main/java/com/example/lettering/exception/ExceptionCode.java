@@ -10,6 +10,7 @@ public enum ExceptionCode {
     // Controller에서 검증시 발생할 수 있는 예외 작성
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "사용자 입력 값이 검증에 실패했습니다.", 1001),
     SESSION_USER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.", 1002),
+    SESSION_KEYRING_NOT_FOUND(HttpStatus.UNAUTHORIZED, "키링인증이 필요합니다", 1003),
 
     // Service에서 비즈니스 로직 처리시 발생할 수 있는 예외 작성
     BUSINESS_ERROR(HttpStatus.CONFLICT, "비즈니스 로직에서 예외가 발생했습니다.", 2001),

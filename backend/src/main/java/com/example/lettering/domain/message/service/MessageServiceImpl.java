@@ -110,12 +110,12 @@ public class MessageServiceImpl implements MessageService {
                 .findByKeyringIdAndOpenedFalseAndConditionTimeLessThanEqualOrderByConditionTimeDesc(keyringId, now);
 
         if (messages == null || messages.isEmpty()) {
-            return new UnreadMessageResponse(false, null, null, null);
+            return new UnreadMessageResponse(false, null, null, null, null);
         }
 
         AbstractMessage latest = messages.get(0);
 
-        return UnreadMessageResponse.of(true, latest.getId(), latest.getSealingWax().getId(), latest.getSealingWax().getDesignType());
+        return UnreadMessageResponse.of(true, latest.getId(), latest.getSealingWax().getId(), latest.getSealingWax().getDesignType(), latest.getConditionType());
     }
 
     // 추후 토큰 인증시 해당 토큰 -> keyringId 찾기, 이후 message값이랑 같은지 검증

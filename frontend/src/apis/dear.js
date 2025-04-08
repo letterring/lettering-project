@@ -30,6 +30,16 @@ export const terminateKeyring = async () => {
   }
 };
 
+//키링 커스텀 메세지 조회
+export const getCustomMessage = async () => {
+  try {
+    const { data } = await client.get('/keyrings/custom-message');
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //키링 세션 설정
 export const postDeviceInfo = async () => {
   try {
