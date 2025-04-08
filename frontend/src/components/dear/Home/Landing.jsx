@@ -17,22 +17,26 @@ const Landing = () => {
   const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용)
 
   useEffect(() => {
-    const fetchUnreadMessage = async () => {
-      const data = await getUnreadMessage();
-      if (data?.exist) {
-        setNewLetter(true);
-        setMessageInfo(data);
-      }
+    const fetchData = async () => {
+      await fetchCustomMessage();
+      await fetchUnreadMessage();
     };
 
-    fetchCustomMessage();
-    fetchUnreadMessage();
+    fetchData();
   }, []);
+
+  const fetchUnreadMessage = async () => {
+    const data = await getUnreadMessage();
+    if (data?.exist) {
+      setNewLetter(true);
+      setMessageInfo(data);
+    }
+  };
 
   const fetchCustomMessage = async () => {
     const data = await getCustomMessage();
     setText(data.customMessage ?? '새로운 메세지가 도착했어요!');
-    isLoading(false);
+    setIsLoading(false);
   };
 
   const handleNewLetterClick = () => {
@@ -69,7 +73,7 @@ const Landing = () => {
     navigate('/dear/home');
   };
 
-  if (isLoading) return null;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <StHomeWrapper>
