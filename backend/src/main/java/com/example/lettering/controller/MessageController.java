@@ -22,6 +22,8 @@ import com.example.lettering.util.SessionUtil;
 import com.example.lettering.util.dto.BooleanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -131,13 +133,18 @@ public class MessageController {
     }
 
     @Operation(summary = "받는 사람 기준 메시지 목록 조회", description = "안읽은순, 즐겨찾기순, 최신순으로 정렬합니다.")
-    @GetMapping("/dear/{keyringId}")
+    @GetMapping("/dear")
     public ResponseEntity<DearMessageSummaryListResponse> getMessagesToDear(
-            @PathVariable("keyringId") Long keyringId,
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            HttpSession session) {
 
-        //추후 태그 가져오는 방식 고민
+        Long keyringId = (Long) session.getAttribute("keyringId");
+
         if (keyringId == null) {
+            throw new BusinessException(ExceptionCode.SESSION_KEYRING_NOT_FOUND);
+        }
+
+        if (!keyringService.isValidKeyring(keyringId)) {
             throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
         }
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));

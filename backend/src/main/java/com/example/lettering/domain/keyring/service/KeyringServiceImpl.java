@@ -283,5 +283,8 @@ public class KeyringServiceImpl implements KeyringService{
         return keyring.getCustomMessage();
     }
 
-
+    @Override
+    public boolean isValidKeyring(Long keyringId) {
+        return keyringRepository.existsById(keyringId);
+    }
 }
