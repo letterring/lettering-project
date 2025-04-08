@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import confettiImg from '../../../assets/images/congratsLetter/confetti.png';
-import RibbonImg from '../../../assets/images/congratsLetter/ribbon.png';
+import confettiImg from '../../../assets/images/congratsletter/confetti.png';
+import RibbonImg from '../../../assets/images/congratsletter/ribbon.png';
 
 const MainTemplate = ({ images }) => {
   const mainImg = images?.imageLowUrl;
@@ -30,26 +30,26 @@ const StWrapper = styled.div`
 
 const StConfetti = styled.img`
   position: absolute;
-  top: -6rem;
-  right: center;
-  width: 27rem;
+  top: -5.3rem;
+  left: -2.8rem;
+  width: 27.5rem;
   z-index: 1;
 `;
 
 const StRibbon = styled.img`
   position: absolute;
   top: 15rem;
-  left: -3.3rem;
-  width: 29.2rem;
+  left: -2.8rem;
+  width: 27.5rem;
   z-index: 4;
 `;
 
 const StLetterImage = styled.img`
   position: absolute;
-  top: 3rem;
-  left: 3rem;
-  width: 17.2rem;
-  height: 17.2rem;
+  top: 0rem;
+  left: 1rem;
+  width: 20rem;
+  height: 20rem;
   object-fit: cover;
   z-index: 3;
 `;
