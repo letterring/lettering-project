@@ -13,6 +13,7 @@ import com.example.lettering.domain.user.entity.User;
 import com.example.lettering.domain.user.repository.UserRepository;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
+import com.example.lettering.util.AESUtil;
 import com.example.lettering.util.S3ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class PostcardServiceImpl implements PostcardService {
     private final UserRepository userRepository;
     private final KeyringRepository keyringRepository;
     private final SealingWaxRepository sealingWaxRepository;
+    private final AESUtil aesUtil;
 
     @Override
     public Long createPostcard(CreatePostcardRequest createPostcardRequest, MultipartFile imageFile, Long senderId) throws IOException {
@@ -51,7 +53,9 @@ public class PostcardServiceImpl implements PostcardService {
 
         String imageLowUrl = s3ImageUtil.uploadLowQualityImage(imageFile, "postcard_images");
 
-        Postcard postcard = Postcard.fromDto(createPostcardRequest, sender, keyring, sealingWax, imageHighUrl, imageLowUrl, sender.getFont());
+        String encryptedContent = aesUtil.encrypt(createPostcardRequest.getContent());
+
+        Postcard postcard = Postcard.fromDto(createPostcardRequest, sender, keyring, sealingWax, imageHighUrl, imageLowUrl, sender.getFont(), encryptedContent);
 
         return postcardRepository.save(postcard).getId();
     }
@@ -62,7 +66,12 @@ public class PostcardServiceImpl implements PostcardService {
         Postcard postcard = postcardRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
 
-        return PostcardBySenderDetailResponse.fromEntity(postcard);
+        String decryptedContent = aesUtil.decrypt(postcard.getContent());
+
+        PostcardBySenderDetailResponse response = PostcardBySenderDetailResponse.fromEntity(postcard);
+        response.setContent(decryptedContent);
+
+        return response;
     }
 
     @Override
@@ -72,7 +81,12 @@ public class PostcardServiceImpl implements PostcardService {
 
         postcard.markAsOpened();
 
-        return PostcardToDearDetailResponse.fromEntity(postcard);
+        String decryptedContent = aesUtil.decrypt(postcard.getContent());
+
+        PostcardToDearDetailResponse response = PostcardToDearDetailResponse.fromEntity(postcard);
+        response.setContent(decryptedContent);
+
+        return response;
     }
 
     @Override
