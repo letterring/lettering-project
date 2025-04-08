@@ -1,13 +1,7 @@
 /* eslint-disable no-void */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  Platform,
-  PermissionsAndroid,
-  StyleSheet,
-} from 'react-native';
+import {Platform, PermissionsAndroid} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {WebView} from 'react-native-webview';
 import type {WebView as WebViewType} from 'react-native-webview';
@@ -208,11 +202,26 @@ const App = () => {
 
   if (!data || !isReady) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.waitText}>
-          📡 NFC 키링을 태깅하거나 링크로 실행하세요
-        </Text>
-      </View>
+      // <View style={styles.center}>
+      //   <Text style={styles.waitText}>
+      //     📡 NFC 키링을 태깅하거나 링크로 실행하세요
+      //   </Text>
+      // </View>
+      <WebView
+        source={{uri: 'https://letterring.shop/dear/notag'}}
+        // onLoadEnd={() => {
+        //   if (webViewRef.current) {
+        //     const payload = {
+        //       keyringId: data?.keyringId,
+        //       text: data?.text,
+        //       device: data?.device,
+        //     };
+        //     webViewRef.current.postMessage(JSON.stringify(payload));
+        //   }
+        // }}
+        javaScriptEnabled
+        originWhitelist={['*']}
+      />
     );
   }
 
@@ -262,34 +271,34 @@ const App = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  waitText: {
-    fontSize: 18,
-    color: '#333',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  infoBox: {
-    padding: 12,
-    backgroundColor: '#f2f2f2',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 6,
-  },
-  infoText: {
-    fontSize: 14,
-    marginBottom: 2,
-  },
-});
+// const styles = StyleSheet.create({
+//   center: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     padding: 20,
+//   },
+//   waitText: {
+//     fontSize: 18,
+//     color: '#333',
+//     marginBottom: 20,
+//     textAlign: 'center',
+//   },
+//   infoBox: {
+//     padding: 12,
+//     backgroundColor: '#f2f2f2',
+//     borderBottomWidth: 1,
+//     borderBottomColor: '#ccc',
+//   },
+//   infoTitle: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     marginBottom: 6,
+//   },
+//   infoText: {
+//     fontSize: 14,
+//     marginBottom: 2,
+//   },
+// });
 
 export default App;
