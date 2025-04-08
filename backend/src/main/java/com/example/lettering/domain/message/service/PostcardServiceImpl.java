@@ -66,7 +66,12 @@ public class PostcardServiceImpl implements PostcardService {
         Postcard postcard = postcardRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
 
-        return PostcardBySenderDetailResponse.fromEntity(postcard);
+        String decryptedContent = aesUtil.decrypt(postcard.getContent());
+
+        PostcardBySenderDetailResponse response = PostcardBySenderDetailResponse.fromEntity(postcard);
+        response.setContent(decryptedContent);
+
+        return response;
     }
 
     @Override
@@ -76,7 +81,12 @@ public class PostcardServiceImpl implements PostcardService {
 
         postcard.markAsOpened();
 
-        return PostcardToDearDetailResponse.fromEntity(postcard);
+        String decryptedContent = aesUtil.decrypt(postcard.getContent());
+
+        PostcardToDearDetailResponse response = PostcardToDearDetailResponse.fromEntity(postcard);
+        response.setContent(decryptedContent);
+
+        return response;
     }
 
     @Override
