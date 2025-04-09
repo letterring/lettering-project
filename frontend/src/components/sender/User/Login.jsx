@@ -48,14 +48,7 @@ const Login = () => {
       setEmail('');
       setPassword('');
 
-      showAlert({
-        title: '로그인 성공',
-        message: `환영합니다, ${data.userNickname}님!`,
-        onClose: () => {
-          setAlertState((prev) => ({ ...prev, isOpen: false }));
-          navigate('/Home');
-        },
-      });
+      navigate('/Home');
     } catch (err) {
       showAlert({
         title: '로그인 실패',
@@ -105,6 +98,8 @@ const Login = () => {
             icon={showPassword ? faEyeSlash : faEye}
             onIconClick={togglePasswordVisibility}
             required
+            minLength={8}
+            maxLength={20}
           />
           <LongButton btnName="로그인" type="submit" />
         </Form>

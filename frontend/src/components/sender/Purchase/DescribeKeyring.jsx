@@ -7,6 +7,7 @@ import { getKeyringData, getKeyringsData } from '../../../apis/keyring';
 import { TotalPrice, TotalQuantity } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
+import AlertModal from '../../common/modal/AlertModal';
 import QuantityInput from './QuantitiyInput';
 
 const DescribeKeyring = () => {
@@ -15,6 +16,7 @@ const DescribeKeyring = () => {
   const [details, setDetails] = useState(null);
   const [total, setTotal] = useRecoilState(TotalPrice);
   const { id, designName, imageUrl, price, description, availableStock } = details || {};
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   /**
    * 지금은 키링 종류가 하나라 1로 적어둠
@@ -38,6 +40,14 @@ const DescribeKeyring = () => {
     const res = getKeyrings();
   }, []);
 
+  const handleSubmit = () => {
+    if (quantity > availableStock) {
+      setIsModalOpen(true);
+      return;
+    }
+    navigate(`/purchase/checkout`);
+  };
+
   return (
     <>
       <StWrapper>
@@ -55,16 +65,14 @@ const DescribeKeyring = () => {
               {description?.split('\n').map((line, idx) => (
                 <p key={idx}>{line}</p>
               ))}
-              남은 키링 개수 : {availableStock}
-              <LongButton
-                btnName="구매하기"
-                onClick={() => {
-                  navigate(`/purchase/checkout`);
-                }}
-              />
+              <h5>현재 재고 : {availableStock} 개</h5>
+              <LongButton btnName="구매하기" onClick={handleSubmit} />
             </StText>
           </StTextWrapper>
         </StContent>
+        <AlertModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="재고 초과">
+          선택한 수량이 현재 재고보다 많습니다. 수량을 조절해주세요.
+        </AlertModal>
       </StWrapper>
     </>
   );
@@ -128,6 +136,11 @@ const StText = styled.div`
 
   h4 {
     ${({ theme }) => theme.fonts.Title3};
+  }
+
+  h5 {
+    ${({ theme }) => theme.fonts.Title5};
+    color: ${({ theme }) => theme.colors.MainRed};
   }
 
   p {
