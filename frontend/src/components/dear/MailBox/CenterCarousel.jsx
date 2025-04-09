@@ -12,9 +12,11 @@ import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/ic
 import Closed3 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
 import Closed1 from '../../../assets/images/mailbox/closed3.png';
+import Closed4 from '../../../assets/images/mailbox/closed4.png';
 import Opened3 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
+import Opened4 from '../../../assets/images/mailbox/opened4.png';
 import { getRelativeFormat } from '../../../util/getRelativeDate';
 import RealTimer from './RealTimer';
 
@@ -22,12 +24,14 @@ const closedImages = {
   1: Closed1,
   2: Closed2,
   3: Closed3,
+  4: Closed4,
 };
 
 const openedImages = {
   1: Opened1,
   2: Opened2,
   3: Opened3,
+  4: Opened4,
 };
 
 const SlideComponent = () => {
@@ -96,6 +100,8 @@ const SlideComponent = () => {
       navigate(`/dear/letter/detail/${messageId}`);
     } else if (sealingWaxId === 3) {
       navigate(`/dear/letter/congrats/detail/${messageId}`);
+    } else if (sealingWaxId === 4) {
+      navigate(`/dear/postcard/detail/${messageId}`);
     }
   };
 
