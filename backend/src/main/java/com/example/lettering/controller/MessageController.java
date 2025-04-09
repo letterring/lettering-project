@@ -25,6 +25,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.protocol.HTTP;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,6 +54,9 @@ public class MessageController {
     private final KeyringService keyringService;
     private final KeyringSessionService sessionService;
     private final SessionUtil sessionUtil;
+
+    @Value("${validation.keyring.enabled:true}")
+    private boolean isKeyringValidationEnabled;
 
     @Operation(summary = "고화질 이미지 API", description = "해당 메시지(우편 또는 엽서)의 고화질 이미지를 얻습니다.")
     @GetMapping("/highimage")
@@ -117,8 +122,7 @@ public class MessageController {
     public ResponseEntity<PostcardBySenderDetailResponse> getPostcardBySenderDetail(
             @PathVariable("messageId") Long messageId) {
 
-        PostcardBySenderDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
-        return ResponseEntity.ok(postcardDetailResponse);
+        return ResponseEntity.ok(postcardService.getPostcardDetail(messageId));
     }
 
     @Operation(summary = "보낸 사람 기준 편지 상세 조회", description = "path variable로 전달된 messageId에 해당하는 편지 상세 정보를 반환합니다.")
@@ -126,30 +130,24 @@ public class MessageController {
     public ResponseEntity<LetterBySenderDetailResponse> getLetterBySenderDetail(
             @PathVariable("messageId") Long messageId) {
 
-        LetterBySenderDetailResponse letterBySenderDetailResponse = letterService.getLetterBySenderDetail(messageId);
-        return ResponseEntity.ok(letterBySenderDetailResponse);
+        return ResponseEntity.ok(letterService.getLetterBySenderDetail(messageId));
     }
 
     @Operation(summary = "받는 사람 기준 메시지 목록 조회", description = "안읽은순, 즐겨찾기순, 최신순으로 정렬합니다.")
-    @GetMapping("/dear/{keyringId}")
+    @GetMapping("/dear")
     public ResponseEntity<DearMessageSummaryListResponse> getMessagesToDear(
-            @PathVariable("keyringId") Long keyringId,
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            HttpSession session) {
+        Long keyringId = isKeyringValidationEnabled ? Objects.requireNonNull((Long) session.getAttribute("keyringId")) : 19L;
 
-        //추후 태그 가져오는 방식 고민
-        if (keyringId == null) {
-            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
-        }
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
     }
 
     @Operation(summary = "받은 편지 읽음/안읽음 개수 조회",
             description = "요청 파라미터 keyringId에 해당하는 메시지 중, ConditionType이 RESERVATION이고 conditionTime이 현재 이후인 예약된 편지를 제외한 후, opened 상태에 따라 읽은 편지와 안읽은 편지의 개수를 반환합니다.")
     @GetMapping("/dear/readcount")
-    public ResponseEntity<MessageReadCountResponse> getMessageReadCount(@RequestParam("keyringId") Long keyringId) {
-        if(keyringId == null) {
-            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
-        }
+    public ResponseEntity<MessageReadCountResponse> getMessageReadCount(HttpSession session) {
+        Long keyringId = isKeyringValidationEnabled ? Objects.requireNonNull((Long) session.getAttribute("keyringId")) : 19L;
 
         return ResponseEntity.ok(MessageReadCountResponse.of(messageService.getMessageReadCount(keyringId, LocalDateTime.now())));
     }
@@ -158,25 +156,21 @@ public class MessageController {
     @GetMapping("/postcards/dear/{messageId}")
     public ResponseEntity<PostcardToDearDetailResponse> getPostcardToDearDetail(
             @PathVariable("messageId") Long messageId) {
-        //키링 관련 session 검증 필요
 
-        PostcardToDearDetailResponse postcardToDearDetailResponse = postcardService.getPostcardToDearDetail(messageId);
-        return ResponseEntity.ok(postcardToDearDetailResponse);
+        return ResponseEntity.ok(postcardService.getPostcardToDearDetail(messageId));
     }
 
     @Operation(summary = "받은 사람 기준 편지 상세 조회", description = "path variable로 전달된 messageId에 해당하는 편지 상세 정보를 반환합니다.")
     @GetMapping("/letters/dear/{messageId}")
     public ResponseEntity<LetterToDearDetailResponse> getLetterToDearDetail(
             @PathVariable("messageId") Long messageId) {
-        //키링 관련 session 검증 필요
 
-        LetterToDearDetailResponse letterToDearDetailResponse = letterService.getLetterToDearDetail(messageId);
-        return ResponseEntity.ok(letterToDearDetailResponse);
+        return ResponseEntity.ok(letterService.getLetterToDearDetail(messageId));
     }
 
     @Operation(summary = "받은 사람 기준 엽서 이미지 다운로드", description = "엽서 이미지를 다운받을 수 있습니다.")
     @PostMapping("/postcards/dear/image")
-    public ResponseEntity<byte[]> downloadPostcardImage(@RequestBody ImageDownloadRequest imageDownloadRequest) {
+    public ResponseEntity<byte[]> downloadPostcardImage(@RequestBody ImageDownloadRequest imageDownloadRequest, HttpSession session) {
         String imageUrl = imageDownloadRequest.getImageUrl();
 
         byte[] imageBytes = postcardService.downloadImageFromS3(imageUrl);
@@ -198,7 +192,6 @@ public class MessageController {
     @PatchMapping("/unread/backoffice/{messageId}")
     public ResponseEntity<BooleanResponse> resetMessageAsUnread(
             @PathVariable("messageId") Long messageId) {
-
         postcardService.resetMessageAsUnread(messageId);
 
         return ResponseEntity.ok(new BooleanResponse(true));
@@ -209,7 +202,6 @@ public class MessageController {
     public ResponseEntity<BooleanResponse> createReply(
             @PathVariable("messageId") Long messageId,
             @RequestBody CreateReplyRequest createReplyRequest) {
-        //키링 관련 session 검증 필요
 
         messageService.createReply(messageId, createReplyRequest.getReplyText());
         return ResponseEntity.ok(new BooleanResponse(true));
@@ -220,33 +212,30 @@ public class MessageController {
     @PatchMapping("/favorite/{messageId}")
     public ResponseEntity<BooleanResponse> toggleFavorite(
             @PathVariable("messageId") Long messageId) {
-        //키링 관련 session 검증 필요
 
         messageService.toggleFavorite(messageId);
         return ResponseEntity.ok(new BooleanResponse(true));
     }
 
-
+    @Operation(summary = "최근 안읽은 메시지 여부 조회", description = "메시지 여부 조회 및 정보 반환")
     @GetMapping("/unread")
-    public ResponseEntity<UnreadMessageResponse> getUnreadMessageBackoffice(HttpSession session)  {
-//        Long keyringId = (Long) session.getAttribute("keyringId");
-        Long keyringId = 2L;
-        if (keyringId == null) {
-            throw new BusinessException(ExceptionCode.KEYRING_NOT_FOUND);
-        }
+    public ResponseEntity<UnreadMessageResponse> getUnreadMessage(HttpSession session)  {
+        Long keyringId = isKeyringValidationEnabled ? Objects.requireNonNull((Long) session.getAttribute("keyringId")) : 19L;
 
-        UnreadMessageResponse unreadMessageResponse = messageService.getLatestUnreadMessage(keyringId);
-        return ResponseEntity.ok(unreadMessageResponse);
+        return ResponseEntity.ok(messageService.getLatestUnreadMessage(keyringId));
+    }
+
+    @Operation(summary = "질문 정보 조회", description = "특정 메세지의 Quiz 정보 반환")
+    @GetMapping("/dear/quiz/{messageId}")
+    public ResponseEntity<QuestionInfoResponse> getMessageQuestion(@PathVariable Long messageId) {
+        return ResponseEntity.ok(messageService.getMessageQuestionInfo(messageId));
     }
 
     @Operation(summary = "보낸 사람 기준 키링 필터",
             description = "세션의 userId(즉, ownerId)와 일치하는 keyring의 id와 nfcName을 반환합니다.")
     @GetMapping("/filter")
     public ResponseEntity<KeyringFilterListResponse> filterKeyringsByOwner(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new ValidationException(ExceptionCode.SESSION_USER_NOT_FOUND);
-        }
+        Long userId = Objects.requireNonNull((Long) session.getAttribute("userId"));
 
         return ResponseEntity.ok(KeyringFilterListResponse.of(keyringService.getKeyringsByOwner(userId)));
     }

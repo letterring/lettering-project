@@ -3,10 +3,7 @@ package com.example.lettering.domain.keyring.service;
 import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
 import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.user.OrderRequest;
-import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
-import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
-import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
-import com.example.lettering.controller.response.keyring.KeyringManageResponse;
+import com.example.lettering.controller.response.keyring.*;
 import com.example.lettering.domain.keyring.entity.Keyring;
 import com.example.lettering.domain.keyring.entity.KeyringDesign;
 import com.example.lettering.domain.keyring.entity.Order;
@@ -267,9 +264,7 @@ public class KeyringServiceImpl implements KeyringService{
             keyring.addDeviceUniqueId(deviceId);
             keyringRepository.save(keyring);
             return keyring.getId();
-        }
-
-        if (!deviceId.equals(keyring.getDeviceUniqueId())) {
+        } else if(!keyring.getDeviceUniqueId().equals(deviceId)) {
             throw new BusinessException(ExceptionCode.UNAUTHORIZED_ACCESS);
         }
 
@@ -283,5 +278,18 @@ public class KeyringServiceImpl implements KeyringService{
         return keyring.getCustomMessage();
     }
 
+    @Override
+    public boolean isValidKeyring(Long keyringId) {
+        return keyringRepository.existsById(keyringId);
+    }
 
+    @Override
+    public KeyringDesignWithStockResponse getKeyringDesignWithStock(Long designId) {
+        KeyringDesign design = keyringDesignRepository.findById(designId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.DESIGN_NOT_FOUND));
+
+        Long stock = keyringRepository.countByDesignIsNullAndOwnerIsNullAndIsPurchaseFalse();
+
+        return KeyringDesignWithStockResponse.from(design, stock);
+    }
 }

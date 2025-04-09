@@ -134,6 +134,8 @@ const ModalDesc = styled.div`
   color: ${({ theme }) => theme.colors.Gray2};
   white-space: pre-line;
   text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
 `;
 
 const InputBox = styled.div`
@@ -159,6 +161,7 @@ const ModalButtons = styled.div`
   justify-content: center;
   gap: 2rem;
   margin-top: 2rem;
+  margin-bottom: 1rem;
 `;
 const QuestionPreview = styled.div`
   // margin-top: 2rem;
@@ -184,7 +187,7 @@ const Toast = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background-color: ${({ theme }) => theme.colors.MainRed};
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: white;
   padding: 1rem 2rem;
   border-radius: 1.2rem;

@@ -1,10 +1,7 @@
 package com.example.lettering.controller;
 
 import com.example.lettering.controller.request.keyring.*;
-import com.example.lettering.controller.response.keyring.CustomMessageResponse;
-import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
-import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
-import com.example.lettering.controller.response.keyring.KeyringManageResponse;
+import com.example.lettering.controller.response.keyring.*;
 import com.example.lettering.domain.keyring.service.KeyringService;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
@@ -53,10 +50,10 @@ public class KeyringController {
     }
 
     @GetMapping("/designs/{designId}")
-    @Operation(summary = "키링 디자인 단건 조회", description = "디자인 ID를 통해 해당 키링 디자인의 상세 정보를 조회합니다.")
-    public ResponseEntity<KeyringDesignResponse> getKeyringDesignById(@PathVariable Long designId) {
-        KeyringDesignResponse design = keyringService.getKeyringDesignById(designId);
-        return ResponseEntity.ok(design);
+    @Operation(summary = "키링 디자인 단건 조회", description = "디자인 ID를 통해 해당 키링 디자인의 상세 정보 및 남은 재고를 조회합니다.")
+    public ResponseEntity<KeyringDesignWithStockResponse> getKeyringDesignById(@PathVariable Long designId) {
+        KeyringDesignWithStockResponse response = keyringService.getKeyringDesignWithStock(designId);
+        return ResponseEntity.ok(response);
     }
 
 
@@ -163,7 +160,7 @@ public class KeyringController {
 
     @PostMapping("/nfc-access")
     @Operation(summary = "디바이스 등록 및 검증", description = "앱에서 진입 시 디바이스 검증 또는 등록 후 결과 제공")
-    public ResponseEntity<Void> handleNfcAccess(@RequestBody KeyringAccessRequest request, HttpSession session) {
+    public ResponseEntity<Void> handleNfcAccess(@Valid @RequestBody KeyringAccessRequest request, HttpSession session) {
         try {
             Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
             session.setAttribute("keyringId", keyringId);

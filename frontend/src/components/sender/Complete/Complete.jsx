@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
@@ -7,10 +8,12 @@ import CompleteImage from '/src/assets/images/sender/TransmissionComplete.png';
 
 import { deletePostcard } from '../../../apis/fastapi';
 import { RedisMessageKey } from '../../../recoil/atom';
+import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 
 const Complete = () => {
   const key = useRecoilValue(RedisMessageKey);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const autoDelete = async () => {
@@ -29,10 +32,11 @@ const Complete = () => {
 
   return (
     <CompleteWrapper $Background={PaperBackground}>
-      <Header headerName="편지 전송" />
+      <Header headerName="편지 전송" missBack={true} />
       <img src={CompleteImage} alt="전송 완료 이미지" />
       <CompleteText>전송 완료!!</CompleteText>
       <SubText>키링을 태그하면 도착한 편지를 바로 확인할 수 있어요!</SubText>
+      <LongButton btnName="보낸 편지함으로 가기" onClick={() => navigate(`/mailbox`)} />
     </CompleteWrapper>
   );
 };
@@ -72,4 +76,6 @@ const SubText = styled.div`
   color: ${({ theme }) => theme.colors.Gray4};
   ${({ theme }) => theme.fonts.Body2};
   text-align: center;
+
+  margin-bottom: 3rem;
 `;
