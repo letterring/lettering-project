@@ -31,9 +31,7 @@ const StImageModalWrapper = styled.div`
 
 const ModalWrapper = styled.div`
   width: 30rem;
-  height: 40rem;
-  background-color: white;
-  border-radius: 2rem;
+  height: auto;
   overflow: hidden;
   display: flex;
   justify-content: center;

@@ -18,7 +18,13 @@ const NickNameSetting = ({ value, icon: IconComponent, onIconClick, isEditing, o
       )}
       {IconComponent && (
         <IconComponent
-          style={{ cursor: 'pointer' }}
+          style={{
+            position: 'absolute',
+            right: '2rem',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            cursor: 'pointer',
+          }}
           onClick={() => {
             isEditing ? onIconClick(inputValue) : onStartEdit();
           }}
@@ -34,6 +40,7 @@ const StBoxWrapper = styled.div`
   color: ${({ theme }) => theme.colors.Gray3};
   ${({ theme }) => theme.fonts.Saeum3};
   background-color: ${({ theme }) => theme.colors.White};
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

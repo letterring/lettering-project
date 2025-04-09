@@ -2,28 +2,27 @@ import client from './axios';
 
 export const signup = async (user) => {
   try {
-    const res = await client.post(`/users/signup`, user);
-    return res.data;
+    const { data } = await client.post(`/users/signup`, user);
+    return data;
   } catch (err) {
     console.error('회원가입 오류:', err);
     const errorMessage =
       err.response?.data?.message || '회원가입에 실패했습니다. 다시 시도해주세요.';
-    alert(errorMessage);
 
-    return null;
+    throw new Error(errorMessage);
   }
 };
 
 export const login = async (userInfo) => {
   try {
-    const res = await client.post(`/users/login`, userInfo);
-    return res.data;
+    const { data } = await client.post(`/users/login`, userInfo);
+    return data;
   } catch (err) {
+    console.error('로그인 오류', err);
     const errorMessage =
       err.response?.data?.message || '로그인에 실패하였습니다. 다시 시도해 주세요.';
-    console.error('로그인 실패: ', err);
-    alert(errorMessage);
-    return null;
+
+    throw new Error(errorMessage);
   }
 };
 

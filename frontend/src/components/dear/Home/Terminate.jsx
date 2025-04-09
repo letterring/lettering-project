@@ -39,7 +39,7 @@ export default Terminate;
 
 const StTerminateWrapper = styled.div`
   width: 100%;
-  height: 100vh; /* 뷰포트 높이 기준으로 */
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
