@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { getUnreadMessage } from '/src/apis/dear';
 import { getHighImage } from '/src/apis/dear';
 
-import { getCustomMessage, postDeviceInfo } from '../../../apis/dear';
 import OBJViewer from './OBJViewer';
 
 const Landing = () => {
@@ -73,10 +72,6 @@ const Landing = () => {
   const handleMissedClick = () => {
     navigate('/dear/home');
   };
-
-  if (isLoading) return <div>Loading...</div>;
-
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <StHomeWrapper>
