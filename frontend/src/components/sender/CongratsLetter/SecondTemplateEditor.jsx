@@ -88,17 +88,20 @@ const StWrapper = styled.div`
 
 const StConffetti = styled.img`
   position: absolute;
-  top: -3.7rem;
+  top: -3rem;
   right: center;
   width: 27rem;
+  height: 35rem;
   z-index: 1;
+
+  object-fit: cover;
 `;
 
 const StTextImage = styled.img`
   position: absolute;
   top: 13rem;
   left: center;
-  width: 27rem;
+  width: 27.2rem;
   z-index: 3;
 `;
 

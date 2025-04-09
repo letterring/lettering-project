@@ -46,3 +46,13 @@ export const setFavorites = async (messageId) => {
     console.error(error);
   }
 };
+
+//받은 편지함에서 읽음/안읽음 조회
+export const getReadStates = async (keyringId) => {
+  try {
+    const { data } = await client.get(`/messages/dear/readcount?keyringId=${keyringId}`);
+    return data;
+  } catch (error) {
+    console.error('보낸 편지함 필터 조회 실패:', error);
+  }
+};

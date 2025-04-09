@@ -226,7 +226,7 @@ const StFloatingText = styled.div`
   font-family: 'Pretendard';
   font-size: 1.8rem;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 130%;
   text-align: center;
   background: rgba(255, 255, 255, 0.8);
