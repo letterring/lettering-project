@@ -12,18 +12,22 @@ import { IcDetail } from '../../../assets/icons';
 import Closed3 from '../../../assets/images/mailbox/closed1.png';
 import Closed2 from '../../../assets/images/mailbox/closed2.png';
 import Closed1 from '../../../assets/images/mailbox/closed3.png';
+import Closed4 from '../../../assets/images/mailbox/closed4.png';
 import Opened3 from '../../../assets/images/mailbox/opened1.png';
 import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
+import Opened4 from '../../../assets/images/mailbox/opened4.png';
 import { getRelativeFormat } from '../../../util/getRelativeDate';
 
 const images = {
   Closed1,
   Closed2,
   Closed3,
+  Closed4,
   Opened1,
   Opened2,
   Opened3,
+  Opened4,
 };
 
 const CenterCarousel = ({ selected }) => {
@@ -103,6 +107,8 @@ const CenterCarousel = ({ selected }) => {
       navigate(`/letter/detail/${messageId}`);
     } else if (sealingWaxId === 3) {
       navigate(`/letter/congrats/detail/${messageId}`);
+    } else if (sealingWaxId === 4) {
+      navigate(`/postcard/detail/ssafy/${messageId}`);
     }
   };
 
