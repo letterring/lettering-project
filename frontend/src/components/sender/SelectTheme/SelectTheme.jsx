@@ -91,7 +91,11 @@ const SelectTheme = () => {
       {selectedTheme && <ExampleImage src={getImageSrc(selectedTheme.id)} />}
 
       <FixedButtonWrapper>
-        <LongButton btnName="지금 디자인으로 편지쓰기" onClick={handleConfirm} opacity={false} />
+        <LongButton
+          btnName={`지금 디자인으로 ${selectedTheme?.designType === 'POSTCARD' ? '엽서' : '편지'}쓰기`}
+          onClick={handleConfirm}
+          opacity={false}
+        />
       </FixedButtonWrapper>
     </Wrapper>
   );
