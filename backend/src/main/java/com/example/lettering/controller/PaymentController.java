@@ -68,7 +68,8 @@ public class PaymentController {
 
         return ResponseEntity.ok(new PaymentReadyResponse(
                 tempOrderNumber,
-                kakao.getNext_redirect_pc_url()
+                kakao.getNextRedirectPcUrl(),
+                kakao.getNextRedirectMobileUrl()
         ));
     }
 
