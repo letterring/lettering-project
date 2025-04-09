@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getHighImage, getQuizInfo, getUnreadMessage, postDeviceInfo } from '/src/apis/dear';
+import { getHighImage, getQuizInfo, getUnreadMessage } from '/src/apis/dear';
 import { getLetterDetail } from '/src/apis/letter';
 import { getPostcardDetail } from '/src/apis/postcard';
 
@@ -22,7 +22,6 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
