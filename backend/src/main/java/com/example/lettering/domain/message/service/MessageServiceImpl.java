@@ -2,12 +2,14 @@ package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.response.dear.DearMessageSummaryResponse;
 import com.example.lettering.controller.response.dear.MessageReadCountResponse;
+import com.example.lettering.controller.response.dear.QuestionInfoResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
 import com.example.lettering.controller.response.dear.UnreadMessageResponse;
 import com.example.lettering.domain.message.entity.AbstractMessage;
 import com.example.lettering.domain.message.entity.Letter;
 import com.example.lettering.domain.message.entity.Postcard;
 import com.example.lettering.domain.message.repository.AbstractMessageRepository;
+import com.example.lettering.domain.user.entity.QuizInfo;
 import com.example.lettering.exception.ExceptionCode;
 import com.example.lettering.exception.type.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -116,6 +118,19 @@ public class MessageServiceImpl implements MessageService {
         AbstractMessage latest = messages.get(0);
 
         return UnreadMessageResponse.of(true, latest.getId(), latest.getSealingWax().getId(), latest.getSealingWax().getDesignType(), latest.getConditionType());
+    }
+
+    @Override
+    public QuestionInfoResponse getMessageQuestionInfo(Long messageId) {
+        AbstractMessage message = abstractMessageRepository.findById(messageId)
+                .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
+
+        QuizInfo quizInfo = message.getQuizInfo();
+        if (quizInfo == null || quizInfo.getQuizQuestion() == null) {
+            throw new BusinessException(ExceptionCode.QUIZ_NOT_FOUND); // 필요한 경우 추가
+        }
+
+        return QuestionInfoResponse.of(quizInfo.getQuizQuestion(), quizInfo.getQuizHint(), quizInfo.getQuizAnswer());
     }
 
     // 추후 토큰 인증시 해당 토큰 -> keyringId 찾기, 이후 message값이랑 같은지 검증
