@@ -118,8 +118,7 @@ public class MessageController {
     public ResponseEntity<PostcardBySenderDetailResponse> getPostcardBySenderDetail(
             @PathVariable("messageId") Long messageId) {
 
-        PostcardBySenderDetailResponse postcardDetailResponse = postcardService.getPostcardDetail(messageId);
-        return ResponseEntity.ok(postcardDetailResponse);
+        return ResponseEntity.ok(postcardService.getPostcardDetail(messageId));
     }
 
     @Operation(summary = "보낸 사람 기준 편지 상세 조회", description = "path variable로 전달된 messageId에 해당하는 편지 상세 정보를 반환합니다.")
@@ -127,8 +126,7 @@ public class MessageController {
     public ResponseEntity<LetterBySenderDetailResponse> getLetterBySenderDetail(
             @PathVariable("messageId") Long messageId) {
 
-        LetterBySenderDetailResponse letterBySenderDetailResponse = letterService.getLetterBySenderDetail(messageId);
-        return ResponseEntity.ok(letterBySenderDetailResponse);
+        return ResponseEntity.ok(letterService.getLetterBySenderDetail(messageId));
     }
 
     @Operation(summary = "받는 사람 기준 메시지 목록 조회", description = "안읽은순, 즐겨찾기순, 최신순으로 정렬합니다.")
@@ -157,8 +155,7 @@ public class MessageController {
     public ResponseEntity<PostcardToDearDetailResponse> getPostcardToDearDetail(
             @PathVariable("messageId") Long messageId) {
 
-        PostcardToDearDetailResponse postcardToDearDetailResponse = postcardService.getPostcardToDearDetail(messageId);
-        return ResponseEntity.ok(postcardToDearDetailResponse);
+        return ResponseEntity.ok(postcardService.getPostcardToDearDetail(messageId));
     }
 
     @Operation(summary = "받은 사람 기준 편지 상세 조회", description = "path variable로 전달된 messageId에 해당하는 편지 상세 정보를 반환합니다.")
@@ -166,8 +163,7 @@ public class MessageController {
     public ResponseEntity<LetterToDearDetailResponse> getLetterToDearDetail(
             @PathVariable("messageId") Long messageId) {
 
-        LetterToDearDetailResponse letterToDearDetailResponse = letterService.getLetterToDearDetail(messageId);
-        return ResponseEntity.ok(letterToDearDetailResponse);
+        return ResponseEntity.ok(letterService.getLetterToDearDetail(messageId));
     }
 
     @Operation(summary = "받은 사람 기준 엽서 이미지 다운로드", description = "엽서 이미지를 다운받을 수 있습니다.")
@@ -219,14 +215,19 @@ public class MessageController {
         return ResponseEntity.ok(new BooleanResponse(true));
     }
 
-
+    @Operation(summary = "최근 안읽은 메시지 여부 조회", description = "메시지 여부 조회 및 정보 반환")
     @GetMapping("/unread")
-    public ResponseEntity<UnreadMessageResponse> getUnreadMessageBackoffice(HttpSession session)  {
+    public ResponseEntity<UnreadMessageResponse> getUnreadMessage(HttpSession session)  {
         Long keyringId = 19L;
 //        Long keyringId = Objects.requireNonNull((Long) session.getAttribute("keyringId"));
 
-        UnreadMessageResponse unreadMessageResponse = messageService.getLatestUnreadMessage(keyringId);
-        return ResponseEntity.ok(unreadMessageResponse);
+        return ResponseEntity.ok(messageService.getLatestUnreadMessage(keyringId));
+    }
+
+    @Operation(summary = "질문 정보 조회", description = "특정 메세지의 Quiz 정보 반환")
+    @GetMapping("/dear/quiz/{messageId}")
+    public ResponseEntity<QuestionInfoResponse> getMessageQuestion(@PathVariable Long messageId) {
+        return ResponseEntity.ok(messageService.getMessageQuestionInfo(messageId));
     }
 
     @Operation(summary = "보낸 사람 기준 키링 필터",
