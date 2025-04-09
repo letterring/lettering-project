@@ -22,7 +22,7 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // await postDeviceInfo();
+      await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
@@ -72,7 +72,8 @@ const Landing = () => {
         ? await getPostcardDetail(lockedData.messageId)
         : await getLetterDetail(lockedData.messageId);
 
-    setMessageInfo(detail);
+    const { id: messageId, sealingWaxId } = detail;
+    setMessageInfo({ messageId, sealingWaxId });
     setNewLetter(true);
     setLockedData(null); // 모달 닫기
   };
@@ -103,15 +104,15 @@ const Landing = () => {
     navigate('/dear/home');
   };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      if (!messageInfo?.messageId) return;
-      const data = await getHighImage(messageInfo.messageId);
-      if (data?.imageHighUrl) {
-        setImageUrl(data.imageHighUrl);
-      }
-    };
+  const fetchImage = async () => {
+    if (!messageInfo?.messageId) return;
+    const data = await getHighImage(messageInfo.messageId);
+    if (data?.imageHighUrl) {
+      setImageUrl(data.imageHighUrl);
+    }
+  };
 
+  useEffect(() => {
     fetchImage();
   }, [messageInfo]);
 
