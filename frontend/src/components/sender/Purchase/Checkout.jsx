@@ -47,14 +47,26 @@ const Checkout = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const { orderNumber, paymentUrl } = await submitOrder(formData);
+
+  //   setOrderNum(orderNumber);
+
+  //   window.location.assign(paymentUrl);
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { orderNumber, paymentUrl } = await submitOrder(formData);
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    const { orderNumber, pcUrl, mobileUrl } = await submitOrder(formData);
 
     setOrderNum(orderNumber);
 
-    window.location.assign(paymentUrl);
+    window.location.assign(isMobile ? mobileUrl : pcUrl);
   };
 
   return (
