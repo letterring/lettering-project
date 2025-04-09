@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { getKeyringData } from '../../../apis/keyring';
+import { getKeyringData, getKeyringsData } from '../../../apis/keyring';
 import { TotalPrice, TotalQuantity } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
@@ -14,12 +14,19 @@ const DescribeKeyring = () => {
   const [quantity, setQuantity] = useRecoilState(TotalQuantity);
   const [details, setDetails] = useState(null);
   const [total, setTotal] = useRecoilState(TotalPrice);
-  const { designName, imageUrl, price, description } = details || {};
+  const { id, designName, imageUrl, price, description, availableStock } = details || {};
 
+  /**
+   * 지금은 키링 종류가 하나라 1로 적어둠
+   * 키링 목록 페이지를 만든다면 거기서
+   * getKeyringsData 로 키링 종류를 받고
+   * 그 중 선택한 키링의 id를 받아서
+   * getKeyringData(id) 로 정보 불러오기
+   */
   const getKeyrings = async () => {
-    const { designs } = await getKeyringData();
-    setDetails(designs[0]);
-    setTotal(designs[0].price);
+    const data = await getKeyringData(1);
+    setDetails(data);
+    setTotal(data.price);
   };
 
   const handleCount = (num) => {
@@ -45,16 +52,10 @@ const DescribeKeyring = () => {
                 <h3>{total}</h3>
               </QuantityWrapper>
               <h4>설명</h4>
-              {description}
-              <p>
-                내장된 NFC 태그를 통해, 연인이나 소중한 친구에게 전하고 싶은 편지를 간편하게 공유할
-                수 있습니다.
-              </p>
-              <p>
-                키링을 스마트폰에 가볍게 태깅하는 것만으로 따뜻한 마음이 담긴 메시지를 바로 확인할
-                수 있습니다.
-              </p>
-              <p>키링을 통해 마음을 소중한 사람에게 전해보세요.</p>
+              {description?.split('\n').map((line, idx) => (
+                <p key={idx}>{line}</p>
+              ))}
+              남은 키링 개수 : {availableStock}
               <LongButton
                 btnName="구매하기"
                 onClick={() => {

@@ -4,18 +4,36 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { login } from '../../../apis/user';
+import FailBirdImg from '../../../assets/images/bird_sorry.svg';
 import LongButton from '../../common/button/LongButton';
+import AlertModal from '../../common/modal/AlertModal';
 import AuthInput from './AuthInput';
 import Divider from './Divider';
 import KakaoLoginButton from './KakaoLoginButton';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [alertState, setAlertState] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    image: null,
+    onClose: null,
+  });
 
-  const navigate = useNavigate();
+  const showAlert = ({ title, message, onClose, image }) => {
+    setAlertState({
+      isOpen: true,
+      title,
+      message,
+      image,
+      onClose: onClose || (() => setAlertState((prev) => ({ ...prev, isOpen: false }))),
+    });
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -24,12 +42,27 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const data = await login({ email, password });
+    try {
+      const data = await login({ email, password });
 
-    if (!data) return;
+      setEmail('');
+      setPassword('');
 
-    alert(`로그인 성공! 환영합니다, ${data.userNickname}님!`);
-    navigate('/home');
+      showAlert({
+        title: '로그인 성공',
+        message: `환영합니다, ${data.userNickname}님!`,
+        onClose: () => {
+          setAlertState((prev) => ({ ...prev, isOpen: false }));
+          navigate('/Home');
+        },
+      });
+    } catch (err) {
+      showAlert({
+        title: '로그인 실패',
+        message: err.message,
+        image: FailBirdImg,
+      });
+    }
   };
 
   useEffect(() => {
@@ -80,6 +113,14 @@ const Login = () => {
           <SignupLink onClick={() => navigate('/signup')}>회원가입</SignupLink>
         </SignupText>
       </ContentWrapper>
+      <AlertModal
+        isOpen={alertState.isOpen}
+        onClose={alertState.onClose}
+        title={alertState.title}
+        imgSrc={alertState.image}
+      >
+        {alertState.message}
+      </AlertModal>
     </StLoginWrapper>
   );
 };

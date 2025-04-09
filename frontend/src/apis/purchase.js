@@ -17,7 +17,7 @@ export const getUserAdress = async () => {
 
 export const submitOrder = async (orderData) => {
   try {
-    const { data } = await client.post('/payment/order', orderData);
+    const data = await client.post('/payment/order', orderData);
     return data;
   } catch (err) {
     console.error('주문정보 생성에 실패했습니다.', err);
@@ -35,6 +35,9 @@ export const approvePayment = async ({ pgToken, orderNumber }) => {
     return res.data;
   } catch (err) {
     console.error('주문 실패', err);
+    const errorMessage = err.response?.data?.message || '주문에 실패했습니다.';
+
+    throw new Error(errorMessage);
   }
 };
 

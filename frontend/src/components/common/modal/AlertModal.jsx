@@ -20,7 +20,7 @@ const AlertModal = ({ isOpen, onClose, title, children, imgSrc }) => {
         <CloseButton onClick={onClose}>
           <IcClose style={{ cursor: 'pointer' }} />
         </CloseButton>
-        <img src={imgSrc} alt="동전새 이미지" />
+        {imgSrc && <img src={imgSrc} alt="동전새 이미지" />}
         <Title>{title}</Title>
         <Content>{children}</Content>
       </StModalWrapper>

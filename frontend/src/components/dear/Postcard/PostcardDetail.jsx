@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
-import DummyImg from '/src/assets/dummy/postcard.jpg';
+import { getHighImageUrl, getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
 import PostcardImg from '/src/assets/images/postcard/postcard.png';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
-import useToggle from '../../../hooks/common/useToggle';
+import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
+import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 
 const PostcardDetail = () => {
   const { messageId } = useParams();
@@ -19,9 +19,10 @@ const PostcardDetail = () => {
 
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
-  const { toggle, handleToggle } = useToggle(false);
-
-  const [postcard, setPostcard] = useState(location.state?.postcard || null);
+  const [postcard, setPostcard] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [highImageUrl, setHighImageUrl] = useState('');
+  const [userFont, setUserFont] = useState('GOMSIN1');
 
   const handleInformMsg = () => {
     setFlipped((prev) => !prev);
@@ -34,20 +35,24 @@ const PostcardDetail = () => {
   };
 
   useEffect(() => {
-    if (!postcard) {
-      const fetchPostcard = async () => {
-        const data = await getPostcardDetail(messageId);
-        setPostcard(data);
-      };
-      fetchPostcard();
-    }
-  }, [messageId, postcard]);
+    const fetchPostcard = async () => {
+      const data = await getPostcardDetail(messageId);
+      setPostcard(data);
+      setUserFont(getFontStyle(data.font));
+    };
 
-  // postcard가 아직 없으면 로딩 처리
+    fetchPostcard();
+  }, [messageId]);
+
   if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
 
-  // 구조분해 할당
-  const { imageUrl, content, nfcName, font, replyText } = postcard;
+  const { imageUrl, content, nfcName, replyText } = postcard;
+
+  const handleOpenPreviewModal = async () => {
+    const { imageHighUrl } = await getHighImageUrl(messageId);
+    setHighImageUrl(imageHighUrl);
+    setIsPreviewOpen(true);
+  };
 
   return (
     <StPageWrapper>
@@ -57,26 +62,31 @@ const PostcardDetail = () => {
           <StInform $isShow={isShow}>엽서를 눌러 편지 내용을 확인해보세요.</StInform>
           <StFlipCard $flipped={flipped}>
             <StCardFace className="front">
-              {/* <StPostcard src={PostcardImg} alt="엽서" /> */}
               <StPostcardWhite />
               <StPostcardImage>
-                <img src={imageUrl || DummyImg} alt="엽서사진" />
+                <img src={imageUrl} alt="엽서사진" />
               </StPostcardImage>
             </StCardFace>
             <StCardFace className="back">
               <StPostcard src={PostcardImg} alt="엽서" />
               <StPostcardContent>
                 <StPostcardStamp src={StampImg} alt="우표" />
-                <StPostcardTitle $font={getFontStyle(font)}>
-                  사랑하는 {nfcName || '너'}에게,
-                </StPostcardTitle>
-                <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
+                <StPostcardTitle $font={userFont}>사랑하는 {nfcName || '너'}에게,</StPostcardTitle>
+                <StPostcardText $font={userFont}>{content}</StPostcardText>
               </StPostcardContent>
             </StCardFace>
           </StFlipCard>
         </StFlipContainer>
-
         <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
+        <PostcardPreviewModal
+          isShowing={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          messageId={messageId}
+          imageHighUrl={highImageUrl}
+          nfcName={nfcName}
+          content={content}
+          font={userFont}
+        />
 
         <ReplyComponent
           messageId={messageId}
@@ -84,6 +94,7 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
+        <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
       </StWrapper>
     </StPageWrapper>
   );
@@ -101,23 +112,23 @@ export const SimpleButton = styled.button`
 `;
 
 const StPageWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100%;
 `;
 
 const StWrapper = styled.div`
-  position: relative;
-
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 
-  height: 100%;
   padding-top: 10rem;
+  gap: 2rem;
 `;
 
 const StInform = styled.div`
@@ -225,6 +236,7 @@ const StPostcardWhite = styled.img`
   z-index: 2;
   background-color: white;
 `;
+
 const StPostcardImage = styled(motion.div)`
   position: absolute;
   top: 0.65rem;
