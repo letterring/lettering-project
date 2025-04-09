@@ -30,17 +30,17 @@ const StWrapper = styled.div`
 
 const StConffetti = styled.img`
   position: absolute;
-  top: -3.7rem;
-  right: center;
-  width: 27rem;
+  top: -1.6rem;
+  left: -3rem;
+  width: 28.2rem;
   z-index: 1;
 `;
 
 const StTextImage = styled.img`
   position: absolute;
-  top: 13rem;
-  left: center;
-  width: 27rem;
+  top: 12.5rem;
+  left: -3.1rem;
+  width: 28.3rem;
   z-index: 3;
 `;
 

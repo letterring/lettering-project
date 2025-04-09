@@ -21,6 +21,7 @@ import TerminatePage from './pages/dear/TerminatePage';
 import ErrorPage from './pages/ErrorPage';
 import ApprovePaymentPage from './pages/sender/ApprovePaymentPage';
 import CheckoutPage from './pages/sender/CheckoutPage';
+import CompleteCongratsLetterPage from './pages/sender/CompleteCongratsLetterPage';
 import CompleteLetterPage from './pages/sender/CompleteLetterPage';
 import CompleteOrderPage from './pages/sender/CompleteOrderPage';
 import CompletePage from './pages/sender/CompletePage';
@@ -82,12 +83,26 @@ const Router = () => {
               <Route path="/letter/preview" element={<LetterPreviewPage />} />
               <Route path="/letter/detail/:messageId" element={<LetterDetailPage />} />
 
+              <Route path="/letter/preview/congrats" element={<CongratsLetterPreviewPage />} />
+              <Route
+                path="/letter/congrats/detail/:messageId"
+                element={<CongratsLetterDetailPage />}
+              />
+
+              <Route path="/postcard/writing/ssafy" element={<SsafyPostcardWritingPage />} />
+              <Route path="/postcard/preview/ssafy" element={<SsafyPostcardPreviewPage />} />
+              <Route
+                path="/postcard/detail/ssafy/:messageId"
+                element={<SsafyPostcardDetailPage />}
+              />
+
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />
 
               <Route path="/complete" element={<CompletePage />} />
               <Route path="/complete/postcard" element={<CompletePostcardPage />} />
               <Route path="/complete/letter" element={<CompleteLetterPage />} />
+              <Route path="/complete/letter/congrats" element={<CompleteCongratsLetterPage />} />
 
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/mypage/font" element={<FontSettingPage />} />

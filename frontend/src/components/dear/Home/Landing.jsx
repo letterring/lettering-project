@@ -80,14 +80,18 @@ const Landing = () => {
   const handleNewLetterClick = () => {
     if (!messageInfo) return;
 
-    const { messageId, designType } = messageInfo;
+    const { messageId, designType, sealingWaxId } = messageInfo;
 
-    if (designType === 'POSTCARD') {
+    if (sealingWaxId === 1) {
       navigate(`/dear/postcard/${messageId}`, {
         state: { imageUrl },
       });
-    } else if (designType === 'LETTER') {
+    } else if (sealingWaxId === 2) {
       navigate(`/dear/letter/${messageId}`, {
+        state: { imageUrl },
+      });
+    } else if (sealingWaxId === 3) {
+      navigate(`/dear/letter/congrats/${messageId}`, {
         state: { imageUrl },
       });
     } else {

@@ -7,11 +7,9 @@ import { getLetterDetail } from '/src/apis/letter';
 import { getLetterDate } from '/src/util/getFormatDate';
 
 import DummyImg from '../../../assets/dummy/letter.jpg';
-import EnvelopeBottomImg from '../../../assets/images/letter/bottom_fold.png';
-import LetterImg from '../../../assets/images/letter/letter_paper.png';
-import LetteringImg from '../../../assets/images/letter/lettering.png';
-import EnvelopeTopImg from '../../../assets/images/letter/top_fold.png';
-import StampImg from '../../../assets/images/letter/vintage_stamp.png';
+import EnvelopeBottomImg from '../../../assets/images/congratsLetter/bottom_fold.png';
+import LetterImg from '../../../assets/images/congratsLetter/letter_paper.png';
+import EnvelopeTopImg from '../../../assets/images/congratsLetter/top_fold.png';
 
 const CongratsLetter = () => {
   const navigate = useNavigate();
@@ -55,7 +53,7 @@ const CongratsLetter = () => {
   }, [messageId, letterData, ImageData]);
 
   const handleNavigate = () => {
-    navigate(`/dear/letter/detail/${messageId}`, {
+    navigate(`/dear/letter/congrats/detail/${messageId}`, {
       state: {
         imageUrl,
         letterData,
@@ -67,7 +65,7 @@ const CongratsLetter = () => {
 
   return (
     <StWrapper>
-      <StEnvelopeWrapper onClick={() => navigate(`/dear/letter/detail/${messageId}`)}>
+      <StEnvelopeWrapper onClick={() => navigate(`/dear/letter/detail/congrats/${messageId}`)}>
         <StEnvelopeTop src={EnvelopeTopImg} alt="편지 봉투 윗부분" />
 
         <StLetter
@@ -89,21 +87,6 @@ const CongratsLetter = () => {
               handleNavigate();
             }, 800);
           }}
-        />
-
-        <StStampImage
-          src={StampImg}
-          alt="스탬프"
-          initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
-          animate={{ x, y, opacity: 1, rotate: -3.7 }}
-          transition={{ duration: 1.2 }}
-        />
-        <StTextImage
-          src={LetteringImg}
-          alt="레터링"
-          initial={{ y: 0, x: 0, opacity: 1, rotate: -3.7 }}
-          animate={{ x, y, opacity: 1, rotate: -3.7 }}
-          transition={{ duration: 1.2 }}
         />
         <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />
         <StBlankWhite />
@@ -144,22 +127,6 @@ const StLetter = styled(motion.img)`
   top: 1rem;
   width: 29rem;
   z-index: 2;
-`;
-
-const StStampImage = styled(motion.img)`
-  position: absolute;
-  top: 4.2rem;
-  right: 3.8rem;
-  width: 6.5rem;
-  z-index: 4;
-`;
-
-const StTextImage = styled(motion.img)`
-  position: absolute;
-  top: 17rem;
-  left: 1.7rem;
-  width: 29rem;
-  z-index: 4;
 `;
 
 const StLetterImage = styled(motion.img)`
