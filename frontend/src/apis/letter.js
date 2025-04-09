@@ -67,5 +67,6 @@ export const getHighImage = async (messageId, index) => {
     return data;
   } catch (err) {
     console.error('고화질 이미지 조회에 실패했습니다.', err);
+    return null;
   }
 };
