@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import KeyringCard from './KeyringCard';
 
-const KeyringList = ({ keyringList }) => {
+const KeyringList = ({ keyringList, toggleFavorite }) => {
   const settings = {
     dots: true, // 아래 점 네비게이션 표시
     infinite: false, // 무한 반복
@@ -23,7 +23,7 @@ const KeyringList = ({ keyringList }) => {
     <StKeyringListWrapper>
       <Slider {...settings} tabIndex={-1}>
         {keyringList.map((keyring) => (
-          <KeyringCard keyring={keyring} key={keyring.keyringId} />
+          <KeyringCard keyring={keyring} key={keyring.keyringId} toggleFavorite={toggleFavorite} />
         ))}
       </Slider>
     </StKeyringListWrapper>
