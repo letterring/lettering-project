@@ -3,7 +3,14 @@ import styled from 'styled-components';
 
 import AiImg from '/src/assets/images/ai_refine.png';
 
-const AiRefineModal = ({ onClose, font, suggestions = [], onUse, isLoading }) => {
+const AiRefineModal = ({
+  onClose,
+  font,
+  suggestions = [],
+  refineStreamTextList,
+  onUse,
+  isLoading,
+}) => {
   return (
     <Overlay onClick={onClose}>
       <Content onClick={(e) => e.stopPropagation()}>
@@ -16,7 +23,7 @@ const AiRefineModal = ({ onClose, font, suggestions = [], onUse, isLoading }) =>
           </GuideText>
         </Header>
 
-        {isLoading ? (
+        {/* {isLoading ? (
           <SuggestionBubble $font={font}>⏳ AI가 문장을 다듬고 있어요...</SuggestionBubble>
         ) : (
           suggestions.map((text, index) => (
@@ -24,11 +31,16 @@ const AiRefineModal = ({ onClose, font, suggestions = [], onUse, isLoading }) =>
               {text}
             </SuggestionBubble>
           ))
-        )}
+        )} */}
+        {refineStreamTextList.map((text, index) => (
+          <SuggestionBubble key={index} $font={font}>
+            {text || '⏳ 생성 중...'}
+          </SuggestionBubble>
+        ))}
 
         <Buttons>
           {/* <OutlinedButton>다시 추천받기</OutlinedButton> */}
-          <FilledButton onClick={() => onUse(suggestions)} disabled={isLoading}>
+          <FilledButton onClick={() => onUse(refineStreamTextList)} disabled={isLoading}>
             사용하기
           </FilledButton>
         </Buttons>

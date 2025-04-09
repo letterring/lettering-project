@@ -5,7 +5,9 @@ import Slider from 'react-slick';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { aiSocket } from '/src/apis/aiWebSocketClient';
 import { enhanceWithImage, refineWithImage, updateRedisMessage } from '/src/apis/fastapi';
+import { refineWithWebSocket } from '/src/apis/refineWithWebSocket';
 import { getUserFont } from '/src/apis/user';
 import LetterImg1 from '/src/assets/images/letter/letter1.png';
 import LetterImg2 from '/src/assets/images/letter/letter2.png';
@@ -32,6 +34,9 @@ const LetterPreview = () => {
   const [imageList, setImageList] = useState([]);
   const [textList, setTextList] = useState([]);
   const [refineSuggestions, setRefineSuggestions] = useState([]);
+  const [refineStreamTextList, setRefineStreamTextList] = useState([]);
+  const completedIndicesRef = useRef(new Set());
+
   const [enhanceTips, setEnhanceTips] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeModal, setActiveModal] = useState(null);
@@ -80,6 +85,11 @@ const LetterPreview = () => {
     }, DEBOUNCE_DELAY),
     [],
   );
+
+  useEffect(() => {
+    aiSocket.connect(); // 🔌 마운트 시 연결
+    return () => aiSocket.close(); // ❌ 언마운트 시 해제
+  }, []);
 
   useEffect(() => {
     if (redisKey) {
@@ -156,45 +166,114 @@ const LetterPreview = () => {
     setActiveModal(null);
   };
 
+  // useEffect(() => {
+  //   const fetchAiSuggestions = async () => {
+  //     if (!['edit', 'add'].includes(activeModal)) return;
+
+  //     const { textStartIndex, textCount } = contents[currentSlide];
+  //     const slideTexts = textList.slice(textStartIndex, textStartIndex + textCount);
+
+  //     if (slideTexts.length < textCount) {
+  //       console.warn('[❌ 텍스트 부족] 예상보다 텍스트 수가 적음');
+  //       setActiveModal('emptyWarning');
+  //       return;
+  //     }
+
+  //     const isEmpty = slideTexts.some((text) => !text || text.trim() === '');
+  //     if (isEmpty) {
+  //       setActiveModal('emptyWarning');
+  //       return;
+  //     }
+
+  //     const filenames = getFilenamesFromPostcard(currentSlide);
+
+  //     console.log('[🖼️ AI 요청용 이미지 파일명]', filenames);
+  //     console.log('[📝 슬라이드 텍스트]', slideTexts);
+
+  //     if (!filenames || filenames.length === 0) return;
+
+  //     setIsRefining(true);
+
+  //     if (activeModal === 'edit') {
+  //       // const result = await refineWithImage({ slideTexts, filenames });
+  //       const result = await refineWithWebSocket({ slideTexts, filenames });
+  //       if (Array.isArray(result)) {
+  //         setRefineSuggestions(result);
+  //       }
+  //     }
+
+  //     // if (activeModal === 'add') {
+  //     //   const result = await enhanceWithImage({ text: slideText, filenames });
+  //     //   if (result) setEnhanceTips(result);
+  //     // }
+
+  //     setIsRefining(false);
+  //   };
+
+  //   fetchAiSuggestions();
+  // }, [activeModal, currentSlide]);
+
   useEffect(() => {
     const fetchAiSuggestions = async () => {
-      if (!['edit', 'add'].includes(activeModal)) return;
+      if (activeModal !== 'edit') return;
 
       const { textStartIndex, textCount } = contents[currentSlide];
       const slideTexts = textList.slice(textStartIndex, textStartIndex + textCount);
+      const filenames = getFilenamesFromPostcard(currentSlide);
 
+      // ✅ 텍스트 수가 부족하면 모달 닫고 경고
       if (slideTexts.length < textCount) {
         console.warn('[❌ 텍스트 부족] 예상보다 텍스트 수가 적음');
         setActiveModal('emptyWarning');
         return;
       }
 
+      // ✅ 비어 있는 텍스트가 하나라도 있다면 경고
       const isEmpty = slideTexts.some((text) => !text || text.trim() === '');
       if (isEmpty) {
         setActiveModal('emptyWarning');
         return;
       }
 
-      const filenames = getFilenamesFromPostcard(currentSlide);
-
-      console.log('[🖼️ AI 요청용 이미지 파일명]', filenames);
-      console.log('[📝 슬라이드 텍스트]', slideTexts);
-
-      if (!filenames || filenames.length === 0) return;
+      if (!slideTexts.length || !filenames.length) return;
 
       setIsRefining(true);
+      setRefineStreamTextList(Array(textCount).fill(''));
+      completedIndicesRef.current = new Set();
 
-      if (activeModal === 'edit') {
-        const result = await refineWithImage({ slideTexts, filenames });
-        if (Array.isArray(result)) {
-          setRefineSuggestions(result);
-        }
+      for (let i = 0; i < slideTexts.length; i++) {
+        const currentIndex = i;
+        const currentText = slideTexts[currentIndex];
+        let accumulated = '';
+
+        // 여기를 클로저로 완전히 고립
+        await new Promise((resolve) => {
+          refineWithWebSocket({
+            slideTexts: [currentText], // 문장 하나만
+            filenames,
+            onStream: (chunk) => {
+              if (completedIndicesRef.current.has(currentIndex)) return;
+
+              accumulated += chunk;
+
+              setRefineStreamTextList((prev) => {
+                const updated = [...prev];
+                updated[currentIndex] = accumulated;
+                return updated;
+              });
+            },
+            onDone: () => {
+              completedIndicesRef.current.add(currentIndex);
+              resolve();
+            },
+            onError: (err) => {
+              console.error(`❌ refine error at index ${currentIndex}:`, err);
+              completedIndicesRef.current.add(currentIndex);
+              resolve(); // 실패해도 다음 문장으로 넘어가야 함
+            },
+          });
+        });
       }
-
-      // if (activeModal === 'add') {
-      //   const result = await enhanceWithImage({ text: slideText, filenames });
-      //   if (result) setEnhanceTips(result);
-      // }
 
       setIsRefining(false);
     };
@@ -259,6 +338,7 @@ const LetterPreview = () => {
           onClose={closeModal}
           font={userFont}
           suggestions={refineSuggestions}
+          refineStreamTextList={refineStreamTextList}
           onUse={handleUseRefineText}
           isLoading={isRefining}
         />
