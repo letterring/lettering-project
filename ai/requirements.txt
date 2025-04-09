@@ -12,5 +12,7 @@ aiohttp==3.11.12
 redis==5.2.1
 SQLAlchemy==2.0.40
 PyMySQL==1.1.1
+pillow-heif==0.22.0
 
 openai==1.70.0
+websockets==15.0.1
