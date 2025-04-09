@@ -76,6 +76,7 @@ const ViewerWrapper = ({
   newLetter,
   onMissedClick,
   text,
+  isLocked,
 }) => {
   const navigate = useNavigate();
 
@@ -135,6 +136,7 @@ const ViewerWrapper = ({
   // 카메라 줌 떙기는 효과(일단 보류류)
   useEffect(() => {
     if (!isRising && rotationSpeed === 0) {
+      if (isLocked) return;
       if (newLetter) {
         const timeout = setTimeout(() => {
           const target = [0, positionY, 5];
@@ -148,7 +150,7 @@ const ViewerWrapper = ({
       }, 2000);
       return () => clearTimeout(timeout);
     }
-  }, [isRising, rotationSpeed, newLetter]);
+  }, [isRising, rotationSpeed, newLetter, isLocked]);
 
   // 📬 확대 끝나고 라우터 이동
   const handleZoomComplete = () => {
