@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { getKeyringData, getKeyringsData } from '../../../apis/keyring';
+import PostBox from '../../../assets/images/postBox.png';
 import { TotalPrice, TotalQuantity } from '../../../recoil/atom';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
@@ -13,10 +14,11 @@ import QuantityInput from './QuantitiyInput';
 const DescribeKeyring = () => {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useRecoilState(TotalQuantity);
-  const [details, setDetails] = useState(null);
+  const [details, setDetails] = useState();
   const [total, setTotal] = useRecoilState(TotalPrice);
   const { id, designName, imageUrl, price, description, availableStock } = details || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * 지금은 키링 종류가 하나라 1로 적어둠
@@ -26,9 +28,12 @@ const DescribeKeyring = () => {
    * getKeyringData(id) 로 정보 불러오기
    */
   const getKeyrings = async () => {
+    setIsLoading(true);
     const data = await getKeyringData(1);
+    console.log('확인 : ', data);
     setDetails(data);
     setTotal(data.price);
+    setIsLoading(false);
   };
 
   const handleCount = (num) => {
@@ -53,19 +58,28 @@ const DescribeKeyring = () => {
       <StWrapper>
         <Header headerName="키링 구매" />
         <StContent>
-          <img src={imageUrl} alt="키링 이미지" />
+          {isLoading ? (
+            <img src={PostBox} alt="로딩 중인 키링" />
+          ) : (
+            <img src={imageUrl} alt="키링 이미지" />
+          )}
+
           <StTextWrapper>
             <StText>
               <h3>{designName}</h3>
               <QuantityWrapper>
-                <QuantityInput quantity={quantity} handleCount={handleCount} />
+                <QuantityInput
+                  quantity={quantity}
+                  handleCount={handleCount}
+                  maxCount={availableStock}
+                />
                 <h3>{total}</h3>
               </QuantityWrapper>
               <h4>설명</h4>
               {description?.split('\n').map((line, idx) => (
                 <p key={idx}>{line}</p>
               ))}
-              <h5>현재 재고 : {availableStock} 개</h5>
+              <h5>남은 재고 : {availableStock} 개</h5>
               <LongButton btnName="구매하기" onClick={handleSubmit} />
             </StText>
           </StTextWrapper>
