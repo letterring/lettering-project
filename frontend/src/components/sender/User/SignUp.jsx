@@ -113,6 +113,8 @@ const SignUp = () => {
             value={user.userNickname}
             onChange={handleChange}
             required
+            minLength={8}
+            maxLength={20}
           />
 
           <AuthInput
