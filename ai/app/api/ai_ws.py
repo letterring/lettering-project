@@ -8,10 +8,9 @@ from app.agents.text_enhancer import TextEnhancerAgent
 from app.agents.image_refiner import ImageRefinerAgent
 from app.agents.text_segmenter import TextSegmenterAgent
 
-router = APIRouter(prefix="/ws", tags=["AI WebSocket"])
+router = APIRouter(prefix="/ai", tags=["AI WebSocket"])
 
-
-@router.websocket("/ai")
+@router.websocket("")
 async def websocket_ai_handler(websocket: WebSocket):
     await websocket.accept()
     try:
@@ -22,14 +21,8 @@ async def websocket_ai_handler(websocket: WebSocket):
                 action = req.get("action")
 
                 match action:
-                    case "enhance":
-                        await handle_enhance(websocket, req)
                     case "refine":
                         await handle_refine(websocket, req)
-                    case "segment":
-                        await handle_segment(websocket, req)
-                    case "generate_and_submit_postcard":
-                        await handle_generate_and_submit(websocket, req)
                     case _:
                         await websocket.send_json({"error": f"Unknown action: {action}"})
 
@@ -56,7 +49,26 @@ async def handle_enhance(websocket: WebSocket, req: dict):
 
 
 # 문장 보정
+# async def handle_refine(websocket: WebSocket, req: dict):
+#     print("📥 [refine 요청 수신]:", req)
+#     texts = req.get("texts", [])
+#     filenames = req.get("filenames", [])
+
+#     image_paths = []
+#     for fname in filenames:
+#         full_path = os.path.join(settings.UPLOAD_DIR, fname)
+#         if not os.path.exists(full_path):
+#             await websocket.send_json({"error": f"파일이 존재하지 않습니다: {fname}"})
+#             return
+#         image_paths.append(full_path)
+
+#     agent = ImageRefinerAgent()
+#     result = await agent.run(texts=texts, image_paths=image_paths)
+#     parsed = json.loads(result)
+#     await websocket.send_json({"response": parsed})
+
 async def handle_refine(websocket: WebSocket, req: dict):
+    print("📥 [refine 요청 수신]:", req)
     texts = req.get("texts", [])
     filenames = req.get("filenames", [])
 
@@ -69,9 +81,13 @@ async def handle_refine(websocket: WebSocket, req: dict):
         image_paths.append(full_path)
 
     agent = ImageRefinerAgent()
-    result = await agent.run(texts=texts, image_paths=image_paths)
-    parsed = json.loads(result)
-    await websocket.send_json({"response": parsed})
+
+    # ✅ 스트리밍 응답 전송
+    async for chunk in agent.stream(texts=texts, image_paths=image_paths):
+        await websocket.send_json({"stream": chunk})
+
+    await websocket.send_json({"done": True})  # ✅ 스트리밍 종료
+
 
 
 # 텍스트 분할
