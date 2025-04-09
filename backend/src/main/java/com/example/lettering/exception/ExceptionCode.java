@@ -26,6 +26,7 @@ public enum ExceptionCode {
     INVALID_MESSAGE_TYPE(HttpStatus.BAD_REQUEST, "메시지 타입이 옳지 않습니다", 2011),
     INVALID_MESSAGE_IMAGE_COUNT(HttpStatus.BAD_REQUEST, "편지 타입에 맞는 이미지 개수와 맞지 않습니다.", 2012),
     INVALID_MESSAGE_CONTENT_COUNT(HttpStatus.BAD_REQUEST, "편지 타입에 맞는 컨텐츠 개수와 맞지 않습니다.", 2013),
+    QUIZ_NOT_FOUND(HttpStatus.BAD_REQUEST, "퀴즈 정보가 존재하지 않습니다.", 2014),
 
     // Repository에서 데이터베이스 조작시 발생할 수 있는 예외 작성
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 조작 과정에서 예외가 발생했습니다.", 3001),
