@@ -101,15 +101,17 @@ const AnswerInput = styled.input`
   border: none;
   color: ${({ theme }) => theme.colors.Gray1};
   ${({ theme }) => theme.fonts.body2};
+  margin-bottom: 0.5rem;
 `;
 
 const ErrorText = styled.div`
   color: ${({ theme }) => theme.colors.MainRed};
-  ${({ theme }) => theme.fonts.caption};
+  ${({ theme }) => theme.fonts.body2};
   margin-bottom: 1rem;
+  font-size: 1rem;
 `;
 
 const ButtonWrapper = styled.div`
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   margin-bottom: 1rem;
 `;
