@@ -1,5 +1,7 @@
 package com.example.lettering.config;
 
+import com.example.lettering.config.interceptor.KeyringSessionValidationInterceptor;
+import com.example.lettering.config.interceptor.SessionValidationInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,11 +18,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final SessionValidationInterceptor sessionValidationInterceptor;
+    private final KeyringSessionValidationInterceptor keyringSessionValidationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionValidationInterceptor)
                 .addPathPatterns("/api/messages/**", "/api/users/**", "/api/payment/**", "/api/keyrings/**")
                 .excludePathPatterns("/api/messages/dear/**", "/api/messages/postcards/dear/**", "/api/messages/letters/dear/**", "/api/users/login", "/api/users/logout","/api/users/signup", "/api/keyrings/designs/**", "/api/keyrings/backoffice", "/api/keyrings/*/delete", "/api/keyrings/nfc-access", "/api/keyrings/custom-message", "/api/messages/unread/**", "/api/messages/highimage", "/api/messages/reply/**", "/api/messages/favorite/**");
+
+        registry.addInterceptor(keyringSessionValidationInterceptor)
+                .addPathPatterns("/api/messages/dear/**", "/api/messages/postcards/dear/**", "/api/messages/letters/dear/**", "/api/messages/reply/**", "/api/messages/favorite/**", "/api/messages/unread/**");
     }
 }

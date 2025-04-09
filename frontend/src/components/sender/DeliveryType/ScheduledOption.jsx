@@ -49,10 +49,10 @@ const ScheduledOption = ({ onClose, onConfirm }) => {
       isOpen={true}
       onClose={onClose}
       title={
-        <div>
+        <TitleWrapper>
           <ModalTitle>{stepTitles[step]}</ModalTitle>
           <ModalDesc>{stepDescriptions[step]}</ModalDesc>
-        </div>
+        </TitleWrapper>
       }
     >
       {step === 1 && (
@@ -104,11 +104,16 @@ const ModalTitle = styled.div`
   ${({ theme }) => theme.fonts.Title2};
   color: ${({ theme }) => theme.colors.MainRed};
   margin-bottom: 0.4rem;
+  width: 100%;
 `;
 
 const ModalDesc = styled.div`
   ${({ theme }) => theme.fonts.body2};
   color: ${({ theme }) => theme.colors.Gray2};
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  width: 100%;
 `;
 
 const ModalButtons = styled.div`
@@ -116,4 +121,9 @@ const ModalButtons = styled.div`
   justify-content: center;
   gap: 1.6rem;
   margin-top: 2rem;
+  margin-bottom: 1rem;
+`;
+
+const TitleWrapper = styled.div`
+  text-align: center;
 `;
