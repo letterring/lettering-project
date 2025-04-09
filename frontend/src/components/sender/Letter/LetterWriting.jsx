@@ -1,3 +1,4 @@
+import imageCompression from 'browser-image-compression';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -38,38 +39,56 @@ const LetterWriting = () => {
     setLetterContent(e.target.value);
   };
 
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1080,
+      useWebWorker: true,
+    };
+    const compressedBlob = await imageCompression(file, options);
+
+    return new File([compressedBlob], file.name, {
+      type: compressedBlob.type,
+      lastModified: Date.now(),
+    });
+  };
+
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
+    const newImageItems = [];
 
-    const imagesProcessed = await Promise.all(
-      files.map(async (file) => {
-        // 이미지 크기 검사
-        if (file.size > 4 * 1024 * 1024) {
-          // 4MB 제한
-          alert('4MB를 초과하는 파일입니다: ' + file.name);
-          return null;
-        }
+    for (const file of files) {
+      // 미리보기 먼저 생성 (압축 전 원본)
+      const previewUrl = URL.createObjectURL(file);
 
-        // HEIC 형식 변환
-        if (file.name.endsWith('.heic') || file.name.endsWith('.HEIC')) {
-          const convertedFile = await convertHeicToJpeg(file);
-          return {
-            file: convertedFile,
-            url: URL.createObjectURL(convertedFile),
-          };
-        }
-        return {
-          file,
-          url: URL.createObjectURL(file),
-        };
-      }),
-    );
+      // 화면에 바로 표시할 미리보기용 객체
+      const imageItem = { file, url: previewUrl }; // 임시 file
 
-    // null 값을 제거하고 유효한 이미지만 상태에 저장
-    const validImages = imagesProcessed.filter((image) => image !== null);
+      newImageItems.push(imageItem);
 
-    // 최대 10개의 이미지만 저장
-    const totalImages = [...ImageList, ...validImages].slice(0, 10);
+      // 비동기적으로 압축 작업 시작
+      (async () => {
+        // heic 변환안함
+        // let processedFile = file;
+        // if (file.name.toLowerCase().endsWith('.heic')) {
+        //   processedFile = await convertHeicToJpeg(file);
+        // }
+        // processedFile = await compressImage(processedFile);
+        const processedFile = await compressImage(file);
+
+        // 압축된 파일로 덮어쓰기
+        imageItem.file = processedFile;
+
+        // 메모리 누수 방지
+        URL.revokeObjectURL(previewUrl);
+        imageItem.url = URL.createObjectURL(processedFile);
+
+        // 강제로 리렌더링 유도
+        setImageList((prev) => [...prev]);
+      })();
+    }
+
+    const totalImages = [...ImageList, ...newImageItems].slice(0, 10);
     setImageList(totalImages);
   };
 
