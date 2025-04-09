@@ -28,9 +28,9 @@ export const getFilterInfo = async () => {
 };
 
 //받은 편지함에서 목록 조회
-export const getDearMessages = async (page, keyringId) => {
+export const getDearMessages = async (page) => {
   try {
-    const { data } = await client.get(`/messages/dear/${keyringId}?page=${page}`);
+    const { data } = await client.get(`/messages/dear?page=${page}`);
     return data;
   } catch (error) {
     console.error('받은 편지함 목록 조회 실패:', error);
@@ -40,7 +40,7 @@ export const getDearMessages = async (page, keyringId) => {
 //받은 편지함에서 즐겨찾기 조회
 export const setFavorites = async (messageId) => {
   try {
-    const { data } = await client.patch(`/messages/favorite/${messageId}`);
+    const { data } = await client.patch(`/messages/favorite`);
     return data;
   } catch (error) {
     console.error(error);
