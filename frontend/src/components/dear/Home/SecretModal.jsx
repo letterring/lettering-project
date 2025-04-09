@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import LockIcon from '/src/assets/images/sender/SecretOption.png'; // 🔒 자물쇠 이미지
+
 import ConfirmButton from '../../common/button/ConfirmButton';
 import ConfirmModal from '../../common/modal/ConfirmModal';
 
@@ -11,7 +13,7 @@ export default function SecretModal({ question, hint, correctAnswer, onSuccess }
   const handleCheckAnswer = () => {
     if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
       setError('');
-      onSuccess(); // 🔐 정답 맞춤 처리 (isUnlocked = true)
+      onSuccess(); // 정답 맞춤 처리
     } else {
       setError('정답이 아닙니다! 다시 입력해주세요.');
     }
@@ -20,39 +22,32 @@ export default function SecretModal({ question, hint, correctAnswer, onSuccess }
   return (
     <ConfirmModal
       isOpen={true}
-      onClose={() => {}} // ❌ 닫기 불가능
+      onClose={() => {}} // 닫기 비활성화
       title={
         <ModalTitleBox>
-          <ModalTitle>비밀 편지 퀴즈</ModalTitle>
-          <ModalDesc>질문에 대한 정답을 맞춰야 편지를 열 수 있어요.</ModalDesc>
+          <ModalTitle>비밀편지 도착</ModalTitle>
+          <ModalSub>퀴즈를 맞추면 편지를 열 수 있어요!</ModalSub>
         </ModalTitleBox>
       }
     >
-      <QuizContent>
-        <Label>Q.</Label>
-        <Question>{question}</Question>
-
-        {hint && (
-          <>
-            <HintLabel>💡 힌트</HintLabel>
-            <HintBox>{hint}</HintBox>
-          </>
-        )}
-
+      <ModalContent>
+        <LockImage src={LockIcon} alt="자물쇠 이미지" />
+        <QuestionText>{question}</QuestionText>
+        {hint !== undefined && <HintText>힌트 : {hint?.trim() ? hint : '없음'}</HintText>}
         <AnswerInput
-          placeholder="정답을 입력해주세요"
+          placeholder="정답을 입력해주세요."
           value={userAnswer}
           onChange={(e) => setUserAnswer(e.target.value)}
         />
         {error && <ErrorText>{error}</ErrorText>}
-        <ButtonBox>
-          <ConfirmButton btnName="확인" onClick={handleCheckAnswer} />
-        </ButtonBox>
-      </QuizContent>
+
+        <ButtonWrapper>
+          <ConfirmButton btnName="완료" onClick={handleCheckAnswer} />
+        </ButtonWrapper>
+      </ModalContent>
     </ConfirmModal>
   );
 }
-
 const ModalTitleBox = styled.div`
   text-align: center;
 `;
@@ -60,58 +55,52 @@ const ModalTitleBox = styled.div`
 const ModalTitle = styled.div`
   ${({ theme }) => theme.fonts.Title2};
   color: ${({ theme }) => theme.colors.MainRed};
-  margin-bottom: 0.4rem;
 `;
 
-const ModalDesc = styled.div`
+const ModalSub = styled.div`
   ${({ theme }) => theme.fonts.body2};
   color: ${({ theme }) => theme.colors.Gray2};
+  white-space: pre-line;
+  text-align: center;
   font-size: 1.3rem;
+  margin-top: 0.8rem;
+  /* margin-bottom: 1rem; */
 `;
 
-const QuizContent = styled.div`
-  margin-top: 1.6rem;
+const ModalContent = styled.div`
+  text-align: center;
+  min-height: 30rem;
+  /* padding-top: 1rem; */
 `;
 
-const Label = styled.div`
+const LockImage = styled.img`
+  width: 10rem;
+  height: auto;
+  margin: 1rem auto;
+`;
+
+const QuestionText = styled.div`
   ${({ theme }) => theme.fonts.Saeum3};
-  font-size: 2rem;
-  color: ${({ theme }) => theme.colors.Gray5};
+  color: ${({ theme }) => theme.colors.MainRed};
+  margin: 1rem 0 0.6rem;
 `;
 
-const Question = styled.div`
-  ${({ theme }) => theme.fonts.Saeum3};
-  color: ${({ theme }) => theme.colors.Black};
-  background-color: ${({ theme }) => theme.colors.Gray7};
-  padding: 1rem 1.4rem;
-  border-radius: 1.2rem;
-  margin-bottom: 2rem;
-`;
-
-const HintLabel = styled.div`
-  ${({ theme }) => theme.fonts.body2};
-  color: ${({ theme }) => theme.colors.Gray4};
-  margin-bottom: 0.4rem;
-`;
-
-const HintBox = styled.div`
-  ${({ theme }) => theme.fonts.body2};
-  background-color: ${({ theme }) => theme.colors.Gray7};
-  padding: 1rem 1.4rem;
-  border-radius: 1rem;
-  margin-bottom: 2rem;
+const HintText = styled.div`
+  ${({ theme }) => theme.fonts.Saeum5};
   color: ${({ theme }) => theme.colors.Gray2};
+  margin-bottom: 1.8rem;
+  text-align: center;
 `;
 
 const AnswerInput = styled.input`
-  width: 100%;
+  justify-content: center;
+  max-width: 22rem;
   padding: 1.2rem;
-  border-radius: 2rem;
-  border: none;
+  border-radius: 1.8rem;
   background-color: ${({ theme }) => theme.colors.Gray7};
-  ${({ theme }) => theme.fonts.body2};
+  border: none;
   color: ${({ theme }) => theme.colors.Gray1};
-  margin-bottom: 1rem;
+  ${({ theme }) => theme.fonts.body2};
 `;
 
 const ErrorText = styled.div`
@@ -120,8 +109,7 @@ const ErrorText = styled.div`
   margin-bottom: 1rem;
 `;
 
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
+const ButtonWrapper = styled.div`
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 `;
