@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.protocol.HTTP;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -53,6 +54,9 @@ public class MessageController {
     private final KeyringService keyringService;
     private final KeyringSessionService sessionService;
     private final SessionUtil sessionUtil;
+
+    @Value("${validation.keyring.enabled:true}")
+    private boolean isKeyringValidationEnabled;
 
     @Operation(summary = "고화질 이미지 API", description = "해당 메시지(우편 또는 엽서)의 고화질 이미지를 얻습니다.")
     @GetMapping("/highimage")
@@ -134,8 +138,7 @@ public class MessageController {
     public ResponseEntity<DearMessageSummaryListResponse> getMessagesToDear(
             @RequestParam(name = "page", defaultValue = "0") int page,
             HttpSession session) {
-        Long keyringId = 19L;
-//        Long keyringId = Objects.requireNonNull((Long) session.getAttribute("keyringId"));
+        Long keyringId = isKeyringValidationEnabled ? Objects.requireNonNull((Long) session.getAttribute("keyringId")) : 19L;
 
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
     }
@@ -144,8 +147,7 @@ public class MessageController {
             description = "요청 파라미터 keyringId에 해당하는 메시지 중, ConditionType이 RESERVATION이고 conditionTime이 현재 이후인 예약된 편지를 제외한 후, opened 상태에 따라 읽은 편지와 안읽은 편지의 개수를 반환합니다.")
     @GetMapping("/dear/readcount")
     public ResponseEntity<MessageReadCountResponse> getMessageReadCount(HttpSession session) {
-        Long keyringId = 19L;
-//        Long keyringId = Objects.requireNonNull((Long) session.getAttribute("keyringId"));
+        Long keyringId = isKeyringValidationEnabled ? Objects.requireNonNull((Long) session.getAttribute("keyringId")) : 19L;
 
         return ResponseEntity.ok(MessageReadCountResponse.of(messageService.getMessageReadCount(keyringId, LocalDateTime.now())));
     }
@@ -218,8 +220,7 @@ public class MessageController {
     @Operation(summary = "최근 안읽은 메시지 여부 조회", description = "메시지 여부 조회 및 정보 반환")
     @GetMapping("/unread")
     public ResponseEntity<UnreadMessageResponse> getUnreadMessage(HttpSession session)  {
-        Long keyringId = 19L;
-//        Long keyringId = Objects.requireNonNull((Long) session.getAttribute("keyringId"));
+        Long keyringId = isKeyringValidationEnabled ? Objects.requireNonNull((Long) session.getAttribute("keyringId")) : 19L;
 
         return ResponseEntity.ok(messageService.getLatestUnreadMessage(keyringId));
     }
