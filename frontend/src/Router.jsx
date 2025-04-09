@@ -15,6 +15,8 @@ import DearNoTagPage from './pages/dear/NoTagPage';
 import OpenAppPage from './pages/dear/OpenAppPage';
 import DearPostDetailPage from './pages/dear/PostcardDetailPage';
 import DearPostcardPage from './pages/dear/PostcardPage';
+import DearSsafyPostDetailPage from './pages/dear/SsafyPostcardDetailPage';
+import DearSsafyPostcardPage from './pages/dear/SsafyPostcardPage';
 import TerminatePage from './pages/dear/TerminatePage';
 import ErrorPage from './pages/ErrorPage';
 import ApprovePaymentPage from './pages/sender/ApprovePaymentPage';
@@ -44,6 +46,9 @@ import PostcardWritingPage from './pages/sender/PostcardWritingPage';
 import SelectDearPage from './pages/sender/SelectDearPage';
 import SelectThemePage from './pages/sender/SelectThemePage';
 import SignUpPage from './pages/sender/SignUpPage';
+import SsafyPostcardDetailPage from './pages/sender/SsafyPostcardDetailPage';
+import SsafyPostcardPreviewPage from './pages/sender/SsafyPostcardPreviewPage';
+import SsafyPostcardWritingPage from './pages/sender/SsafyPostcardWritingPage';
 
 const Router = () => {
   const location = useLocation();
@@ -77,12 +82,6 @@ const Router = () => {
               <Route path="/letter/preview" element={<LetterPreviewPage />} />
               <Route path="/letter/detail/:messageId" element={<LetterDetailPage />} />
 
-              <Route path="/letter/preview/congrats" element={<CongratsLetterPreviewPage />} />
-              <Route
-                path="/letter/detail/congrats/:messageId"
-                element={<CongratsLetterDetailPage />}
-              />
-
               <Route path="/selectdear" element={<SelectDearPage />} />
               <Route path="/deliverytype" element={<DeliveryTypePage />} />
 
@@ -103,11 +102,6 @@ const Router = () => {
               <Route path="/dear/postcard/detail/:messageId" element={<DearPostDetailPage />} />
               <Route path="/dear/letter/:messageId" element={<DearLetterPage />} />
               <Route path="/dear/letter/detail/:messageId" element={<DearLetterDetailPage />} />
-              <Route path="/dear/letter/congrats/:messageId" element={<DearCongratsLetterPage />} />
-              <Route
-                path="/dear/letter/congrats/detail/:messageId"
-                element={<DearCongratsLetterDetailPage />}
-              />
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
               <Route path="/openapp" element={<OpenAppPage />} />
               <Route path="/dear/terminate" element={<TerminatePage />} />
