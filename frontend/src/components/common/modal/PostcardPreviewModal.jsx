@@ -65,11 +65,14 @@ const PostcardPreviewModal = ({
       useCORS: true,
     });
 
-    canvas.toBlob((blob) => {
-      if (blob) {
-        saveAs(blob, `letterring_postcard_${messageId}.png`);
-      }
-    });
+    // canvas.toBlob((blob) => {
+    //   if (blob) {
+    //     saveAs(blob, `letterring_postcard_${messageId}.png`);
+    //   }
+    // });
+
+    const base64 = canvas.toDataURL('image/png');
+    window.ReactNativeWebView?.postMessage(base64);
   };
 
   if (!isShowing) return null;
