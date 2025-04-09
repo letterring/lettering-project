@@ -7,9 +7,9 @@ import { getLetterDetail } from '/src/apis/letter';
 import { getLetterDate } from '/src/util/getFormatDate';
 
 import DummyImg from '../../../assets/dummy/letter.jpg';
-import EnvelopeBottomImg from '../../../assets/images/congratsletter/bottom_fold.png';
-import LetterImg from '../../../assets/images/congratsletter/letter_paper.png';
-import EnvelopeTopImg from '../../../assets/images/congratsletter/top_fold.png';
+import EnvelopeBottomImg from '../../../assets/images/congratsLetter/bottom_fold.png';
+import LetterImg from '../../../assets/images/congratsLetter/letter_paper.png';
+import EnvelopeTopImg from '../../../assets/images/congratsLetter/top_fold.png';
 
 const CongratsLetter = () => {
   const navigate = useNavigate();
