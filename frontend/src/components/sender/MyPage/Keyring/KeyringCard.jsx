@@ -4,30 +4,29 @@ import styled from 'styled-components';
 
 import { IcAlarmClock, IcEnvelop, IcLock, IcStar, IcTimeQuarter } from '../../../../assets/icons';
 import PostBoxImg from '../../../../assets/images/postBox.png';
-import { getRelativeDate } from '../../../../util/getRelativeDate';
 
-const KeyringCard = ({ keyring }) => {
+const KeyringCard = ({ keyring, toggleFavorite }) => {
   const {
     keyringName,
-    tagCode,
-    lastSentTime,
     totalMessageCount,
     scheduledCount,
     timeCapsuleCount,
     secretCount,
     favorite,
+    keyringId,
   } = keyring;
 
   return (
     <StCardWrapper>
       <CardHeader>
-        <IcStar style={{ color: favorite ? '#FFD600' : '#D3D3D3' }} />
-        <LastDateText>{getRelativeDate(lastSentTime)}</LastDateText>
+        <IcStar
+          style={{ color: favorite ? '#FFD600' : '#D3D3D3' }}
+          onClick={() => toggleFavorite(keyringId)}
+        />
       </CardHeader>
 
       <PostBoxImage src={PostBoxImg} alt="우체통" />
       <Nickname>{keyringName}</Nickname>
-      <SubText>{tagCode}</SubText>
 
       <InfoGrid>
         <InfoBox>
