@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { getUserInfo, updateNickname } from '../../../apis/mypage';
+import { getUserInfo, toggleKeyringFavoirite, updateNickname } from '../../../apis/mypage';
 import { IcArrowRight, IcCheckCircle, IcPen, IcSetting } from '../../../assets/icons';
 import { UserFont, UserKeyringList, UserNickname } from '../../../recoil/atom';
 import { getFontName, getFontStyle } from '../../../util/getFont';
@@ -48,6 +48,25 @@ const MyProfile = () => {
     navigate('keyring');
   };
 
+  const handleToggleFavorite = async (keyringId) => {
+    // optimistic UI
+    setKeyringList((prevList) =>
+      prevList.map((k) => (k.keyringId === keyringId ? { ...k, favorite: !k.favorite } : k)),
+    );
+
+    const result = await toggleKeyringFavoirite(keyringId);
+
+    if (!result) {
+      setKeyringList((prevList) =>
+        prevList.map((k) => (k.keyringId === keyringId ? { ...k, favorite: !k.favorite } : k)),
+      );
+    }
+    // else {
+    //   const updated = await getUserInfo();
+    //   setKeyringList(updated.keyrings);
+    // }
+  };
+
   return (
     <>
       <StWrapper>
@@ -72,7 +91,7 @@ const MyProfile = () => {
             키링
             <IcSetting style={{ cursor: 'pointer' }} onClick={handleKeyringSetting} />
           </Title>
-          <KeyringList keyringList={keyringList} />
+          <KeyringList keyringList={keyringList} toggleFavorite={handleToggleFavorite} />
         </StMyWrapper>
       </StWrapper>
     </>

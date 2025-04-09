@@ -11,7 +11,7 @@ const KeyringItem = ({
   onDelete,
   onChangeName,
 }) => {
-  const { tagCode, favorite, keyringId, keyringName } = keyring;
+  const { favorite, keyringId, keyringName } = keyring;
   const [newName, setNewName] = useState(keyringName);
   const [showWarning, setShowWarning] = useState(false);
 
@@ -34,7 +34,6 @@ const KeyringItem = ({
 
   return (
     <StItemWrapper $isEditing={isEditing}>
-      <IdText>키링 ID : {tagCode}</IdText>
       <SettingBox>
         <IcStar
           style={{ color: favorite ? '#FFD600' : '#D3D3D3' }}
