@@ -23,8 +23,8 @@ const Header = ({ headerName, missBack }) => {
 
   return (
     <>
-      <StHeaderWrapper>
-        <IcBack className="back" onClick={handleGoBack} $missBack={missBack} />
+      <StHeaderWrapper $missBack={missBack}>
+        <IcBack className="back" onClick={handleGoBack} />
         {headerName}
         <IcMenuSmall onClick={handleMenuClick} />
       </StHeaderWrapper>
@@ -48,6 +48,7 @@ const StHeaderWrapper = styled.button`
   align-items: center;
 
   width: 100%;
+  max-width: 38rem;
   padding: 2rem;
 
   color: ${({ theme }) => theme.colors.MainRed};
@@ -56,6 +57,7 @@ const StHeaderWrapper = styled.button`
   z-index: 10;
 
   .back {
+    opacity: ${({ $missBack }) => ($missBack ? '0' : '1')};
   }
 `;
 

@@ -46,7 +46,8 @@ const ZipCodeButton = styled.button`
   /* position: absolute;
   right: 0; */
 
-  width: 8rem;
+  width: fit-content;
+  white-space: nowrap;
   height: 3.5rem;
   border-radius: 0.625rem;
 

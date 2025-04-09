@@ -88,18 +88,18 @@ const Checkout = () => {
             <TitleText>배송지 정보</TitleText>
             <BodyText>우편번호</BodyText>
             <PostCodeWrapper>
-              <ContentWrapper style={{ width: '18rem' }}>
+              <StContentWrapper>
                 <InputField
                   name="zipcode"
                   value={formData.zipcode}
                   placeholder="우편번호"
                   readOnly
                 />
-              </ContentWrapper>
-              <AddressSearch
-                setZipcode={(zipcode) => setFormData((prev) => ({ ...prev, zipcode }))}
-                setAddress={(roadAddress) => setFormData((prev) => ({ ...prev, roadAddress }))}
-              />
+                <AddressSearch
+                  setZipcode={(zipcode) => setFormData((prev) => ({ ...prev, zipcode }))}
+                  setAddress={(roadAddress) => setFormData((prev) => ({ ...prev, roadAddress }))}
+                />
+              </StContentWrapper>
             </PostCodeWrapper>
             <BodyText>주소</BodyText>
             <ContentWrapper>
@@ -168,6 +168,17 @@ const ContentWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 3rem;
+`;
+
+const StContentWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 3rem;
+  gap: 0.5rem;
 `;
 
 const InputField = styled.input`
