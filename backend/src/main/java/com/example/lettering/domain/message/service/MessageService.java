@@ -2,6 +2,7 @@ package com.example.lettering.domain.message.service;
 
 import com.example.lettering.controller.response.dear.DearMessageSummaryResponse;
 import com.example.lettering.controller.response.dear.MessageReadCountResponse;
+import com.example.lettering.controller.response.dear.QuestionInfoResponse;
 import com.example.lettering.controller.response.sender.SenderMessageSummaryResponse;
 import com.example.lettering.controller.response.dear.UnreadMessageResponse;
 
@@ -24,4 +25,6 @@ public interface MessageService {
     void toggleFavorite(Long messageId);
 
     UnreadMessageResponse getLatestUnreadMessage(Long keyringId);
+
+    QuestionInfoResponse getMessageQuestionInfo(Long messageId);
 }
