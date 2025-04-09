@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getSealingWaxList } from '../../../apis/sealingWax';
+import BirthdayPreview from '../../../assets/images/theme/birthday_preview.png';
+import CongratsPreview from '../../../assets/images/theme/congrats_preview.png';
+import LetterPreview from '../../../assets/images/theme/letter_preview.png';
+import PostcardPreview from '../../../assets/images/theme/postcard_preview.png';
+import SsafycardPreview from '../../../assets/images/theme/ssafy_preview.png';
 import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
 import SealingWaxCarousel from './SealingWaxCarousel';
@@ -12,6 +17,23 @@ const SelectTheme = () => {
 
   const [sealingWaxes, setSealingWaxes] = useState([]);
   const [selectedTheme, setSelectedTheme] = useState(null);
+
+  const getImageSrc = (themeId) => {
+    switch (themeId) {
+      case 1:
+        return PostcardPreview;
+      case 2:
+        return LetterPreview;
+      case 3:
+        return BirthdayPreview;
+      case 4:
+        return SsafycardPreview;
+      case 5:
+        return CongratsPreview;
+      default:
+        return PostcardPreview;
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,8 +84,11 @@ const SelectTheme = () => {
         selectedTheme={selectedTheme}
       />
 
-      {selectedTheme && <SelectedThemeName>{selectedTheme.sealing_wax_name}</SelectedThemeName>}
-      {selectedTheme && <ExampleImage src={`/temp-images/${selectedTheme.id + 10}.png`} />}
+      {selectedTheme && <SelectedThemeName>{selectedTheme.sealingWaxName}</SelectedThemeName>}
+      {selectedTheme && (
+        <RequiredImageCount>필요한 이미지: {selectedTheme.imageCount}장</RequiredImageCount>
+      )}
+      {selectedTheme && <ExampleImage src={getImageSrc(selectedTheme.id)} />}
 
       <FixedButtonWrapper>
         <LongButton btnName="지금 디자인으로 편지쓰기" onClick={handleConfirm} opacity={false} />
@@ -78,22 +103,28 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  /* gap: 1rem; */
 `;
 
 const SelectedThemeName = styled.div`
   text-align: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: ${({ theme }) => theme.colors.MainRed};
+  ${({ theme }) => theme.fonts.EduTitle1}
+  color: ${({ theme }) => theme.colors.Gray3};
+`;
+
+const RequiredImageCount = styled.div`
+  text-align: center;
+  ${({ theme }) => theme.fonts.EduBody3}
+  color: ${({ theme }) => theme.colors.Gray4};
 `;
 
 const ExampleImage = styled.img`
-  width: 90%;
+  width: 100%;
+  max-width: 375px;
   height: auto;
   border-radius: 1rem;
   margin-top: 0.8rem;
-  padding: 1rem;
+  /* padding: 1rem; */
 `;
 
 const FixedButtonWrapper = styled.div`

@@ -42,6 +42,8 @@ const CarouselContainer = styled.div`
   margin-top: 6rem;
   margin-bottom: 1rem;
 
+  padding: 0 1rem;
+
   &::-webkit-scrollbar {
     display: none;
   }
