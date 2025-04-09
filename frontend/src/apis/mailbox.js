@@ -28,12 +28,12 @@ export const getFilterInfo = async () => {
 };
 
 //받은 편지함에서 목록 조회
-export const getDearMessages = async (page, keyringId) => {
+export const getDearMessages = async (page) => {
   try {
-    const { data } = await client.get(`/messages/dear/${keyringId}?page=${page}`);
+    const { data } = await client.get(`/messages/dear?page=${page}`);
     return data;
   } catch (error) {
-    console.error('받은 편지함 목록 조회 실패:', error);
+    console.error('받은 편지함 목록 조회 실패1:', error);
   }
 };
 
@@ -44,5 +44,15 @@ export const setFavorites = async (messageId) => {
     return data;
   } catch (error) {
     console.error(error);
+  }
+};
+
+//받은 편지함에서 읽음/안읽음 조회
+export const getReadStates = async () => {
+  try {
+    const { data } = await client.get(`/messages/dear/readcount`);
+    return data;
+  } catch (error) {
+    console.error('보낸 편지함 필터 조회 실패:', error);
   }
 };

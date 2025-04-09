@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
-import { getSentLetterDetail } from '/src/apis/letter';
+import { getLetterDetail } from '/src/apis/letter';
+import LetterImg1 from '/src/assets/images/congratsLetter/background1.png';
 import LetterImg2 from '/src/assets/images/congratsLetter/pink_background.png';
-import LetterImg1 from '/src/assets/images/congratsLetter/white_background.png';
 import Header from '/src/components/common/Header';
 import { getLetterDate } from '/src/util/getFormatDate';
 
@@ -34,7 +34,7 @@ const CongratsLetterDetail = () => {
         nfcName,
         nickName,
         replyText,
-      } = await getSentLetterDetail(messageId);
+      } = await getLetterDetail(messageId);
 
       const sentAt = getLetterDate(conditionTime);
       const readAt = firstOpenedTime ? getLetterDate(firstOpenedTime) : null;

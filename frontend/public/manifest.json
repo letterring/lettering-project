@@ -1,6 +1,6 @@
 {
-  "name": "Lettering",
-  "short_name": "Lettering",
+  "name": "레터링",
+  "short_name": "레터링",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff",

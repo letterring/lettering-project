@@ -6,7 +6,7 @@ import { IcBack, IcMenuSmall } from '../../assets/icons';
 import useModal from '../../hooks/common/useModal';
 import MenuModal from './modal/MenuModal';
 
-const Header = ({ headerName }) => {
+const Header = ({ headerName, missBack }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const menu = useModal();
@@ -24,7 +24,7 @@ const Header = ({ headerName }) => {
   return (
     <>
       <StHeaderWrapper>
-        <IcBack onClick={handleGoBack} />
+        <IcBack className="back" onClick={handleGoBack} $missBack={missBack} />
         {headerName}
         <IcMenuSmall onClick={handleMenuClick} />
       </StHeaderWrapper>
@@ -54,6 +54,9 @@ const StHeaderWrapper = styled.button`
   ${({ theme }) => theme.fonts.MenuLogo};
 
   z-index: 10;
+
+  .back {
+  }
 `;
 
 const StMenuModalWrapper = styled.div`

@@ -102,7 +102,7 @@ const CenterCarousel = ({ selected }) => {
     } else if (sealingWaxId === 2) {
       navigate(`/letter/detail/${messageId}`);
     } else if (sealingWaxId === 3) {
-      navigate(`/letter/detail/congrats/${messageId}`);
+      navigate(`/letter/congrats/detail/${messageId}`);
     }
   };
 
