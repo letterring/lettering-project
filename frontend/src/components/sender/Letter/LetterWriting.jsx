@@ -7,6 +7,7 @@ import { getPostcard, segmentText, submitPostcard } from '/src/apis/fastapi';
 import { getUserFont } from '/src/apis/user';
 import { getFontStyle } from '/src/util/getFont';
 
+import CircleClose from '../../../assets/images/circleClose.png';
 import { LetterImageList, LetterText, RedisMessageKey } from '../../../recoil/atom';
 import { convertHeicToJpeg } from '../../../util/convertHeicToJpeg';
 import Header from '../../common/Header';
@@ -163,12 +164,15 @@ const LetterWriting = () => {
           </LoadingOverlay>
         )}
         <ContentWrapper>
-          <Text>이미지 업로드</Text>
+          <ImageHeader>
+            <Text>이미지 업로드</Text>
+            {!isValid ? <WarnText>사진은 10장 필요합니다.</WarnText> : <WarnText />}
+          </ImageHeader>
           <ImagesWrapper>
             {ImageList.map((img, index) => (
               <ImagePreview key={index}>
                 <PreviewImg src={img.url} alt={`uploaded-${index}`} />
-                <RemoveBtn onClick={() => handleRemoveImage(index)}>×</RemoveBtn>
+                <RemoveBtn src={CircleClose} onClick={() => handleRemoveImage(index)} />
               </ImagePreview>
             ))}
             {ImageList.length < 10 && (
@@ -194,7 +198,6 @@ const LetterWriting = () => {
             $fontStyle={userFont}
           />
           <FooterWrapper>
-            {!isValid ? <WarnText>사진은 10장 필요합니다.</WarnText> : <WarnText />}
             <CharCount>{letterContent.length} / 600</CharCount>
             <SubmitButton disabled={!isValid} $isValid={isValid} onClick={handleSubmit}>
               입력완료
@@ -225,7 +228,7 @@ const WritingContentWrapper = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 `;
 
 const Text = styled.div`
@@ -255,21 +258,10 @@ const PreviewImg = styled.img`
   object-fit: cover;
 `;
 
-const RemoveBtn = styled.button`
+const RemoveBtn = styled.img`
   position: absolute;
   top: 0.2rem;
   right: 0.2rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: ${({ theme }) => theme.colors.Red2};
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
 `;
 
 const AddImageLabel = styled.label`
@@ -291,7 +283,7 @@ const ImageInput = styled.input`
 
 const InputTextBox = styled.textarea`
   width: 100%;
-  height: 36rem;
+  height: 35rem;
 
   padding: 1rem;
   border: solid 1px ${({ theme }) => theme.colors.Orange1};
@@ -307,29 +299,29 @@ const InputTextBox = styled.textarea`
 
 const FooterWrapper = styled.div`
   width: 100%;
-  height: 3rem;
+  height: auto;
+  position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
 `;
 
 const WarnText = styled.p`
-  width: 13rem;
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.Body4};
 `;
 
 const CharCount = styled.p`
-  width: 5rem;
+  width: 6rem;
   color: ${({ theme }) => theme.colors.MainRed};
   ${({ theme }) => theme.fonts.Body3};
 `;
 
 const SubmitButton = styled.button`
-  width: 6rem;
-  height: 2rem;
-  border-radius: 1rem;
+  width: 7rem;
+  height: 3rem;
+  border-radius: 2rem;
   background-color: ${({ theme, $isValid }) => ($isValid ? theme.colors.Red2 : theme.colors.Gray4)};
   color: ${({ theme }) => theme.colors.White};
   ${({ theme }) => theme.fonts.Body3};
@@ -372,4 +364,9 @@ const Spinner = styled.div`
       transform: rotate(360deg);
     }
   }
+`;
+
+const ImageHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

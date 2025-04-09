@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 import { IcMinus, IcPlus } from '../../../assets/icons';
 
-const QuantityInput = ({ quantity, handleCount }) => {
+const QuantityInput = ({ quantity, handleCount, maxCount }) => {
   const increment = () => {
-    handleCount(1);
+    if (quantity < maxCount) handleCount(1);
   };
 
   const decrement = () => {
