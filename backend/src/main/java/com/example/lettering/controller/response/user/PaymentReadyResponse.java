@@ -7,5 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PaymentReadyResponse {
     private Long orderNumber;
-    private String paymentUrl;
+    private String pcUrl;
+    private String mobileUrl;
 }
