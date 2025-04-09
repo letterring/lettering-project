@@ -7,4 +7,5 @@ import java.util.List;
 public interface KeyringRepository extends JpaRepository<Keyring, Long>, KeyringRepositoryCustom {
     List<Keyring> findAllByOwnerId(Long ownerId);
     List<Keyring> findAllByOwnerIdOrderByIsFavoriteDescIdAsc(Long userId);
+    Long countByDesignIsNullAndOwnerIsNullAndIsPurchaseFalse();
 }
