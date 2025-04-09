@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import confettiImg from '../../../assets/images/congratsLetter/confetti.png';
 import RibbonImg from '../../../assets/images/congratsLetter/ribbon.png';
 
-const MainTemplate = ({ images }) => {
+const MainTemplate = ({ images, onImageClick }) => {
   const mainImg = images?.imageLowUrl;
 
   return (
     <StWrapper>
       <StConfetti src={confettiImg} alt="컨페티" />
-      <StLetterImage src={mainImg} alt="편지 사진" />
+      <StLetterImage src={mainImg} alt="편지 사진" onClick={() => onImageClick(images?.index)} />
       <StRibbon src={RibbonImg} alt="레터링" />
     </StWrapper>
   );
