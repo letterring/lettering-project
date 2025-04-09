@@ -52,3 +52,14 @@ export const postDeviceInfo = async () => {
     console.error('키링 영구 삭제 실패', error);
   }
 };
+
+//퀴즈 정보
+export const getQuizInfo = async (messageId) => {
+  try {
+    const res = await client.get(`/messages/dear/quiz/${messageId}`);
+    return res.data;
+  } catch (error) {
+    console.error('퀴즈 정보 조회 실패', error);
+    return null;
+  }
+};
