@@ -2,22 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getUnreadMessage } from '/src/apis/dear';
-import { getHighImage } from '/src/apis/dear';
+import { getHighImage, getQuizInfo, getUnreadMessage, postDeviceInfo } from '/src/apis/dear';
+import { getLetterDetail } from '/src/apis/letter';
+import { getPostcardDetail } from '/src/apis/postcard';
 
 import { getCustomMessage } from '../../../apis/dear';
 import OBJViewer from './OBJViewer';
+import SecretModal from './SecretModal';
 
 const Landing = () => {
   const navigate = useNavigate();
+
   const [newLetter, setNewLetter] = useState(false);
   const [messageInfo, setMessageInfo] = useState(null);
   const [text, setText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [imageUrl, setImageUrl] = useState(''); //편지 메인 사진(봉투 애니메이션용)
+  const [imageUrl, setImageUrl] = useState('');
+  const [lockedData, setLockedData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
@@ -25,18 +30,51 @@ const Landing = () => {
     fetchData();
   }, []);
 
-  const fetchUnreadMessage = async () => {
-    const data = await getUnreadMessage();
-    if (data?.exist) {
-      setNewLetter(true);
-      setMessageInfo(data);
+  const fetchCustomMessage = async () => {
+    try {
+      const data = await getCustomMessage();
+      setText(data.customMessage ?? '새로운 메세지가 도착했어요!');
+    } catch (err) {
+      console.error('[getCustomMessage 실패]', err);
+      setText('새로운 메세지가 도착했어요!');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const fetchCustomMessage = async () => {
-    const data = await getCustomMessage();
-    setText(data.customMessage ?? '새로운 메세지가 도착했어요!');
-    setIsLoading(false);
+  const fetchUnreadMessage = async () => {
+    try {
+      const data = await getUnreadMessage();
+
+      if (data?.exist) {
+        if (data.conditionType === 'SECRETTYPE') {
+          const quiz = await getQuizInfo(data.messageId);
+          setLockedData({
+            ...quiz,
+            messageId: data.messageId,
+            designType: data.designType,
+          });
+        } else {
+          setMessageInfo(data);
+          setNewLetter(true);
+        }
+      } else {
+        console.log('[📭 새 편지가 없습니다]');
+      }
+    } catch (e) {
+      console.error('[getUnreadMessage 실패]', e);
+    }
+  };
+
+  const handleSuccessUnlock = async () => {
+    const detail =
+      lockedData.designType === 'POSTCARD'
+        ? await getPostcardDetail(lockedData.messageId)
+        : await getLetterDetail(lockedData.messageId);
+
+    setMessageInfo(detail);
+    setNewLetter(true);
+    setLockedData(null); // 모달 닫기
   };
 
   const handleNewLetterClick = () => {
@@ -57,8 +95,12 @@ const Landing = () => {
         state: { imageUrl },
       });
     } else {
-      navigate('/dear/home'); // fallback
+      navigate('/dear/home');
     }
+  };
+
+  const handleMissedClick = () => {
+    navigate('/dear/home');
   };
 
   useEffect(() => {
@@ -73,26 +115,34 @@ const Landing = () => {
     fetchImage();
   }, [messageInfo]);
 
-  const handleMissedClick = () => {
-    navigate('/dear/home');
-  };
-
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <StHomeWrapper>
-      <div>
-        <OBJViewer
-          objPath="/models/postbox.obj"
-          mtlPath="/models/postbox.mtl"
-          envelopeObjPath="/models/envelope.obj"
-          envelopeMtlPath="/models/envelope.mtl"
-          newLetter={newLetter}
-          onMissedClick={newLetter ? handleNewLetterClick : handleMissedClick}
-          text={text}
+    <>
+      {lockedData && (
+        <SecretModal
+          question={lockedData.quizQuestion}
+          hint={lockedData.quizHint}
+          correctAnswer={lockedData.quizAnswer}
+          onSuccess={handleSuccessUnlock}
         />
-      </div>
-    </StHomeWrapper>
+      )}
+
+      <StHomeWrapper>
+        <div>
+          <OBJViewer
+            objPath="/models/postbox.obj"
+            mtlPath="/models/postbox.mtl"
+            envelopeObjPath="/models/envelope.obj"
+            envelopeMtlPath="/models/envelope.mtl"
+            newLetter={newLetter}
+            onMissedClick={newLetter ? handleNewLetterClick : handleMissedClick}
+            text={text}
+            isLocked={!!lockedData} // 모달이 떠있을 땐 자동 이동 방지
+          />
+        </div>
+      </StHomeWrapper>
+    </>
   );
 };
 
