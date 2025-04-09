@@ -16,6 +16,7 @@ const StLongButtonWrapper = styled.button`
   align-items: center;
 
   width: 100%;
+  max-width: 28rem;
   height: 5rem;
   padding: 1rem 2rem;
 

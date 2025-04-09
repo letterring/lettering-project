@@ -22,7 +22,7 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await postDeviceInfo();
+      // await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
