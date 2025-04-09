@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { login } from '../../../apis/user';
-import SuccessBirdImg from '../../../assets/images/bird_hi.png';
 import FailBirdImg from '../../../assets/images/bird_sorry.svg';
 import LongButton from '../../common/button/LongButton';
 import AlertModal from '../../common/modal/AlertModal';
@@ -52,7 +51,6 @@ const Login = () => {
       showAlert({
         title: '로그인 성공',
         message: `환영합니다, ${data.userNickname}님!`,
-        image: SuccessBirdImg,
         onClose: () => {
           setAlertState((prev) => ({ ...prev, isOpen: false }));
           navigate('/Home');

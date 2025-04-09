@@ -1,27 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const ImageModal = ({ isShowing, imageUrl, onClose }) => {
+const ImageModal = ({ isShowing, imageUrls = [], onClose }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  if (!isShowing || !imageUrls.length) return null;
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev < imageUrls.length - 1 ? prev + 1 : prev));
+  };
+
   return (
-    isShowing && (
-      <StImageModalWrapper onClick={onClose}>
-        <ModalWrapper onClick={(e) => e.stopPropagation()}>
-          <Image src={imageUrl} alt="고화질 이미지" />
-        </ModalWrapper>
-      </StImageModalWrapper>
-    )
+    <StImageModalWrapper onClick={onClose}>
+      <ModalWrapper onClick={(e) => e.stopPropagation()}>
+        {currentIndex > 0 && <ArrowLeft onClick={handlePrev}>&lt;</ArrowLeft>}
+        <Image src={imageUrls[currentIndex]} alt={`image-${currentIndex}`} />
+        {currentIndex < imageUrls.length - 1 && <ArrowRight onClick={handleNext}>&gt;</ArrowRight>}
+      </ModalWrapper>
+    </StImageModalWrapper>
   );
 };
 
 export default ImageModal;
 
 const StImageModalWrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.6);
   z-index: 9999;
   display: flex;
@@ -30,11 +41,10 @@ const StImageModalWrapper = styled.div`
 `;
 
 const ModalWrapper = styled.div`
+  position: relative;
   width: 30rem;
-  height: 40rem;
-  background-color: white;
-  border-radius: 2rem;
-  overflow: hidden;
+  max-width: 90vw;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,6 +52,32 @@ const ModalWrapper = styled.div`
 
 const Image = styled.img`
   width: 100%;
-  height: 100%;
+  max-height: 80vh;
   object-fit: contain;
+  border-radius: 8px;
+`;
+
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  padding: 0 1rem;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const ArrowLeft = styled(ArrowButton)`
+  left: -2rem;
+`;
+
+const ArrowRight = styled(ArrowButton)`
+  right: -2rem;
 `;

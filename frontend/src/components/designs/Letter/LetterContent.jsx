@@ -29,6 +29,7 @@ const LetterContent = ({
   const fontStyle = getFontStyle(font);
   const [highImageUrls, setHighImageUrls] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [selectedImageIndexes, setSelectedImageIndexes] = useState(null);
   const { toggle: isModalOpen, setToggle: setIsModalOpen } = useToggle(false);
 
   const handleImageClick = async (index) => {
@@ -92,14 +93,22 @@ const LetterContent = ({
           </>
         )}
       </StContentWrapper>
-
       {isModalOpen && selectedImageIndex !== null && highImageUrls[selectedImageIndex] && (
+        <ImageModal
+          isShowing={isModalOpen}
+          imageUrls={highImageUrls.filter((url) => url)} // null 제거
+          onClose={() => setIsModalOpen(false)}
+          initialIndex={selectedImageIndex} // 시작 이미지 인덱스 전달
+        />
+      )}
+
+      {/* {isModalOpen && selectedImageIndex !== null && highImageUrls[selectedImageIndex] && (
         <ImageModal
           isShowing={isModalOpen}
           imageUrl={highImageUrls[selectedImageIndex]}
           onClose={() => setIsModalOpen(false)}
         />
-      )}
+      )} */}
     </StLetterWrapper>
   );
 };

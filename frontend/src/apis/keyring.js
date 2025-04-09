@@ -11,12 +11,22 @@ export const getKeyringList = async () => {
   }
 };
 
-//판매 키링정보 조회
-export const getKeyringData = async () => {
+//판매 키링종류 조회
+export const getKeyringsData = async () => {
   try {
     const { data } = await client.get(`/keyrings/designs`);
     return data;
   } catch (error) {
-    console.error('판매 키링 조회 실패:', error);
+    console.error('판매 키링 종류 조회 실패:', error);
+  }
+};
+
+//판매 키링정보 조회
+export const getKeyringData = async (keyringId) => {
+  try {
+    const { data } = await client.get(`/keyrings/designs/${keyringId}`);
+    return data;
+  } catch (error) {
+    console.error('판매 키링 정보 조회 실패:', error);
   }
 };
