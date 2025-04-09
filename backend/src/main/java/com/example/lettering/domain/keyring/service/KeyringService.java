@@ -3,10 +3,7 @@ package com.example.lettering.domain.keyring.service;
 import com.example.lettering.controller.request.keyring.KeyringCustomizeRequest;
 import com.example.lettering.controller.request.keyring.KeyringDesignRequest;
 import com.example.lettering.controller.request.user.OrderRequest;
-import com.example.lettering.controller.response.keyring.KeyringDesignListResponse;
-import com.example.lettering.controller.response.keyring.KeyringDesignResponse;
-import com.example.lettering.controller.response.keyring.KeyringFilterResponse;
-import com.example.lettering.controller.response.keyring.KeyringManageResponse;
+import com.example.lettering.controller.response.keyring.*;
 import com.example.lettering.domain.keyring.entity.Order;
 import com.example.lettering.domain.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,4 +30,5 @@ public interface KeyringService {
     Long validateOrRegisterDevice(Long keyringId, String deviceId);
     String getCustomMessage(Long keyringId);
     boolean isValidKeyring(Long keyringId);
+    KeyringDesignWithStockResponse getKeyringDesignWithStock(Long designId);
 }
