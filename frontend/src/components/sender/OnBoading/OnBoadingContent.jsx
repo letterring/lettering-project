@@ -24,6 +24,7 @@ const StOnBoadingWrapper = styled.div`
   justify-content: flex-start;
 
   height: 50rem;
+  width: 27rem;
   padding: 0 3rem;
 
   h2 {
@@ -43,13 +44,11 @@ const StImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
+  /* flex-grow: 1; */
   width: 100%;
 
   img {
-    width: 100%;
-    max-height: 32rem;
-    flex-grow: 1;
+    width: 75%;
 
     padding-top: 4rem;
     padding-left: 2rem;
