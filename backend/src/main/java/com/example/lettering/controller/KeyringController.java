@@ -165,8 +165,9 @@ public class KeyringController {
     public ResponseEntity<Void> handleNfcAccess(@Valid @RequestBody KeyringAccessRequest request, HttpSession session) {
         try {
             Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
-            log.info("log kyering Id: "+keyringId);
+            log.info("log keyring Id: "+keyringId);
             session.setAttribute("keyringId", keyringId);
+            log.info("get log keyring Id: "+keyringId);
             return ResponseEntity.ok().build();
 
         } catch (BusinessException e) {
