@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getFilterInfo } from '../../../apis/mailbox';
@@ -7,6 +8,10 @@ import Header from '../../common/Header';
 import CenterCarousel from './CenterCarousel';
 
 const SenderMailBox = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state;
+
   const [dearList, setDearList] = useState(null);
   const [selectedDear, setSelectedDear] = useState('ALL');
 
@@ -20,6 +25,14 @@ const SenderMailBox = () => {
     }
   };
 
+  const handleGoBack = () => {
+    if (state === 'send') {
+      navigate(`/home`);
+    } else {
+      navigate(-1);
+    }
+  };
+
   useEffect(() => {
     fetchFilterList();
   }, []);
@@ -27,7 +40,7 @@ const SenderMailBox = () => {
   return (
     <>
       <StListWrapper>
-        <Header headerName="보낸 편지함" />
+        <Header headerName="보낸 편지함" onBack={handleGoBack} />
         <StContentWrapper>
           <FilterOptions>
             {dearList &&

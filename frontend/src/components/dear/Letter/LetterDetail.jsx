@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
@@ -25,6 +26,17 @@ const LetterDetail = () => {
   const [nickName, setNickName] = useState(location.state?.nickName || null);
   const [nfcName, setNfcName] = useState(location.state?.nfcName || null);
   const [replyText, setReplyText] = useState(null);
+
+  const navigate = useNavigate();
+  const state = location.status;
+
+  const handleGoBack = () => {
+    if (state === 'mailbox') {
+      navigate(-1);
+    } else {
+      navigate(`/dear/mailbox`);
+    }
+  };
 
   useEffect(() => {
     if (!letterData || !ImageData) {
@@ -113,7 +125,7 @@ const LetterDetail = () => {
 
   return (
     <StPageWrapper>
-      <Header headerName="Lettering" />
+      <Header headerName="Lettering" onBack={handleGoBack} />
 
       <StyledSlider ref={sliderRef} {...settings}>
         {contents.map((item, id) => (

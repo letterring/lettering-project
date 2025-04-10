@@ -1,7 +1,7 @@
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
@@ -35,6 +35,7 @@ const openedImages = {
 };
 
 const SlideComponent = () => {
+  const swiperRef = useRef(null);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
@@ -81,6 +82,12 @@ const SlideComponent = () => {
     );
   };
 
+  const handleSlideClick = (idx) => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      swiperRef.current.swiper.slideTo(idx);
+    }
+  };
+
   const handleSlideChange = (swiper) => {
     const newIndex = swiper.realIndex;
 
@@ -95,13 +102,13 @@ const SlideComponent = () => {
 
   const handleOpenMsg = (sealingWaxId, messageId) => {
     if (sealingWaxId === 1) {
-      navigate(`/dear/postcard/detail/${messageId}`);
+      navigate(`/dear/postcard/detail/${messageId}`, { state: 'mailbox' });
     } else if (sealingWaxId === 2) {
-      navigate(`/dear/letter/detail/${messageId}`);
+      navigate(`/dear/letter/detail/${messageId}`, { state: 'mailbox' });
     } else if (sealingWaxId === 3) {
-      navigate(`/dear/letter/congrats/detail/${messageId}`);
+      navigate(`/dear/letter/congrats/detail/${messageId}`, { state: 'mailbox' });
     } else if (sealingWaxId === 4) {
-      navigate(`/dear/postcard/ssafy/detail/${messageId}`);
+      navigate(`/dear/postcard/ssafy/detail/${messageId}`, { state: 'mailbox' });
     }
   };
 
@@ -115,13 +122,23 @@ const SlideComponent = () => {
   const handleToggleFavorite = async (event, idx, id) => {
     event.stopPropagation();
 
-    setMessages((prevMessages) =>
-      prevMessages.map((msg, messageIndex) =>
-        idx === messageIndex ? { ...msg, favorite: !msg.favorite } : msg,
-      ),
+    const updated = messages.map((msg, messageIndex) =>
+      idx === messageIndex ? { ...msg, favorite: !msg.favorite } : msg,
     );
 
+    const sorted = sortMessages(updated);
+    setMessages(sorted);
+
     await setFavorites(id);
+  };
+
+  const sortMessages = (messages) => {
+    return [...messages].sort((a, b) => {
+      if (a.favorite !== b.favorite) {
+        return b.favorite - a.favorite;
+      }
+      return new Date(b.conditionTime) - new Date(a.conditionTime);
+    });
   };
 
   useEffect(() => {
@@ -132,6 +149,7 @@ const SlideComponent = () => {
 
   return (
     <StyledSwiper
+      ref={swiperRef}
       direction="vertical"
       effect="coverflow"
       grabCursor
@@ -169,7 +187,11 @@ const SlideComponent = () => {
               <ImageWrapper>
                 <img
                   onClick={() => {
-                    handleClick(idx);
+                    if (idx !== activeIndex) {
+                      handleSlideClick(idx);
+                    } else {
+                      handleClick(idx);
+                    }
                   }}
                   // className={!isPast && isCenter ? 'blurred' : ''}
                   src={
