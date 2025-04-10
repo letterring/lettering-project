@@ -109,7 +109,11 @@ const LetterContent = ({
               isSender={isSender}
             />
             <StBtnWrapper>
-              <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+              {isSender ? (
+                <LongButton btnName="목록으로" onClick={() => navigator('/mailbox')} />
+              ) : (
+                <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+              )}
             </StBtnWrapper>
           </>
         )}
@@ -138,11 +142,11 @@ const LetterContent = ({
 export default LetterContent;
 
 const StBtnWrapper = styled.div`
-  position: absolute;
   width: 100%;
-  bottom: 1rem;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
+  margin: 1rem;
 `;
 
 const StLetterWrapper = styled.div`

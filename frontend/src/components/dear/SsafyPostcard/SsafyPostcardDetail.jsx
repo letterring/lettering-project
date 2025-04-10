@@ -11,7 +11,7 @@ import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
 import useToggle from '../../../hooks/common/useToggle';
-import LongButton from '../../common/button/LongButton';
+import ConfirmButton from '../../common/button/ConfirmButton';
 import Header from '../../common/Header';
 import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 
@@ -33,16 +33,12 @@ const PostcardDetail = () => {
     setIsShow(false);
   };
 
-  const handleMarkAsUnread = async () => {
-    await markPostcardAsUnread(messageId);
-    alert('안읽음 처리 완료!');
-  };
-
   useEffect(() => {
     if (!postcard) {
       const fetchPostcard = async () => {
         const data = await getPostcardDetail(messageId);
         setPostcard(data);
+        setUserFont(getFontStyle(data.font));
       };
       fetchPostcard();
     }
@@ -51,15 +47,7 @@ const PostcardDetail = () => {
   // postcard가 아직 없으면 로딩 처리
   if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
 
-  // 구조분해 할당
   const { imageUrl, content, nfcName, font, replyText } = postcard;
-
-  // dummy
-  // const imageUrl = DummyImg;
-  // const font = 'GOMSIN';
-  // const nfcName = '';
-  // const content = '더미이지롱';
-  // const replyText = '답장이지롱';
 
   const handleOpenPreviewModal = async () => {
     const { imageHighUrl } = await getHighImageUrl(messageId);
@@ -94,7 +82,6 @@ const PostcardDetail = () => {
           </StFlipCard>
         </StFlipContainer>
 
-        {/* <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton> */}
         <PostcardPreviewModal
           isShowing={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
@@ -102,7 +89,7 @@ const PostcardDetail = () => {
           imageHighUrl={highImageUrl}
           nfcName={nfcName}
           content={content}
-          font={font}
+          font={userFont}
           flag="ssafy"
         />
 
@@ -112,16 +99,23 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
-        <StButtonsWrapper>
-          <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
-          <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
-        </StButtonsWrapper>
+        <StbtnWrapper>
+          <ConfirmButton btnName="다운로드" onClick={handleOpenPreviewModal} />
+          <ConfirmButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+        </StbtnWrapper>
       </StWrapper>
     </StPageWrapper>
   );
 };
 
 export default PostcardDetail;
+const StbtnWrapper = styled.div`
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+`;
 
 export const SimpleButton = styled.button`
   padding: 0.5rem 1rem;
@@ -146,6 +140,7 @@ const StWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 4rem;
+  z-index: 1001;
 `;
 
 const StInform = styled.div`
