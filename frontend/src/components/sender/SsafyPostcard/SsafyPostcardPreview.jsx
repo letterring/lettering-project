@@ -49,7 +49,7 @@ const PostcardWriting = () => {
         <StTextBox>
           <StPostcardContent>
             <StPostcardStamp src={StampImg} alt="우표" />
-            <StPostcardTitle $font={userFont}>사랑하는 너에게,</StPostcardTitle>
+            <StPostcardTitle $font={userFont}>고생한 너에게,</StPostcardTitle>
             <StPostcardText $font={userFont}>{text}</StPostcardText>
           </StPostcardContent>
         </StTextBox>
