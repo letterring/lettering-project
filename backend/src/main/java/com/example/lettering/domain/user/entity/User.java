@@ -45,7 +45,7 @@ public class User {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "font")
-    private Font font = Font.GOMSIN1;
+    private Font font = Font.GOMSIN2;
 
     @Column(name = "zipcode")
     private String zipcode;

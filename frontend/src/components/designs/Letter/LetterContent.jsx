@@ -46,6 +46,22 @@ const LetterContent = ({
     setIsModalOpen(true);
   };
 
+  const handleFilmClick = async () => {
+    const filmImages = images;
+    const newHighImageUrls = await Promise.all(
+      filmImages.map(async (img, index) => {
+        if (!highImageUrls[index]) {
+          const { imageHighUrl } = await getHighImage(messageId, index);
+          return imageHighUrl;
+        }
+        return highImageUrls[index];
+      }),
+    );
+    setHighImageUrls(newHighImageUrls);
+    setSelectedImageIndex(0);
+    setIsModalOpen(true);
+  };
+
   return (
     <StLetterWrapper $background={background}>
       <StContentWrapper>
@@ -59,13 +75,13 @@ const LetterContent = ({
         {template === 'film' && (
           <>
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
-            <FilmTemplate images={images} onImageClick={handleImageClick} />
+            <FilmTemplate images={images} onFilmClick={handleFilmClick} />
           </>
         )}
         {template === 'polar' && (
           <>
             <PolarTemplate images={images} isActive={isActive} onImageClick={handleImageClick} />
-            <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
+            <StLetterLongText $userFont={fontStyle}>{text[0]}</StLetterLongText>
           </>
         )}
         {template === 'card' && (
@@ -93,13 +109,22 @@ const LetterContent = ({
         )}
       </StContentWrapper>
 
-      {isModalOpen && selectedImageIndex !== null && highImageUrls[selectedImageIndex] && (
-        <ImageModal
-          isShowing={isModalOpen}
-          imageUrl={highImageUrls[selectedImageIndex]}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+      {isModalOpen &&
+        selectedImageIndex !== null &&
+        (template === 'film' ? (
+          <ImageModal
+            isShowing={isModalOpen}
+            images={highImageUrls}
+            initialIndex={selectedImageIndex}
+            onClose={() => setIsModalOpen(false)}
+          />
+        ) : (
+          <ImageModal
+            isShowing={isModalOpen}
+            imageUrl={highImageUrls[selectedImageIndex]}
+            onClose={() => setIsModalOpen(false)}
+          />
+        ))}
     </StLetterWrapper>
   );
 };
@@ -156,7 +181,10 @@ const StSenderText = styled.div`
   margin: 0.5rem 1rem;
 `;
 
-const StLetterText = styled.div`
+const StLetterText = styled.div.attrs(() => ({
+  onTouchStart: (e) => e.stopPropagation(),
+  onTouchMove: (e) => e.stopPropagation(),
+}))`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -165,11 +193,40 @@ const StLetterText = styled.div`
   width: 100%;
   box-sizing: border-box;
   margin: 0rem 1rem;
+  max-height: 12rem;
   min-height: 4rem;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   ${({ $userFont, theme }) => theme.fonts[$userFont]};
   color: ${({ theme }) => theme.colors.Gray2};
   word-wrap: break-word;
   overflow: auto;
   white-space: normal;
+  z-index: 50;
+`;
+
+const StLetterLongText = styled.div.attrs(() => ({
+  onTouchStart: (e) => e.stopPropagation(),
+  onTouchMove: (e) => e.stopPropagation(),
+}))`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0rem 1rem;
+  max-height: 15rem;
+  min-height: 4rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  ${({ $userFont, theme }) => theme.fonts[$userFont]};
+  color: ${({ theme }) => theme.colors.Gray2};
+  word-wrap: break-word;
+  overflow: auto;
+  white-space: normal;
+  z-index: 50;
 `;

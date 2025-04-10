@@ -26,6 +26,7 @@ import CompleteLetterPage from './pages/sender/CompleteLetterPage';
 import CompleteOrderPage from './pages/sender/CompleteOrderPage';
 import CompletePage from './pages/sender/CompletePage';
 import CompletePostcardPage from './pages/sender/CompletePostcardPage';
+import CompleteSsafyPostcardPage from './pages/sender/CompleteSsafyPostcardPage';
 import CongratsLetterDetailPage from './pages/sender/CongratsLetterDetailPage';
 import CongratsLetterPreviewPage from './pages/sender/CongratsLetterPreviewPage';
 import CustomizePage from './pages/sender/CustomizePage';
@@ -103,6 +104,7 @@ const Router = () => {
               <Route path="/complete/postcard" element={<CompletePostcardPage />} />
               <Route path="/complete/letter" element={<CompleteLetterPage />} />
               <Route path="/complete/letter/congrats" element={<CompleteCongratsLetterPage />} />
+              <Route path="/complete/postcard/ssafy" element={<CompleteSsafyPostcardPage />} />
 
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/mypage/font" element={<FontSettingPage />} />
@@ -117,6 +119,17 @@ const Router = () => {
               <Route path="/dear/postcard/detail/:messageId" element={<DearPostDetailPage />} />
               <Route path="/dear/letter/:messageId" element={<DearLetterPage />} />
               <Route path="/dear/letter/detail/:messageId" element={<DearLetterDetailPage />} />
+              <Route path="/dear/letter/congrats/:messageId" element={<DearCongratsLetterPage />} />
+              <Route
+                path="/dear/letter/congrats/detail/:messageId"
+                element={<DearCongratsLetterDetailPage />}
+              />
+              <Route path="/dear/postcard/ssafy/:messageId" element={<DearSsafyPostcardPage />} />
+              <Route
+                path="/dear/postcard/ssafy/detail/:messageId"
+                element={<DearSsafyPostDetailPage />}
+              />
+
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
               <Route path="/openapp" element={<OpenAppPage />} />
               <Route path="/dear/terminate" element={<TerminatePage />} />

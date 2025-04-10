@@ -3,7 +3,7 @@ import styled, { css, keyframes } from 'styled-components';
 
 import FilmImg from '/src/assets/images/letter/film.png';
 
-const FilmTemplate = ({ images, onImageClick }) => {
+const FilmTemplate = ({ images, onFilmClick }) => {
   const [animate, setAnimate] = useState(true);
   const sliderRef = useRef(null);
 
@@ -22,7 +22,7 @@ const FilmTemplate = ({ images, onImageClick }) => {
 
   return (
     <StWrapper>
-      <StMaskWrapper>
+      <StMaskWrapper onClick={onFilmClick}>
         <StRotateWrapper>
           <StSliderContainer
             ref={sliderRef}
@@ -32,23 +32,13 @@ const FilmTemplate = ({ images, onImageClick }) => {
             <StImageSlider>
               <StSlide $animate={animate}>
                 {images.map((src, idx) => (
-                  <StPhoto
-                    key={`orig-${idx}`}
-                    src={src.imageLowUrl}
-                    alt={`film-${idx}`}
-                    onClick={() => onImageClick(src.index)}
-                  />
+                  <StPhoto key={`orig-${idx}`} src={src.imageLowUrl} alt={`film-${idx}`} />
                 ))}
               </StSlide>
 
               <StSlide $animate={animate} $clone>
                 {images.map((src, idx) => (
-                  <StPhoto
-                    key={`clone-${idx}`}
-                    src={src.imageLowUrl}
-                    alt={`film-${idx}`}
-                    onClick={() => onImageClick(src.index)}
-                  />
+                  <StPhoto key={`clone-${idx}`} src={src.imageLowUrl} alt={`film-${idx}`} />
                 ))}
               </StSlide>
             </StImageSlider>

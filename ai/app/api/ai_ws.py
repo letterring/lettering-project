@@ -10,7 +10,7 @@ from app.agents.text_segmenter import TextSegmenterAgent
 
 router = APIRouter(prefix="/ai", tags=["AI WebSocket"])
 
-@router.websocket("")
+@router.websocket("/ws")
 async def websocket_ai_handler(websocket: WebSocket):
     await websocket.accept()
     try:
