@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
+import DummyImg from '/src/assets/dummy/postcard.jpg';
+
 import EnvelopeBottomImg from '../../../assets/images/congratsLetter/bottom_fold.png';
 import EnvelopeBodyImg from '../../../assets/images/congratsLetter/envelope_body.png';
 import EnvelopeTopPartImg from '../../../assets/images/congratsLetter/envelope_top_part.png';
@@ -18,10 +20,12 @@ const CongratsLetterAnimation = () => {
   const [isClosed, setIsClosed] = useState(false);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
-  const distance = 130;
+  const distance = 100;
 
   const x = -Math.cos(angle) * distance;
   const y = Math.sin(angle) * distance;
+  // const x = 0;
+  // const y = 0;
 
   return (
     <StWrapper>
@@ -76,14 +80,15 @@ const StEnvelopeWrapper = styled.div`
 const StEnvelopeTop = styled.img`
   position: absolute;
   width: 34rem;
-  top: -9.3rem;
+  height: 16rem;
+  top: -13.5rem;
   left: -2.4rem;
   z-index: ${({ $isClosed }) => ($isClosed ? 8 : 1)};
 
   transform-origin: bottom center;
   transform: ${({ $isClosed }) =>
     $isClosed ? 'rotateZ(-3.71deg) rotateX(180deg)' : 'rotateZ(-3.71deg) rotateX(0deg)'};
-  transition: transform 5s ease;
+  transition: transform 3s ease;
 `;
 
 const StEnvelopeBody = styled.img`
@@ -108,19 +113,19 @@ const StLetter = styled(motion.img)`
   position: absolute;
   left: 1rem;
   top: -10rem;
-  width: 26rem;
-  /* height: 30rem; */
+  width: 28rem;
+  height: 30rem;
   z-index: 2;
 
-  object-fit: cover;
+  object-fit: contain;
 `;
 
 const StLetterImage = styled(motion.img)`
   position: absolute;
-  top: -6.5rem;
-  left: 7.3rem;
-  width: 13.5rem;
-  height: 13.5rem;
+  top: -1rem;
+  left: 8rem;
+  width: 15rem;
+  height: 15rem;
   object-fit: cover;
   z-index: 3;
 `;
@@ -128,15 +133,16 @@ const StLetterImage = styled(motion.img)`
 const StEnvelope = styled.img`
   position: absolute;
   width: 31rem;
+  height: 25rem;
   top: 1rem;
   z-index: 5;
 `;
 
 const StSealingWax = styled.img`
   position: absolute;
-  width: 9.2rem;
-  top: 7.7rem;
-  left: 10.7rem;
+  width: 9.3rem;
+  top: 9rem;
+  left: 10.6rem;
   z-index: 100;
   /* display: ${({ $isClosed }) => ($isClosed ? 'block' : 'none')}; */
 `;
