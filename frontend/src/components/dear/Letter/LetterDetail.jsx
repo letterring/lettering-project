@@ -22,8 +22,8 @@ const LetterDetail = () => {
   const [ImageData, setImageData] = useState(location.state?.ImageData || null);
   const [letterFont, setLetterFont] = useState(location.state?.letterFont || null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [nickName, setNickName] = useState(null);
-  const [nfcName, setNfcName] = useState(null);
+  const [nickName, setNickName] = useState(location.state?.nickName || null);
+  const [nfcName, setNfcName] = useState(location.state?.nfcName || null);
   const [replyText, setReplyText] = useState(null);
 
   useEffect(() => {
