@@ -97,7 +97,11 @@ const DeliveryType = () => {
 
     const firstImageURL = postcardImageFile ? URL.createObjectURL(postcardImageFile) : null;
 
-    navigate(`/complete/postcard`, { state: { firstImageURL } });
+    if (postcardData.sealingWaxId === 1) {
+      navigate(`/complete/postcard`, { state: { firstImageURL } });
+    } else {
+      navigate(`/complete/postcard/ssafy`, { state: { firstImageURL } });
+    }
   };
 
   // 전송 공통 로직 (NORMAL, SCHEDULED에서 사용)
@@ -213,6 +217,8 @@ const Wrapper = styled.div`
 const CardList = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1.2rem;
 `;
 

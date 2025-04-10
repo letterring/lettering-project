@@ -8,7 +8,7 @@ import CenterCarousel from './CenterCarousel';
 
 const DearMailBox = () => {
   const [readData, setReadData] = useState({});
-  const keyringId = 19;
+  const keyringId = 17;
 
   useEffect(() => {
     const fetchReadStatus = async (keyringId) => {

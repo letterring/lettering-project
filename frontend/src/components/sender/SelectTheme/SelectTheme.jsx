@@ -68,6 +68,8 @@ const SelectTheme = () => {
         navigate('/letter/preview/congrats');
       } else if (selectedTheme.id === 4) {
         navigate('/postcard/writing/ssafy');
+      } else if (selectedTheme.id === 5) {
+        alert('아직 준비중입니다.');
       }
     } else {
       alert('테마를 선택해주세요!');
@@ -92,9 +94,14 @@ const SelectTheme = () => {
 
       <FixedButtonWrapper>
         <LongButton
-          btnName={`지금 디자인으로 ${selectedTheme?.designType === 'POSTCARD' ? '엽서' : '편지'}쓰기`}
+          btnName={
+            selectedTheme?.id === 5
+              ? '아직 준비중인 디자인입니다.'
+              : `지금 디자인으로 ${selectedTheme?.designType === 'POSTCARD' ? '엽서' : '편지'}쓰기`
+          }
           onClick={handleConfirm}
           opacity={false}
+          disabled={selectedTheme?.id === 5}
         />
       </FixedButtonWrapper>
     </Wrapper>
@@ -139,6 +146,8 @@ const FixedButtonWrapper = styled.div`
   box-sizing: border-box; // ✅ 이거 추가!
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
   z-index: 10;
 `;
