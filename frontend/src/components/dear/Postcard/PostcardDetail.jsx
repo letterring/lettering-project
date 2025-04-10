@@ -9,7 +9,7 @@ import StampImg from '/src/assets/images/postcard/stamp.png';
 import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
-import LongButton from '../../common/button/LongButton';
+import ConfirmButton from '../../common/button/ConfirmButton';
 import Header from '../../common/Header';
 import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 
@@ -37,11 +37,6 @@ const PostcardDetail = () => {
   const handleInformMsg = () => {
     setFlipped((prev) => !prev);
     setIsShow(false);
-  };
-
-  const handleMarkAsUnread = async () => {
-    await markPostcardAsUnread(messageId);
-    alert('안읽음 처리 완료!');
   };
 
   useEffect(() => {
@@ -87,7 +82,6 @@ const PostcardDetail = () => {
             </StCardFace>
           </StFlipCard>
         </StFlipContainer>
-        <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
         <PostcardPreviewModal
           isShowing={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
@@ -104,13 +98,25 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
-        <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
+
+        <StbtnWrapper>
+          <ConfirmButton btnName="다운로드" onClick={handleOpenPreviewModal} />
+          <ConfirmButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+        </StbtnWrapper>
       </StWrapper>
     </StPageWrapper>
   );
 };
 
 export default PostcardDetail;
+
+const StbtnWrapper = styled.div`
+  padding: 0 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+`;
 
 export const SimpleButton = styled.button`
   padding: 0.5rem 1rem;
@@ -134,7 +140,7 @@ const StPageWrapper = styled.div`
 const StWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   gap: 2rem;
 
@@ -159,7 +165,7 @@ const StFlipContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* margin-bottom: 7rem; */
+  margin-bottom: 3rem;
 `;
 
 const StFlipCard = styled.div`

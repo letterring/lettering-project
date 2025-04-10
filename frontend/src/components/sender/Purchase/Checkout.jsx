@@ -154,8 +154,6 @@ const StBodyWrapper = styled.div`
   justify-content: space-evenly;
   align-items: flex-start;
 
-  padding: 0 3rem;
-  padding-bottom: 3rem;
   box-sizing: border-box;
   gap: 1rem;
   flex: 1;

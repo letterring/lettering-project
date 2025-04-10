@@ -21,9 +21,12 @@ export default function SecretConfirm({ question, hint, answer, onBack, onConfir
       <ContentWrapper>
         <Label>질문</Label>
         <GrayBox>{question}</GrayBox>
-
-        <Label>힌트</Label>
-        <GrayBox>{hint}</GrayBox>
+        {hint && (
+          <>
+            <Label>힌트</Label>
+            <GrayBox>{hint}</GrayBox>
+          </>
+        )}
 
         <Label>정답</Label>
         <GrayBox>{answer}</GrayBox>

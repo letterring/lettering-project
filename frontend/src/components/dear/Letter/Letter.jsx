@@ -22,6 +22,8 @@ const Letter = () => {
   const [letterData, setLetterData] = useState(null);
   const [ImageData, setImageData] = useState(null);
   const [letterFont, setLetterFont] = useState(null);
+  const [nickName, setNickName] = useState(null);
+  const [nfcName, setNfcName] = useState(null);
 
   const angle = (90 + 3.71) * (Math.PI / 180); // 라디안 변환
   const distance = 200;
@@ -32,8 +34,15 @@ const Letter = () => {
   useEffect(() => {
     if (!letterData || !ImageData) {
       const fetchLetter = async () => {
-        const { letterContents, letterImages, font, conditionTime, firstOpenedTime } =
-          await getLetterDetail(messageId);
+        const {
+          nfcName,
+          nickName,
+          letterContents,
+          letterImages,
+          font,
+          conditionTime,
+          firstOpenedTime,
+        } = await getLetterDetail(messageId);
 
         const sentAt = getLetterDate(conditionTime);
         const readAt = getLetterDate(firstOpenedTime);
@@ -45,6 +54,8 @@ const Letter = () => {
           `${readAt}에 열었습니다.`,
         ];
 
+        setNfcName(nfcName);
+        setNickName(nickName);
         setImageData(newImageData);
         setLetterData(newLetterContents);
         setLetterFont(font);
@@ -61,6 +72,8 @@ const Letter = () => {
         letterData,
         ImageData,
         letterFont,
+        nickName,
+        nfcName,
       },
     });
   };

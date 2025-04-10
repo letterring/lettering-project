@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
+import { getHighImageUrl, getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 import PostcardImg from '/src/assets/images/ssafyPostcard/postcard.png';
@@ -11,18 +11,21 @@ import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
 import useToggle from '../../../hooks/common/useToggle';
+import ConfirmButton from '../../common/button/ConfirmButton';
 import Header from '../../common/Header';
+import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 
 const PostcardDetail = () => {
   const { messageId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.status;
-
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
   const { toggle, handleToggle } = useToggle(false);
-
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [highImageUrl, setHighImageUrl] = useState('');
+  const [userFont, setUserFont] = useState('GOMSIN2');
   const [postcard, setPostcard] = useState(location.state?.postcard || null);
 
   const handleGoBack = () => {
@@ -38,16 +41,12 @@ const PostcardDetail = () => {
     setIsShow(false);
   };
 
-  const handleMarkAsUnread = async () => {
-    await markPostcardAsUnread(messageId);
-    alert('안읽음 처리 완료!');
-  };
-
   useEffect(() => {
     if (!postcard) {
       const fetchPostcard = async () => {
         const data = await getPostcardDetail(messageId);
         setPostcard(data);
+        setUserFont(getFontStyle(data.font));
       };
       fetchPostcard();
     }
@@ -56,15 +55,13 @@ const PostcardDetail = () => {
   // postcard가 아직 없으면 로딩 처리
   if (!postcard) return <div>엽서를 불러오는 중입니다...</div>;
 
-  // 구조분해 할당
   const { imageUrl, content, nfcName, font, replyText } = postcard;
 
-  // dummy
-  // const imageUrl = DummyImg;
-  // const font = 'GOMSIN';
-  // const nfcName = '';
-  // const content = '더미이지롱';
-  // const replyText = '답장이지롱';
+  const handleOpenPreviewModal = async () => {
+    const { imageHighUrl } = await getHighImageUrl(messageId);
+    setHighImageUrl(imageHighUrl);
+    setIsPreviewOpen(true);
+  };
 
   return (
     <StPageWrapper>
@@ -85,7 +82,7 @@ const PostcardDetail = () => {
               <StPostcardContent>
                 <StPostcardStamp src={StampImg} alt="우표" />
                 <StPostcardTitle $font={getFontStyle(font)}>
-                  사랑하는 {nfcName || '너'}에게,
+                  고생한 {nfcName || '너'}에게,
                 </StPostcardTitle>
                 <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
               </StPostcardContent>
@@ -93,7 +90,16 @@ const PostcardDetail = () => {
           </StFlipCard>
         </StFlipContainer>
 
-        <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
+        <PostcardPreviewModal
+          isShowing={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          messageId={messageId}
+          imageHighUrl={highImageUrl}
+          nfcName={nfcName}
+          content={content}
+          font={userFont}
+          flag="ssafy"
+        />
 
         <ReplyComponent
           messageId={messageId}
@@ -101,12 +107,24 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
+
+        <StbtnWrapper>
+          <ConfirmButton btnName="다운로드" onClick={handleOpenPreviewModal} />
+          <ConfirmButton btnName="목록으로" onClick={() => navigate('/dear/mailbox')} />
+        </StbtnWrapper>
       </StWrapper>
     </StPageWrapper>
   );
 };
 
 export default PostcardDetail;
+const StbtnWrapper = styled.div`
+  padding: 0 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+`;
 
 export const SimpleButton = styled.button`
   padding: 0.5rem 1rem;
@@ -128,12 +146,13 @@ const StPageWrapper = styled.div`
 const StWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   gap: 2rem;
 
   padding-top: 5rem;
   overflow: hidden;
+  height: 100%;
 `;
 
 const StInform = styled.div`
@@ -152,7 +171,7 @@ const StFlipContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* margin-bottom: 7rem; */
+  margin-bottom: 3rem;
 `;
 
 const StFlipCard = styled.div`
@@ -254,4 +273,15 @@ const StPostcardImage = styled(motion.div)`
     height: 100%;
     object-fit: cover;
   }
+`;
+
+const StButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  position: absolute;
+  bottom: 1rem;
 `;
