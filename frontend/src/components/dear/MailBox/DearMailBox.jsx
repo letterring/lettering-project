@@ -83,9 +83,7 @@ const StatusWrapper = styled.div`
   padding: 1rem 0;
   padding-right: 2rem;
 
-  .opened {
-    color: ${({ theme }) => theme.colors.Gray1};
-  }
+  color: ${({ theme }) => theme.colors.Gray1};
 `;
 
 const ShowStatus = styled.div`

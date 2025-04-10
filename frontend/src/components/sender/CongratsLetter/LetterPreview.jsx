@@ -77,7 +77,7 @@ const LetterPreview = () => {
 
   return (
     <StLetterPreview>
-      <Header headerName="편지쓰기" />
+      <Header headerName="편지쓰기" missBack={true} />
       <ContentWrapper>
         <StyledSlider ref={sliderRef} {...settings}>
           {contents.map((item, index) => (

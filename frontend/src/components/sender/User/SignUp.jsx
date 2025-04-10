@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Background from '/src/assets/background2.png';
+
 import { signup } from '../../../apis/user';
 import { getUserData } from '../../../apis/user';
 import SuccessBirdImg from '../../../assets/images/bird_hi.png';
@@ -212,11 +214,14 @@ const SignUp = () => {
 export default SignUp;
 
 const StSignUpWrapper = styled.div`
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 5rem 2rem;
   box-sizing: border-box;
+  background-image: url(${Background});
 `;
 
 const LogoText = styled.h1`
