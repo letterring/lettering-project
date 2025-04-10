@@ -115,13 +115,23 @@ const SlideComponent = () => {
   const handleToggleFavorite = async (event, idx, id) => {
     event.stopPropagation();
 
-    setMessages((prevMessages) =>
-      prevMessages.map((msg, messageIndex) =>
-        idx === messageIndex ? { ...msg, favorite: !msg.favorite } : msg,
-      ),
+    const updated = messages.map((msg, messageIndex) =>
+      idx === messageIndex ? { ...msg, favorite: !msg.favorite } : msg,
     );
 
+    const sorted = sortMessages(updated);
+    setMessages(sorted);
+
     await setFavorites(id);
+  };
+
+  const sortMessages = (messages) => {
+    return [...messages].sort((a, b) => {
+      if (a.favorite !== b.favorite) {
+        return b.favorite - a.favorite;
+      }
+      return new Date(b.conditionTime) - new Date(a.conditionTime);
+    });
   };
 
   useEffect(() => {
