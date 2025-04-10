@@ -77,6 +77,12 @@ const EditButton = styled.button`
   border-radius: 1rem;
   ${({ theme }) => theme.fonts.Body4};
   color: ${({ theme }) => theme.colors.White};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const CharCount = styled.div`
