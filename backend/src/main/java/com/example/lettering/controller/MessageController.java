@@ -14,9 +14,6 @@ import com.example.lettering.domain.keyring.service.KeyringSessionService;
 import com.example.lettering.domain.message.service.LetterService;
 import com.example.lettering.domain.message.service.MessageService;
 import com.example.lettering.domain.message.service.PostcardService;
-import com.example.lettering.exception.ExceptionCode;
-import com.example.lettering.exception.type.BusinessException;
-import com.example.lettering.exception.type.ValidationException;
 import com.example.lettering.util.FileMetaUtil;
 import com.example.lettering.util.SessionUtil;
 import com.example.lettering.util.dto.BooleanResponse;
@@ -25,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.protocol.HTTP;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpStatus;
@@ -45,6 +42,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Messasge", description = "메시지 관련 API")
 public class MessageController {
 
@@ -139,7 +137,7 @@ public class MessageController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             HttpSession session) {
         Long keyringId = isKeyringValidationEnabled ? Objects.requireNonNull((Long) session.getAttribute("keyringId")) : 19L;
-
+        log.info("dear kyering Id: "+keyringId);
         return ResponseEntity.ok(DearMessageSummaryListResponse.of(messageService.getMessagesToDear(keyringId, page)));
     }
 
