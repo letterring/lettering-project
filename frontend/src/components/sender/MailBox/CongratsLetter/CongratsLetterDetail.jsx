@@ -144,6 +144,7 @@ const StPageWrapper = styled.div`
 
 const StyledSlider = styled(Slider)`
   width: 100%;
+  height: 100%;
 
   .slick-list {
     overflow: hidden;

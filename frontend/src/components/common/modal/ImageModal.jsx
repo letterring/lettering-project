@@ -24,9 +24,9 @@ const ImageModal = ({ isShowing, imageUrl, images, initialIndex = 0, onClose }) 
   return (
     <StImageModalWrapper onClick={onClose}>
       <ModalWrapper onClick={(e) => e.stopPropagation()}>
-        {hasSlider && <ArrowButtonLeft onClick={handlePrev}>◀</ArrowButtonLeft>}
+        {hasSlider && <StyledArrowLeft onClick={handlePrev} />}
         <Image src={currentImage} alt="고화질 이미지" />
-        {hasSlider && <ArrowButtonRight onClick={handleNext}>▶</ArrowButtonRight>}
+        {hasSlider && <StyledArrowRight onClick={handleNext} />}
       </ModalWrapper>
     </StImageModalWrapper>
   );
@@ -41,7 +41,7 @@ const StImageModalWrapper = styled.div`
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.3);
   z-index: 9999;
   display: flex;
   justify-content: center;
@@ -63,24 +63,14 @@ const Image = styled.img`
   object-fit: contain;
 `;
 
-const ArrowButtonLeft = styled.div`
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+const StyledArrowLeft = styled(IcArrowLeft)`
   cursor: pointer;
-  font-size: 2rem;
-  color: white;
-  z-index: 10000;
+  position: absolute;
+  left: 0.2rem;
 `;
 
-const ArrowButtonRight = styled.div`
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+const StyledArrowRight = styled(IcArrowRight2)`
   cursor: pointer;
-  font-size: 2rem;
-  color: white;
-  z-index: 10000;
+  position: absolute;
+  right: 0.2rem;
 `;
