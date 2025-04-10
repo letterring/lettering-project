@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Background from '/src/assets/background2.png';
+
 import { login } from '../../../apis/user';
 import FailBirdImg from '../../../assets/images/bird_sorry.svg';
 import LongButton from '../../common/button/LongButton';
@@ -144,12 +146,15 @@ const Login = () => {
 export default Login;
 
 const StLoginWrapper = styled.div`
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 5rem 2rem;
   box-sizing: border-box;
+  background-image: url(${Background});
 `;
 
 const LogoText = styled.h1`

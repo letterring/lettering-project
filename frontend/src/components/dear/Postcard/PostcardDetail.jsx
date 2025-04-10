@@ -9,7 +9,7 @@ import StampImg from '/src/assets/images/postcard/stamp.png';
 import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
-import LongButton from '../../common/button/LongButton';
+import ConfirmButton from '../../common/button/ConfirmButton';
 import Header from '../../common/Header';
 import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 
@@ -28,11 +28,6 @@ const PostcardDetail = () => {
   const handleInformMsg = () => {
     setFlipped((prev) => !prev);
     setIsShow(false);
-  };
-
-  const handleMarkAsUnread = async () => {
-    await markPostcardAsUnread(messageId);
-    alert('안읽음 처리 완료!');
   };
 
   useEffect(() => {
@@ -78,7 +73,6 @@ const PostcardDetail = () => {
             </StCardFace>
           </StFlipCard>
         </StFlipContainer>
-        {/* <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton> */}
         <PostcardPreviewModal
           isShowing={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
@@ -95,16 +89,25 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
-        <StButtonsWrapper>
-          <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
-          <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
-        </StButtonsWrapper>
+
+        <StbtnWrapper>
+          <ConfirmButton btnName="다운로드" onClick={handleOpenPreviewModal} />
+          <ConfirmButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+        </StbtnWrapper>
       </StWrapper>
     </StPageWrapper>
   );
 };
 
 export default PostcardDetail;
+
+const StbtnWrapper = styled.div`
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+`;
 
 export const SimpleButton = styled.button`
   padding: 0.5rem 1rem;
@@ -131,6 +134,7 @@ const StWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 4rem;
+  z-index: 1001;
 `;
 
 const StInform = styled.div`
@@ -252,15 +256,4 @@ const StPostcardImage = styled(motion.div)`
     height: 100%;
     object-fit: cover;
   }
-`;
-
-const StButtonsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  position: absolute;
-  bottom: 1rem;
 `;
