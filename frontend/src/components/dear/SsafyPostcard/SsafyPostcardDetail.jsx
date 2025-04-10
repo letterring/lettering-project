@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
@@ -16,12 +16,22 @@ import Header from '../../common/Header';
 const PostcardDetail = () => {
   const { messageId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
+  const state = location.status;
 
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
   const { toggle, handleToggle } = useToggle(false);
 
   const [postcard, setPostcard] = useState(location.state?.postcard || null);
+
+  const handleGoBack = () => {
+    if (state === 'mailbox') {
+      navigate(-1);
+    } else {
+      navigate(`/dear/mailbox`);
+    }
+  };
 
   const handleInformMsg = () => {
     setFlipped((prev) => !prev);
@@ -58,7 +68,7 @@ const PostcardDetail = () => {
 
   return (
     <StPageWrapper>
-      <Header headerName="Lettering" />
+      <Header headerName="Lettering" onBack={handleGoBack} />
       <StWrapper>
         <StFlipContainer onClick={handleInformMsg}>
           <StInform $isShow={isShow}>엽서를 눌러 편지 내용을 확인해보세요.</StInform>

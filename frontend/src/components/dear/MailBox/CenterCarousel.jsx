@@ -95,13 +95,13 @@ const SlideComponent = () => {
 
   const handleOpenMsg = (sealingWaxId, messageId) => {
     if (sealingWaxId === 1) {
-      navigate(`/dear/postcard/detail/${messageId}`);
+      navigate(`/dear/postcard/detail/${messageId}`, { state: 'mailbox' });
     } else if (sealingWaxId === 2) {
-      navigate(`/dear/letter/detail/${messageId}`);
+      navigate(`/dear/letter/detail/${messageId}`, { state: 'mailbox' });
     } else if (sealingWaxId === 3) {
-      navigate(`/dear/letter/congrats/detail/${messageId}`);
+      navigate(`/dear/letter/congrats/detail/${messageId}`, { state: 'mailbox' });
     } else if (sealingWaxId === 4) {
-      navigate(`/dear/postcard/ssafy/detail/${messageId}`);
+      navigate(`/dear/postcard/ssafy/detail/${messageId}`, { state: 'mailbox' });
     }
   };
 

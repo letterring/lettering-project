@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 
@@ -12,6 +12,9 @@ import { getLetterDate } from '/src/util/getFormatDate';
 import CongratsLetterContent from '../../designs/CongratsLetter/CongratsLetterContent';
 
 const CongratsLetterDetail = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.status;
   const sliderRef = useRef(null);
   const { messageId } = useParams();
 
@@ -22,6 +25,14 @@ const CongratsLetterDetail = () => {
   const [nickName, setNickName] = useState(null);
   const [nfcName, setNfcName] = useState(null);
   const [replyText, setReplyText] = useState(null);
+
+  const handleGoBack = () => {
+    if (state === 'mailbox') {
+      navigate(-1);
+    } else {
+      navigate(`/dear/mailbox`);
+    }
+  };
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -104,7 +115,7 @@ const CongratsLetterDetail = () => {
   return (
     <>
       <StPageWrapper>
-        <Header headerName="Congratulations" />
+        <Header headerName="Congratulations" onBack={handleGoBack} />
 
         <StyledSlider ref={sliderRef} {...settings}>
           {contents.map((item, id) => (

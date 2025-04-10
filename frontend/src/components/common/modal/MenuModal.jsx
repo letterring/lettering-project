@@ -43,6 +43,15 @@ const MenuModal = ({ isShowing, target, alarm }) => {
     if (id === 'theme') {
       return writingPaths.some((path) => location.pathname.includes(path));
     }
+
+    //받은 사람
+    if (
+      id === 'mailbox' &&
+      location.pathname.includes('/dear') &&
+      location.pathname.includes('/detail')
+    ) {
+      return true;
+    }
     return location.pathname.includes(id);
   };
 

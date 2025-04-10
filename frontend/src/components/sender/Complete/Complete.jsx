@@ -36,7 +36,10 @@ const Complete = () => {
       <img src={CompleteImage} alt="전송 완료 이미지" />
       <CompleteText>전송 완료!!</CompleteText>
       <SubText>키링을 태그하면 도착한 편지를 바로 확인할 수 있어요!</SubText>
-      <LongButton btnName="보낸 편지함으로 가기" onClick={() => navigate(`/mailbox`)} />
+      <LongButton
+        btnName="보낸 편지함으로 가기"
+        onClick={() => navigate(`/mailbox`, { state: 'send' })}
+      />
     </CompleteWrapper>
   );
 };
