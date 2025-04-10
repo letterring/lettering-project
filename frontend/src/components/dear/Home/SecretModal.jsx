@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LockIcon from '/src/assets/images/sender/SecretOption.png'; // 🔒 자물쇠 이미지
@@ -7,6 +8,7 @@ import ConfirmButton from '../../common/button/ConfirmButton';
 import ConfirmModal from '../../common/modal/ConfirmModal';
 
 export default function SecretModal({ question, hint, correctAnswer, onSuccess }) {
+  const navigate = useNavigate();
   const [userAnswer, setUserAnswer] = useState('');
   const [error, setError] = useState('');
 
@@ -22,7 +24,9 @@ export default function SecretModal({ question, hint, correctAnswer, onSuccess }
   return (
     <ConfirmModal
       isOpen={true}
-      onClose={() => {}} // 닫기 비활성화
+      onClose={() => {
+        navigate('/dear/mailbox');
+      }}
       title={
         <ModalTitleBox>
           <ModalTitle>비밀편지 도착</ModalTitle>
