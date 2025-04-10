@@ -39,7 +39,7 @@ export const getUserData = async () => {
 export const logout = async () => {
   try {
     const res = await client.post(`/users/logout`);
-
+    localStorage.removeItem('sealingWaxId');
     return res;
   } catch (err) {
     console.error('로그아웃 요청 실패', err);

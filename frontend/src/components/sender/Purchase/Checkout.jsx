@@ -127,15 +127,11 @@ export default Checkout;
 
 const StCheckoutWrapper = styled.div`
   width: 100%;
-  height: 100%;
-
-  form {
-    background-color: white;
-  }
 `;
 
 const StWrapper = styled.div`
-  padding-top: 7rem;
+  padding: 7rem 3rem;
+  background-color: ${({ theme }) => theme.colors.White};
 `;
 
 const StBodyWrapper = styled.div`
@@ -144,8 +140,6 @@ const StBodyWrapper = styled.div`
   justify-content: space-evenly;
   align-items: flex-start;
 
-  padding: 0 3rem;
-  padding-bottom: 3rem;
   box-sizing: border-box;
   gap: 1rem;
 `;
