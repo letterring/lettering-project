@@ -139,6 +139,7 @@ const FixedButtonWrapper = styled.div`
   box-sizing: border-box; // ✅ 이거 추가!
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
   z-index: 10;
 `;
