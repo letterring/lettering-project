@@ -126,16 +126,26 @@ const Checkout = () => {
 export default Checkout;
 
 const StCheckoutWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
   width: 100%;
   height: 100%;
 
   form {
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 `;
 
 const StWrapper = styled.div`
+  flex: 1;
   padding-top: 7rem;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 const StBodyWrapper = styled.div`
@@ -148,6 +158,7 @@ const StBodyWrapper = styled.div`
   padding-bottom: 3rem;
   box-sizing: border-box;
   gap: 1rem;
+  flex: 1;
 `;
 
 const ContentWrapper = styled.div`
@@ -157,6 +168,8 @@ const ContentWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 3rem;
+
+  flex: 1;
 `;
 
 const StContentWrapper = styled.div`

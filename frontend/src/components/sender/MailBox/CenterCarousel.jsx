@@ -1,7 +1,7 @@
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
@@ -31,6 +31,8 @@ const images = {
 };
 
 const CenterCarousel = ({ selected }) => {
+  const swiperRef = useRef(null);
+
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [openedIndices, setOpenedIndices] = useState([]);
@@ -65,6 +67,12 @@ const CenterCarousel = ({ selected }) => {
     setOpenedIndices((prev) =>
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx],
     );
+  };
+
+  const handleSlideClick = (idx) => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      swiperRef.current.swiper.slideTo(idx);
+    }
   };
 
   const handleSlideChange = (swiper) => {
@@ -114,6 +122,7 @@ const CenterCarousel = ({ selected }) => {
 
   return (
     <StyledSwiper
+      ref={swiperRef}
       direction="vertical"
       effect="coverflow"
       grabCursor
@@ -137,7 +146,17 @@ const CenterCarousel = ({ selected }) => {
           const isOpened = openedIndices.includes(idx);
 
           return (
-            <StyledSlide key={idx} $hidden={!isVisible} onClick={() => handleClick(idx)}>
+            <StyledSlide
+              key={idx}
+              $hidden={!isVisible}
+              onClick={() => {
+                if (idx !== activeIndex) {
+                  handleSlideClick(idx);
+                } else {
+                  handleClick(idx);
+                }
+              }}
+            >
               <SlideContent $align={getAlignType(idx, activeIndex)}>
                 <ImageWrapper>
                   <img
