@@ -1,18 +1,17 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { getKeyringList } from '../../../apis/keyring';
 import { logout } from '../../../apis/user';
 import CoinBirdImg from '../../../assets/images/bird_coin.png';
-import useModal from '../../../hooks/common/useModal';
 import ConfirmButton from '../button/ConfirmButton';
 import AlertModal from './AlertModal';
 
-const MenuModal = ({ isShowing, target }) => {
+const MenuModal = ({ isShowing, target, alarm }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const alarm = useModal();
 
   //status: 현재 선택된 메뉴명
   const senderMenus = [
@@ -50,7 +49,7 @@ const MenuModal = ({ isShowing, target }) => {
   const handleClickMenu = (name) => {
     if (name === 'logout') {
       logout();
-      navigate('/');
+      navigate('/login');
     } else if (name === 'terminate') {
       navigate('/dear/terminate');
     } else if (name === 'theme') {
@@ -66,7 +65,6 @@ const MenuModal = ({ isShowing, target }) => {
 
   const handleAuth = async () => {
     const res = await getKeyringList();
-    console.log(res);
 
     if (!res || res.length == 0) {
       alarm.setShowing(true);
@@ -76,9 +74,9 @@ const MenuModal = ({ isShowing, target }) => {
   };
 
   return (
-    isShowing && (
-      <>
-        <StMenuModalWrapper>
+    <>
+      {isShowing && (
+        <StMenuModalWrapper onClick={(e) => e.stopPropagation()}>
           {menus.map((item, id) => (
             <StMenu
               key={id}
@@ -90,17 +88,8 @@ const MenuModal = ({ isShowing, target }) => {
             </StMenu>
           ))}
         </StMenuModalWrapper>
-
-        <AlertModal
-          title="키링을 구매한 뒤 편지를 써주세요."
-          imgSrc={CoinBirdImg}
-          isOpen={alarm.isShowing}
-          onClose={alarm.toggle}
-        >
-          <ConfirmButton onClick={() => navigate(`/purchase`)} btnName="키링 구매하러 가기" />
-        </AlertModal>
-      </>
-    )
+      )}
+    </>
   );
 };
 
@@ -117,7 +106,7 @@ const StMenuModalWrapper = styled.div`
   padding-top: 5rem;
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.Background};
-  z-index: 1000;
+  z-index: 995;
 `;
 
 const StMenu = styled.div`
