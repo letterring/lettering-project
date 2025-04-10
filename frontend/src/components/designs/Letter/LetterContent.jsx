@@ -58,14 +58,14 @@ const LetterContent = ({
         )}
         {template === 'film' && (
           <>
-            <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
+            <StLetterLongText $userFont={fontStyle}>{text[0]}</StLetterLongText>
             <FilmTemplate images={images} onImageClick={handleImageClick} />
           </>
         )}
         {template === 'polar' && (
           <>
             <PolarTemplate images={images} isActive={isActive} onImageClick={handleImageClick} />
-            <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
+            <StLetterLongText $userFont={fontStyle}>{text[0]}</StLetterLongText>
           </>
         )}
         {template === 'card' && (
@@ -156,7 +156,10 @@ const StSenderText = styled.div`
   margin: 0.5rem 1rem;
 `;
 
-const StLetterText = styled.div`
+const StLetterText = styled.div.attrs(() => ({
+  onTouchStart: (e) => e.stopPropagation(),
+  onTouchMove: (e) => e.stopPropagation(),
+}))`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -165,11 +168,40 @@ const StLetterText = styled.div`
   width: 100%;
   box-sizing: border-box;
   margin: 0rem 1rem;
+  max-height: 12rem;
   min-height: 4rem;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   ${({ $userFont, theme }) => theme.fonts[$userFont]};
   color: ${({ theme }) => theme.colors.Gray2};
   word-wrap: break-word;
   overflow: auto;
   white-space: normal;
+  z-index: 50;
+`;
+
+const StLetterLongText = styled.div.attrs(() => ({
+  onTouchStart: (e) => e.stopPropagation(),
+  onTouchMove: (e) => e.stopPropagation(),
+}))`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0rem 1rem;
+  max-height: 15rem;
+  min-height: 4rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  ${({ $userFont, theme }) => theme.fonts[$userFont]};
+  color: ${({ theme }) => theme.colors.Gray2};
+  word-wrap: break-word;
+  overflow: auto;
+  white-space: normal;
+  z-index: 50;
 `;
