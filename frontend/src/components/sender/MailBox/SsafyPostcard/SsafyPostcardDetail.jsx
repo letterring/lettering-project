@@ -47,7 +47,7 @@ const PostcardDetail = () => {
             <StPostcardContent>
               <StPostcardStamp src={StampImg} alt="우표" />
               <StPostcardTitle $font={getFontStyle(font)}>
-                사랑하는 {nfcName || '너'}에게,
+                고생한 {nfcName || '너'}에게,
               </StPostcardTitle>
               <StPostcardText $font={getFontStyle(font)}>{content}</StPostcardText>
             </StPostcardContent>
