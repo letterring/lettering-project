@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const ImageModal = ({ isShowing, imageUrl, onClose }) => {
+import { IcArrowLeft, IcArrowRight2 } from '../../../assets/icons/index.js';
+
+const ImageModal = ({ isShowing, imageUrl, images, initialIndex = 0, onClose }) => {
+  const hasSlider = Array.isArray(images) && images.length > 0;
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  const currentImage = hasSlider ? images[currentIndex] : imageUrl;
+
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNext = (e) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  if (!isShowing) return null;
+
   return (
-    isShowing && (
-      <StImageModalWrapper onClick={onClose}>
-        <ModalWrapper onClick={(e) => e.stopPropagation()}>
-          <Image src={imageUrl} alt="고화질 이미지" />
-        </ModalWrapper>
-      </StImageModalWrapper>
-    )
+    <StImageModalWrapper onClick={onClose}>
+      <ModalWrapper onClick={(e) => e.stopPropagation()}>
+        {hasSlider && <ArrowButtonLeft onClick={handlePrev}>◀</ArrowButtonLeft>}
+        <Image src={currentImage} alt="고화질 이미지" />
+        {hasSlider && <ArrowButtonRight onClick={handleNext}>▶</ArrowButtonRight>}
+      </ModalWrapper>
+    </StImageModalWrapper>
   );
 };
 
@@ -42,4 +61,26 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
+`;
+
+const ArrowButtonLeft = styled.div`
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 2rem;
+  color: white;
+  z-index: 10000;
+`;
+
+const ArrowButtonRight = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 2rem;
+  color: white;
+  z-index: 10000;
 `;
