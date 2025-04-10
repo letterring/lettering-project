@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { getHighImage } from '@/apis/message'; // 경로는 상황에 맞게 수정
+import { getHighImage } from '../../../apis/letter'; // 경로는 상황에 맞게 수정
 
 const ImageModals = ({ isOpen, onClose, messageId, images, currentIndex }) => {
   const [index, setIndex] = useState(currentIndex);
@@ -41,7 +41,7 @@ const ImageModals = ({ isOpen, onClose, messageId, images, currentIndex }) => {
         {loading ? (
           <LoadingText>이미지를 불러오는 중...</LoadingText>
         ) : (
-          <Image src={imageUrl} alt={`image-${index}`} />
+          <Image src={imageUrl} alt="고화질 이미지" />
         )}
         <NavButton direction="left" onClick={handlePrev}>
           ◀
@@ -61,8 +61,8 @@ const Backdrop = styled.div`
   top: 0;
   left: 0;
   z-index: 9999;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
