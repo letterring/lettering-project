@@ -48,7 +48,7 @@ const Login = () => {
       setEmail('');
       setPassword('');
 
-      navigate('/Home');
+      navigate('/home');
     } catch (err) {
       showAlert({
         title: '로그인 실패',

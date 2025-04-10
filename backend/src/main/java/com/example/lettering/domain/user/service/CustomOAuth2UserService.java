@@ -43,7 +43,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // ✅ 사용자 정보 조회 및 저장
         User user = userRepository.findByEmailAndProvider(email, provider).orElseGet(() -> {
             User newUser = new User(email, nickname, provider);
-            newUser.updateFont(Font.GOMSIN1); // ✅ 기본 폰트 설정
+            newUser.updateFont(Font.GOMSIN2); // ✅ 기본 폰트 설정
             return newUser;
         });
 

@@ -252,20 +252,30 @@ const App = () => {
     <WebView
       ref={webViewRef}
       source={{uri: data?.url ?? ''}}
-      // onLoadEnd={() => {
-      //   if (webViewRef.current) {
-      //     const payload = {
-      //       keyringId: data?.keyringId,
-      //       text: data?.text,
-      //       device: data?.device,
-      //     };
-      //     webViewRef.current.postMessage(JSON.stringify(payload));
-      //   }
-      // }}
       sharedCookiesEnabled={true}
       javaScriptEnabled
       originWhitelist={['*']}
       style={{flex: 1}}
+      onMessage={async event => {
+        const base64 = event.nativeEvent.data;
+
+        if (!base64?.startsWith('data:image')) {
+          console.warn('📛 예상치 못한 메시지:', base64);
+          return;
+        }
+
+        const base64Data = base64.replace(/^data:image\/png;base64,/, '');
+        const filename = `letterring_postcard_${Date.now()}.png`;
+        const path = `${RNFS.DownloadDirectoryPath}/${filename}`;
+
+        try {
+          await RNFS.writeFile(path, base64Data, 'base64');
+          Alert.alert('✅ 이미지 저장 완료', `경로: ${path}`);
+        } catch (err) {
+          console.error('❌ 저장 실패:', err);
+          Alert.alert('❌ 저장 실패', '파일을 저장할 수 없습니다.');
+        }
+      }}
     />
     // </View>
   );

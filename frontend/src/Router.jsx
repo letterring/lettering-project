@@ -117,6 +117,17 @@ const Router = () => {
               <Route path="/dear/postcard/detail/:messageId" element={<DearPostDetailPage />} />
               <Route path="/dear/letter/:messageId" element={<DearLetterPage />} />
               <Route path="/dear/letter/detail/:messageId" element={<DearLetterDetailPage />} />
+              <Route path="/dear/letter/congrats/:messageId" element={<DearCongratsLetterPage />} />
+              <Route
+                path="/dear/letter/congrats/detail/:messageId"
+                element={<DearCongratsLetterDetailPage />}
+              />
+              <Route path="/dear/postcard/ssafy/:messageId" element={<DearSsafyPostcardPage />} />
+              <Route
+                path="/dear/postcard/ssafy/detail/:messageId"
+                element={<DearSsafyPostDetailPage />}
+              />
+
               <Route path="/dear/mailbox" element={<DearMailBoxPage />} />
               <Route path="/openapp" element={<OpenAppPage />} />
               <Route path="/dear/terminate" element={<TerminatePage />} />
