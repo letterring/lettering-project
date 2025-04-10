@@ -47,16 +47,6 @@ const Checkout = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const { orderNumber, paymentUrl } = await submitOrder(formData);
-
-  //   setOrderNum(orderNumber);
-
-  //   window.location.assign(paymentUrl);
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -110,7 +100,6 @@ const Checkout = () => {
                 readOnly
               />
             </ContentWrapper>
-            {/* <BodyText>상세주소</BodyText> */}
             <ContentWrapper>
               <InputField
                 name="detailAddress"
@@ -182,7 +171,7 @@ const StContentWrapper = styled.div`
 `;
 
 const InputField = styled.input`
-  width: 28rem;
+  width: 100%;
   height: 3rem;
   padding-left: 0.5rem;
 

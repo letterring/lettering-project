@@ -128,6 +128,7 @@ const StLoginWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding: 5rem 2rem;
+  box-sizing: border-box;
 `;
 
 const LogoText = styled.h1`
