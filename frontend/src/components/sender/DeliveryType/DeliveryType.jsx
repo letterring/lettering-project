@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { sendLetter } from '../../../apis/letter';
@@ -13,6 +13,7 @@ import IconLock from '../../../assets/images/sender/SecretOption.png';
 import {
   LetterImageList,
   LetterTextList,
+  PostcardImage,
   PostcardImageFile,
   PostcardText,
   SelectedKeyringId,
@@ -32,6 +33,12 @@ const DeliveryType = () => {
   const postcardText = useRecoilValue(PostcardText);
   const letterTextList = useRecoilValue(LetterTextList);
   const letterImageList = useRecoilValue(LetterImageList);
+
+  const resetLetterTextList = useResetRecoilState(LetterTextList);
+  const resetLetterImageList = useResetRecoilState(LetterImageList);
+  const resetPostcardText = useResetRecoilState(PostcardText);
+  const resetPostcardImageFile = useResetRecoilState(PostcardImageFile);
+  const resetPostcardImage = useResetRecoilState(PostcardImage);
 
   const [selectedModalType, setSelectedModalType] = useState(null);
 
@@ -65,6 +72,8 @@ const DeliveryType = () => {
   const postLetter = async (letterData) => {
     sendLetter(letterData, letterImageList)
       .then(() => {
+        resetLetterTextList();
+        resetLetterImageList();
         // 성공 처리
       })
       .catch((error) => {
@@ -89,6 +98,9 @@ const DeliveryType = () => {
     })
       .then(() => {
         // 성공 처리
+        resetPostcardText();
+        resetPostcardImageFile();
+        resetPostcardImage();
       })
       .catch((error) => {
         console.error('엽서 전송 실패:', error);
