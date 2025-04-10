@@ -39,7 +39,12 @@ const CongratsLetterDetail = () => {
       const sentAt = getLetterDate(conditionTime);
       const readAt = firstOpenedTime ? getLetterDate(firstOpenedTime) : null;
 
-      const newImageData = [...letterImages, letterImages[0]];
+      const originalImageData = letterImages.map((img, index) => ({
+        ...img,
+        index,
+      }));
+
+      const newImageData = [...originalImageData, originalImageData[0]];
       const newLetterContents = [
         ...letterContents,
         `${sentAt}에 보낸 편지를`,
@@ -139,6 +144,7 @@ const StPageWrapper = styled.div`
 
 const StyledSlider = styled(Slider)`
   width: 100%;
+  height: 100%;
 
   .slick-list {
     overflow: hidden;

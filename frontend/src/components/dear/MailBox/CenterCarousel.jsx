@@ -101,7 +101,7 @@ const SlideComponent = () => {
     } else if (sealingWaxId === 3) {
       navigate(`/dear/letter/congrats/detail/${messageId}`);
     } else if (sealingWaxId === 4) {
-      navigate(`/dear/postcard/detail/${messageId}`);
+      navigate(`/dear/postcard/ssafy/detail/${messageId}`);
     }
   };
 

@@ -23,6 +23,7 @@ export const updateFont = async (font) => {
     const res = await client.patch('/users/font', {
       font,
     });
+
     return true;
   } catch (err) {
     console.error('폰트 수정에 실패하였습니다', err);

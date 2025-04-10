@@ -126,8 +126,6 @@ const StWrapper = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
-  padding-top: 10rem;
   gap: 2rem;
 `;
 
@@ -162,8 +160,8 @@ const StFlipCard = styled.div`
 
 const StCardFace = styled.div`
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 30rem;
+  height: 23rem;
   backface-visibility: hidden;
   overflow: hidden;
 
@@ -242,7 +240,7 @@ const StPostcardImage = styled(motion.div)`
   top: 0.65rem;
   left: 0.85rem;
   width: 28.3rem;
-  height: 19rem;
+  height: 21.5rem;
   z-index: 3;
 
   img {
