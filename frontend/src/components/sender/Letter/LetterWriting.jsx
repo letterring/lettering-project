@@ -268,7 +268,7 @@ const ImagesWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  height: 11rem;
+  height: auto;
   gap: 0.5rem;
 `;
 
