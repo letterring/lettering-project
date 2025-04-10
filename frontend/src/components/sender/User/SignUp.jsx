@@ -163,6 +163,7 @@ const StSignUpWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 5rem 2rem;
+  box-sizing: border-box;
 `;
 
 const LogoText = styled.h1`

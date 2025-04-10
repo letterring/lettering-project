@@ -46,6 +46,22 @@ const LetterContent = ({
     setIsModalOpen(true);
   };
 
+  const handleFilmClick = async () => {
+    const filmImages = images;
+    const newHighImageUrls = await Promise.all(
+      filmImages.map(async (img, index) => {
+        if (!highImageUrls[index]) {
+          const { imageHighUrl } = await getHighImage(messageId, index);
+          return imageHighUrl;
+        }
+        return highImageUrls[index];
+      }),
+    );
+    setHighImageUrls(newHighImageUrls);
+    setSelectedImageIndex(0);
+    setIsModalOpen(true);
+  };
+
   return (
     <StLetterWrapper $background={background}>
       <StContentWrapper>
@@ -59,7 +75,7 @@ const LetterContent = ({
         {template === 'film' && (
           <>
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
-            <FilmTemplate images={images} onImageClick={handleImageClick} />
+            <FilmTemplate images={images} onFilmClick={handleFilmClick} />
           </>
         )}
         {template === 'polar' && (
@@ -93,13 +109,22 @@ const LetterContent = ({
         )}
       </StContentWrapper>
 
-      {isModalOpen && selectedImageIndex !== null && highImageUrls[selectedImageIndex] && (
-        <ImageModal
-          isShowing={isModalOpen}
-          imageUrl={highImageUrls[selectedImageIndex]}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+      {isModalOpen &&
+        selectedImageIndex !== null &&
+        (template === 'film' ? (
+          <ImageModal
+            isShowing={isModalOpen}
+            images={highImageUrls}
+            initialIndex={selectedImageIndex}
+            onClose={() => setIsModalOpen(false)}
+          />
+        ) : (
+          <ImageModal
+            isShowing={isModalOpen}
+            imageUrl={highImageUrls[selectedImageIndex]}
+            onClose={() => setIsModalOpen(false)}
+          />
+        ))}
     </StLetterWrapper>
   );
 };
