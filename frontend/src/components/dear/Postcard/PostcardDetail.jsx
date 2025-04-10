@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getHighImageUrl, getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
@@ -16,13 +16,14 @@ import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 const PostcardDetail = () => {
   const { messageId } = useParams();
   const location = useLocation();
+  const navigator = useNavigate();
 
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
   const [postcard, setPostcard] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [highImageUrl, setHighImageUrl] = useState('');
-  const [userFont, setUserFont] = useState('GOMSIN1');
+  const [userFont, setUserFont] = useState('GOMSIN2');
 
   const handleInformMsg = () => {
     setFlipped((prev) => !prev);
@@ -77,7 +78,7 @@ const PostcardDetail = () => {
             </StCardFace>
           </StFlipCard>
         </StFlipContainer>
-        <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
+        {/* <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton> */}
         <PostcardPreviewModal
           isShowing={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
@@ -94,7 +95,10 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
-        <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
+        <StButtonsWrapper>
+          <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
+          <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+        </StButtonsWrapper>
       </StWrapper>
     </StPageWrapper>
   );
@@ -126,7 +130,7 @@ const StWrapper = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  gap: 2rem;
+  gap: 4rem;
 `;
 
 const StInform = styled.div`
@@ -248,4 +252,15 @@ const StPostcardImage = styled(motion.div)`
     height: 100%;
     object-fit: cover;
   }
+`;
+
+const StButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  position: absolute;
+  bottom: 1rem;
 `;

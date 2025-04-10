@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
+import { getHighImageUrl, getPostcardDetail, markPostcardAsUnread } from '/src/apis/postcard';
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 import StampImg from '/src/assets/images/postcard/stamp.png';
 import PostcardImg from '/src/assets/images/ssafyPostcard/postcard.png';
@@ -11,16 +11,21 @@ import ReplyComponent from '/src/components/designs/ReplyComponent';
 import { getFontStyle } from '/src/util/getFont';
 
 import useToggle from '../../../hooks/common/useToggle';
+import LongButton from '../../common/button/LongButton';
 import Header from '../../common/Header';
+import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 
 const PostcardDetail = () => {
   const { messageId } = useParams();
   const location = useLocation();
+  const navigator = useNavigate();
 
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
   const { toggle, handleToggle } = useToggle(false);
-
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [highImageUrl, setHighImageUrl] = useState('');
+  const [userFont, setUserFont] = useState('GOMSIN2');
   const [postcard, setPostcard] = useState(location.state?.postcard || null);
 
   const handleInformMsg = () => {
@@ -56,6 +61,12 @@ const PostcardDetail = () => {
   // const content = '더미이지롱';
   // const replyText = '답장이지롱';
 
+  const handleOpenPreviewModal = async () => {
+    const { imageHighUrl } = await getHighImageUrl(messageId);
+    setHighImageUrl(imageHighUrl);
+    setIsPreviewOpen(true);
+  };
+
   return (
     <StPageWrapper>
       <Header headerName="Lettering" />
@@ -83,7 +94,17 @@ const PostcardDetail = () => {
           </StFlipCard>
         </StFlipContainer>
 
-        <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton>
+        {/* <SimpleButton onClick={handleMarkAsUnread}>안읽음 처리</SimpleButton> */}
+        <PostcardPreviewModal
+          isShowing={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          messageId={messageId}
+          imageHighUrl={highImageUrl}
+          nfcName={nfcName}
+          content={content}
+          font={font}
+          flag="ssafy"
+        />
 
         <ReplyComponent
           messageId={messageId}
@@ -91,6 +112,10 @@ const PostcardDetail = () => {
           dearName={nfcName}
           isSender={false}
         />
+        <StButtonsWrapper>
+          <LongButton btnName="엽서 다운로드" onClick={handleOpenPreviewModal} />
+          <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+        </StButtonsWrapper>
       </StWrapper>
     </StPageWrapper>
   );
@@ -120,7 +145,7 @@ const StWrapper = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  gap: 2rem;
+  gap: 4rem;
 `;
 
 const StInform = styled.div`
@@ -241,4 +266,15 @@ const StPostcardImage = styled(motion.div)`
     height: 100%;
     object-fit: cover;
   }
+`;
+
+const StButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  position: absolute;
+  bottom: 1rem;
 `;
