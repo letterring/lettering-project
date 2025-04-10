@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import useToggle from '/src/hooks/common/useToggle';
 import { getFontStyle } from '/src/util/getFont';
 
+import { getHighImage } from '../../../apis/letter';
+import ImageModal from '../../common/modal/ImageModal';
 import ReplyComponent from '../ReplyComponent';
 import EndTemplate from './EndTemplate';
 import MainTemplate from './MainTemplate';
@@ -22,19 +25,38 @@ const CongratsLetterContent = ({
   isSender,
 }) => {
   const fontStyle = getFontStyle(font);
+  const [highImageUrls, setHighImageUrls] = useState([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const { toggle: isModalOpen, setToggle: setIsModalOpen } = useToggle(false);
+
+  const handleImageClick = async (index) => {
+    setSelectedImageIndex(index);
+
+    if (!highImageUrls[index]) {
+      const { imageHighUrl } = await getHighImage(messageId, index);
+
+      setHighImageUrls((prev) => {
+        const newUrls = [...prev];
+        newUrls[index] = imageHighUrl;
+        return newUrls;
+      });
+    }
+    setIsModalOpen(true);
+  };
+
   return (
     <StLetterWrapper $background={background}>
       <StContentWrapper>
         {template === 'main' && (
           <>
-            <MainTemplate images={images} />
+            <MainTemplate images={images} onImageClick={handleImageClick} />
             <StDearText $userFont={fontStyle}>{dearName} 에게</StDearText>
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
           </>
         )}
         {template === 'second' && (
           <>
-            <SecondTemplate images={images} />
+            <SecondTemplate images={images} onImageClick={handleImageClick} />
             <StLetterText $userFont={fontStyle}>{text[0]}</StLetterText>
             <StSenderText $userFont={fontStyle}>{senderName} 로부터</StSenderText>
           </>
@@ -56,6 +78,13 @@ const CongratsLetterContent = ({
           </>
         )}
       </StContentWrapper>
+      {isModalOpen && selectedImageIndex !== null && highImageUrls[selectedImageIndex] && (
+        <ImageModal
+          isShowing={isModalOpen}
+          imageUrl={highImageUrls[selectedImageIndex]}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </StLetterWrapper>
   );
 };
