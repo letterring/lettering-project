@@ -167,7 +167,7 @@ public class KeyringController {
             Long keyringId = keyringService.validateOrRegisterDevice(request.getId(), request.getDeviceId());
             log.info("log keyring Id: "+keyringId);
             session.setAttribute("keyringId", keyringId);
-            log.info("get log keyring Id: "+keyringId);
+            log.info("get log keyring Id: "+session.getAttribute("keyringId"));
             return ResponseEntity.ok().build();
 
         } catch (BusinessException e) {
