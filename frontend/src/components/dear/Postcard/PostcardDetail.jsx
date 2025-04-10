@@ -137,6 +137,10 @@ const StWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 2rem;
+
+  height: 100%;
+  padding-top: 5rem;
+  overflow: hidden;
 `;
 
 const StInform = styled.div`
