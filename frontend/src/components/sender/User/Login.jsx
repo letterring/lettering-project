@@ -42,6 +42,27 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // 커스텀 검증: 이메일 형식 체크
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showAlert({
+        title: '잘못된 이메일 형식',
+        message: '유효한 이메일 주소를 입력해주세요.',
+        image: FailBirdImg,
+      });
+      return;
+    }
+
+    // 커스텀 검증: 비밀번호 길이 체크 (8자 이상 20자 이하)
+    if (password.length < 8 || password.length > 20) {
+      showAlert({
+        title: '비밀번호 길이 오류',
+        message: '비밀번호는 8자 이상 20자 이하로 입력해주세요.',
+        image: FailBirdImg,
+      });
+      return;
+    }
+
     try {
       const data = await login({ email, password });
 
@@ -82,7 +103,7 @@ const Login = () => {
       <ContentWrapper>
         <KakaoLoginButton />
         <Divider text="또는" />
-        <Form onSubmit={handleLogin}>
+        <Form onSubmit={handleLogin} noValidate>
           <AuthInput
             type="email"
             placeholder="이메일"
