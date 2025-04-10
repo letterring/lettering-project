@@ -97,6 +97,8 @@ const CongratsLetterDetail = () => {
     swipe: true,
     fade: true,
     afterChange: setCurrentSlide,
+    swipeToSlide: false,
+    touchMove: true,
   };
 
   return (

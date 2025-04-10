@@ -25,7 +25,7 @@ const StWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: start;
-  margin-bottom: 10rem;
+  margin-bottom: 8rem;
 `;
 
 const StConffetti = styled.img`
@@ -46,7 +46,7 @@ const StTextImage = styled.img`
 
 const StLetterImage = styled.img`
   position: absolute;
-  top: 0rem;
+  top: 2.5rem;
   left: center;
   width: 20rem;
   height: 20rem;
