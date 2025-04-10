@@ -16,14 +16,23 @@ import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 const PostcardDetail = () => {
   const { messageId } = useParams();
   const location = useLocation();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
+  const state = location.status;
 
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
   const [postcard, setPostcard] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [highImageUrl, setHighImageUrl] = useState('');
-  const [userFont, setUserFont] = useState('GOMSIN2');
+  const [userFont, setUserFont] = useState('GOMSIN1');
+
+  const handleGoBack = () => {
+    if (state === 'mailbox') {
+      navigate(-1);
+    } else {
+      navigate(`/dear/mailbox`);
+    }
+  };
 
   const handleInformMsg = () => {
     setFlipped((prev) => !prev);
@@ -52,7 +61,7 @@ const PostcardDetail = () => {
 
   return (
     <StPageWrapper>
-      <Header headerName="Lettering" />
+      <Header headerName="Lettering" onBack={handleGoBack} />
       <StWrapper>
         <StFlipContainer onClick={handleInformMsg}>
           <StInform $isShow={isShow}>엽서를 눌러 편지 내용을 확인해보세요.</StInform>
@@ -102,7 +111,7 @@ const PostcardDetail = () => {
 export default PostcardDetail;
 
 const StbtnWrapper = styled.div`
-  padding: 2rem;
+  padding: 0 2rem;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -131,9 +140,13 @@ const StPageWrapper = styled.div`
 const StWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  gap: 4rem;
+  gap: 2rem;
+
+  height: 100%;
+  padding-top: 5rem;
+  overflow: hidden;
 `;
 
 const StInform = styled.div`
@@ -152,7 +165,7 @@ const StFlipContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* margin-bottom: 7rem; */
+  margin-bottom: 3rem;
 `;
 
 const StFlipCard = styled.div`

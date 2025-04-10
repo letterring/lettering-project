@@ -11,6 +11,7 @@ import CoinBirdImg from '../../../assets/images/bird_coin.png';
 import useModal from '../../../hooks/common/useModal';
 import ConfirmButton from '../../common/button/ConfirmButton';
 import LongButton from '../../common/button/LongButton';
+import Header from '../../common/Header';
 import AlertModal from '../../common/modal/AlertModal';
 import MenuModal from '../../common/modal/MenuModal';
 
@@ -36,7 +37,7 @@ const Home = () => {
   return (
     <>
       <StHomeWrapper $Background={Background}>
-        <MenuBtn onClick={handleMenuClick} />
+        <Header headerName="" missBack={true} />
         <StContentWrapper>
           Lettering
           <img src={SendermainImg} alt="senderMainImg" />

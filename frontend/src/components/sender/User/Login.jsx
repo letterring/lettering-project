@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Background from '/src/assets/background2.png';
 
 import { login } from '../../../apis/user';
+import { getUserData } from '../../../apis/user';
 import FailBirdImg from '../../../assets/images/bird_sorry.svg';
 import LongButton from '../../common/button/LongButton';
 import AlertModal from '../../common/modal/AlertModal';
@@ -84,7 +85,7 @@ const Login = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await getUserData();
+        const data = await getUserData();
 
         if (data) {
           navigate('/home');
