@@ -111,6 +111,7 @@ const StPostcardImage = styled(motion.img)`
   left: 2rem;
   width: 26.6rem;
   height: 19.7rem;
+  object-fit: cover;
   z-index: 3;
 `;
 

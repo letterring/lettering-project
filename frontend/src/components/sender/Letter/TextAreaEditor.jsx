@@ -31,7 +31,7 @@ const TextAreaEditor = ({ value = '', onChange, font }) => {
         maxLength={MAX_LENGTH}
         $fonStyle={font}
       />
-      <CharCount>{`${value.length}/${MAX_LENGTH}`}</CharCount>
+      <CharCount>{`${tempText.length}/${MAX_LENGTH}`}</CharCount>
       <EditButton onClick={handleToggleEdit} $isEditing={isEditing}>
         {isEditing ? '완료' : '수정'}
       </EditButton>

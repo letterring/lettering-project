@@ -22,7 +22,7 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      //await postDeviceInfo();
+      await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
@@ -120,7 +120,7 @@ const Landing = () => {
     fetchImage();
   }, [messageInfo]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div></div>;
 
   return (
     <>

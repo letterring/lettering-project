@@ -100,6 +100,7 @@ const FixedButtonWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
   z-index: 10;
