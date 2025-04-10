@@ -6,11 +6,11 @@ import styled from 'styled-components';
 
 import DummyImg from '/src/assets/dummy/postcard.jpg';
 
-import EnvelopeBottomImg from '../../../assets/images/postcard/bottom_fold.png';
-import EnvelopeBodyImg from '../../../assets/images/postcard/envelope_body.png';
-import SealingWaxImg from '../../../assets/images/postcard/envelope_wax.png';
-import PostcardImg from '../../../assets/images/postcard/postcard_paper.png';
-import EnvelopeTopPartImg from '../../../assets/images/postcard/top_fold_part.png';
+import SsafyEnvelopeBottomImg from '../../../assets/images/ssafyPostcard/bottom_fold.png';
+import SsafyEnvelopeBodyImg from '../../../assets/images/ssafyPostcard/envelope_body.png';
+import SsafySealingWaxImg from '../../../assets/images/ssafyPostcard/envelope_wax.png';
+import SsafyPostcardImg from '../../../assets/images/ssafyPostcard/postcard_paper.png';
+import SsafyEnvelopeTopPartImg from '../../../assets/images/ssafyPostcard/top_fold_part.png';
 
 const PostcardAnimation = () => {
   const navigate = useNavigate();
@@ -23,17 +23,15 @@ const PostcardAnimation = () => {
 
   const x = -Math.cos(angle) * distance;
   const y = Math.sin(angle) * distance;
-  // const x = 0;
-  // const y = 0;
 
   return (
     <StWrapper>
       <StEnvelopeWrapper>
-        <StEnvelopeTop $isClosed={isClosed} src={EnvelopeTopPartImg} alt="편지 봉투 윗부분" />
-        <StEnvelopeBody $isClosed={isClosed} src={EnvelopeBodyImg} alt="편지 봉투 바닥" />
+        <StEnvelopeTop $isClosed={isClosed} src={SsafyEnvelopeTopPartImg} alt="편지 봉투 윗부분" />
+        <StEnvelopeBody $isClosed={isClosed} src={SsafyEnvelopeBodyImg} alt="편지 봉투 바닥" />
 
         <StPostcard
-          src={PostcardImg}
+          src={SsafyPostcardImg}
           alt="엽서"
           initial={{ y: 0, x: 0, opacity: 1 }}
           animate={{ x, y, opacity: 1 }}
@@ -52,8 +50,8 @@ const PostcardAnimation = () => {
             }, 4400);
           }}
         />
-        <StEnvelope src={EnvelopeBottomImg} alt="편지 봉투" />
-        <StSealingWax src={SealingWaxImg} alt="실링왁스" />
+        <StEnvelope src={SsafyEnvelopeBottomImg} alt="편지 봉투" />
+        <StSealingWax src={SsafySealingWaxImg} alt="실링왁스" />
       </StEnvelopeWrapper>
     </StWrapper>
   );
@@ -78,16 +76,16 @@ const StEnvelopeWrapper = styled.div`
 
 const StEnvelopeTop = styled.img`
   position: absolute;
-  width: 33.8rem;
+  width: 28.9rem;
   height: 16rem;
   top: -13.5rem;
-  left: -2.4rem;
+  left: 0rem;
   z-index: ${({ $isClosed }) => ($isClosed ? 8 : 1)};
 
   transform-origin: bottom center;
   transform: ${({ $isClosed }) =>
     $isClosed ? 'rotateZ(-4deg) rotateX(180deg)' : 'rotateZ(-4deg) rotateX(0deg)'};
-  transition: transform 4s ease;
+  transition: transform 3s ease;
 `;
 const StEnvelopeBody = styled.img`
   position: absolute;
@@ -127,7 +125,7 @@ const StEnvelope = styled.img`
 const StSealingWax = styled.img`
   position: absolute;
   width: 9rem;
-  top: 9.3rem;
+  top: 8rem;
   left: 10.8rem;
   z-index: 100;
   /* display: ${({ $isClosed }) => ($isClosed ? 'block' : 'none')}; */
