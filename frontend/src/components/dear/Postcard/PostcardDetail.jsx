@@ -134,7 +134,6 @@ const StWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 4rem;
-  z-index: 1001;
 `;
 
 const StInform = styled.div`
