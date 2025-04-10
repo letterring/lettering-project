@@ -140,6 +140,19 @@ export const reset = css`
     background: transparent;
     border: none;
   }
+
+  button:focus,
+  a:focus,
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
 `;
 
 export const GlobalStyle = createGlobalStyle`
