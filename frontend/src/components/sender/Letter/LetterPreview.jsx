@@ -166,6 +166,7 @@ const LetterPreview = () => {
     setActiveModal(null);
   };
 
+  // REST API 방식
   // useEffect(() => {
   //   const fetchAiSuggestions = async () => {
   //     if (!['edit', 'add'].includes(activeModal)) return;
@@ -238,7 +239,7 @@ const LetterPreview = () => {
       if (!slideTexts.length || !filenames.length) return;
 
       setIsRefining(true);
-      setRefineStreamTextList(Array(textCount).fill(''));
+      setRefineStreamTextList(() => Array(textCount).fill(''));
       completedIndicesRef.current = new Set();
 
       for (let i = 0; i < slideTexts.length; i++) {
@@ -257,6 +258,7 @@ const LetterPreview = () => {
               accumulated += chunk;
 
               setRefineStreamTextList((prev) => {
+                if (currentIndex >= prev.length) return prev;
                 const updated = [...prev];
                 updated[currentIndex] = accumulated;
                 return updated;
