@@ -47,11 +47,6 @@ const SelectDear = () => {
     navigate('/deliverytype');
   };
 
-  const handleImmediateSend = () => {
-    console.log('즉시 전송');
-    navigate('/send');
-  };
-
   return (
     <Wrapper>
       {/* 헤더 영역 */}
@@ -70,7 +65,6 @@ const SelectDear = () => {
       {/* 버튼 영역 */}
       <FixedButtonWrapper>
         <LongButton btnName="다음" onClick={handleSelectOption} opacity={false} />
-        {/* <LongButton btnName="즉시 전송" onClick={handleImmediateSend} opacity={false} /> */}
       </FixedButtonWrapper>
     </Wrapper>
   );
