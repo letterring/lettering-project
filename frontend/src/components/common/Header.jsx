@@ -59,7 +59,7 @@ const Header = ({ headerName, missBack, onBack }) => {
 export default Header;
 
 const StHeaderWrapper = styled.button`
-  position: absolute;
+  position: fixed;
   top: 0;
 
   display: flex;
