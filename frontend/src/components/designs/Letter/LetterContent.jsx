@@ -49,12 +49,12 @@ const LetterContent = ({
   const handleFilmClick = async () => {
     const filmImages = images;
     const newHighImageUrls = await Promise.all(
-      filmImages.map(async (img, index) => {
-        if (!highImageUrls[index]) {
-          const { imageHighUrl } = await getHighImage(messageId, index);
+      filmImages.map(async (img) => {
+        if (!highImageUrls[img.index]) {
+          const { imageHighUrl } = await getHighImage(messageId, img.index);
           return imageHighUrl;
         }
-        return highImageUrls[index];
+        return highImageUrls[img.index];
       }),
     );
     setHighImageUrls(newHighImageUrls);
