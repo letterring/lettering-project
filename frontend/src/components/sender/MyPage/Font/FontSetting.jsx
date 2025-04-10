@@ -10,7 +10,7 @@ import FontItem from './FontItem';
 
 const FontSetting = () => {
   const navigate = useNavigate();
-  const fontEnumList = ['GOMSIN1', 'UHBEE1', 'SAEUM5', 'EDUBODY0'];
+  const fontEnumList = ['GOMSIN2', 'UHBEE1', 'SAEUM6', 'EDUBODY1'];
   const [userFont, setUserFont] = useRecoilState(UserFont);
   const [selectedFont, setSelectedFont] = useState(userFont);
 
