@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import useToggle from '/src/hooks/common/useToggle';
 import { getFontStyle } from '/src/util/getFont';
 
 import { getHighImage } from '../../../apis/letter';
+import LongButton from '../../common/button/LongButton';
 import ImageModal from '../../common/modal/ImageModal';
 import ReplyComponent from '../ReplyComponent';
 import EndTemplate from './EndTemplate';
@@ -26,6 +28,7 @@ const LetterContent = ({
   replyText,
   isSender,
 }) => {
+  const navigator = useNavigate();
   const fontStyle = getFontStyle(font);
   const [highImageUrls, setHighImageUrls] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
@@ -105,6 +108,9 @@ const LetterContent = ({
               dearName={dearName}
               isSender={isSender}
             />
+            <StBtnWrapper>
+              <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+            </StBtnWrapper>
           </>
         )}
       </StContentWrapper>
@@ -130,6 +136,14 @@ const LetterContent = ({
 };
 
 export default LetterContent;
+
+const StBtnWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 1rem;
+  display: flex;
+  justify-content: center;
+`;
 
 const StLetterWrapper = styled.div`
   display: flex;

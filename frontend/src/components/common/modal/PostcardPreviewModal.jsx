@@ -4,11 +4,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { downloadPostcardImage } from '../../../apis/postcard';
-import PostcardBack from '../../../assets/images/postcard/defalt_back.png';
-import PostcardBottom from '../../../assets/images/postcard/defalt_bottom.png';
-import PostcardPaper from '../../../assets/images/postcard/defalt_paper.png';
-import PostcardTop from '../../../assets/images/postcard/defalt_top.png';
-import PostcardStamp from '../../../assets/images/postcard/stamp.png';
+import PostcardBackDefalt from '../../../assets/images/postcard/defalt_back.png';
+import PostcardBottomDefalt from '../../../assets/images/postcard/defalt_bottom.png';
+import PostcardPaperDefalt from '../../../assets/images/postcard/defalt_paper.png';
+import PostcardTopDefalt from '../../../assets/images/postcard/defalt_top.png';
+import PostcardBackSsafy from '../../../assets/images/postcard/ssafy_back.png';
+import PostcardBottomSsafy from '../../../assets/images/postcard/ssafy_bottom.png';
+import PostcardPaperSsafy from '../../../assets/images/postcard/ssafy_paper.png';
+import PostcardStampSsafy from '../../../assets/images/postcard/ssafy_stamp.png';
+import PostcardTopSsafy from '../../../assets/images/postcard/ssafy_top.png';
+import PostcardStampDefalt from '../../../assets/images/postcard/stamp.png';
 import CancelButton from '../button/CancelButton';
 import ConfirmButton from '../button/ConfirmButton';
 
@@ -20,11 +25,31 @@ const PostcardPreviewModal = ({
   nfcName,
   content,
   font,
+  flag = 'defalt',
 }) => {
   const captureRef = useRef(null);
   const modalRef = useRef(null);
   const [blobUrl, setBlobUrl] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  const postcardImages = {
+    defalt: {
+      top: PostcardTopDefalt,
+      back: PostcardBackDefalt,
+      bottom: PostcardBottomDefalt,
+      paper: PostcardPaperDefalt,
+      stamp: PostcardStampDefalt,
+    },
+    ssafy: {
+      top: PostcardTopSsafy,
+      back: PostcardBackSsafy,
+      bottom: PostcardBottomSsafy,
+      paper: PostcardPaperSsafy,
+      stamp: PostcardStampSsafy,
+    },
+  };
+
+  const selectedImages = postcardImages[flag];
 
   useEffect(() => {
     const loadImageBlob = async () => {
@@ -65,11 +90,11 @@ const PostcardPreviewModal = ({
       useCORS: true,
     });
 
-    // canvas.toBlob((blob) => {
-    //   if (blob) {
-    //     saveAs(blob, `letterring_postcard_${messageId}.png`);
-    //   }
-    // });
+    canvas.toBlob((blob) => {
+      if (blob) {
+        saveAs(blob, `letterring_postcard_${messageId}.png`);
+      }
+    });
 
     const base64 = canvas.toDataURL('image/png');
     window.ReactNativeWebView?.postMessage(base64);
@@ -81,17 +106,17 @@ const PostcardPreviewModal = ({
     <Backdrop>
       <ModalContainer ref={modalRef}>
         <PreviewWrapper ref={captureRef}>
-          <PostcardTopImg src={PostcardTop} alt="봉투 윗부분" />
-          <PostcardBackImg src={PostcardBack} alt="봉투 뒷부분" />
+          <PostcardTopImg src={selectedImages.top} alt="봉투 윗부분" />
+          <PostcardBackImg src={selectedImages.back} alt="봉투 뒷부분" />
           {isLoading ? (
             <LoadingMessage>이미지 불러오는 중...</LoadingMessage>
           ) : (
             <PostcardImage src={blobUrl} alt="엽서 사진" />
           )}
-          <PostcardBottomImg src={PostcardBottom} alt="봉투 아랫부분" />
+          <PostcardBottomImg src={selectedImages.bottom} alt="봉투 아랫부분" />
 
-          <BigpaperImg src={PostcardPaper} alt="엽서 내용" />
-          <StampImg src={PostcardStamp} alt="우표" />
+          <BigpaperImg src={selectedImages.paper} alt="엽서 내용" />
+          <StampImg src={selectedImages.stamp} alt="우표" />
           <ContentBox $font={font}>
             <h1>사랑하는 {nfcName} 에게</h1>
             <p>{content}</p>
@@ -160,11 +185,11 @@ const PostcardBackImg = styled.img`
 
 const PostcardImage = styled.img`
   position: absolute;
-  top: 10rem;
+  top: 13rem;
   left: 2.3rem;
   width: 15.3rem;
   min-height: 10rem;
-  max-height: 20rem;
+  max-height: 18rem;
   z-index: 3;
   box-sizing: border-box;
   transform: rotate(-3.71deg);
@@ -172,12 +197,23 @@ const PostcardImage = styled.img`
 `;
 
 const LoadingMessage = styled.div`
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 13rem;
+  left: 2.3rem;
+
+  width: 15rem;
+  height: 12rem;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  z-index: 3;
+  box-sizing: border-box;
+  transform: rotate(-3.71deg);
+
   font-size: 1rem;
+  border: solid ${({ theme }) => theme.colors.Gray6};
   color: ${({ theme }) => theme.colors.Gray2};
 `;
 
