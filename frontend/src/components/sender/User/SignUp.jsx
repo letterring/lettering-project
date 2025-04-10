@@ -1,5 +1,5 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -55,6 +55,38 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 이메일 형식 검증 (간단한 정규표현식 사용)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user.email)) {
+      showAlert({
+        title: '잘못된 이메일 형식',
+        message: '유효한 이메일 주소를 입력해주세요.',
+        image: FailBirdImg,
+      });
+      return;
+    }
+
+    // 닉네임 검증: 2자 이상 5자 이하
+    if (user.userNickname.length < 2 || user.userNickname.length > 5) {
+      showAlert({
+        title: '닉네임 길이 오류',
+        message: '닉네임은 2자 이상 5자 이하로 입력해주세요.',
+        image: FailBirdImg,
+      });
+      return;
+    }
+
+    // 비밀번호 길이 검증: 8자 이상 20자 이하
+    if (user.password.length < 8 || user.password.length > 20) {
+      showAlert({
+        title: '비밀번호 길이 오류',
+        message: '비밀번호는 8자 이상 20자 이하로 입력해주세요.',
+        image: FailBirdImg,
+      });
+      return;
+    }
+
+    // 비밀번호와 비밀번호 확인 일치 여부 검증
     if (user.password !== user.confirmPassword) {
       showAlert({
         title: '비밀번호 불일치',
@@ -64,8 +96,9 @@ const SignUp = () => {
       return;
     }
 
+    // 모든 검증을 통과했다면 회원가입 API 호출
     try {
-      const data = await signup({
+      await signup({
         email: user.email,
         userNickname: user.userNickname,
         password: user.password,
@@ -97,7 +130,7 @@ const SignUp = () => {
       <ContentWrapper>
         <KakaoLoginButton />
         <Divider text="또는" />
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} noValidate>
           <AuthInput
             type="email"
             name="email"
@@ -163,6 +196,7 @@ const StSignUpWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 5rem 2rem;
+  box-sizing: border-box;
 `;
 
 const LogoText = styled.h1`

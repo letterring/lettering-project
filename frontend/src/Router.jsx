@@ -26,6 +26,7 @@ import CompleteLetterPage from './pages/sender/CompleteLetterPage';
 import CompleteOrderPage from './pages/sender/CompleteOrderPage';
 import CompletePage from './pages/sender/CompletePage';
 import CompletePostcardPage from './pages/sender/CompletePostcardPage';
+import CompleteSsafyPostcardPage from './pages/sender/CompleteSsafyPostcardPage';
 import CongratsLetterDetailPage from './pages/sender/CongratsLetterDetailPage';
 import CongratsLetterPreviewPage from './pages/sender/CongratsLetterPreviewPage';
 import CustomizePage from './pages/sender/CustomizePage';
@@ -103,6 +104,7 @@ const Router = () => {
               <Route path="/complete/postcard" element={<CompletePostcardPage />} />
               <Route path="/complete/letter" element={<CompleteLetterPage />} />
               <Route path="/complete/letter/congrats" element={<CompleteCongratsLetterPage />} />
+              <Route path="/complete/postcard/ssafy" element={<CompleteSsafyPostcardPage />} />
 
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/mypage/font" element={<FontSettingPage />} />

@@ -9,9 +9,11 @@ const OptionCard = ({ keyring }) => {
     <>
       <CardWrapper key={keyring.keyringId} $isFavorite={keyring.favorite}>
         <CardHeader>
-          <FavoriteMark $isFavorite={keyring.favorite}>
-            <StarIcon />
-          </FavoriteMark>
+          {keyring.favorite && (
+            <FavoriteMark $isFavorite={keyring.favorite}>
+              <StarIcon />
+            </FavoriteMark>
+          )}
           <LastDate>{keyring.lastSentTime ? getRelativeDate(keyring.lastSentTime) : ''}</LastDate>
         </CardHeader>
 
@@ -53,12 +55,15 @@ const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 `;
 
 const FavoriteMark = styled.div`
   width: 3rem;
   height: 2rem;
   color: ${({ $isFavorite, theme }) => ($isFavorite ? theme.colors.KakaoBG : theme.colors.Gray5)};
+  position: absolute;
+  left: 1rem;
 
   svg {
     width: 100%;
@@ -69,6 +74,8 @@ const FavoriteMark = styled.div`
 const LastDate = styled.div`
   color: ${({ theme }) => theme.colors.Gray4};
   ${({ theme }) => theme.fonts.Saeum4};
+  position: absolute;
+  right: 1rem;
 `;
 
 const CardContent = styled.div`

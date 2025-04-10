@@ -120,7 +120,7 @@ const Landing = () => {
     fetchImage();
   }, [messageInfo]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div></div>;
 
   return (
     <>

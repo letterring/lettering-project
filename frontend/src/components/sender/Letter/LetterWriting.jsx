@@ -127,7 +127,7 @@ const LetterWriting = () => {
         }
       } catch (error) {
         console.warn('AI 문장 나누기 실패, fallback으로 줄바꿈 처리함:', error);
-        segmentedText = splitByNewlineAndMergeToCount(letterContent, textCount);
+        segmentedText = splitTextBySentence(letterContent, textCount);
 
         if (segmentedText.length < textCount) {
           const missingCount = textCount - segmentedText.length;
@@ -157,19 +157,27 @@ const LetterWriting = () => {
     }
   };
 
-  const splitByNewlineAndMergeToCount = (text, count) => {
-    const chunks = text
-      .split(/\n+/)
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0);
+  const splitTextBySentence = (text, count) => {
+    const sentences =
+      text
+        .match(/[^.!?]+[.!?]+(?:\s+|$)/g)
+        ?.map((s) => s.trim())
+        .filter((s) => s.length > 0) || [];
 
-    const result = Array.from({ length: count }, () => []);
+    const total = sentences.length;
+    const baseSize = Math.floor(total / count);
+    const remainder = total % count;
 
-    chunks.forEach((chunk, i) => {
-      result[i % count].push(chunk);
-    });
+    const result = [];
+    let index = 0;
 
-    return result.map((group) => group.join('\n'));
+    for (let i = 0; i < count; i++) {
+      const groupSize = baseSize + (i < remainder ? 1 : 0);
+      result.push(sentences.slice(index, index + groupSize).join(' '));
+      index += groupSize;
+    }
+
+    return result;
   };
 
   return (

@@ -26,6 +26,7 @@ const Card = styled.div`
   cursor: pointer;
   transition: transform 0.2s ease;
   height: 6.5rem;
+  width: 100%;
 
   &:hover {
     transform: translateY(-3px);
