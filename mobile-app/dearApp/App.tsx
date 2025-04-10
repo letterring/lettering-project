@@ -1,13 +1,14 @@
 /* eslint-disable no-void */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
-import {Platform, PermissionsAndroid} from 'react-native';
+import {Alert, Platform, PermissionsAndroid} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {WebView} from 'react-native-webview';
 import type {WebView as WebViewType} from 'react-native-webview';
 import NfcManager, {Ndef} from 'react-native-nfc-manager';
 import {Linking} from 'react-native';
 import axios from 'axios';
+import RNFS from 'react-native-fs';
 
 // NFC 초기화
 NfcManager.start();
@@ -257,11 +258,39 @@ const App = () => {
       originWhitelist={['*']}
       style={{flex: 1}}
       onMessage={async event => {
+        console.log('📨 받은 메시지:', event.nativeEvent.data);
+
         const base64 = event.nativeEvent.data;
 
         if (!base64?.startsWith('data:image')) {
           console.warn('📛 예상치 못한 메시지:', base64);
           return;
+        }
+
+        if (Platform.OS === 'android') {
+          try {
+            let granted;
+
+            if (Platform.Version >= 33) {
+              // Android 13 이상
+              granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+              );
+            } else {
+              // Android 12 이하
+              granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              );
+            }
+
+            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+              Alert.alert('저장 권한이 필요합니다.');
+            } else {
+              console.log('✅ 권한 허용됨');
+            }
+          } catch (err) {
+            console.warn(err);
+          }
         }
 
         const base64Data = base64.replace(/^data:image\/png;base64,/, '');

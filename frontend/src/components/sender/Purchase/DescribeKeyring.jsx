@@ -30,7 +30,6 @@ const DescribeKeyring = () => {
   const getKeyrings = async () => {
     setIsLoading(true);
     const data = await getKeyringData(1);
-    console.log('확인 : ', data);
     setDetails(data);
     setTotal(data.price);
     setIsLoading(false);
@@ -80,7 +79,9 @@ const DescribeKeyring = () => {
                 <p key={idx}>{line}</p>
               ))}
               <h5>남은 재고 : {availableStock} 개</h5>
-              <LongButton btnName="구매하기" onClick={handleSubmit} />
+              <StButtomWrapper>
+                <LongButton btnName="구매하기" onClick={handleSubmit} />
+              </StButtomWrapper>
             </StText>
           </StTextWrapper>
         </StContent>
@@ -167,4 +168,9 @@ const QuantityWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+`;
+
+const StButtomWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;

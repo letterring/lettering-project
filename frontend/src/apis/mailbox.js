@@ -40,7 +40,7 @@ export const getDearMessages = async (page) => {
 //받은 편지함에서 즐겨찾기 조회
 export const setFavorites = async (messageId) => {
   try {
-    const { data } = await client.patch(`/messages/favorite`);
+    const { data } = await client.patch(`/messages/favorite/${messageId}`);
     return data;
   } catch (error) {
     console.error(error);

@@ -15,15 +15,6 @@ export const getUserAdress = async () => {
   }
 };
 
-// export const submitOrder = async (orderData) => {
-//   try {
-//     const data = await client.post('/payment/order', orderData);
-//     return data;
-//   } catch (err) {
-//     console.error('주문정보 생성에 실패했습니다.', err);
-//   }
-// };
-
 export const submitOrder = async (orderData) => {
   try {
     const { data } = await client.post('/payment/order', orderData);
