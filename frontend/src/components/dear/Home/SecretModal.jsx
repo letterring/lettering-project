@@ -7,7 +7,7 @@ import LockIcon from '/src/assets/images/sender/SecretOption.png'; // 🔒 자�
 import ConfirmButton from '../../common/button/ConfirmButton';
 import ConfirmModal from '../../common/modal/ConfirmModal';
 
-export default function SecretModal({ question, hint, correctAnswer, onSuccess }) {
+export default function SecretModal({ question, hint, correctAnswer, onSuccess, onClose }) {
   const navigate = useNavigate();
   const [userAnswer, setUserAnswer] = useState('');
   const [error, setError] = useState('');
@@ -17,16 +17,14 @@ export default function SecretModal({ question, hint, correctAnswer, onSuccess }
       setError('');
       onSuccess(); // 정답 맞춤 처리
     } else {
-      setError('정답이 아닙니다! 다시 입력해주세요.');
+      setError('정답이 아닙니다!');
     }
   };
 
   return (
     <ConfirmModal
       isOpen={true}
-      onClose={() => {
-        navigate('/dear/mailbox');
-      }}
+      onClose={onClose}
       title={
         <ModalTitleBox>
           <ModalTitle>비밀편지 도착</ModalTitle>
@@ -71,10 +69,16 @@ const ModalSub = styled.div`
   /* margin-bottom: 1rem; */
 `;
 
+// const ModalContent = styled.div`
+//   text-align: center;
+//   min-height: 30rem;
+//   /* padding-top: 1rem; */
+// `;
 const ModalContent = styled.div`
   text-align: center;
-  min-height: 30rem;
-  /* padding-top: 1rem; */
+  max-width: 30rem; /* ✅ 최대 너비 제한 */
+  width: 90%;
+  margin: 0 auto;
 `;
 
 const LockImage = styled.img`
