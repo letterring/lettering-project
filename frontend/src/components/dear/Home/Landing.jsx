@@ -6,7 +6,7 @@ import { getHighImage, getQuizInfo, getUnreadMessage } from '/src/apis/dear';
 import { getLetterDetail } from '/src/apis/letter';
 import { getPostcardDetail } from '/src/apis/postcard';
 
-import { getCustomMessage, postDeviceInfo } from '../../../apis/dear';
+import { getCustomMessage } from '../../../apis/dear';
 import OBJViewer from './OBJViewer';
 import SecretModal from './SecretModal';
 
@@ -22,7 +22,6 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      //await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
@@ -72,8 +71,7 @@ const Landing = () => {
         ? await getPostcardDetail(lockedData.messageId)
         : await getLetterDetail(lockedData.messageId);
 
-    const { id: messageId, sealingWaxId } = detail;
-    setMessageInfo({ messageId, sealingWaxId });
+    setMessageInfo(detail);
     setNewLetter(true);
     setLockedData(null); // 모달 닫기
   };
@@ -81,22 +79,14 @@ const Landing = () => {
   const handleNewLetterClick = () => {
     if (!messageInfo) return;
 
-    const { messageId, designType, sealingWaxId } = messageInfo;
+    const { messageId, designType } = messageInfo;
 
-    if (sealingWaxId === 1) {
+    if (designType === 'POSTCARD') {
       navigate(`/dear/postcard/${messageId}`, {
         state: { imageUrl },
       });
-    } else if (sealingWaxId === 2) {
+    } else if (designType === 'LETTER') {
       navigate(`/dear/letter/${messageId}`, {
-        state: { imageUrl },
-      });
-    } else if (sealingWaxId === 3) {
-      navigate(`/dear/letter/congrats/${messageId}`, {
-        state: { imageUrl },
-      });
-    } else if (sealingWaxId === 4) {
-      navigate(`/dear/postcard/ssafy/${messageId}`, {
         state: { imageUrl },
       });
     } else {
@@ -108,19 +98,19 @@ const Landing = () => {
     navigate('/dear/home');
   };
 
-  const fetchImage = async () => {
-    if (!messageInfo?.messageId) return;
-    const data = await getHighImage(messageInfo.messageId);
-    if (data?.imageHighUrl) {
-      setImageUrl(data.imageHighUrl);
-    }
-  };
-
   useEffect(() => {
+    const fetchImage = async () => {
+      if (!messageInfo?.messageId) return;
+      const data = await getHighImage(messageInfo.messageId);
+      if (data?.imageHighUrl) {
+        setImageUrl(data.imageHighUrl);
+      }
+    };
+
     fetchImage();
   }, [messageInfo]);
 
-  if (isLoading) return <div></div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <>
@@ -130,6 +120,9 @@ const Landing = () => {
           hint={lockedData.quizHint}
           correctAnswer={lockedData.quizAnswer}
           onSuccess={handleSuccessUnlock}
+          onClose={() => {
+            navigate(`/dear/mailbox`);
+          }}
         />
       )}
 
