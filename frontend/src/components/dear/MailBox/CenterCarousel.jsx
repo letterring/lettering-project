@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { getQuizInfo } from '../../../apis/dear';
+
 import { getDearMessages, setFavorites } from '../../../apis/mailbox';
 import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/icons';
 import Closed3 from '../../../assets/images/mailbox/closed1.png';
@@ -18,7 +20,12 @@ import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened4 from '../../../assets/images/mailbox/opened4.png';
 import { getRelativeFormat } from '../../../util/getRelativeDate';
+import SecretModal from '../Home/SecretModal'; 
+import { getLetterDetail } from '../../../apis/letter';
 import RealTimer from './RealTimer';
+
+const [quizData, setQuizData] = useState(null); // 🔐 퀴즈 정보 상태
+const [pendingMessageId, setPendingMessageId] = useState(null); // 열람 대기 중 메시지 ID
 
 const closedImages = {
   1: Closed1,
@@ -74,8 +81,22 @@ const SlideComponent = () => {
   const handleClick = (idx) => {
     const message = messages[idx];
     if (!isPastDate(message.conditionTime)) return;
-
     if (activeIndex !== idx) return;
+
+    // ✅ 수정: 아직 안 열린 편지인 경우 퀴즈 확인
+    if (!message.opened) {
+      try {
+        const quiz = await getQuizInfo(message.id);
+        if (quiz?.quizQuestion) {
+          setQuizData(quiz);
+          setPendingMessageId(message.id);
+          return; // 정답 맞추기 전까진 열람하지 않음
+        }
+      } catch (err) {
+        console.error('퀴즈 정보 조회 실패:', err);
+      }
+    }
+
 
     setOpenedIndices((prev) =>
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx],
@@ -140,6 +161,25 @@ const SlideComponent = () => {
       return new Date(b.conditionTime) - new Date(a.conditionTime);
     });
   };
+
+    // 🔽 컴포넌트 하단에 추가
+  const handleCorrectAnswer = async () => {
+    try {
+      const detail = await getLetterDetail(pendingMessageId); // 상세 정보 조회
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === pendingMessageId ? { ...m, opened: true } : m,
+        ),
+      );
+      setOpenedIndices((prev) => [...prev, activeIndex]); // 애니메이션
+    } catch (err) {
+      console.error('편지 상세 조회 실패:', err);
+    } finally {
+      setQuizData(null); // 모달 닫기
+      setPendingMessageId(null);
+    }
+  };
+
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -240,6 +280,15 @@ const SlideComponent = () => {
           </StyledSlide>
         );
       })}
+
+    {quizData && (
+      <SecretModal
+        question={quizData.quizQuestion}
+        hint={quizData.quizHint || '힌트 없음'}
+        correctAnswer={quizData.quizAnswer}
+        onSuccess={handleCorrectAnswer}
+      />
+    )}
     </StyledSwiper>
   );
 };
