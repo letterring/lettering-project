@@ -6,7 +6,7 @@ import { getHighImage, getQuizInfo, getUnreadMessage } from '/src/apis/dear';
 import { getLetterDetail } from '/src/apis/letter';
 import { getPostcardDetail } from '/src/apis/postcard';
 
-import { getCustomMessage } from '../../../apis/dear';
+import { getCustomMessage, postDeviceInfo } from '../../../apis/dear';
 import OBJViewer from './OBJViewer';
 import SecretModal from './SecretModal';
 
@@ -22,6 +22,7 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      await postDeviceInfo();
       await fetchCustomMessage();
       await fetchUnreadMessage();
     };
@@ -71,7 +72,9 @@ const Landing = () => {
         ? await getPostcardDetail(lockedData.messageId)
         : await getLetterDetail(lockedData.messageId);
 
-    setMessageInfo(detail);
+    const { id: messageId, sealingWaxId } = detail;
+    setMessageInfo({ messageId, sealingWaxId });
+
     setNewLetter(true);
     setLockedData(null); // 모달 닫기
   };
@@ -79,14 +82,23 @@ const Landing = () => {
   const handleNewLetterClick = () => {
     if (!messageInfo) return;
 
-    const { messageId, designType } = messageInfo;
+    console.log(messageInfo);
+    const { messageId, sealingWaxId } = messageInfo;
 
-    if (designType === 'POSTCARD') {
+    if (sealingWaxId === 1) {
       navigate(`/dear/postcard/${messageId}`, {
         state: { imageUrl },
       });
-    } else if (designType === 'LETTER') {
+    } else if (sealingWaxId === 2) {
       navigate(`/dear/letter/${messageId}`, {
+        state: { imageUrl },
+      });
+    } else if (sealingWaxId === 3) {
+      navigate(`/dear/letter/congrats/${messageId}`, {
+        state: { imageUrl },
+      });
+    } else if (sealingWaxId === 4) {
+      navigate(`/dear/postcard/ssafy/${messageId}`, {
         state: { imageUrl },
       });
     } else {
