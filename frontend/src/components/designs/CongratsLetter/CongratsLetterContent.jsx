@@ -26,7 +26,7 @@ const CongratsLetterContent = ({
   replyText,
   isSender,
 }) => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const fontStyle = getFontStyle(font);
   const [highImageUrls, setHighImageUrls] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
@@ -79,7 +79,7 @@ const CongratsLetterContent = ({
               isSender={isSender}
             />
             <StBtnWrapper>
-              <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+              <LongButton btnName="목록으로" onClick={() => navigate('/dear/mailbox')} />
             </StBtnWrapper>
           </>
         )}
