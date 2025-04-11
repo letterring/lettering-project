@@ -1,11 +1,12 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Background from '/src/assets/background2.png';
 
 import { signup } from '../../../apis/user';
+import { getUserData } from '../../../apis/user';
 import SuccessBirdImg from '../../../assets/images/bird_hi.png';
 import FailBirdImg from '../../../assets/images/bird_sorry.svg';
 import LongButton from '../../common/button/LongButton';
@@ -16,6 +17,7 @@ import KakaoLoginButton from './KakaoLoginButton';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [alertState, setAlertState] = useState({
@@ -125,6 +127,24 @@ const SignUp = () => {
       });
     }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const data = await getUserData();
+
+        if (data) {
+          navigate('/home');
+        }
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (isLoading) return null;
 
   return (
     <StSignUpWrapper>
