@@ -15,8 +15,8 @@ const Home = () => {
       <StPageWrapper $Background={PaperBackground}>
         <StTitle>Lettering</StTitle>
         <StMainText>
-          {/* 편지를 보려면
-          <br /> 우체통 키링을 태그해주세요 */}
+          편지를 보려면
+          <br /> 우체통 키링을 태그해주세요
         </StMainText>
 
         <StImageWrapper>
@@ -27,8 +27,8 @@ const Home = () => {
         </StAnimationWrapper>
 
         <StText>
-          {/* 더 이상 유효하지 않은 링크로 접속했어요.
-          <br /> 키링을 다시 태그하고, 새로운 편지를 확인해보세요. */}
+          더 이상 유효하지 않은 링크로 접속했어요.
+          <br /> 키링을 다시 태그하고, 새로운 편지를 확인해보세요.
         </StText>
 
         <StButtonWrapper>

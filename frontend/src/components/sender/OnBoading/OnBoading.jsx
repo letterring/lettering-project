@@ -63,7 +63,7 @@ const OnBoading = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await getUserData();
+        const data = await getUserData();
 
         if (data) {
           navigate('/home');

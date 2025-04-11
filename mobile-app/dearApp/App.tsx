@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Platform, PermissionsAndroid} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {WebView} from 'react-native-webview';
 import type {WebView as WebViewType} from 'react-native-webview';
@@ -9,6 +10,7 @@ import NfcManager, {Ndef} from 'react-native-nfc-manager';
 import {Linking} from 'react-native';
 import axios from 'axios';
 import RNFS from 'react-native-fs';
+import NoTag from './NoTag';
 
 // NFC 초기화
 NfcManager.start();
@@ -31,6 +33,7 @@ type KeyringData = {
 const App = () => {
   const [data, setData] = useState<KeyringData | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [isForbidden, setIsForbidden] = useState(false);
 
   const webViewRef = useRef<WebViewType>(null);
 
@@ -129,6 +132,10 @@ const App = () => {
           err.response?.status,
           err.response?.data,
         );
+        //403 에러 발생
+        if (err.response?.status === 403) {
+          setIsForbidden(true);
+        }
       } else {
         console.error('❌ 알 수 없는 에러:', err);
       }
@@ -161,12 +168,15 @@ const App = () => {
       console.log(device);
 
       if (keyringId) {
-        setData({
+        const newData = {
           url,
           text: textParam,
           keyringId,
           device,
-        });
+        };
+
+        setData(newData);
+        await sendDeviceInfoToServer(newData);
       }
 
       await NfcManager.unregisterTagEvent();
@@ -201,55 +211,42 @@ const App = () => {
     uniqueId: await DeviceInfo.getUniqueId(),
   });
 
-  if (!data || !isReady) {
+  if (isForbidden) {
     return (
-      // <View style={styles.center}>
-      //   <Text style={styles.waitText}>
-      //     📡 NFC 키링을 태깅하거나 링크로 실행하세요
-      //   </Text>
-      // </View>
-      <WebView
-        source={{uri: 'https://letterring.shop/dear/notag'}}
-        // onLoadEnd={() => {
-        //   if (webViewRef.current) {
-        //     const payload = {
-        //       keyringId: data?.keyringId,
-        //       text: data?.text,
-        //       device: data?.device,
-        //     };
-        //     webViewRef.current.postMessage(JSON.stringify(payload));
-        //   }
-        // }}
-        javaScriptEnabled
-        originWhitelist={['*']}
-      />
+      <View style={styles.center}>
+        <Text style={styles.forbiddenEmoji}>🚫</Text>
+        <Text style={styles.forbiddenTitle}>접근이 제한된 키링이에요</Text>
+        <Text style={styles.forbiddenSubtitle}>
+          유효하지 않거나 권한이 없는 키링입니다.
+        </Text>
+      </View>
     );
+  }
+
+  if (!data || (!isReady && !isForbidden)) {
+    return <NoTag />;
+    // return (
+    //   <WebView
+    //     source={{uri: 'https://letterring.shop/dear/notag'}}
+    //     // onLoadEnd={() => {
+    //     //   if (webViewRef.current) {
+    //     //     const payload = {
+    //     //       keyringId: data?.keyringId,
+    //     //       text: data?.text,
+    //     //       device: data?.device,
+    //     //     };
+    //     //     webViewRef.current.postMessage(JSON.stringify(payload));
+    //     //   }
+    //     // }}
+    //     javaScriptEnabled
+    //     originWhitelist={['*']}
+    //   />
+    // );
   }
 
   console.log(data.url);
 
   return (
-    // <View style={{flex: 1}}>
-    //   <View style={styles.infoBox}>
-    //     <Text style={styles.infoTitle}>📋 태깅 정보</Text>
-    //     <Text style={styles.infoText}>🔑 Keyring ID: {data.keyringId}</Text>
-    //     <Text style={styles.infoText}>📝 Text: {data.text}</Text>
-    //     <Text style={styles.infoText}>📱 Model: {data.device.model}</Text>
-    //     <Text style={styles.infoText}>🏷️ Brand: {data.device.brand}</Text>
-    //     <Text style={styles.infoText}>
-    //       🏭 Manufacturer: {data.device.manufacturer}
-    //     </Text>
-    //     <Text style={styles.infoText}>
-    //       🔧 Device ID: {data.device.deviceId}
-    //     </Text>
-    //     <Text style={styles.infoText}>
-    //       🧬 OS: {data.device.systemName} {data.device.systemVersion}
-    //     </Text>
-    //     <Text style={styles.infoText}>
-    //       🆔 Unique ID: {data.device.uniqueId}
-    //     </Text>
-    //   </View>
-
     <WebView
       ref={webViewRef}
       source={{uri: data?.url ?? ''}}
@@ -299,10 +296,10 @@ const App = () => {
 
         try {
           await RNFS.writeFile(path, base64Data, 'base64');
-          Alert.alert('✅ 이미지 저장 완료', `경로: ${path}`);
+          Alert.alert('내 파일 > Download에 사진이 저장되었습니다!');
         } catch (err) {
           console.error('❌ 저장 실패:', err);
-          Alert.alert('❌ 저장 실패', '파일을 저장할 수 없습니다.');
+          Alert.alert('파일을 저장할 수 없습니다.');
         }
       }}
     />
@@ -310,34 +307,29 @@ const App = () => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   center: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     padding: 20,
-//   },
-//   waitText: {
-//     fontSize: 18,
-//     color: '#333',
-//     marginBottom: 20,
-//     textAlign: 'center',
-//   },
-//   infoBox: {
-//     padding: 12,
-//     backgroundColor: '#f2f2f2',
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#ccc',
-//   },
-//   infoTitle: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     marginBottom: 6,
-//   },
-//   infoText: {
-//     fontSize: 14,
-//     marginBottom: 2,
-//   },
-// });
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+    backgroundColor: '#fff',
+  },
+  forbiddenEmoji: {
+    fontSize: 64,
+    marginBottom: 16,
+  },
+  forbiddenTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  forbiddenSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+  },
+});
 
 export default App;
