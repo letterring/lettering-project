@@ -94,6 +94,11 @@ const CenterCarousel = ({ selected }) => {
       setHasMore(true);
       setOpenedIndices([]);
       setInitialLoaded(true);
+      setActiveIndex(0);
+
+      if (swiperRef.current && swiperRef.current.swiper) {
+        swiperRef.current.swiper.slideTo(0, 0);
+      }
 
       await getSenderMailbox(0);
     };

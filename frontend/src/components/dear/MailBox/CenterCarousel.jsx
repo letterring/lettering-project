@@ -350,7 +350,7 @@ const Details = styled.div`
 `;
 
 const OpenTime = styled.div`
-  margin-right: 1rem;
+  /* margin-right: 1rem; */
 
   color: ${({ theme }) => theme.colors.Gray2};
   ${({ theme }) => theme.fonts.Body5};
