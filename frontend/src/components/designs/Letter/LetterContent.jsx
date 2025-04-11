@@ -28,7 +28,7 @@ const LetterContent = ({
   replyText,
   isSender,
 }) => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const fontStyle = getFontStyle(font);
   const [highImageUrls, setHighImageUrls] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
@@ -110,9 +110,9 @@ const LetterContent = ({
             />
             <StBtnWrapper>
               {isSender ? (
-                <LongButton btnName="목록으로" onClick={() => navigator('/mailbox')} />
+                <LongButton btnName="목록으로" onClick={() => navigate('/mailbox')} />
               ) : (
-                <LongButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+                <LongButton btnName="목록으로" onClick={() => navigate('/dear/mailbox')} />
               )}
             </StBtnWrapper>
           </>
