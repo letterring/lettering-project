@@ -60,6 +60,8 @@ const CloseButton = styled.div`
   justify-content: flex-end;
   padding: 1rem;
   width: 90%;
+
+  z-index: 1000;
 `;
 
 const Title = styled.div`

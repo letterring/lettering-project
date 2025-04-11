@@ -8,7 +8,7 @@ import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { getQuizInfo } from '../../../apis/dear';
-
+import { getLetterDetail } from '../../../apis/letter';
 import { getDearMessages, setFavorites } from '../../../apis/mailbox';
 import { IcDetail, IcLikesFalse, IcLikesTrue, IcLock2 } from '../../../assets/icons';
 import Closed3 from '../../../assets/images/mailbox/closed1.png';
@@ -20,12 +20,8 @@ import Opened2 from '../../../assets/images/mailbox/opened2.png';
 import Opened1 from '../../../assets/images/mailbox/opened3.png';
 import Opened4 from '../../../assets/images/mailbox/opened4.png';
 import { getRelativeFormat } from '../../../util/getRelativeDate';
-import SecretModal from '../Home/SecretModal'; 
-import { getLetterDetail } from '../../../apis/letter';
+import SecretModal from '../Home/SecretModal';
 import RealTimer from './RealTimer';
-
-const [quizData, setQuizData] = useState(null); // 🔐 퀴즈 정보 상태
-const [pendingMessageId, setPendingMessageId] = useState(null); // 열람 대기 중 메시지 ID
 
 const closedImages = {
   1: Closed1,
@@ -42,6 +38,8 @@ const openedImages = {
 };
 
 const SlideComponent = () => {
+  const [quizData, setQuizData] = useState(null); // 🔐 퀴즈 정보 상태
+  const [pendingMessageId, setPendingMessageId] = useState(null); // 열람 대기 중 메시지 ID
   const swiperRef = useRef(null);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -78,7 +76,7 @@ const SlideComponent = () => {
     return openDate <= now;
   };
 
-  const handleClick = (idx) => {
+  const handleClick = async (idx) => {
     const message = messages[idx];
     if (!isPastDate(message.conditionTime)) return;
     if (activeIndex !== idx) return;
@@ -96,7 +94,6 @@ const SlideComponent = () => {
         console.error('퀴즈 정보 조회 실패:', err);
       }
     }
-
 
     setOpenedIndices((prev) =>
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx],
@@ -162,14 +159,12 @@ const SlideComponent = () => {
     });
   };
 
-    // 🔽 컴포넌트 하단에 추가
+  // 🔽 컴포넌트 하단에 추가
   const handleCorrectAnswer = async () => {
     try {
       const detail = await getLetterDetail(pendingMessageId); // 상세 정보 조회
       setMessages((prev) =>
-        prev.map((m) =>
-          m.id === pendingMessageId ? { ...m, opened: true } : m,
-        ),
+        prev.map((m) => (m.id === pendingMessageId ? { ...m, opened: true } : m)),
       );
       setOpenedIndices((prev) => [...prev, activeIndex]); // 애니메이션
     } catch (err) {
@@ -180,7 +175,6 @@ const SlideComponent = () => {
     }
   };
 
-
   useEffect(() => {
     if (!initialLoaded) {
       getDearMailbox(0);
@@ -188,108 +182,117 @@ const SlideComponent = () => {
   }, [initialLoaded]);
 
   return (
-    <StyledSwiper
-      ref={swiperRef}
-      direction="vertical"
-      effect="coverflow"
-      grabCursor
-      centeredSlides
-      slidesPerView={5}
-      onSlideChange={handleSlideChange}
-      coverflowEffect={{
-        rotate: 0,
-        stretch: 0,
-        depth: 100,
-        modifier: 2.5,
-        slideShadows: false,
-      }}
-      modules={[EffectCoverflow]}
-    >
-      {messages.map((msg, idx) => {
-        const { id, conditionTime, replied, sealingWaxId, favorite, designType, opened } = msg;
-        const isVisible = Math.abs(activeIndex - idx) <= 2;
-        const isCenter = activeIndex === idx;
-        const isOpened = openedIndices.includes(idx);
-        const isPast = isPastDate(conditionTime);
+    <>
+      {quizData && (
+        <ModalWrapper>
+          <SecretModal
+            question={quizData.quizQuestion}
+            hint={quizData.quizHint || '힌트 없음'}
+            correctAnswer={quizData.quizAnswer}
+            onSuccess={handleCorrectAnswer}
+            onClose={() => {
+              // ✅ 닫기 버튼 눌렀을 때 모달 안 보이게 설정
+              setQuizData(null);
+              setPendingMessageId(null);
+              navigate('/dear/mailbox'); // 선택적으로 경로 이동도 포함
+            }}
+          />
+        </ModalWrapper>
+      )}
+      <StyledSwiper
+        ref={swiperRef}
+        direction="vertical"
+        effect="coverflow"
+        grabCursor
+        centeredSlides
+        slidesPerView={5}
+        onSlideChange={handleSlideChange}
+        coverflowEffect={{
+          rotate: 0,
+          stretch: 0,
+          depth: 100,
+          modifier: 2.5,
+          slideShadows: false,
+        }}
+        modules={[EffectCoverflow]}
+      >
+        {messages.map((msg, idx) => {
+          const { id, conditionTime, replied, sealingWaxId, favorite, designType, opened } = msg;
+          const isVisible = Math.abs(activeIndex - idx) <= 2;
+          const isCenter = activeIndex === idx;
+          const isOpened = openedIndices.includes(idx);
+          const isPast = isPastDate(conditionTime);
 
-        let commentText = '';
-        if (isPast && !opened) {
-          commentText = '아직 읽지 않은 편지입니다.';
-        } else if (opened && !replied) {
-          commentText = '아직 답장을 하지 않았어요.';
-        } else if (opened && replied) {
-          commentText = '답장을 완료했어요!';
-        }
+          let commentText = '';
+          if (isPast && !opened) {
+            commentText = '아직 읽지 않은 편지입니다.';
+          } else if (opened && !replied) {
+            commentText = '아직 답장을 하지 않았어요.';
+          } else if (opened && replied) {
+            commentText = '답장을 완료했어요!';
+          }
 
-        return (
-          <StyledSlide key={idx} $hidden={!isVisible}>
-            <SlideContent $align={getAlignType(idx, activeIndex)}>
-              <ImageWrapper>
-                <img
-                  onClick={() => {
-                    if (idx !== activeIndex) {
-                      handleSlideClick(idx);
-                    } else {
-                      handleClick(idx);
+          return (
+            <StyledSlide key={idx} $hidden={!isVisible}>
+              <SlideContent $align={getAlignType(idx, activeIndex)}>
+                <ImageWrapper>
+                  <img
+                    onClick={() => {
+                      if (idx !== activeIndex) {
+                        handleSlideClick(idx);
+                      } else {
+                        handleClick(idx);
+                      }
+                    }}
+                    // className={!isPast && isCenter ? 'blurred' : ''}
+                    src={
+                      isCenter && isOpened && isPast
+                        ? openedImages[sealingWaxId]
+                        : closedImages[sealingWaxId]
                     }
-                  }}
-                  // className={!isPast && isCenter ? 'blurred' : ''}
-                  src={
-                    isCenter && isOpened && isPast
-                      ? openedImages[sealingWaxId]
-                      : closedImages[sealingWaxId]
-                  }
-                  alt={`Slide ${idx + 1}`}
-                />
-                {!isPast && isCenter && (
-                  <Overlay>
-                    <RealTimer msg={msg} isCenter={isCenter} isOpened={isOpened} />
-                  </Overlay>
-                )}
-              </ImageWrapper>
-
-              {isCenter && isOpened && (
-                <Comment>
-                  <p>{commentText}</p>
-                </Comment>
-              )}
-              <Details>
-                <StyledIcon>
-                  <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
-                  {isPast ? (
-                    favorite ? (
-                      <button onClick={(event) => handleToggleFavorite(event, idx, id)}>
-                        <IcLikesTrue />
-                      </button>
-                    ) : (
-                      <button onClick={(event) => handleToggleFavorite(event, idx, id)}>
-                        <IcLikesFalse />
-                      </button>
-                    )
-                  ) : (
-                    <IcLock2 />
+                    alt={`Slide ${idx + 1}`}
+                  />
+                  {!isPast && isCenter && (
+                    <Overlay>
+                      <RealTimer msg={msg} isCenter={isCenter} isOpened={isOpened} />
+                    </Overlay>
                   )}
-                </StyledIcon>
-                {isPast && isOpened && isCenter && (
-                  <DetailButton>
-                    <IcDetail onClick={() => handleOpenMsg(sealingWaxId, id)} />
-                  </DetailButton>
-                )}
-              </Details>
-            </SlideContent>
-          </StyledSlide>
-        );
-      })}
+                </ImageWrapper>
 
-    {quizData && (
-      <SecretModal
-        question={quizData.quizQuestion}
-        hint={quizData.quizHint || '힌트 없음'}
-        correctAnswer={quizData.quizAnswer}
-        onSuccess={handleCorrectAnswer}
-      />
-    )}
-    </StyledSwiper>
+                {isCenter && isOpened && (
+                  <Comment>
+                    <p>{commentText}</p>
+                  </Comment>
+                )}
+                <Details>
+                  <StyledIcon>
+                    <OpenTime>{getRelativeFormat(conditionTime)}</OpenTime>
+                    {isPast ? (
+                      favorite ? (
+                        <button onClick={(event) => handleToggleFavorite(event, idx, id)}>
+                          <IcLikesTrue />
+                        </button>
+                      ) : (
+                        <button onClick={(event) => handleToggleFavorite(event, idx, id)}>
+                          <IcLikesFalse />
+                        </button>
+                      )
+                    ) : (
+                      <IcLock2 />
+                    )}
+                  </StyledIcon>
+                  {isPast && isOpened && isCenter && (
+                    <DetailButton>
+                      <IcDetail onClick={() => handleOpenMsg(sealingWaxId, id)} />
+                    </DetailButton>
+                  )}
+                </Details>
+              </SlideContent>
+            </StyledSlide>
+          );
+        })}
+      </StyledSwiper>
+    </>
   );
 };
 
@@ -427,4 +430,29 @@ const StyledIcon = styled.div`
 
 const DetailButton = styled.button`
   margin-top: 4rem;
+`;
+
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  /* width: 100vw;
+  height: 100vh; */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img[src*='SecretOption.png'] {
+    width: 10rem !important;
+    height: auto !important;
+  }
+
+  .error-text {
+    font-size: 1.3rem !important;
+    white-space: nowrap !important;
+    color: ${({ theme }) => theme.colors.Gray1};
+    ${({ theme }) => theme.fonts.body2};
+  }
 `;
