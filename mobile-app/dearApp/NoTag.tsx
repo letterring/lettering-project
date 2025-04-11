@@ -29,7 +29,8 @@ const Home = () => {
       resizeMode="cover">
       <Text style={styles.title}>Lettering</Text>
       <Text style={styles.mainText}>
-        편지를 보려면{'\n'}우체통 키링을 태그해주세요
+        편지를 보려면{'\n'} 기기의 홈 화면에서
+        {'\n'}우체통 키링을 태그해주세요
       </Text>
 
       <View style={styles.imageWrapper}>
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   },
   animationWrapper: {
     position: 'absolute',
-    top: '45%',
+    top: '35%',
     left: 0,
     right: 0,
     alignItems: 'center',
