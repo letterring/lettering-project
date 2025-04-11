@@ -47,7 +47,13 @@ const Letter = () => {
         const sentAt = getLetterDate(conditionTime);
         const readAt = getLetterDate(firstOpenedTime);
 
-        const newImageData = [...letterImages, letterImages[0]];
+        const originalImageData = letterImages.map((img, index) => ({
+          ...img,
+          index,
+        }));
+
+        const newImageData = [...originalImageData, { ...originalImageData[0], index: 0 }];
+
         const newLetterContents = [
           ...letterContents,
           `${sentAt}에 보낸 편지를`,
