@@ -16,7 +16,7 @@ import PostcardPreviewModal from '../../common/modal/PostcardPreviewModal';
 const PostcardDetail = () => {
   const { messageId } = useParams();
   const location = useLocation();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const [flipped, setFlipped] = useState(false);
   const [isShow, setIsShow] = useState(true);
@@ -92,7 +92,7 @@ const PostcardDetail = () => {
 
         <StbtnWrapper>
           <ConfirmButton btnName="다운로드" onClick={handleOpenPreviewModal} />
-          <ConfirmButton btnName="목록으로" onClick={() => navigator('/dear/mailbox')} />
+          <ConfirmButton btnName="목록으로" onClick={() => navigate('/dear/mailbox')} />
         </StbtnWrapper>
       </StWrapper>
     </StPageWrapper>
