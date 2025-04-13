@@ -1,269 +1,208 @@
 <div align="center">
   <h1> Lettering <img src="레터링 메인 이미지 아이콘" height="35">
   </h1>
-  
-![메인페이지(화면)](https://img url넣으면 됨)
 
 </div>
 
-> 배포 링크 <br />
-> **https://letterring.shop/**
+> 배포 링크 <br /> > **https://letterring.shop/**
 
-<br/>
+[장표표지.pdf](%EC%9E%A5%ED%91%9C%ED%91%9C%EC%A7%80.pdf)
 
-<p align=center>
-  <a href="https://bow-snail-89d.notion.site/d913942c81e343339927bc654bb0b158?pvs=4">팀 노션</a>
-  &nbsp; | &nbsp; 
-  <a href="https://bow-snail-89d.notion.site/f927d58b843d4b63bb6e9041e35b8cd3?v=cbaa33b73c3b4092a16aaf1fd9857ec5&pvs=4">개발위키</a>
-  &nbsp; | &nbsp;
-  <a href="https://bow-snail-89d.notion.site/6b0f7d9d2e574e1597de6c6c19a68ded?pvs=4">기획서</a>   &nbsp; | &nbsp;
-  <a href="https://bow-snail-89d.notion.site/Ground-Rule-4c2c96afbfbf4a6aa1353a4ed6517daa?pvs=4">그라운드 룰</a> 
-  <br />
-  <a href="https://www.figma.com/design/MfCRRB3bWLgo4YMorH7M4U/졸작_디자인?node-id=438-1940&t=iFzQIb6C351DL0Wr-0">figma</a>
-  &nbsp; | &nbsp; 
-  <a href="https://github.com/users/LuizyHub/projects/2">백로그</a>
-</p>
+![제목을-입력해주세요_-001.jpg](%EC%A0%9C%EB%AA%A9%EC%9D%84-%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94_-001.jpg)
 
-<div align=center>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FLuizyHub%2Fexam-lab&count_bg=%232DB3B4&title_bg=%23555555&icon=&icon_color=%23FFFFFF&title=hits&edge_flat=false"/></a>
-</div>
+> 배포 링크
+>
+> [**https://letterring.shop/**](https://letterring.shop/)
 
-## 📄 목차
+[figma](https://www.figma.com/design/MfCRRB3bWLgo4YMorH7M4U/%EC%A1%B8%EC%9E%91_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=438-1940&t=iFzQIb6C351DL0Wr-0)   |
 
-- [📄 목차](#-목차)
-- [📝 프로젝트 개요](#-프로젝트-개요)
-- [💡 핵심 기능](#-핵심-기능)
-  - [빠른 맞춤 검색](#빠른-맞춤-검색)
-  - [AI 문제 생성](#ai-문제-생성)
-  - [PDF 시험지 생성](#pdf-시험지-생성)
-- [🛠️ 기술 스택](#-기술-스택)
-- [🖇️ 시스템 구조도](#-시스템-구조도)
-- [🔎 FE 기술적 도전](#-fe-기술적-도전)
-  - [사이드바 네비게이션 구현](#사이드바-네비게이션-구현)
-  - [문제 검색 페이지의 구성](#문제-검색-페이지의-구성)
-  - [문제 편집 툴 제작](#문제-편집-툴-제작)
-  - [PDF 변환](#pdf-변환)
-- [🔎 BE 기술적 도전](#-be-기술적-도전)
-  - [테스트코드로 Swagger생성](#테스트코드로-swagger생성)
-  - [서버 성능에 맞춰 DB 구축](#서버-성능에-맞춰-db-구축)
-  - [데이터 베이스 선택을 위해 추상화를 사용해서 NoSQL, SQL 둘 다 사용](#데이터-베이스-선택을-위해-추상화를-사용해서-nosql-sql-둘-다-사용)
-  - [Testcontainer를 이용한 Test코드 작성](#testcontainer를-이용한-test코드-작성)
-  - [AI 문제 생성하기](#ai-문제-생성하기)
-- [🧑🏻‍💻 팀원 소개 👩🏻‍💻](#ai-프롬프트-설정하기)
+## **📄 목차**
 
-<br />
+- [📝 프로젝트 개요](#📝-프로젝트-개요)
+- [💡 핵심 기능](#💡-핵심-기능)
+  - [편지 전송 유형 선택 기능](#편지-전송-유형-선택-기능)
+  - [AI 글쓰기 어시스턴스](#ai-글쓰기-어시스턴스)
+  - [엽서 다운로드 기능](#엽서-다운로드-기능)
+- [🖼️ 주요 화면](#🖼️-주요-화면)
+- [🛠️ 기술 스택](#🛠️-기술-스택)
+- [🖇️ 시스템 구조도](#🖇️-시스템-구조도)
+- [🔎 FE 기술적 도전](#🔎-fe-기술적-도전)
+  - [이미지 확장자 및 용량 제한](#📁-이미지-확장자-및-용량-제한)
+  - [동적 UI 구성](#🎨-동적-ui-구성)
+  - [다양한 편지 템플릿 선택](#💌-다양한-편지-템플릿-선택)
+  - [엽서 다운로드 기능](#🖼️-엽서-다운로드-기능)
+  - [Dear 사용자용 React Native 앱 배포](#📱-dear-사용자용-react-native-앱-배포)
+- [🔎 BE 기술적 도전](#🔎-be-기술적-도전)
+  - [NFC 키링 인증 시스템 고도화](#1️⃣-nfc-키링-인증-시스템-고도화)
+  - [편지 내용 암호화](#2️⃣-편지-내용-암호화)
+  - [AI 글쓰기 어시스턴스](#3️⃣-ai-글쓰기-어시스턴스)
+- [🧑🏻‍💻 팀원 소개](#팀원-소개)
+
+---
 
 ## 📝 프로젝트 개요
 
-레터링 서비스 관련된 프로젝트 개요
+**Lettering**은 나의 마음과 추억을 ‘NFC 키링’에 담아 선물하고,
+사진과 메시지를 지속적으로 기록 및 공유할 수 있는 감성적인 편지 서비스입니다.
 
-<br />
+사용자는 편지 유형을 선택하고, 사진을 첨부해 글을 작성하며, AI의 도움으로 글의 품질을 향상시킬 수 있습니다.
+작성한 편지는 NFC 키링에 연동되어 특정 사람만 확인할 수 있도록 보안 처리됩니다.
+
+---
 
 ## 💡 핵심 기능
 
-### 핵심 기능 1
+### ✉️ 편지 전송 유형 선택 기능
 
-> 기능 설명 1
+- **일반 편지** : 즉시 전송
+- **비밀 편지** : 퀴즈를 풀어야 확인 가능
+- **예약 편지** : 특정 날짜와 시간에 자동 전송
+- **오픈 타이머 편지** : 타이머 종료 후 확인 가능
 
-<img alt='selectQeustion' src="https://github.com/LuizyHub/exam-lab/assets/120697456/d08e1ff5-f093-4651-8419-a8cb9870908a" /> 
+### 🤖 AI 글쓰기 어시스턴트
 
-### 핵심 기능 2
+- GPT 기반 AI가 문맥을 분석하여 편지 구성 보조
+- 이미지 기반 문장 보강 기능 제공 (예: 사진 속 배경을 설명하는 문장 추가)
 
-> 기능 설명 2
+### 📩 엽서 다운로드 기능
 
-<img alt='addAI' src="https://github.com/LuizyHub/exam-lab/assets/120697456/b42020de-7de9-4d89-80ba-0d89101535fe" /> 
+- 받은 엽서를 **이미지**형태로 다운로드 가능
+- 사용자가 받은 엽서를 추억으로 간직할 수 있도록 이미지 저장 기능 제공
 
-### 핵심 기능 3
+---
 
-> 기능 설명 3
+## 🖼️ 주요 화면
 
-<!--<img alt='' src="" /> -->
+### ✉️ 보내는 사람(Sender)
 
-<br />
+**온보딩 - 서비스 소개 및 로그인**  
+<img src="./images/sender/sender-onboarding.gif" width="180" />
+
+**마이페이지 - 닉네임, 폰트 설정, 키링 목록 확인**  
+<img src="./images/sender/mypage.gif" width="180" />
+
+**키링구매 - 키링 디자인 선택 및 결제 진행**  
+<img src="./images/sender/purchase-keyring.gif" width="180" />
+
+**편지 디자인 선택**  
+<img src="./images/sender/template-select.gif" width="180" />
+
+**편지 작성 - 이미지 업로드 및 내용 입력**  
+<img src="./images/sender/letter-writing.gif" width="180" />
+
+**AI 어시스턴스**  
+<img src="./images/sender/ai-assist.gif" width="180" />
+
+**받는 사람 설정 및 비밀 편지 퀴즈 등록**  
+<img src="./images/sender/secret-open.gif" width="180" />
+
+**편지 상세 - 편지 템플릿 동적 UI**  
+<img src="./images/sender/letter-detail.gif" width="180" />
+
+### 📮 받는 사람(Dear)
+
+**노태그 대기 화면**  
+<img src="./images/dear/no-tag.gif" width="180" />
+
+**새로운 편지 도착 시 랜딩**  
+<img src="./images/dear/dear-new-message.gif" width="180" />
+
+**새로운 편지 없을 때 랜딩**  
+<img src="./images/dear/dear-landing.gif" width="180" />
+
+**비밀편지 열람**  
+<img src="./images/dear/secret-open.gif" width="180" />
+
+**키링 영구 삭제 확인 화면**  
+<img src="./images/dear/keyring-delete.gif" width="180" />
+
+---
 
 ## 🛠️ 기술 스택
 
-<table>
-    <thead>
-        <tr>
-            <th>분류</th>
-            <th>기술 스택</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <p>개발 도구</p>
-            </td>
-            <td>
-                <img src="https://img.shields.io/badge/IntelliJ IDEA-c94799?logo=IntelliJ IDEA&logoColor=ffffff">
-                <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?logo=Visual Studio Code&logoColor=ffffff">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                  <p>언어</p>
-            </td>
-            <td>
-                  <img src="https://img.shields.io/badge/java-0d8ac7?logo=openjdk&logoColor=ec2025">
-                  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=JavaScript&logoColor=000000">
-            </td>
-        </tr> 
-        <tr>
-            <td>
-                <p>데이터 베이스</p>
-            </td>
-            <td>
-                <img src="https://img.shields.io/badge/Elasticsearch-3ab8ac?logo=Elasticsearch&logoColor=e9b919">
-                <img src="https://img.shields.io/badge/MongoDB-114411?logo=mongodb">
-                <img src="https://img.shields.io/badge/Amazon S3-7D929E?logo=Amazon S3&logoColor=ffffff">
-            </td>
-        </tr>
-        <tr> 
-            <td>
-                <p>프레임 워크</p>
-            </td>
-            <td>
-                <img src="https://img.shields.io/badge/React-61DAFB?logo=React&logoColor=ffffff">
-                <img src="https://img.shields.io/badge/Spring Boot-52b520?logo=Spring Boot&logoColor=ffffff">
-                <img src="https://img.shields.io/badge/Spring Data-114411?logo=amazondocumentdb&logoColor=ffffff">
-                <img src="https://img.shields.io/badge/Spring AI-6aac3d?logo=Spring Boot&logoColor=ffffff">
-            </td>
-        </tr>
-        <tr> 
-            <td>
-                <p>AI</p>
-            </td>
-            <td>
-                <img src="https://img.shields.io/badge/Gpt 4o-74AA9C?&logo=OpenAI&logoColor=ffffff">
-            </td>
-        </tr>
-                <tr>
-            <td>
-                <p>배포</p>
-            </td>
-            <td>
-                <img src="https://img.shields.io/badge/Nginx-009639?logo=Nginx&logoColor=ffffff&">
-                <img src="https://img.shields.io/badge/AWS-FF9900?logo=Amazon EC2&logoColor=ffffff">
-                <img src="https://img.shields.io/badge/GitHub Actions-2088FF?logo=github-actions&logoColor=ffffff">
-                <img src="https://img.shields.io/badge/Docker-2496ED?&logo=Docker&logoColor=white">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p>협업</p>
-            </td>
-            <td>
-                <img src="https://img.shields.io/badge/GitHub-181717?logo=GitHub&logoColor=ffffff">
-                <img src="https://img.shields.io/badge/Notion-000000?logo=Notion">
-                <img src="https://img.shields.io/badge/Discord-5865F2?logo=Discord&Color=&logoColor=ffffff">
-            </td>
-        </tr>
-    </tbody>
-</table>
+| 구분            | 사용 기술                                           |
+| --------------- | --------------------------------------------------- |
+| 💻 개발 도구    | VSCode, Git, GitHub, Figma, Postman, Notion         |
+| 🧑‍💻 언어         | Java, JavaScript, Python                            |
+| 🗃️ 데이터베이스 | MariaDB, Redis                                      |
+| 🧩 프레임워크   | Spring Boot (BE), React + Recoil (FE), FastAPI (AI) |
+| 🤖 AI           | OpenAI GPT API, FastAPI, Python                     |
+| 🚀 배포         | AWS EC2, S3, Nginx, Docker, Jenkins                 |
+| 🤝 협업 도구    | GitHub, Notion, Figma, Jira                         |
 
-<br />
+---
 
 ## 🖇️ 시스템 구조도
 
-![시스템 아키텍처](https://github.com/LuizyHub/exam-lab/assets/120697456/0b7463fa-f35e-4750-ae61-6855267b49f8)
-
-<br />
+---
 
 ## 🔎 FE 기술적 도전
 
-### 사이드바 네비게이션 구현
-<!--
-| 이미지 예시                                                                                                                      | 이미지 예시                                                                                                                 |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <img alt="" src="" /> | <img alt="" src="" /> |
--->
-- 페이지의 가독성을 높이기 위해 상단 네비게이션바 대신 사이드바를 구현하였습니다.
-- 사이드바는 모든 페이지에서 활용되며, 상태에 따라 동적으로 움직이도록 설계되었습니다.
-- 이 과정에서 전역 상태 관리와 관련된 여러 어려움이 있었지만, 이를 통해 인터페이스의 일관성을 유지할 수 있었습니다.
+### 📁 이미지 확장자 및 용량 제한
 
-### 문제 검색 페이지의 구성
-<!--<img width="70%" alt="" src=""> -->
-- 문제, 지문, 이미지, 선택지 등 문제의 규격이 제각각이라 사용자에게 보기 좋게 페이지를 구성하는 데 어려움이 있었습니다.
-- 사용자가 원하는 문제를 장바구니처럼 담아 나만의 시험지를 제작할 수 있도록 하였으며, 문제를 한눈에 볼 수 있고 중복되지 않도록 구성했습니다.
+- .jpg, .png, .heic 파일만 업로드 가능 제한
+- JavaScript `File` 객체로 확장자/용량 확인 처리
+- 업로드 시 `browser-image-compression`을 사용해 1MB 이하로 압축
+- 압축 전후 미리보기 이미지 갱신 처리 포함
 
-### 문제 편집 툴 제작
-<!--
-| 이미지 예시                                                                                                                      | 이미지 예시                                                                                                                 |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <img alt="" src="" /> | <img alt="" src="" /> |
--->
-- 필요한 편집 기능만을 제공하여 입력 칸을 제어하기 위해 직접 편집 툴을 제작했습니다.
-- 사용자에게 필요한 편집 기능을 제공하기 위해 라이브러리를 사용하지 않고 직접 편집 툴을 제작하였습니다.
-- 단순히 input 요소를 사용하는 대신 contentEditable을 활용하고 다양한 이벤트를 통해 사용자 입력의 UX를 개선하고자 했습니다.
-- 이 과정에서 사용자 경험(UX) 요소와 디자인적인 고려 사항을 배우게 되었습니다.
-- 아쉬운 점은 `execCommand()` 메소드를 대체할 로직을 완전히 구현하지 못한 부분이 있었습니다. 하지만 이를 통해 에디터를 제작하는 많은 기술적 도전을 경험하였습니다.
+### 🎨 동적 UI 구성
 
-### PDF 변환
-<!--
-| 이미지 예시                                                                                                                      | 이미지 예시                                                                                                                 |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <img alt="" src="" /> | <img alt="" src="" /> |
--->
-- 사용자가 제작한 시험지를 쉽게 출력하여 풀어볼 수 있도록 PDF 형식으로 변환할 수 있습니다.
-- 이를 위해 react-pdf의 `PDFDownloadLink` 컴포넌트를 사용하여 구현하였습니다.
-- react-pdf 라이브러리의 내장 컴포넌트인 View와 Page 등을 활용하여 pdf 라이브러리를 조금 이나마 알 수 있었습니다.
-- 원하는 만큼의 퍼포먼스를 내지 못한 부분 이였습니다. 이는 제가 생각했던 CSS 방식과 pdf 라이브러리에 적용될 수 있는 부분의 한계를 느낀 아쉬운 부분이었습니다.
+- 편지 유형에 따라 UI 애니메이션이 실시간 반응
+- 상태 관리는 Recoil을 사용하여 전체 앱과 연결
 
-<br />
+### 💌 다양한 편지 템플릿 선택
+
+- 편지지는 여러 디자인 템플릿 중 선택 가능
+- 템플릿은 react-slick 기반의 캐러셀로 구성
+
+### 🖼️ 엽서 다운로드 기능
+
+- 모달 내 렌더링된 DOM을 `html2canvas`로 캡처하여 이미지화
+- `file-saver`를 이용해 PNG 저장 기능 구현
+- React Native 앱 환경은 WebView에서 캡처된 base64 이미지를 `postMessage`로 전달하고, 앱 내부에서 이미지 파일로 저장
+
+### 📱 Dear 사용자용 React Native 앱 배포
+
+- 편지를 받는 사람은 React Native 기반의 Android 앱(apk)으로 편지를 확인
+- NFC 태깅을 통해 편지 열람 가능하도록 구현
+- apk 단독 실행이나 키링 태깅만으로는 열람 불가능
+- 전용 다운로드 안내 페이지 제공으로 사용자 거부감 최소화
+
+---
 
 ## 🔎 BE 기술적 도전
 
-### 테스트코드로 Swagger생성
-<img width="85%" alt="createSwagger" src="https://github.com/LuizyHub/exam-lab/assets/120697456/541cae50-d117-48d7-a165-b9f7a66b34ab" >
+### 1️⃣ NFC 키링 인증 시스템 고도화
 
-- API 문서에 신뢰성 : Spring REST Docs를 사용해 테스트코드를 기반으로 api 문서를 생성합니다.
-- 효과적인 API 문서 : Swagger UI를 도입해 직접 api를 실행하고 볼 수 있는 문서를 생성합니다.
-- 자동 생성 : Spring REST Docs로 OpenAPI3문서를 만들기 위해 restdocs-api-spec 라이브러리를 사용했습니다.
-- 기술 블로그 : https://code-l.tistory.com/36
+> 태깅 시마다 동적으로 생성되는 token + mac을 통해 사용자가 실제 태깅한 주체임을 인증하고, 1회용 sessionToken 발급을 통해 메시지 접근을 제어하는 보안 시스템을 구축했습니다.
 
-### 서버 성능에 맞춰 DB 구축
+- **랜덤 토큰 기반 인증 흐름**: NFC 태깅 시 서버에서 token + mac 생성 후 검증 게이트웨이로 유도
+- **복사/재사용 방지**: token은 TTL과 IP/UA를 통해 1회용 처리
+- **보안 알고리즘**: CMAC 대신 HMAC-SHA256을 활용해 서버 환경에서 구현 가능하도록 설계
 
-<img width="30%" alt="DBStructure" src="https://github.com/LuizyHub/exam-lab/assets/120697456/6df18add-6586-4246-b6c4-03ef8f20d8cc">
+### 2️⃣ 편지 내용 암호화
 
-- 개발 과정에서 불필요한 자원을 줄이고자 제한된 서버에 DB 서버를 구축했습니다.
-- 이를 위해 서버와 Docker의 로그를 분석하여 2GB 노드 1개와 1GB Kibana 구성을 통해 필요한 성능에 맞춰 DB를 최적화했습니다.
-- 현재는 배포를 앞두고 향상된 서버에 4GB 노드 3개와 2GB Kibana 구성으로 전환하여 이용 중입니다. 이를 통해 불필요한 서버 유지 비용을 방지할 수 있었습니다.
-- 기술 블로그: https://developerjisu.tistory.com/104
+> 서버에 저장되는 편지 본문 데이터는 AES 기반 대칭키 암호화를 적용해, 데이터 유출 시에도 메시지 내용을 확인할 수 없도록 처리했습니다.
 
-### 데이터 베이스 선택을 위해 추상화를 사용해서 NoSQL, SQL 둘 다 사용
+- **AES 암호화 적용**: 편지 작성 시 암호화 → 복호화는 인증된 사용자만 수행 가능
+- **DTO/Service Layer 분리 처리**: 암호화 및 복호화 로직은 비즈니스 로직과 분리하여 모듈화
 
-| JPA 구현                                                                                                           | MongoDB 구현                                                                                                      |
-|------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| <img  alt="" src="https://github.com/LuizyHub/exam-lab/assets/120697456/8f49f334-6dfb-42f7-a461-7217511cac4c" /> | <img alt="" src="https://github.com/LuizyHub/exam-lab/assets/120697456/6b686682-209a-4fc1-b66e-ca0265a89173" /> |
+### 3️⃣ AI 글쓰기 어시스턴스
 
-- **유연한 데이터베이스 선택**: Spring의 Dependency Injection(DI) 기능과 추상화를 사용하여 SQL과 NoSQL 데이터베이스를 모두 지원하는 유연한 구조를 설계하였습니다.
-- **프로필 기반 구성**: Spring Profiles을 사용하여 JPA와 MongoDB를 프로파일에 따라 동적으로 전환할 수 있습니다.
-- 기술 블로그: https://code-l.tistory.com/37
+> 사용자가 작성한 편지 내용을 AI가 자연스럽게 다듬고 이미지와 문맥을 분석해 감성적인 메시지로 변환하는 기능을 구현했습니다.
 
-### TestContainer를 이용한 Test코드 작성
+- **GPT 기반 API 연동**: 사용자의 초안을 OpenAI API에 전달해 감정 보완 및 자연어 개선
+- **FastAPI 서버 구성**: AI 서비스는 Python + FastAPI로 구성되어 독립된 인프라에서 운영
+- **이미지 기반 힌트 생성**: 첨부된 사진의 메타데이터나 키워드를 기반으로 스토리텔링 보조
+- **반응형 적용**: AI 보정 내용은 편지 레이아웃에 적용되어 사용자가 미리 확인 가능
 
-<img width="70%" alt="" src="https://github.com/LuizyHub/exam-lab/assets/120697456/fb0fb611-6796-4c6d-814a-fb712dc42874"> 
+---
 
-- NoSQL 데이터베이스는 SpringBootTest와 @Transactional을 사용해도 롤백 처리가 되지 않기 때문에, 실제 데이터에 영향을 주지 않고 테스트를 수행하기 위해 Testcontainer가 필요했습니다.
-- Testcontainer를 사용하면 데이터베이스와 같은 외부 서비스를 격리된 환경에서 실행할 수 있습니다.
-- 이를 통해 정확하고 신뢰성 있는 테스트를 보장할 수 있습니다.
-- 기술 블로그: https://developerjisu.tistory.com/106
+## 👩🏻‍💻 팀원 소개
 
-### AI 문제 생성하기
+---
 
-<img width="70%" alt="" src="https://github.com/LuizyHub/exam-lab/assets/120697456/bf7b3a36-039f-4460-806d-874625bd10b9"> 
-
-- **RAG를 사용한 시험 문제 생성**: 검색 증강 생성(RAG) 기술을 활용하여 사용자의 학습 자료에 특화된 시험 문제를 생성합니다.
-- **프라이빗 또는 독점 데이터 소스 활용**: RAG는 프라이빗 또는 독점 데이터 소스의 정보를 보완하여 텍스트를 생성하는 기술입니다.
-- **사용자 맞춤형 시험 문제**: 사용자의 학습 자료를 바탕으로 정확하고 관련성 높은 시험 문제를 자동으로 생성하여 제공합니다.
-
-<br />
-
-## 🧑🏻‍💻 팀원 소개 👩🏻‍💻
-
-|                                                         김지수                                                          |                                                         공예슬                                                         |                                                        강승엽                                                        |                                                         이효승                                                         |이하나                                                         |유하람                                                         |
-|:--------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/LuizyHub/exam-lab/assets/120697456/5392a423-dc8e-447d-bbb4-c2df055653a3" height="130"/> | <img src="3" height="130" /> | <img src="이미지주소" height="130"> | <img src="이미지주소" height="130"> | <img src="이미지주소" height="130"> | <img src="이미지주소" height="130"> |
-|                                                        **BE**                                                        |                                                       **BE**                                                        |                                                      **FE**                                                       |                                                       **FE**                                                        |**FE**                                                        |**FE**                                                        |
-|                                       [@jisu-0305](https://github.com/jisu-0305)                                       |                                     [@공예슬깃헙주소](본인 깃허브 주소)                                      |                                       [@강승엽깃헙주소](본인 깃허브 주소)                                       |                                          [@이효승깃헙주소](본인 깃허브 주소)                                           |                                          [@이하나깃헙주소](본인 깃허브 주소)                                           |                                          [@유하람깃헙주소](본인 깃허브 주소)                                           |
+| 김지수                                     | 강승엽                                       | 공예슬                         | 유하람                                   | 이하나                                   | 이효승                                           |
+| ------------------------------------------ | -------------------------------------------- | ------------------------------ | ---------------------------------------- | ---------------------------------------- | ------------------------------------------------ |
+| BE                                         | BE                                           | BE+AI                          | FE                                       | FE+INFRA                                 | FE                                               |
+| [@jisu-0305](https://github.com/jisu-0305) | [@SeungYeopp](https://github.com/SeungYeopp) | [@Oys](https://github.com/0ys) | [@Ryuharam](https://github.com/Ryuharam) | [@ehanadul](https://github.com/ehanadul) | [@hyoseung2000](https://github.com/hyoseung2000) |
