@@ -93,8 +93,8 @@
 **AI 어시스턴스**  
 <img src="./images/sender/ai-assist.gif" width="180" />
 
-**받는 사람 설정 및 비밀 편지 퀴즈 등록**  
-<img src="./images/sender/secret-open.gif" width="180" />
+**받는 사람 설정**  
+<img src="./images/sender/delivery-type-select.gif" width="180" />
 
 **편지 상세 - 편지 템플릿 동적 UI**  
 <img src="./images/sender/letter-detail.gif" width="180" />
